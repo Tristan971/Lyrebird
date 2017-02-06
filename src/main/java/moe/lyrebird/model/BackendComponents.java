@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Created by Tristan on 05/02/2017.
+ * Back-end (Twitter, persistence etc.) components go here.
  */
 @Configuration
-public class Services {
+public class BackendComponents {
     
     @Bean
     public TwitterHandler twitterHandler() {
