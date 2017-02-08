@@ -5,6 +5,7 @@
 
 [![Travis-CI Badge](https://travis-ci.org/Tristan971/Lyrebird.svg?branch=master)](https://travis-ci.org/Tristan971/Lyrebird)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/63206a65b5a146d3a1af5d8c4b90eef7)](https://www.codacy.com/app/Tristan971/Lyrebird)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/63206a65b5a146d3a1af5d8c4b90eef7)](https://www.codacy.com/app/Tristan971/Lyrebird)
 
 ## Reasoning :
 Currently there is not one good windows twitter client.
