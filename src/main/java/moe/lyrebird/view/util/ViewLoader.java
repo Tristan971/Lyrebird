@@ -3,6 +3,7 @@ package moe.lyrebird.view.util;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import moe.lyrebird.view.views.ErrorPane;
+import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -20,15 +21,15 @@ public class ViewLoader {
     }
     
     /**
-     * Wrapper around {@link #loadPane(String)} that puts the returning {@link Pane}
+     * Wrapper around {@link #loadPane(Views)} that puts the returning {@link Pane}
      * into a {@link Scene}.
      *
-     * @param windowName
-     *         The name of the window to load
+     * @param view
+     *         The view to load
      * @return The {@link Scene} containing the loaded {@link Pane}
      */
-    public Scene loadWindow(final String windowName) {
-        final Pane effectivePane = this.loadPane(windowName);
+    public Scene loadWindow(final Views view) {
+        final Pane effectivePane = this.loadPane(view);
         return new Scene(effectivePane);
     }
     
@@ -36,14 +37,14 @@ public class ViewLoader {
      * Loads a pane from a file. The file is assumed to be a view.
      * i.e. a standard FXML file inside {@link moe.lyrebird.view.views}.
      *
-     * @param paneName
-     *         The pane's filename to load (i.e. "RootView.fxml")
+     * @param view
+     *         The view to load
      * @return The {@link Pane} corresponding to the filename.
      */
-    public Pane loadPane(final String paneName) {
-        return this.easyFXML.getPaneForView(paneName)
+    public Pane loadPane(final Views view) {
+        return this.easyFXML.getPaneForView(view)
                 .getOrElseGet(
-                        failure -> ErrorPane.of("Could not load window : " + paneName, failure)
+                        failure -> ErrorPane.of("Could not load window : " + view, failure)
                 );
     }
 }

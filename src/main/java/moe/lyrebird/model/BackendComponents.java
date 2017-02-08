@@ -1,8 +1,9 @@
 package moe.lyrebird.model;
 
-import moe.lyrebird.model.twitter.TwitterHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
 
 /**
  * Back-end (Twitter, persistence etc.) components go here.
@@ -10,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class BackendComponents {
     
-    @Bean
-    public TwitterHandler twitterHandler() {
-        return new TwitterHandler();
+    @Bean(name = "twitterHandler")
+    public Twitter twitter() {
+        return TwitterFactory.getSingleton();
     }
 }

@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.util.ViewLoader;
+import moe.lyrebird.view.views.Views;
 
 /**
  * The {@link GUIManager} is responsible for bootstraping the
@@ -20,7 +21,7 @@ public final class GUIManager {
     
     public void startGui(final Stage primaryStage) {
         Platform.setImplicitExit(false);
-        primaryStage.setScene(this.viewLoader.loadWindow("RootView.fxml"));
+        primaryStage.setScene(this.viewLoader.loadWindow(Views.ROOT_VIEW));
         primaryStage.show();
     }
 }

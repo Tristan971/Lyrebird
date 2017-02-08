@@ -6,6 +6,9 @@ import moe.lyrebird.view.util.ViewLoader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * Front-end (views-related) components go here.
@@ -13,7 +16,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FrontendComponents {
     
+    /**
+     * Containerize {@link FXMLLoader} so we can get configured instances
+     * of it through Spring. Namely setting Spring as the provider for
+     * controller instances.
+     *
+     * @param context
+     *         The spring{@link ApplicationContext}.
+     * @return A *new* (non-singleton) configured {@link FXMLLoader}
+     */
     @Bean
+    @Scope(scopeName = SCOPE_PROTOTYPE)
     public FXMLLoader fxmlLoader(final ApplicationContext context) {
         final FXMLLoader loader = new FXMLLoader();
         loader.setControllerFactory(context::getBean);
@@ -21,8 +34,8 @@ public class FrontendComponents {
     }
     
     @Bean
-    public EasyFXML easyFXML(final FXMLLoader fxmlLoader) {
-        return new EasyFXML(fxmlLoader);
+    public EasyFXML easyFXML(final ApplicationContext context) {
+        return new EasyFXML(context);
     }
     
     @Bean

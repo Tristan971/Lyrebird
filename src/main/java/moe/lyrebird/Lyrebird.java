@@ -14,10 +14,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class Lyrebird extends Application {
     private ConfigurableApplicationContext context;
     
-    public static void main(final String... args) {
-        Application.launch(args);
-    }
-    
     @Override
     public void init() throws Exception {
         this.context = SpringApplication.run(Lyrebird.class);
@@ -25,12 +21,17 @@ public class Lyrebird extends Application {
     
     @Override
     public void start(final Stage primaryStage) throws Exception {
+        this.context.registerShutdownHook();
         this.context.getBean(GUIManager.class).startGui(primaryStage);
     }
     
     @Override
     public void stop() throws Exception {
         this.context.stop();
+    }
+    
+    public static void main(final String... args) {
+        Application.launch(args);
     }
     
 }

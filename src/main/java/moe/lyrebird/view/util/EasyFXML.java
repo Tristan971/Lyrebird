@@ -7,35 +7,37 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.net.URL;
 
+import static moe.lyrebird.view.views.Views.VIEWS_ROOT_FOLDER;
+
 /**
  * Created by Tristan on 06/02/2017.
  */
-@Component
 @Slf4j
 @Data
 public class EasyFXML {
-    private final FXMLLoader fxmlLoader;
+    
+    private final ApplicationContext context;
     
     @Autowired
-    public EasyFXML(final FXMLLoader fxmlLoader) {
-        this.fxmlLoader = fxmlLoader;
+    public EasyFXML(final ApplicationContext context) {
+        this.context = context;
     }
     
     /**
      * This is a wrapper around {@link #getPaneForFile(String)} for views inside
-     * {@link moe.lyrebird.view.views} package.
+     * {@link Views} enum.
      *
-     * @param fileName
-     *         The raw file name (e.g. RootView.fxml)
+     * @param view
+     *         The view to load
      * @return the pane associated
      */
-    public Try<Pane> getPaneForView(final String fileName) {
-        return this.getPaneForFile(Views.VIEWS_ROOT_FOLDER + fileName);
+    public Try<Pane> getPaneForView(final Views view) {
+        return this.getPaneForFile(VIEWS_ROOT_FOLDER.toString() + view.toString());
     }
     
     /**
@@ -47,12 +49,13 @@ public class EasyFXML {
      * @return the {@link Pane} associated to it.
      */
     public Try<Pane> getPaneForFile(final String filePathString) {
-        this.fxmlLoader.setLocation(getURLForView(filePathString));
+        final FXMLLoader loader = this.context.getBean(FXMLLoader.class);
+        loader.setLocation(getURLForView(filePathString));
         try {
-            final Pane filePane = this.fxmlLoader.load();
+            final Pane filePane = loader.load();
             return Try.of(() -> filePane);
         } catch (final IOException e) {
-            log.error("Could not locate file at path : "+filePathString, e);
+            log.error("Could not locate file at path : " + filePathString, e);
             return Try.failure(e);
         }
     }
