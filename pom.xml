@@ -37,47 +37,10 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!-- Shade plugin for fat jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <configuration>
-                    <transformers>
-                        <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"/>
-                    </transformers>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <!-- Spring maven plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <!-- JUnit 5 binding to mvn test -->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.0.0-M3</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>5.0.0-M3</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <!-- JaCoCo test coverage reporting -->
             <plugin>
@@ -101,6 +64,16 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <!-- Maven is too dumb to copy FXML files not
+            in .../resources by default, and SceneBuilder
+            is too dumb to discover Controller classes
+            if they are not in the same folder as FXML
+            files. And IntelliJ is too dumb to syntax check
+            java files in .../resources. So our FXML files
+            lie amidst the Controllers package and we enforce
+            maven to copy the FXML files as resources,
+            preserving the file path. -->
         <resources>
             <resource>
                 <directory>
