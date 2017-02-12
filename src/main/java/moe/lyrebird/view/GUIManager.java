@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.util.ViewLoader;
 import moe.lyrebird.view.views.Views;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * The {@link GUIManager} is responsible for bootstraping the
@@ -14,7 +15,8 @@ import moe.lyrebird.view.views.Views;
 public final class GUIManager {
     
     private final ViewLoader viewLoader;
-    
+
+    @Autowired
     public GUIManager(final ViewLoader viewLoader) {
         this.viewLoader = viewLoader;
     }

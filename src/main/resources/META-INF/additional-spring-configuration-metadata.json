@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "twitter.consumerKey",
+      "type": "java.lang.String",
+      "description": "This is the consumer key for the TwitterFactory."
+    }
+  ]
+}
