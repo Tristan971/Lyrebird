@@ -1,9 +1,19 @@
 {
   "properties": [
     {
+      "name": "app.version",
+      "type": "java.lang.String",
+      "description": "Application version, extracted from Maven's project.version key."
+    },
+    {
       "name": "twitter.consumerKey",
       "type": "java.lang.String",
       "description": "This is the consumer key for the TwitterFactory."
+    },
+    {
+      "name": "twitter.consumerSecret",
+      "type": "java.lang.String",
+      "description": "This is the consumer secret. Will be exposed via server config later."
     }
   ]
 }

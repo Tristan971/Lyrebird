@@ -2,6 +2,7 @@ package moe.lyrebird.model;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
@@ -21,11 +22,11 @@ public class BackendComponents {
      * @return a {@link Configuration}
      */
     @Bean
-    public twitter4j.conf.Configuration configuration() {
+    public twitter4j.conf.Configuration configuration(final Environment environment) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
 
-        String consumerKey = System.getProperty("twitter.consumerKey");
-        String consumerSecret = System.getProperty("twitter.consumerSecret");
+        String consumerKey = environment.getProperty("twitter.consumerKey");
+        String consumerSecret = environment.getProperty("twitter.consumerSecret");
         String accessToken = "";
         String accessTokenSecret = "";
 

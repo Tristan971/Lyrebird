@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * GUI of the application correctly.
  */
 @Slf4j
-public final class GUIManager {
+public class GUIManager {
     
     private final ViewLoader viewLoader;
 
