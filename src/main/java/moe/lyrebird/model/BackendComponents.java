@@ -23,12 +23,12 @@ public class BackendComponents {
      */
     @Bean
     public twitter4j.conf.Configuration configuration(final Environment environment) {
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-
-        String consumerKey = environment.getProperty("twitter.consumerKey");
-        String consumerSecret = environment.getProperty("twitter.consumerSecret");
-        String accessToken = "";
-        String accessTokenSecret = "";
+        final ConfigurationBuilder cb = new ConfigurationBuilder();
+    
+        final String consumerKey = environment.getProperty("twitter.consumerKey");
+        final String consumerSecret = environment.getProperty("twitter.consumerSecret");
+        final String accessToken = "";
+        final String accessTokenSecret = "";
 
         cb.setOAuthConsumerSecret(consumerSecret);
         cb.setOAuthConsumerKey(consumerKey);
@@ -39,17 +39,17 @@ public class BackendComponents {
     }
 
     @Bean
-    public TwitterFactory twitterFactory(twitter4j.conf.Configuration configuration) {
+    public TwitterFactory twitterFactory(final twitter4j.conf.Configuration configuration) {
         return new TwitterFactory(configuration);
     }
 
     @Bean
-    public Twitter twitter(TwitterFactory factory) {
+    public Twitter twitter(final TwitterFactory factory) {
         return factory.getInstance();
     }
 
     @Bean
-    public TwitterHandler twitterHandler(Twitter twitter) {
+    public TwitterHandler twitterHandler(final Twitter twitter) {
         return new TwitterHandler(twitter);
     }
 }
