@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.env.Environment;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -44,8 +45,8 @@ public class FrontendComponents {
     }
     
     @Bean
-    public GUIManager guiManager(final ViewLoader viewLoader) {
-        return new GUIManager(viewLoader);
+    public GUIManager guiManager(final Environment environment, final ViewLoader viewLoader) {
+        return new GUIManager(environment, viewLoader);
     }
     
 }

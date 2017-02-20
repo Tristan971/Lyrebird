@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.util.ViewLoader;
 import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 /**
  * The {@link GUIManager} is responsible for bootstraping the
@@ -14,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Slf4j
 public class GUIManager {
     
+    private final Environment environment;
     private final ViewLoader viewLoader;
 
     @Autowired
-    public GUIManager(final ViewLoader viewLoader) {
+    public GUIManager(final Environment environment, final ViewLoader viewLoader) {
+        this.environment = environment;
         this.viewLoader = viewLoader;
     }
     
