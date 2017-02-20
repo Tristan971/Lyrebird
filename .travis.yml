@@ -25,7 +25,6 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn -B clean
   - mvn -B test
   - mvn -B jacoco:report
   - mvn -B com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/jacoco/jacoco.xml -DprojectToken=$CODACY_PROJECT_TOKEN -DapiToken=$CODACY_API_TOKEN

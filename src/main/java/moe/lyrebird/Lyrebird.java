@@ -2,6 +2,7 @@ package moe.lyrebird;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.GUIManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * Main application entry point.
  */
+@Slf4j
 @SpringBootApplication
 public class Lyrebird extends Application {
     private ConfigurableApplicationContext context;
@@ -21,7 +23,6 @@ public class Lyrebird extends Application {
     
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        this.context.registerShutdownHook();
         this.context.getBean(GUIManager.class).startGui(primaryStage);
     }
     
