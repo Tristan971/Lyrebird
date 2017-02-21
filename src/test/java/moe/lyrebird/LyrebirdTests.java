@@ -15,7 +15,7 @@ public class LyrebirdTests {
     
     @Autowired
     private ApplicationContext context;
-
+    
     @Autowired
     private Environment environment;
     
@@ -23,7 +23,7 @@ public class LyrebirdTests {
     public void contextLoads() {
         Assertions.assertNotNull(this.context);
     }
-
+    
     @Test
     public void propertiesSetup() {
         final String version = environment.getProperty("app.version");

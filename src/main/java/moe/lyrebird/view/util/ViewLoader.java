@@ -28,7 +28,7 @@ public class ViewLoader {
      *         The view to load
      * @return The {@link Scene} containing the loaded {@link Pane}
      */
-    public Scene loadWindow(final Views view) {
+    public Scene loadScene(final Views view) {
         final Pane effectivePane = this.loadPane(view);
         return new Scene(effectivePane);
     }
