@@ -20,7 +20,7 @@ public class SessionManagerTest {
     @Autowired
     private SessionManager sessionManager;
     
-    private void addExampleSession() throws Exception {
+    private void addExampleSession() {
         this.sessionManager.addSession(exampleSession);
     }
     

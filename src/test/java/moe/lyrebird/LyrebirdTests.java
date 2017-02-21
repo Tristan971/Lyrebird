@@ -26,7 +26,7 @@ public class LyrebirdTests {
     
     @Test
     public void propertiesSetup() {
-        final String version = environment.getProperty("app.version");
+        final String version = this.environment.getProperty("app.version");
         Assertions.assertNotNull(
                 version,
                 "The application.properties file was not loaded at runtime."
