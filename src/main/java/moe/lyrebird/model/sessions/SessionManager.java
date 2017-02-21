@@ -1,14 +1,19 @@
 package moe.lyrebird.model.sessions;
 
 import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.model.TwitterHandler;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 import twitter4j.Twitter;
 
-import java.util.HashMap;
+import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * The session manager is responsible for persisting the sessions in database
@@ -18,16 +23,15 @@ import java.util.Optional;
 @Slf4j
 public class SessionManager implements ApplicationListener<ContextClosedEvent> {
     
+    private final ApplicationContext context;
     private final SessionRepository sessionRepository;
-    private final Map<Session, Twitter> currentSessions;
+    private final Map<Session, TwitterHandler> currentSessions;
     
-    public SessionManager(final SessionRepository sessionRepository) {
-        log.info("Started the Twitter session manager service.");
+    public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
+        log.info("Started the twitter session manager.");
         this.sessionRepository = sessionRepository;
-        
-        // For performance reasons we assume most users
-        // only have 1 session
-        this.currentSessions = new HashMap<>(1);
+        this.context = context;
+        this.currentSessions = new ConcurrentHashMap<>(1);
     }
     
     public Optional<Session> getSession(final String userHandle) {
@@ -44,7 +48,7 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
      * @return The optional representing an existing Twitter implementation,
      * or empty (was null in {@link #currentSessions}).
      */
-    public Optional<Twitter> getTwitterForSession(final Session session) {
+    public Optional<TwitterHandler> getTwitter(final Session session) {
         return Optional.ofNullable(this.currentSessions.get(session));
     }
     
@@ -54,21 +58,38 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
      *
      * @return The number of new sessions loaded
      */
+    @PostConstruct
     private long loadAllSessions() {
         final long initialSize = this.currentSessions.size();
         
         this.sessionRepository.findAll().forEach(session -> {
-            this.currentSessions.putIfAbsent(session, null);
+            this.currentSessions.putIfAbsent(session, this.context.getBean(TwitterHandler.class));
         });
         
         final long finalSize = this.currentSessions.size();
+    
+        final List<String> sessionUsernames = this.currentSessions.keySet().stream()
+                .map(Session::getUserHandle)
+                .collect(Collectors.toList());
         
         log.info(
-                "Loaded {} new sessions! Total loaded sessions is {}",
+                "Loaded {} Twitter sessions. Total loaded sessions so far is : {} {}",
                 finalSize - initialSize,
-                finalSize
+                finalSize,
+                sessionUsernames
         );
+    
         return finalSize - initialSize;
+    }
+    
+    public long reloadAllSessions() {
+        // "force" kill all references to avoid memory leaks
+        this.currentSessions.forEach((s, t) -> this.currentSessions.remove(s));
+        return this.loadAllSessions();
+    }
+    
+    public void addSession(final Session session) {
+        this.currentSessions.put(session, this.context.getBean(TwitterHandler.class));
     }
     
     /**
@@ -76,7 +97,7 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
      * Do not use bulk-save as it crashes under null reference saving.
      * We want to make absolutely sure to never corrupt the database.
      */
-    private void saveAllSessions() {
+    public void saveAllSessions() {
         this.currentSessions.keySet().stream()
                 .filter(Objects::nonNull)
                 .forEach(this.sessionRepository::save);
@@ -91,6 +112,7 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
      */
     @Override
     public void onApplicationEvent(final ContextClosedEvent event) {
+        log.info("Received application shutdown signal. Saving all sessions.");
         this.saveAllSessions();
     }
 }

@@ -1,5 +1,7 @@
 package moe.lyrebird.model.sessions;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import twitter4j.auth.OAuth2Authorization;
 
@@ -14,18 +16,24 @@ import java.io.Serializable;
  */
 @Data
 @Entity
+@AllArgsConstructor
+@Builder
 public class Session implements Serializable {
     
     private static final long serialVersionUID = -9038797949832585362L;
     
     @Id
     @GeneratedValue
-    private final Long uid;
+    private Long uid;
     
-    private final OAuth2Authorization oAuth2Authorization;
-    
-    /**
-     * Non-final since the user's name might change at some point.
-     */
+    private OAuth2Authorization oAuth2Authorization;
     private String userHandle;
+    
+    public Session() {
+    }
+    
+    @Override
+    public String toString() {
+        return this.userHandle;
+    }
 }

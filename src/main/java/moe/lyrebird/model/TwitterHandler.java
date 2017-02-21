@@ -8,11 +8,12 @@ import twitter4j.Twitter;
  * class.
  */
 public class TwitterHandler {
-
+    
     private final Twitter twitter;
-
+    
     @Autowired
-    public TwitterHandler(Twitter twitter) {
+    public TwitterHandler(final Twitter twitter) {
         this.twitter = twitter;
     }
+    
 }
