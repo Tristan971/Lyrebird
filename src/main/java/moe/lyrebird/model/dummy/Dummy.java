@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
  * Use with caution.
  */
 @Slf4j
-public class Dummy {
+public final class Dummy {
     /**
      * Returns a dummy object of some class
      *
@@ -20,6 +20,10 @@ public class Dummy {
      */
     @SuppressWarnings("unchecked")
     public static <T> T getDummy(final Class<T> tClass) {
-        return (T) new Object();
+        try {
+            return tClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            return (T) new Object();
+        }
     }
 }

@@ -1,7 +1,7 @@
 package moe.lyrebird.model.sessions;
 
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.model.TwitterHandler;
+import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;

@@ -1,4 +1,4 @@
-package moe.lyrebird.model;
+package moe.lyrebird.model.twitter4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import twitter4j.Twitter;
