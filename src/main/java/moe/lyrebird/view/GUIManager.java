@@ -25,7 +25,6 @@ public class GUIManager {
     
     public void startGui(final Stage primaryStage) {
         primaryStage.setScene(this.viewLoader.loadScene(Views.ROOT_VIEW));
-    
         primaryStage.setTitle(
                 String.format(
                         "Lyrebird Alpha [%s]",
@@ -33,9 +32,5 @@ public class GUIManager {
                 )
         );
         primaryStage.show();
-    }
-    
-    private static void startAWT() {
-        java.awt.Toolkit.getDefaultToolkit();
     }
 }

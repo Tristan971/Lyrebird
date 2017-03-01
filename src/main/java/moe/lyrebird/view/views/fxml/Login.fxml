@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="moe.lyrebird.view.views.fxml.LoginViewController">
+    <children>
+        <Label fx:id="loginLabel" layoutX="208.0" layoutY="124.0" text="Click to start logging in"/>
+        <Button fx:id="loginButton" layoutX="353.0" layoutY="120.0" mnemonicParsing="false" text="Login"/>
+        <TextField fx:id="pinCodeField" layoutX="208.0" layoutY="188.0" promptText="PIN CODE"/>
+        <Button fx:id="pinCodeButton" layoutX="366.0" layoutY="188.0" mnemonicParsing="false" text="OK"/>
+    </children>
+</AnchorPane>
