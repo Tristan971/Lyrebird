@@ -68,16 +68,16 @@
             </plugin>
         </plugins>
 
-        <!-- Maven is too dumb to copy FXML files not
-            in .../resources by default, and SceneBuilder
-            is too dumb to discover Controller classes
-            if they are not in the same folder as FXML
-            files. And IntelliJ is too dumb to syntax check
-            java files in .../resources. So our FXML files
-            lie amidst the Controllers package and we enforce
-            maven to copy the FXML files as resources,
-            preserving the file path. -->
         <resources>
+            <!-- Maven is too dumb to copy FXML files not
+    in .../resources by default, and SceneBuilder
+    is too dumb to discover Controller classes
+    if they are not in the same folder as FXML
+    files. And IntelliJ is too dumb to syntax check
+    java files in .../resources. So our FXML files
+    lie amidst the Controllers package and we enforce
+    maven to copy the FXML files as resources,
+    preserving the file path. -->
             <resource>
                 <directory>
                     src/main/java
@@ -97,6 +97,10 @@
                         **/*
                     </include>
                 </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
     </build>
