@@ -1,6 +1,10 @@
 package moe.lyrebird.view;
 
+import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import com.sun.javafx.application.HostServicesDelegate;
 import javafx.fxml.FXMLLoader;
+import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.Lyrebird;
 import moe.lyrebird.view.util.EasyFXML;
 import moe.lyrebird.view.util.ViewLoader;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +19,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  * Front-end (views-related) components go here.
  */
 @Configuration
+@Slf4j
 public class FrontendComponents {
     
     /**
@@ -47,6 +52,12 @@ public class FrontendComponents {
     @Bean
     public GUIManager guiManager(final Environment environment, final ViewLoader viewLoader) {
         return new GUIManager(environment, viewLoader);
+    }
+    
+    @Bean
+    public HostServicesDelegate hostServicesDelegate(final ApplicationContext context) {
+        log.info("Creating a HostServicesDelegate instance.");
+        return HostServicesFactory.getInstance(context.getBean(Lyrebird.class));
     }
     
 }
