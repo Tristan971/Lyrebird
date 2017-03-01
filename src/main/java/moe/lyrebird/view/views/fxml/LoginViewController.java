@@ -1,6 +1,5 @@
 package moe.lyrebird.view.views.fxml;
 
-import com.sun.javafx.application.HostServicesDelegate;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -29,7 +28,6 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 @Component
 @Slf4j
 public class LoginViewController {
-    private final HostServicesDelegate hostServices;
     private final TwitterHandler twitterHandler;
     @FXML
     private Button loginButton;
@@ -44,7 +42,6 @@ public class LoginViewController {
     @Autowired
     public LoginViewController(final ApplicationContext applicationContext) {
         this.twitterHandler = applicationContext.getBean(TwitterHandler.class);
-        this.hostServices = applicationContext.getBean(HostServicesDelegate.class);
     }
     
     public void initialize() {
