@@ -1,8 +1,11 @@
 package moe.lyrebird.view.views;
 
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.util.Arrays;
 
@@ -20,5 +23,15 @@ public class ErrorPane {
         
         throwableDataLabel.setLayoutY(20.0);
         return new Pane(messageLabel, throwableDataLabel);
+    }
+    
+    public static Stage displayErrorPaneOf(final String message, final Throwable throwable) {
+        final Pane errorPane = of(message, throwable);
+        final Stage errorStage = new Stage(StageStyle.DECORATED);
+        final Scene scene = new Scene(errorPane);
+        errorStage.setScene(scene);
+        errorStage.setTitle(message);
+        errorStage.show();
+        return errorStage;
     }
 }
