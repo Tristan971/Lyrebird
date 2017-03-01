@@ -33,4 +33,12 @@ public class GUIManager {
         );
         primaryStage.show();
     }
+
+    /**
+     * Must be called (only once) BEFORE the execution of JavaFX to enable AWT functionnality.
+     * Thus the place to do it is {@link moe.lyrebird.Lyrebird#main(String...)}
+     */
+    public static void enableAWT() {
+        java.awt.Toolkit.getDefaultToolkit();
+    }
 }

@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.views.ErrorPane;
@@ -16,8 +15,12 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import twitter4j.auth.RequestToken;
 
+import java.awt.*;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+
+import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 
 /**
  * Created by Tristan on 01/03/2017.
@@ -49,25 +52,32 @@ public class LoginViewController {
         this.pinCodeField.setVisible(false);
         this.pinCodeField.addEventHandler(Event.ANY, this::pinCodeTextListener);
         
-        this.loginButton.addEventFilter(MouseEvent.MOUSE_RELEASED, this::startNewSession);
+        this.loginButton.addEventFilter(MOUSE_RELEASED, this::startNewSession);
     }
     
     private void startNewSession(final Event loginButtonEvent) {
         final Pair<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
         log.info("Got authorization URL {}, opening the browser!", tokenUrl.getFirst().toString());
         try {
-            this.hostServices.showDocument(tokenUrl.getFirst().toURI().toString());
-            
+            Desktop.getDesktop().browse(tokenUrl.getFirst().toURI());
+
             this.loginButton.setDisable(true);
             this.pinCodeField.setVisible(true);
             this.pinCodeButton.setVisible(true);
-            this.pinCodeButton.addEventHandler(MouseEvent.MOUSE_RELEASED, __ -> {
-                this.registerPinCode(tokenUrl.getSecond());
-            });
+            this.pinCodeButton.addEventHandler(MOUSE_RELEASED, e -> this.registerPinCode(tokenUrl.getSecond()));
             
         } catch (final URISyntaxException e) {
             log.info("Bad URL returned! [{}]", tokenUrl.getFirst().toString());
             ErrorPane.displayErrorPaneOf("Bad URL returned!" + tokenUrl.getFirst().toString(), e);
+        } catch (IOException e) {
+            log.info("Could not get a handle to the OS's browser!");
+            ErrorPane.displayErrorPaneOf(
+                    "Browser unavailable!\n" +
+                            "We couldn't open your default browser, so you need" +
+                            "to access the following URL "+tokenUrl.getFirst().toString()+
+                            "manually with your preferred browser to get the pin code.",
+                    e
+            );
         }
     }
     

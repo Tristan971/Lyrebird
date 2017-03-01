@@ -32,6 +32,7 @@ public class Lyrebird extends Application {
     }
     
     public static void main(final String... args) {
+        GUIManager.enableAWT();
         Application.launch(args);
     }
     
