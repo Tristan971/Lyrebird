@@ -25,13 +25,12 @@ public class ErrorPane {
         return new Pane(messageLabel, throwableDataLabel);
     }
     
-    public static Stage displayErrorPaneOf(final String message, final Throwable throwable) {
+    public static void displayErrorPaneOf(final String message, final Throwable throwable) {
         final Pane errorPane = of(message, throwable);
         final Stage errorStage = new Stage(StageStyle.DECORATED);
         final Scene scene = new Scene(errorPane);
         errorStage.setScene(scene);
         errorStage.setTitle(message);
         errorStage.show();
-        return errorStage;
     }
 }
