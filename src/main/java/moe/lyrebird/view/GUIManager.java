@@ -34,4 +34,8 @@ public class GUIManager {
         );
         primaryStage.show();
     }
+    
+    private static void startAWT() {
+        java.awt.Toolkit.getDefaultToolkit();
+    }
 }
