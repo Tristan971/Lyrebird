@@ -1,4 +1,4 @@
-package moe.lyrebird.model.dummy;
+package moe.lyrebird.lang;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

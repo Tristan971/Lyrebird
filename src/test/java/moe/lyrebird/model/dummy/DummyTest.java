@@ -1,5 +1,6 @@
 package moe.lyrebird.model.dummy;
 
+import moe.lyrebird.lang.Dummy;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,5 +21,4 @@ public class DummyTest {
                 Dummy.getDummy(String.class) instanceof String
         );
     }
-
 }
