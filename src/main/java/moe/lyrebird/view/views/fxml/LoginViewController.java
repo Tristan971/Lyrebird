@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
+import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Optional;
 
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 
@@ -66,7 +68,7 @@ public class LoginViewController {
         } catch (final URISyntaxException e) {
             log.info("Bad URL returned! [{}]", tokenUrl.getFirst().toString());
             ErrorPane.displayErrorPaneOf("Bad URL returned!" + tokenUrl.getFirst().toString(), e);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             log.info("Could not get a handle to the OS's browser!");
             ErrorPane.displayErrorPaneOf(
                     "Browser unavailable!\n" +
@@ -80,11 +82,19 @@ public class LoginViewController {
     
     private void registerPinCode(final RequestToken requestToken) {
         if (this.pinIsValid) {
-            final boolean success = this.twitterHandler.registerAccessToken(
+            final Optional<AccessToken> success = this.twitterHandler.registerAccessToken(
                     requestToken,
                     this.pinCodeField.getText()
             );
-            if (!success) {
+            if (success.isPresent()) {
+                final AccessToken token = success.get();
+                this.loginButton.setVisible(false);
+                this.loginLabel.setText(
+                        String.format(
+                                "Successfully logged in account @%s!",
+                                token.getScreenName())
+                );
+            } else {
                 ErrorPane.displayErrorPaneOf("Could not authenticate you!", null);
             }
         }

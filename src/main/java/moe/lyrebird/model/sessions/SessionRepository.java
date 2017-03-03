@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
  * It is used to store {@link Session}s with their credentials
  * in the database.
  */
-public interface SessionRepository extends CrudRepository<Session, Long> {
+public interface SessionRepository extends CrudRepository<Session, String> {
     
     /**
      * Saves a session to the repository.
@@ -27,7 +27,7 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
      *         The session's UID.
      * @return The session.
      */
-    Session findOne(final Long uid);
+    Session findOne(final String uid);
     
     /**
      * Finds all the saved sessions.
@@ -44,7 +44,7 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
      *         The uid of the session looked for
      * @return Whether it exists or not.
      */
-    boolean exists(final Long uid);
+    boolean exists(final String uid);
     
     /**
      * Deletes a session from the repo.
@@ -52,5 +52,5 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
      * @param uid
      *         The ID of the session to be deleted.
      */
-    void delete(final Long uid);
+    void delete(final String uid);
 }
