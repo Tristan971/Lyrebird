@@ -1,7 +1,7 @@
 package moe.lyrebird;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,13 +21,13 @@ public class LyrebirdTests {
     
     @Test
     public void contextLoads() {
-        Assertions.assertNotNull(this.context);
+        Assert.assertNotNull(this.context);
     }
     
     @Test
     public void propertiesSetup() {
         final String version = this.environment.getProperty("app.version");
-        Assertions.assertNotNull(
+        Assert.assertNotNull(
                 version,
                 "The application.properties file was not loaded at runtime."
         );

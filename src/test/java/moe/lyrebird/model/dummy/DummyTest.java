@@ -1,7 +1,7 @@
 package moe.lyrebird.model.dummy;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,10 +15,10 @@ public class DummyTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     public void getDummy() throws Exception {
-        Assertions.assertTrue(
-                Dummy.getDummy(String.class) instanceof String,
-                "Dummy was not cast !"
+        Assert.assertTrue(
+                "Dummy was not cast !",
+                Dummy.getDummy(String.class) instanceof String
         );
     }
-    
+
 }
