@@ -8,7 +8,8 @@ public enum Views {
     VIEWS_ROOT_FOLDER("moe/lyrebird/view/views/fxml/"),
     
     ROOT_VIEW("RootView.fxml"),
-    LOGIN_VIEW("Login.fxml");
+    LOGIN_VIEW("Login.fxml"),
+    TIMELINE_VIEW("Timeline.fxml");
     
     private final String fileName;
     

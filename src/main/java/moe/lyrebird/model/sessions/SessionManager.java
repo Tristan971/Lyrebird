@@ -8,6 +8,7 @@ import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
+import twitter4j.auth.AccessToken;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -31,7 +32,8 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
     @Getter(AccessLevel.NONE)
     private final SessionRepository sessionRepository;
 
-    private final Map<Session, TwitterHandler> currentSessions;
+    private Session currentSession;
+    private final Map<Session, TwitterHandler> loadedSessions;
     
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
@@ -39,11 +41,11 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
         log.info("Started the twitter session manager!");
         this.sessionRepository = sessionRepository;
         log.info("Loaded the session repository : {}", sessionRepository.toString());
-        this.currentSessions = new ConcurrentHashMap<>(1);
+        this.loadedSessions = new ConcurrentHashMap<>(1);
     }
     
     public Optional<Session> getSession(final String userId) {
-        return this.currentSessions.keySet().stream()
+        return this.loadedSessions.keySet().stream()
                 .filter(session -> session.getUserId().equals(userId))
                 .findFirst();
     }
@@ -56,7 +58,7 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
      * @return The potential TwitterHandler for this session.
      */
     public Optional<TwitterHandler> getTwitterHandler(final Session session) {
-        return Optional.ofNullable(this.currentSessions.get(session));
+        return Optional.ofNullable(this.loadedSessions.get(session));
     }
     
     /**
@@ -66,13 +68,13 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
      */
     @PostConstruct
     private long loadAllSessions() {
-        final long initialSize = this.currentSessions.size();
+        final long initialSize = this.loadedSessions.size();
         
         this.sessionRepository.findAll().forEach(this::addSession);
         
-        final long finalSize = this.currentSessions.size();
+        final long finalSize = this.loadedSessions.size();
     
-        final List<String> sessionUsernames = this.currentSessions.keySet().stream()
+        final List<String> sessionUsernames = this.loadedSessions.keySet().stream()
                 .map(Session::getUserId)
                 .collect(Collectors.toList());
         
@@ -90,14 +92,26 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
     @SuppressWarnings("UnusedReturnValue")
     public long reloadAllSessions() {
         // "force" kill all references to avoid memory leaks
-        this.currentSessions.forEach((s, t) -> this.currentSessions.remove(s));
+        this.loadedSessions.forEach((s, t) -> this.loadedSessions.remove(s));
         return this.loadAllSessions();
     }
     
     public void addSession(final Session session) {
         final TwitterHandler handler = this.context.getBean(TwitterHandler.class);
         handler.setAccessToken(session.getAccessToken());
-        this.currentSessions.put(session, handler);
+        this.loadedSessions.put(session, handler);
+        this.setCurrentSession(session);
+    }
+
+    public void addTwitterHandler(final TwitterHandler twitterHandler) {
+        final AccessToken accessToken = twitterHandler.getAccessToken();
+        final Session session = Session.builder()
+                .userId(accessToken.getScreenName())
+                .accessToken(accessToken)
+                .build();
+
+        this.loadedSessions.put(session, twitterHandler);
+        this.setCurrentSession(session);
     }
     
     /**
@@ -107,8 +121,8 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
      */
     @SuppressWarnings("UseBulkOperation")
     public void saveAllSessions() {
-        this.currentSessions.keySet().forEach(this.sessionRepository::save);
-        log.info("Saving sessions {}", this.currentSessions.keySet().toString());
+        this.loadedSessions.keySet().forEach(this.sessionRepository::save);
+        log.info("Saving sessions {}", this.loadedSessions.keySet().toString());
     }
     
     /**

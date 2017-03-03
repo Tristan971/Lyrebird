@@ -26,7 +26,6 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 /**
  * Created by Tristan on 01/03/2017.
  */
-@SuppressWarnings("unused")
 @Component
 @Slf4j
 public class LoginViewController {
@@ -54,6 +53,7 @@ public class LoginViewController {
         this.loginButton.addEventFilter(MOUSE_RELEASED, this::startNewSession);
     }
     
+    @SuppressWarnings("unused")
     private void startNewSession(final Event loginButtonEvent) {
         final Pair<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
         log.info("Got authorization URL {}, opening the browser!", tokenUrl.getFirst().toString());
@@ -100,6 +100,7 @@ public class LoginViewController {
         }
     }
     
+    @SuppressWarnings("unused")
     private void pinCodeTextListener(final Event keyEvent) {
         final String text = LoginViewController.this.pinCodeField.getText();
         try {

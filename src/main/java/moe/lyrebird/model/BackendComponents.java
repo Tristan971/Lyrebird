@@ -18,8 +18,8 @@ import twitter4j.Twitter;
 public class BackendComponents {
     
     @Bean
-    public TwitterHandler twitterHandler(final Twitter twitter) {
-        return new TwitterHandler(twitter);
+    public TwitterHandler twitterHandler(final ApplicationContext context, final Twitter twitter) {
+        return new TwitterHandler(context, twitter);
     }
     
     @Bean

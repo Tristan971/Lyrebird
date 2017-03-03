@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.lang.SneakyThrow;
+import moe.lyrebird.model.sessions.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.util.Pair;
 import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
@@ -21,6 +23,8 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TwitterHandler {
+    private final ApplicationContext context;
+
     private final Twitter twitter;
     private AccessToken accessToken;
     
@@ -55,7 +59,9 @@ public class TwitterHandler {
                 accessToken.getFirst().getScreenName(),
                 accessToken.getFirst().toString()
         );
+        this.accessToken = accessToken.getFirst();
+
+        this.context.getBean(SessionManager.class).addTwitterHandler(this);
         return Optional.of(accessToken.getFirst());
-        //storeAccessToken(twitter.verifyCredentials().getId() , accessToken);
     }
 }
