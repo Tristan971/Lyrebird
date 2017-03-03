@@ -1,5 +1,6 @@
 package moe.lyrebird.model.dummy;
 
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
  * Use with caution.
  */
 @Slf4j
+@UtilityClass
 public final class Dummy {
     /**
      * Returns a dummy object of some class
