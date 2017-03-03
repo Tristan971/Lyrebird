@@ -37,12 +37,6 @@ public class Twitter4JComponentsTest {
         );
     }
 
-    @Test(expected = NullPointerException.class)
-    public void twitterConfiguration() throws Exception {
-        final TwitterConfiguration twitterConfiguration = this.context.getBean(TwitterConfiguration.class);
-        twitterConfiguration.setConfiguration(null);
-    }
-
     @Test
     public void twitter() throws Exception {
         final Twitter twitter = this.context.getBean(Twitter.class);

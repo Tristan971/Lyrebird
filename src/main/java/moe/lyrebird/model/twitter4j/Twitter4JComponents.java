@@ -2,13 +2,10 @@ package moe.lyrebird.model.twitter4j;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
-
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * Created by Tristan on 22/02/2017.
@@ -24,20 +21,13 @@ public class Twitter4JComponents {
         cb.setOAuthConsumerKey(consumerKey);
         return cb.build();
     }
-
+    
     @Bean
-    public TwitterConfiguration twitterConfiguration(final twitter4j.conf.Configuration configuration) {
-        return new TwitterConfiguration((long) -1, configuration);
+    public TwitterFactory twitterFactory(final twitter4j.conf.Configuration configuration) {
+        return new TwitterFactory(configuration);
     }
     
     @Bean
-    @Scope(scopeName = SCOPE_PROTOTYPE)
-    public TwitterFactory twitterFactory(final TwitterConfiguration configuration) {
-        return new TwitterFactory(configuration.getConfiguration());
-    }
-    
-    @Bean
-    @Scope(scopeName = SCOPE_PROTOTYPE)
     public Twitter twitter(final TwitterFactory factory) {
         return factory.getInstance();
     }
