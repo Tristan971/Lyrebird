@@ -57,27 +57,34 @@ public class LoginViewController {
     private void startNewSession(final Event loginButtonEvent) {
         final Pair<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
         log.info("Got authorization URL {}, opening the browser!", tokenUrl.getFirst().toString());
-        try {
-            Desktop.getDesktop().browse(tokenUrl.getFirst().toURI());
 
-            this.loginButton.setDisable(true);
-            this.pinCodeField.setVisible(true);
-            this.pinCodeButton.setVisible(true);
-            this.pinCodeButton.addEventHandler(MOUSE_RELEASED, e -> this.registerPinCode(tokenUrl.getSecond()));
-            
-        } catch (final URISyntaxException e) {
-            log.info("Bad URL returned! [{}]", tokenUrl.getFirst().toString());
-            ErrorPane.displayErrorPaneOf("Bad URL returned!" + tokenUrl.getFirst().toString(), e);
-        } catch (final IOException e) {
-            log.info("Could not get a handle to the OS's browser!");
-            ErrorPane.displayErrorPaneOf(
-                    "Browser unavailable!\n" +
-                            "We couldn't open your default browser, so you need" +
-                            "to access the following URL "+tokenUrl.getFirst().toString()+
-                            "manually with your preferred browser to get the pin code.",
-                    e
-            );
-        }
+        System.out.println("before browse to twitter");
+        boolean issupported = Desktop.isDesktopSupported();
+        log.info("Desktop is supported: {}", issupported);
+
+        new Thread(() -> {
+            try {
+                Desktop.getDesktop().browse(tokenUrl.getFirst().toURI());
+            } catch (final URISyntaxException e) {
+                log.info("Bad URL returned! [{}]", tokenUrl.getFirst().toString());
+                ErrorPane.displayErrorPaneOf("Bad URL returned!" + tokenUrl.getFirst().toString(), e);
+            } catch (final IOException e) {
+                log.info("Could not get a handle to the OS's browser!");
+                ErrorPane.displayErrorPaneOf(
+                        "Browser unavailable!\n" +
+                                "We couldn't open your default browser, so you need" +
+                                "to access the following URL " + tokenUrl.getFirst().toString() +
+                                "manually with your preferred browser to get the pin code.",
+                        e
+                );
+            }
+        }).start();
+
+        System.out.println("after browse to twitter");
+        this.loginButton.setDisable(true);
+        this.pinCodeField.setVisible(true);
+        this.pinCodeButton.setVisible(true);
+        this.pinCodeButton.addEventHandler(MOUSE_RELEASED, e -> this.registerPinCode(tokenUrl.getSecond()));
     }
     
     private void registerPinCode(final RequestToken requestToken) {
