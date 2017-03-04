@@ -1,7 +1,6 @@
 package moe.lyrebird.view.util;
 
-import de.saxsys.javafx.test.JfxRunner;
-import de.saxsys.javafx.test.TestInJfxThread;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -9,6 +8,8 @@ import moe.lyrebird.Lombok;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.testfx.framework.junit.ApplicationTest;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -16,13 +17,11 @@ import java.lang.reflect.InvocationTargetException;
  * Created by Tristan on 04/03/2017.
  */
 @SpringBootTest
-@RunWith(JfxRunner.class)
-public class StageUtilsTest {
+@RunWith(SpringRunner.class)
+public class StageUtilsTest extends ApplicationTest {
     @Test
-    @TestInJfxThread
     public void stageOf() throws Exception {
-        final Stage stage = StageUtils.stageOf("Test", new Scene(new Pane()));
-        stage.hide();
+        Platform.runLater(() -> StageUtils.stageOf("Test", new Scene(new Pane())));
     }
     
     @Test(expected = InvocationTargetException.class)
@@ -30,4 +29,8 @@ public class StageUtilsTest {
         Lombok.utilityClassTest(StageUtils.class);
     }
     
+    @Override
+    public void start(final Stage stage) throws Exception {
+        stage.show();
+    }
 }
