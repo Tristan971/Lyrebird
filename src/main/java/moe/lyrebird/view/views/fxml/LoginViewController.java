@@ -64,7 +64,8 @@ public class LoginViewController {
 
         new Thread(() -> {
             try {
-                Desktop.getDesktop().browse(tokenUrl.getFirst().toURI());
+                if (issupported)
+                    Desktop.getDesktop().browse(tokenUrl.getFirst().toURI());
             } catch (final URISyntaxException e) {
                 log.info("Bad URL returned! [{}]", tokenUrl.getFirst().toString());
                 ErrorPane.displayErrorPaneOf("Bad URL returned!" + tokenUrl.getFirst().toString(), e);
