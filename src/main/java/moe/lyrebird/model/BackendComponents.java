@@ -7,7 +7,10 @@ import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import twitter4j.Twitter;
+
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * Back-end (Twitter, persistence etc.) components go here.
@@ -18,6 +21,7 @@ import twitter4j.Twitter;
 public class BackendComponents {
     
     @Bean
+    @Scope(scopeName = SCOPE_PROTOTYPE)
     public TwitterHandler twitterHandler(final ApplicationContext context, final Twitter twitter) {
         return new TwitterHandler(context, twitter);
     }

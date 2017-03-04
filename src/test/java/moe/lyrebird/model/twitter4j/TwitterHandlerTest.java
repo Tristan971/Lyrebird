@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.util.Pair;
 import org.springframework.test.context.junit4.SpringRunner;
 import twitter4j.auth.AccessToken;
@@ -21,6 +22,9 @@ import static moe.lyrebird.model.twitter4j.TwitterHandler.FAKE_ACCESS_TOKEN;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class TwitterHandlerTest {
+    
+    @Autowired
+    private ApplicationContext context;
     @Autowired
     private TwitterHandler twitterHandler;
     
@@ -47,6 +51,7 @@ public class TwitterHandlerTest {
     
     @Test
     public void getAccessToken() throws Exception {
+        this.twitterHandler = this.context.getBean(TwitterHandler.class);
         Assert.assertNotNull(this.twitterHandler.getAccessToken());
         Assert.assertEquals(this.twitterHandler.getAccessToken(), FAKE_ACCESS_TOKEN);
     }
