@@ -50,7 +50,8 @@ public class RootViewController {
         loginStage.initModality(Modality.APPLICATION_MODAL);
         loginStage.show();
     }
-
+    
+    @SuppressWarnings("unused")
     private void loadTimeline(final MouseEvent event) {
         log.info("Loading timeline.");
         final Pane timelinePane = this.viewLoader.loadPane(Views.TIMELINE_VIEW);
