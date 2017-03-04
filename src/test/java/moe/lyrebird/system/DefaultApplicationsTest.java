@@ -2,12 +2,14 @@ package moe.lyrebird.system;
 
 import de.saxsys.javafx.test.JfxRunner;
 import de.saxsys.javafx.test.TestInJfxThread;
+import moe.lyrebird.Lombok;
 import moe.lyrebird.lang.SneakyThrow;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
 /**
@@ -36,5 +38,11 @@ public class DefaultApplicationsTest {
     public void enabledMode() throws Exception {
         DefaultApplications.openBrowser(GOOGLE);
     }
+    
+    @Test(expected = InvocationTargetException.class)
+    public void utilityClassTest() throws Exception {
+        Lombok.utilityClassTest(DefaultApplications.class);
+    }
+    
     
 }

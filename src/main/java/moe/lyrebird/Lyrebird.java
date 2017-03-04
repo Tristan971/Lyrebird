@@ -17,17 +17,17 @@ public class Lyrebird extends Application {
     private ConfigurableApplicationContext context;
     
     @Override
-    public void init() throws Exception {
+    public void init() {
         this.context = SpringApplication.run(Lyrebird.class);
     }
     
     @Override
-    public void start(final Stage primaryStage) throws Exception {
+    public void start(final Stage primaryStage) {
         this.context.getBean(GUIManager.class).startGui(primaryStage);
     }
     
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         this.context.stop();
     }
     

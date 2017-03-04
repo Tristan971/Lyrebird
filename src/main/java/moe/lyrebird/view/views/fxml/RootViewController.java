@@ -8,9 +8,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.view.util.StageUtils;
 import moe.lyrebird.view.util.ViewLoader;
 import moe.lyrebird.view.views.Views;
-import moe.lyrebird.view.views.utils.StageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

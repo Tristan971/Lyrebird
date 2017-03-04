@@ -1,5 +1,6 @@
 package moe.lyrebird.lang;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.data.util.Pair;
 
 import java.util.function.Supplier;
@@ -7,6 +8,7 @@ import java.util.function.Supplier;
 /**
  * Created by Tristan on 01/03/2017.
  */
+@UtilityClass
 public class SneakyThrow {
     public static final Throwable NO_EXCEPTION = new Throwable("No exception was thrown");
     

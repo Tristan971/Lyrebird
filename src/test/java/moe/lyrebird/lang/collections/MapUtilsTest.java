@@ -1,5 +1,6 @@
 package moe.lyrebird.lang.collections;
 
+import moe.lyrebird.Lombok;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,5 +42,10 @@ public class MapUtilsTest {
     @Test(expected = NullPointerException.class)
     public void nullMapCheck() throws Exception {
         MapUtils.entryFor(testKey, null);
+    }
+    
+    @Test(expected = InvocationTargetException.class)
+    public void utilityClassTest() throws Exception {
+        Lombok.utilityClassTest(MapUtils.class);
     }
 }

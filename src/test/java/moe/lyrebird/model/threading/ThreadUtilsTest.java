@@ -1,8 +1,10 @@
 package moe.lyrebird.model.threading;
 
+import moe.lyrebird.Lombok;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -50,6 +52,11 @@ public class ThreadUtilsTest {
         Assert.assertTrue(oldValue.isDone());
         Assert.assertFalse(oldValue.get());
         Assert.assertTrue(ran.get());
+    }
+    
+    @Test(expected = InvocationTargetException.class)
+    public void utilityClassTest() throws Exception {
+        Lombok.utilityClassTest(ThreadUtils.class);
     }
     
 }

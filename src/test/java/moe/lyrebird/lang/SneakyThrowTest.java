@@ -1,5 +1,6 @@
 package moe.lyrebird.lang;
 
+import moe.lyrebird.Lombok;
 import moe.lyrebird.lang.SneakyThrow.ThrowingSupplier;
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.util.Pair;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Tristan on 04/03/2017.
@@ -38,5 +41,10 @@ public class SneakyThrowTest {
         final Pair<?, Throwable> uncheckedWithException = SneakyThrow.uncheckedWithException(nonThrowingSupplier);
         Assert.assertEquals(uncheckedWithException.getSecond(), SneakyThrow.NO_EXCEPTION);
         Assert.assertEquals(0, uncheckedWithException.getFirst());
+    }
+    
+    @Test(expected = InvocationTargetException.class)
+    public void utilityClassTest() throws Exception {
+        Lombok.utilityClassTest(SneakyThrow.class);
     }
 }
