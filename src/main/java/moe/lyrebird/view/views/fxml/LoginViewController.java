@@ -6,7 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.model.threading.ThreadUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
+import moe.lyrebird.system.DefaultApplications;
 import moe.lyrebird.view.views.ErrorPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -15,9 +17,6 @@ import org.springframework.stereotype.Component;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Optional;
 
@@ -58,30 +57,9 @@ public class LoginViewController {
         final Pair<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
         log.info("Got authorization URL {}, opening the browser!", tokenUrl.getFirst().toString());
 
-        System.out.println("before browse to twitter");
-        boolean issupported = Desktop.isDesktopSupported();
-        log.info("Desktop is supported: {}", issupported);
+        final URL authorizationURL = tokenUrl.getFirst();
+        ThreadUtils.run(() -> DefaultApplications.openBrowser(authorizationURL));
 
-        new Thread(() -> {
-            try {
-                if (issupported)
-                    Desktop.getDesktop().browse(tokenUrl.getFirst().toURI());
-            } catch (final URISyntaxException e) {
-                log.info("Bad URL returned! [{}]", tokenUrl.getFirst().toString());
-                ErrorPane.displayErrorPaneOf("Bad URL returned!" + tokenUrl.getFirst().toString(), e);
-            } catch (final IOException e) {
-                log.info("Could not get a handle to the OS's browser!");
-                ErrorPane.displayErrorPaneOf(
-                        "Browser unavailable!\n" +
-                                "We couldn't open your default browser, so you need" +
-                                "to access the following URL " + tokenUrl.getFirst().toString() +
-                                "manually with your preferred browser to get the pin code.",
-                        e
-                );
-            }
-        }).start();
-
-        System.out.println("after browse to twitter");
         this.loginButton.setDisable(true);
         this.pinCodeField.setVisible(true);
         this.pinCodeButton.setVisible(true);
