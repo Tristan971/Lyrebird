@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.model.threading.ThreadUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.system.DefaultApplications;
 import moe.lyrebird.view.views.ErrorPane;
@@ -56,9 +55,7 @@ public class LoginViewController {
     private void startNewSession(final Event loginButtonEvent) {
         final Pair<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
         log.info("Got authorization URL {}, opening the browser!", tokenUrl.getFirst().toString());
-
-        final URL authorizationURL = tokenUrl.getFirst();
-        ThreadUtils.run(() -> DefaultApplications.openBrowser(authorizationURL));
+        DefaultApplications.openBrowser(tokenUrl.getFirst());
 
         this.loginButton.setDisable(true);
         this.pinCodeField.setVisible(true);
