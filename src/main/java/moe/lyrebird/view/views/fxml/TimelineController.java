@@ -23,21 +23,19 @@ import java.util.stream.Collectors;
 @Component
 @Lazy
 public class TimelineController {
+    private final TwitterHandler twitterHandler;
     @FXML
     private ListView<String> tweets;
 
-    private final TwitterHandler twitterHandler;
-
     public TimelineController(final SessionManager sessionManager) {
-        this.twitterHandler = sessionManager.getLoadedSessions()
-                .get(sessionManager.getCurrentSession());
+        this.twitterHandler = sessionManager.getCurrentSession().getValue();
     }
 
     public void initialize() {
-        loadTimeline();
+        this.updateTimeline();
     }
-
-    private void loadTimeline() {
+    
+    private void updateTimeline() {
         List<Status> statuses;
         try {
             statuses = this.twitterHandler.getTwitter().getHomeTimeline();
@@ -45,8 +43,8 @@ public class TimelineController {
             log.error("Could not load timeline!", e);
             statuses = Collections.emptyList();
         }
-
-        log.info("Statuses loaded : {}", statuses.toString());
+        
+        log.info("Loaded {} new statuses", statuses.size());
 
         final List<String> statusesStr = statuses.stream()
                 .map(Tweet::of)

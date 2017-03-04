@@ -1,5 +1,6 @@
 package moe.lyrebird.model.threading;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +16,7 @@ public class ThreadUtils {
     private static final int nbcores;
     private static final ThreadPoolExecutor tpe;
     private static final ScheduledExecutorService stpe;
-
+    
     static {
         nbcores = Runtime.getRuntime().availableProcessors();
         tpe = new ThreadPoolExecutor(
@@ -25,26 +26,26 @@ public class ThreadUtils {
                 TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(60)
         );
-
+        
         stpe = new ScheduledThreadPoolExecutor(1);
     }
-
-    public static void run(final Runnable runnable) {
-        log.info("Submitted a task for execution.", runnable);
+    
+    public static void run(@NonNull final Runnable runnable) {
+        log.info("Submitted a task for execution.");
         tpe.submit(runnable);
     }
-
-    public static <V> Future<V> run(final Callable<V> callable) {
-        log.info("Submitted call for computation.", callable);
+    
+    public static <V> Future<V> run(@NonNull final Callable<V> callable) {
+        log.info("Submitted call for computation.");
         return tpe.submit(callable);
     }
-
-    public static void runlater(final Runnable runnable, final long time, final TimeUnit timeUnit) {
+    
+    public static void runlater(@NonNull final Runnable runnable, final long time, final TimeUnit timeUnit) {
         log.info("Submitted task for execution in {} {}", runnable, time, timeUnit.toString());
         stpe.schedule(runnable, time, timeUnit);
     }
-
-    public static <V> ScheduledFuture<V>  runLater(final Callable<V> callable, final long time, final TimeUnit timeUnit) {
+    
+    public static <V> ScheduledFuture<V> runLater(@NonNull final Callable<V> callable, final long time, final TimeUnit timeUnit) {
         log.info("Submitted call for computation in {} {}", callable, time, timeUnit.toString());
         return stpe.schedule(callable, time, timeUnit);
     }

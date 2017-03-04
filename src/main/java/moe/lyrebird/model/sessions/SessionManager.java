@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.lang.collections.MapUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -13,6 +14,7 @@ import twitter4j.auth.AccessToken;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -31,9 +33,8 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
 
     @Getter(AccessLevel.NONE)
     private final SessionRepository sessionRepository;
-
-    private Session currentSession;
     private final Map<Session, TwitterHandler> loadedSessions;
+    private Entry<Session, TwitterHandler> currentSession;
     
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
@@ -100,7 +101,7 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
         final TwitterHandler handler = this.context.getBean(TwitterHandler.class);
         handler.setAccessToken(session.getAccessToken());
         this.loadedSessions.put(session, handler);
-        this.setCurrentSession(session);
+        this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
     }
 
     public void addTwitterHandler(final TwitterHandler twitterHandler) {
@@ -111,7 +112,7 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
                 .build();
 
         this.loadedSessions.put(session, twitterHandler);
-        this.setCurrentSession(session);
+        this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
     }
     
     /**

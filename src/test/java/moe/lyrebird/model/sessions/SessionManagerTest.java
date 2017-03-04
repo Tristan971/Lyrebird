@@ -35,4 +35,11 @@ public class SessionManagerTest {
         );
     }
     
+    @Test
+    public void testAutosetSession() {
+        final Session newSession = new Session();
+        this.sessionManager.addSession(newSession);
+        Assert.assertEquals(newSession, this.sessionManager.getCurrentSession().getKey());
+    }
+    
 }

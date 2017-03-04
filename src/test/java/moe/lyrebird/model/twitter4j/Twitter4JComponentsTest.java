@@ -29,11 +29,11 @@ public class Twitter4JComponentsTest {
         final Configuration configuration = this.context.getBean(Configuration.class);
         Assert.assertEquals(
                 configuration.getOAuthConsumerSecret(),
-                environment.getProperty("twitter.consumerSecret")
+                this.environment.getProperty("twitter.consumerSecret")
         );
         Assert.assertEquals(
                 configuration.getOAuthConsumerKey(),
-                environment.getProperty("twitter.consumerKey")
+                this.environment.getProperty("twitter.consumerKey")
         );
     }
 

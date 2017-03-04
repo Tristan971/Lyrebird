@@ -23,10 +23,12 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TwitterHandler {
+    public static final AccessToken FAKE_ACCESS_TOKEN = new AccessToken("fake", "token");
+    
     private final ApplicationContext context;
 
     private final Twitter twitter;
-    private AccessToken accessToken;
+    private AccessToken accessToken = FAKE_ACCESS_TOKEN;
     
     public Pair<URL, RequestToken> newSession() {
         log.info("Requesting new Session!");
@@ -40,28 +42,28 @@ public class TwitterHandler {
     
     public Optional<AccessToken> registerAccessToken(final RequestToken requestToken, final String pinCode) {
         log.info("Registering token {} with pincode {}", requestToken.toString(), pinCode);
-        
-        final Pair<AccessToken, Throwable> accessToken = SneakyThrow.uncheckedWithException(() -> {
+    
+        final Pair<AccessToken, Throwable> newAccessToken = SneakyThrow.uncheckedWithException(() -> {
             // Don't refactor expression lambda into statement lambda. It's too
             // long to be treated that way.
             //noinspection CodeBlock2Expr
             return this.twitter.getOAuthAccessToken(requestToken, pinCode);
         });
-        
-        if (accessToken.getSecond() != SneakyThrow.NO_EXCEPTION) {
+    
+        if (newAccessToken.getSecond() != SneakyThrow.NO_EXCEPTION) {
             log.info("Could not get access token! An error was thrown!");
             return Optional.empty();
         }
-        
-        this.twitter.setOAuthAccessToken(accessToken.getFirst());
+    
+        this.twitter.setOAuthAccessToken(newAccessToken.getFirst());
         log.info(
                 "Successfully got access token for user @{}! {}",
-                accessToken.getFirst().getScreenName(),
-                accessToken.getFirst().toString()
+                newAccessToken.getFirst().getScreenName(),
+                newAccessToken.getFirst().toString()
         );
-        this.accessToken = accessToken.getFirst();
+        this.accessToken = newAccessToken.getFirst();
 
         this.context.getBean(SessionManager.class).addTwitterHandler(this);
-        return Optional.of(accessToken.getFirst());
+        return Optional.of(newAccessToken.getFirst());
     }
 }
