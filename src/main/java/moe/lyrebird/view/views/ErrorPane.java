@@ -1,5 +1,6 @@
 package moe.lyrebird.view.views;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -27,10 +28,10 @@ public class ErrorPane {
     
     public static void displayErrorPaneOf(final String message, final Throwable throwable) {
         final Pane errorPane = of(message, throwable);
-        final Stage errorStage = new Stage(StageStyle.DECORATED);
         final Scene scene = new Scene(errorPane);
+        final Stage errorStage = new Stage(StageStyle.DECORATED);
         errorStage.setScene(scene);
         errorStage.setTitle(message);
-        errorStage.show();
+        Platform.runLater(errorStage::show);
     }
 }
