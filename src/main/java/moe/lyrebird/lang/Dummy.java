@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @UtilityClass
-public final class Dummy {
+public class Dummy {
     /**
      * Returns a dummy object of some class
      *
