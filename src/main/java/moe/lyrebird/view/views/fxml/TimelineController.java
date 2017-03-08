@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.format.Tweet;
+import moe.lyrebird.view.views.Controller;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
@@ -22,15 +23,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @Lazy
-public class TimelineController {
+public class TimelineController implements Controller {
     private final TwitterHandler twitterHandler;
     @FXML
     private ListView<String> tweets;
-
+    
     public TimelineController(final SessionManager sessionManager) {
         this.twitterHandler = sessionManager.getCurrentSession().getValue();
     }
-
+    
+    @Override
     public void initialize() {
         this.updateTimeline();
     }
@@ -45,11 +47,11 @@ public class TimelineController {
         }
         
         log.info("Loaded {} new statuses", statuses.size());
-
+    
         final List<String> statusesStr = statuses.stream()
                 .map(Tweet::of)
                 .collect(Collectors.toList());
-
+    
         this.tweets.setItems(FXCollections.observableArrayList(statusesStr));
     }
 }

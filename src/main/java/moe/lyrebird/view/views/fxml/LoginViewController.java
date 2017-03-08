@@ -8,6 +8,8 @@ import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.system.DefaultApplications;
+import moe.lyrebird.view.GUIManager;
+import moe.lyrebird.view.views.Controller;
 import moe.lyrebird.view.views.ErrorPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +21,7 @@ import twitter4j.auth.RequestToken;
 import java.net.URL;
 import java.util.Optional;
 
+import static javafx.event.Event.ANY;
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 
 /**
@@ -26,8 +29,10 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
  */
 @Component
 @Slf4j
-public class LoginViewController {
+public class LoginViewController implements Controller {
+    private final GUIManager guiManager;
     private final TwitterHandler twitterHandler;
+    
     @FXML
     private Button loginButton;
     @FXML
@@ -41,14 +46,18 @@ public class LoginViewController {
     @Autowired
     public LoginViewController(final ApplicationContext applicationContext) {
         this.twitterHandler = applicationContext.getBean(TwitterHandler.class);
+        this.guiManager = applicationContext.getBean(GUIManager.class);
     }
     
+    @Override
     public void initialize() {
         this.pinCodeButton.setVisible(false);
         this.pinCodeField.setVisible(false);
-        this.pinCodeField.addEventHandler(Event.ANY, this::pinCodeTextListener);
         
+        this.pinCodeField.addEventHandler(ANY, this::pinCodeTextListener);
         this.loginButton.addEventFilter(MOUSE_RELEASED, this::startNewSession);
+        
+        this.guiManager.getMainStage().setOpacity(0.5f);
     }
     
     @SuppressWarnings("unused")
@@ -80,6 +89,7 @@ public class LoginViewController {
             } else {
                 ErrorPane.displayErrorPaneOf("Could not authenticate you!", null);
             }
+            this.guiManager.getStages().get(this.getClass()).hide();
         }
     }
     
