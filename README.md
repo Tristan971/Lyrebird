@@ -16,16 +16,16 @@ Hopefully this works out.
 Check out the release pages once we have something working decently.
 
 ## Currently working :
-[x] Log in 
+- [x] Log in 
 
-[x] Display timeline
+- [x] Display timeline
 
-[ ] Tweeting
+- [ ] Tweeting
 
-[ ] Add tabs for mentions and hashtag searches
+- [ ] Add tabs for mentions and hashtag searches
 
-[ ] Add reply and retweet options
+- [ ] Add reply and retweet options
 
-[ ] Open pictures from within the app
+- [ ] Open pictures from within the app
 
-[ ] Show DM list
+- [ ] Show DM list
