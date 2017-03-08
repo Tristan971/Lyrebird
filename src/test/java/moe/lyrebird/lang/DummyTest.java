@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.misc.Unsafe;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -34,7 +33,7 @@ public class DummyTest {
     
     @Test(expected = RuntimeException.class)
     public void noCastForPrivateClasses() throws Exception {
-        Assert.assertEquals(Dummy.getDummy(Unsafe.class).getClass(), Unsafe.class);
+        Assert.assertEquals(Dummy.getDummy(System.class).getClass(), System.class);
     }
     
     @Test(expected = InvocationTargetException.class)
