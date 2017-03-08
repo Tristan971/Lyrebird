@@ -54,7 +54,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.8</version>
+                <version>0.7.9</version>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
@@ -163,7 +163,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-            <version>1.16.12</version>
+            <version>1.16.14</version>
         </dependency>
 
         <!-- JavaSlang -->
@@ -182,13 +182,13 @@
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
-            <version>4.0.1-alpha</version>
+            <version>4.0.5-alpha</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit</artifactId>
-            <version>4.0.1-alpha</version>
+            <version>4.0.5-alpha</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
