@@ -1,10 +1,8 @@
 package moe.lyrebird.view.views;
 
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.stage.Stage;
 import moe.lyrebird.Lombok;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,12 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class ErrorPaneTest extends ApplicationTest {
-    
-    @Before
-    public void setUp() {
-        new JFXPanel();
-    }
-    
     @Test
     public void of() throws Exception {
         ErrorPane.of(
