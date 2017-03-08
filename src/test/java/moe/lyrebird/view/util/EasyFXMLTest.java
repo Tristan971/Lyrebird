@@ -15,7 +15,6 @@ import static moe.lyrebird.view.views.Views.VIEWS_ROOT_FOLDER;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class EasyFXMLTest {
-
     @Autowired
     private EasyFXML easyFXML;
 
@@ -42,6 +41,11 @@ public class EasyFXMLTest {
                 "Could not load the Pane for the root view!",
                 this.easyFXML.getPaneForFile(VIEWS_ROOT_FOLDER.toString() + ROOT_VIEW.toString()).isSuccess()
         );
+    }
+    
+    @Test
+    public void getPaneForNoFile() throws Exception {
+        this.easyFXML.getPaneForFile("brokenfxml.fxml");
     }
 
     @Test

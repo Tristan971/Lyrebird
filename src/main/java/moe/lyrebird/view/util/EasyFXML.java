@@ -3,7 +3,6 @@ package moe.lyrebird.view.util;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 import javaslang.control.Try;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,7 @@ import static moe.lyrebird.view.views.Views.VIEWS_ROOT_FOLDER;
  * Created by Tristan on 06/02/2017.
  */
 @Slf4j
-@Data
 public class EasyFXML {
-    
     private final ApplicationContext context;
     
     @Autowired
