@@ -1,9 +1,8 @@
 package moe.lyrebird.system;
 
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.lang.SneakyThrow;
-import moe.lyrebird.model.threading.ThreadUtils;
+import moe.lyrebird.model.threading.BackgroundService;
 import moe.lyrebird.view.views.ErrorPane;
 
 import java.awt.*;
@@ -15,27 +14,32 @@ import java.net.URL;
  * Created by tristan on 04/03/2017.
  */
 @Slf4j
-@UtilityClass
-public class DefaultApplications {
-
-    public static void openBrowser(final URL url) {
+public class SystemIntegration {
+    
+    private final BackgroundService backgroundService;
+    
+    public SystemIntegration(final BackgroundService backgroundService) {
+        this.backgroundService = backgroundService;
+    }
+    
+    public void openBrowser(final URL url) {
         log.info("Requested opening browser at address : {}", url.toString());
         if (!Desktop.isDesktopSupported()) {
-            couldNotOpenDefaultBrowser(url);
+            SystemIntegration.couldNotOpenDefaultBrowser(url);
             return;
         }
 
         final URI uri = SneakyThrow.unchecked(url::toURI);
-        ThreadUtils.run(() -> {
+        this.backgroundService.run(() -> {
             try {
                 Desktop.getDesktop().browse(uri);
             } catch (final IOException e) {
-                couldNotOpenDefaultBrowser(url, e);
+                SystemIntegration.couldNotOpenDefaultBrowser(url, e);
             }
         });
     }
-
-    private static void couldNotOpenDefaultBrowser(final URL url, final IOException ... exception) {
+    
+    private static void couldNotOpenDefaultBrowser(final URL url, final IOException... exception) {
         log.info("Could not get a handle to the OS's browser!");
         ErrorPane.displayErrorPaneOf(
                 "Browser unavailable!\n" +
