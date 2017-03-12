@@ -1,10 +1,12 @@
 package moe.lyrebird.model.threading;
 
-import moe.lyrebird.Lombok;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -13,11 +15,16 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 /**
  * Created by Tristan on 04/03/2017.
  */
-public class ThreadUtilsTest {
+@SpringBootTest
+@RunWith(SpringRunner.class)
+public class BackgroundServiceTest {
+    @Autowired
+    private BackgroundService backgroundService;
+    
     @Test
     public void run() throws Exception {
         final AtomicBoolean ran = new AtomicBoolean(false);
-        ThreadUtils.run(() -> ran.set(true));
+        this.backgroundService.run(() -> ran.set(true));
         Thread.sleep(100);
         Assert.assertTrue(ran.get());
     }
@@ -25,7 +32,7 @@ public class ThreadUtilsTest {
     @Test
     public void runCallable() throws Exception {
         final AtomicBoolean ran = new AtomicBoolean(false);
-        final Future<Boolean> oldValue = ThreadUtils.run(() -> ran.getAndSet(true));
+        final Future<Boolean> oldValue = this.backgroundService.run(() -> ran.getAndSet(true));
         Assert.assertFalse(oldValue.get());
         Assert.assertTrue(ran.get());
     }
@@ -33,7 +40,7 @@ public class ThreadUtilsTest {
     @Test
     public void runLater() throws Exception {
         final AtomicBoolean ran = new AtomicBoolean(false);
-        ThreadUtils.runlater(() -> ran.set(true), 500, MILLISECONDS);
+        this.backgroundService.runlater(() -> ran.set(true), 500, MILLISECONDS);
         Thread.sleep(250);
         Assert.assertFalse(ran.get());
         Thread.sleep(400);
@@ -43,7 +50,9 @@ public class ThreadUtilsTest {
     @Test
     public void runLaterCallable() throws Exception {
         final AtomicBoolean ran = new AtomicBoolean(false);
-        final Future<Boolean> oldValue = ThreadUtils.runLater(() -> ran.getAndSet(true), 500, MILLISECONDS);
+        final Future<Boolean> oldValue = this.backgroundService.runLater(
+                () -> ran.getAndSet(true), 500, MILLISECONDS
+        );
         
         Thread.sleep(250);
         Assert.assertFalse(ran.get());
@@ -52,11 +61,6 @@ public class ThreadUtilsTest {
         Assert.assertTrue(oldValue.isDone());
         Assert.assertFalse(oldValue.get());
         Assert.assertTrue(ran.get());
-    }
-    
-    @Test(expected = InvocationTargetException.class)
-    public void utilityClassTest() throws Exception {
-        Lombok.utilityClassTest(ThreadUtils.class);
     }
     
 }
