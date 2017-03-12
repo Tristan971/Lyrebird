@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.lang.collections.MapUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextClosedEvent;
 import twitter4j.auth.AccessToken;
 
 import javax.annotation.PostConstruct;
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class SessionManager implements ApplicationListener<ContextClosedEvent> {
+public class SessionManager {
 
     @Getter(AccessLevel.NONE)
     private final ApplicationContext context;
@@ -124,17 +122,5 @@ public class SessionManager implements ApplicationListener<ContextClosedEvent> {
     public void saveAllSessions() {
         this.loadedSessions.keySet().forEach(this.sessionRepository::save);
         log.info("Saving sessions {}", this.loadedSessions.keySet().toString());
-    }
-    
-    /**
-     * Saving all sessions on shutdown signal.
-     *
-     * @param event
-     *         The shutdown event.
-     */
-    @Override
-    public void onApplicationEvent(final ContextClosedEvent event) {
-        log.info("Received application shutdown signal. Saving all sessions.");
-        this.saveAllSessions();
     }
 }
