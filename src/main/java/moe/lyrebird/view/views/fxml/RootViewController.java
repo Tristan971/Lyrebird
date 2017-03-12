@@ -1,5 +1,6 @@
 package moe.lyrebird.view.views.fxml;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -49,13 +50,14 @@ public class RootViewController implements Controller {
         final Scene loginScene = this.guiManager.getViewLoader().loadScene(Views.LOGIN_VIEW);
         final Stage loginStage = StageUtils.stageOf("Login", loginScene);
         loginStage.initModality(Modality.APPLICATION_MODAL);
-        loginStage.show();
-        loginStage.setOnShown(shownEvent -> this.guiManager.registerStage(LoginViewController.class, loginStage));
+        Platform.runLater(loginStage::show);
+        this.guiManager.registerStage(LoginViewController.class, loginStage);
     }
     
     private void loadTimeline() {
         log.info("Loading timeline.");
         final Pane timelinePane = this.guiManager.getViewLoader().loadPane(Views.TIMELINE_VIEW);
         this.contentPane.getChildren().add(timelinePane);
+        log.info("Loaded timeline!");
     }
 }

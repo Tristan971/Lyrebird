@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.lyrebird.system.DefaultApplications;
+import moe.lyrebird.system.SystemIntegration;
 import moe.lyrebird.view.GUIManager;
 import moe.lyrebird.view.views.Controller;
 import moe.lyrebird.view.views.ErrorPane;
@@ -32,6 +32,7 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 public class LoginViewController implements Controller {
     private final GUIManager guiManager;
     private final TwitterHandler twitterHandler;
+    private final SystemIntegration systemIntegration;
     
     @FXML
     private Button loginButton;
@@ -47,6 +48,7 @@ public class LoginViewController implements Controller {
     public LoginViewController(final ApplicationContext applicationContext) {
         this.twitterHandler = applicationContext.getBean(TwitterHandler.class);
         this.guiManager = applicationContext.getBean(GUIManager.class);
+        this.systemIntegration = applicationContext.getBean(SystemIntegration.class);
     }
     
     @Override
@@ -64,7 +66,7 @@ public class LoginViewController implements Controller {
     private void startNewSession(final Event loginButtonEvent) {
         final Pair<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
         log.info("Got authorization URL {}, opening the browser!", tokenUrl.getFirst().toString());
-        DefaultApplications.openBrowser(tokenUrl.getFirst());
+        this.systemIntegration.openBrowser(tokenUrl.getFirst());
 
         this.loginButton.setDisable(true);
         this.pinCodeField.setVisible(true);

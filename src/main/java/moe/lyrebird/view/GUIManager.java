@@ -1,5 +1,6 @@
 package moe.lyrebird.view;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class GUIManager {
     }
     
     public void startGui(final Stage primaryStage) {
+        Platform.setImplicitExit(true);
         this.mainStage = primaryStage;
         primaryStage.setScene(this.viewLoader.loadScene(Views.ROOT_VIEW));
         primaryStage.setTitle(String.format("Lyrebird Alpha [%s]", this.environment.getProperty("app.version")));
@@ -42,6 +44,7 @@ public class GUIManager {
     
     public void registerStage(final Class<? extends Controller> controllerClass, final Stage stage) {
         this.stages.put(controllerClass, stage);
+        log.info("Registered stage {} for controller class {}", stage, controllerClass.getName());
     }
     
     /**
