@@ -4,12 +4,15 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="262.0" prefWidth="461.0"
             xmlns="http://javafx.com/javafx/8.0.111" fx:controller="moe.lyrebird.view.views.fxml.LoginViewController">
     <children>
-        <Label fx:id="loginLabel" layoutX="208.0" layoutY="124.0" text="Click to start logging in"/>
-        <Button fx:id="loginButton" layoutX="353.0" layoutY="120.0" mnemonicParsing="false" text="Login"/>
-        <TextField fx:id="pinCodeField" layoutX="208.0" layoutY="188.0" promptText="PIN CODE"/>
-        <Button fx:id="pinCodeButton" layoutX="366.0" layoutY="188.0" mnemonicParsing="false" text="OK"/>
+        <Label fx:id="loginLabel" layoutX="61.0" layoutY="31.0" prefHeight="88.0" prefWidth="344.0"
+               text="%loginWindow.loginDesc"/>
+        <Button fx:id="loginButton" layoutX="353.0" layoutY="120.0" mnemonicParsing="false"
+                text="%loginWindow.loginButton"/>
+        <TextField fx:id="pinCodeField" layoutX="208.0" layoutY="188.0" promptText="%loginWindow.loginFieldPromptText"/>
+        <Button fx:id="pinCodeButton" layoutX="366.0" layoutY="188.0" mnemonicParsing="false"
+                text="%loginWindow.loginFieldValidate"/>
     </children>
 </AnchorPane>
