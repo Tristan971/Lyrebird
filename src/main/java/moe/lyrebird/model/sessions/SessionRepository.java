@@ -2,6 +2,8 @@ package moe.lyrebird.model.sessions;
 
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 /**
  * This class is the interface of the DAO of the application.
  * It is used to store {@link Session}s with their credentials
@@ -18,6 +20,7 @@ public interface SessionRepository extends CrudRepository<Session, String> {
      *         {@link Session} or a subtype of it.
      * @return The session you just saved.
      */
+    @Override
     <S extends Session> S save(final S session);
     
     /**
@@ -27,7 +30,8 @@ public interface SessionRepository extends CrudRepository<Session, String> {
      *         The session's UID.
      * @return The session.
      */
-    Session findOne(final String uid);
+    @Override
+    Optional<Session> findOne(final String uid);
     
     /**
      * Finds all the saved sessions.
@@ -44,6 +48,7 @@ public interface SessionRepository extends CrudRepository<Session, String> {
      *         The uid of the session looked for
      * @return Whether it exists or not.
      */
+    @Override
     boolean exists(final String uid);
     
     /**
@@ -52,5 +57,6 @@ public interface SessionRepository extends CrudRepository<Session, String> {
      * @param uid
      *         The ID of the session to be deleted.
      */
+    @Override
     void delete(final String uid);
 }
