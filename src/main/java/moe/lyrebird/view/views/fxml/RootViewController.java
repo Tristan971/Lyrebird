@@ -2,7 +2,6 @@ package moe.lyrebird.view.views.fxml;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -47,8 +46,8 @@ public class RootViewController implements Controller {
     
     private void openLoginWindow() {
         log.info("User requested login.");
-        final Scene loginScene = this.guiManager.getViewLoader().loadScene(Views.LOGIN_VIEW);
-        final Stage loginStage = StageUtils.stageOf("Login", loginScene);
+        final Pane loginPane = this.guiManager.getViewLoader().loadPane(Views.LOGIN_VIEW);
+        final Stage loginStage = StageUtils.stageOf("Login", loginPane);
         loginStage.initModality(Modality.APPLICATION_MODAL);
         Platform.runLater(loginStage::show);
         this.guiManager.registerStage(LoginViewController.class, loginStage);
