@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.util.ViewLoader;
 import moe.lyrebird.view.views.Controller;
-import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
@@ -40,7 +39,7 @@ public class GUIManager {
     public void startGui(final Stage primaryStage) {
         Platform.setImplicitExit(true);
         this.mainStage = primaryStage;
-        primaryStage.setScene(this.viewLoader.loadScene(Views.ROOT_VIEW));
+        primaryStage.setScene(this.viewLoader.getRootScene());
         primaryStage.setTitle(this.getMainStageTitle());
         primaryStage.show();
     }
@@ -55,7 +54,8 @@ public class GUIManager {
     
     public void registerStage(final Class<? extends Controller> controllerClass, final Stage stage) {
         this.stages.put(controllerClass, stage);
-        log.info("Registered stage {} for controller class {}", stage, controllerClass.getName());
+        final String className = controllerClass.getSimpleName();
+        log.info("Registered {} stage ({})", className, stage.toString());
     }
     
     /**
