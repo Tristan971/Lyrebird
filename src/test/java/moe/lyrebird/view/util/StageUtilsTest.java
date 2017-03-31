@@ -1,7 +1,6 @@
 package moe.lyrebird.view.util;
 
 import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import moe.lyrebird.Lombok;
@@ -21,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 public class StageUtilsTest extends ApplicationTest {
     @Test
     public void stageOf() throws Exception {
-        Platform.runLater(() -> StageUtils.stageOf("Test", new Scene(new Pane())));
+        Platform.runLater(() -> StageUtils.stageOf("Test", new Pane()));
     }
     
     @Test(expected = InvocationTargetException.class)
