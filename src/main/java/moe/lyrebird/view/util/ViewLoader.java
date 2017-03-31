@@ -33,20 +33,6 @@ public class ViewLoader {
     }
     
     /**
-     * Wrapper around {@link #loadPane(Views)} that puts the returning {@link Pane}
-     * into a {@link Scene}.
-     *
-     * @param view
-     *         The view to load
-     * @return The {@link Scene} containing the loaded {@link Pane}
-     */
-    public Scene loadScene(final Views view) {
-        log.debug("Loading scene : {}", view.name());
-        final Pane effectivePane = this.loadPane(view);
-        return new Scene(effectivePane);
-    }
-    
-    /**
      * Loads a pane from a file. The file is assumed to be a view.
      * i.e. a standard FXML file inside {@link moe.lyrebird.view.views}.
      *
