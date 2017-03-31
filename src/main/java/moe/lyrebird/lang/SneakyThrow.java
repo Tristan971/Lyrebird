@@ -3,6 +3,7 @@ package moe.lyrebird.lang;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.util.Pair;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -32,7 +33,21 @@ public class SneakyThrow {
         }
     }
     
+    public static <T, R> Function<T, R> unchecked(final ThrowingFunction<T, R> originalFunction) {
+        return element -> {
+            try {
+                return originalFunction.apply(element);
+            } catch (final Exception e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }
+    
     public interface ThrowingSupplier<T> {
         T get() throws Exception;
+    }
+    
+    public interface ThrowingFunction<T, R> {
+        R apply(T elem) throws Exception;
     }
 }
