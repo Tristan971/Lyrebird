@@ -149,6 +149,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>1.4.194</version>
         </dependency>
 
         <!-- Twitter4J -->
@@ -162,8 +163,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-            <version>1.16.14</version>
+            <version>1.16.16</version>
         </dependency>
 
         <!-- JavaSlang -->
@@ -182,13 +182,13 @@
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
-            <version>4.0.5-alpha</version>
+            <version>4.0.6-alpha</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-junit</artifactId>
-            <version>4.0.5-alpha</version>
+            <version>4.0.6-alpha</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
