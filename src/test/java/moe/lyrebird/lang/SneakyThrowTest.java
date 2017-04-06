@@ -1,12 +1,12 @@
 package moe.lyrebird.lang;
 
+import javaslang.control.Try;
 import moe.lyrebird.Lombok;
 import moe.lyrebird.lang.SneakyThrow.ThrowingSupplier;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.util.Pair;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,15 +32,14 @@ public class SneakyThrowTest {
     
     @Test
     public void uncheckedWithException() throws Exception {
-        final Pair<?, Throwable> uncheckedWithException = SneakyThrow.uncheckedWithException(throwingSupplier);
-        Assert.assertNotEquals(uncheckedWithException.getSecond(), SneakyThrow.NO_EXCEPTION);
+        final Try<?> tryFailing = SneakyThrow.tryUnchecked(throwingSupplier);
+        Assert.assertFalse(tryFailing.isSuccess());
     }
     
     @Test
     public void uncheckedWithoutException() throws Exception {
-        final Pair<?, Throwable> uncheckedWithException = SneakyThrow.uncheckedWithException(nonThrowingSupplier);
-        Assert.assertEquals(uncheckedWithException.getSecond(), SneakyThrow.NO_EXCEPTION);
-        Assert.assertEquals(0, uncheckedWithException.getFirst());
+        final Try<?> successfulTry = SneakyThrow.tryUnchecked(nonThrowingSupplier);
+        Assert.assertTrue(successfulTry.isSuccess());
     }
     
     @Test(expected = InvocationTargetException.class)

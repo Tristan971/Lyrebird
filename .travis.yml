@@ -20,13 +20,10 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
-  - bash update-snapshots.sh
   - rm ~/.m2/settings.xml
 
 jdk:
   - oraclejdk8
 
 script:
-  - mvn -B -nsu test
-  - mvn -B -nsu jacoco:report
-  - mvn -B -nsu com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/jacoco/jacoco.xml -DprojectToken=$CODACY_PROJECT_TOKEN -DapiToken=$CODACY_API_TOKEN
+  - mvn -B test jacoco:report com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/jacoco/jacoco.xml -DprojectToken=$CODACY_PROJECT_TOKEN -DapiToken=$CODACY_API_TOKEN

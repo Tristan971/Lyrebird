@@ -1,5 +1,6 @@
 package moe.lyrebird.model.twitter4j;
 
+import javaslang.control.Try;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,27 +44,29 @@ public class TwitterHandler {
     public Optional<AccessToken> registerAccessToken(final RequestToken requestToken, final String pinCode) {
         log.info("Registering token {} with pincode {}", requestToken.toString(), pinCode);
     
-        final Pair<AccessToken, Throwable> newAccessToken = SneakyThrow.uncheckedWithException(() -> {
+        final Try<AccessToken> tryAccessToken = SneakyThrow.tryUnchecked(() -> {
             // Don't refactor expression lambda into statement lambda. It's too
             // long to be treated that way.
             //noinspection CodeBlock2Expr
             return this.twitter.getOAuthAccessToken(requestToken, pinCode);
         });
     
-        if (newAccessToken.getSecond() != SneakyThrow.NO_EXCEPTION) {
+        if (tryAccessToken.isFailure()) {
             log.info("Could not get access token! An error was thrown!");
             return Optional.empty();
         }
     
-        this.twitter.setOAuthAccessToken(newAccessToken.getFirst());
+    
+        final AccessToken successAccessToken = tryAccessToken.get();
+        this.twitter.setOAuthAccessToken(successAccessToken);
         log.info(
                 "Successfully got access token for user @{}! {}",
-                newAccessToken.getFirst().getScreenName(),
-                newAccessToken.getFirst().toString()
+                successAccessToken.getScreenName(),
+                successAccessToken.toString()
         );
-        this.accessToken = newAccessToken.getFirst();
+        this.accessToken = successAccessToken;
 
         this.context.getBean(SessionManager.class).addTwitterHandler(this);
-        return Optional.of(newAccessToken.getFirst());
+        return Optional.of(successAccessToken);
     }
 }

@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.util.ViewLoader;
 import moe.lyrebird.view.views.Controller;
-import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * The {@link GUIManager} is responsible for bootstraping the
@@ -20,6 +20,7 @@ import java.util.Map;
 @Slf4j
 public class GUIManager {
     private final Environment environment;
+    private final ResourceBundle resourceBundle;
     
     @Getter
     private final ViewLoader viewLoader;
@@ -29,22 +30,32 @@ public class GUIManager {
     private Stage mainStage;
     
     @Autowired
-    public GUIManager(final Environment environment, final ViewLoader viewLoader) {
+    public GUIManager(final Environment environment, final ViewLoader viewLoader, final ResourceBundle resourceBundle) {
         this.environment = environment;
         this.viewLoader = viewLoader;
+        this.resourceBundle = resourceBundle;
     }
     
     public void startGui(final Stage primaryStage) {
         Platform.setImplicitExit(true);
         this.mainStage = primaryStage;
-        primaryStage.setScene(this.viewLoader.loadScene(Views.ROOT_VIEW));
-        primaryStage.setTitle(String.format("Lyrebird Alpha [%s]", this.environment.getProperty("app.version")));
+        primaryStage.setScene(this.viewLoader.getRootScene());
+        primaryStage.setTitle(this.getMainStageTitle());
         primaryStage.show();
+    }
+    
+    private String getMainStageTitle() {
+        return String.format(
+                "%s [%s]",
+                this.resourceBundle.getString("mainWindow.title"),
+                this.environment.getProperty("app.version")
+        );
     }
     
     public void registerStage(final Class<? extends Controller> controllerClass, final Stage stage) {
         this.stages.put(controllerClass, stage);
-        log.info("Registered stage {} for controller class {}", stage, controllerClass.getName());
+        final String className = controllerClass.getSimpleName();
+        log.info("Registered {} stage ({})", className, stage.toString());
     }
     
     /**

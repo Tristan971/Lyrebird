@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 
+import java.util.ResourceBundle;
+
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -18,6 +20,11 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Configuration
 @Slf4j
 public class FrontendComponents {
+    
+    @Bean
+    public ResourceBundle resourceBundle() {
+        return ResourceBundle.getBundle("strings");
+    }
     
     /**
      * Containerize {@link FXMLLoader} so we can get configured instances
@@ -30,9 +37,10 @@ public class FrontendComponents {
      */
     @Bean
     @Scope(scopeName = SCOPE_PROTOTYPE)
-    public FXMLLoader fxmlLoader(final ApplicationContext context) {
+    public FXMLLoader fxmlLoader(final ApplicationContext context, final ResourceBundle resourceBundle) {
         final FXMLLoader loader = new FXMLLoader();
         loader.setControllerFactory(context::getBean);
+        loader.setResources(resourceBundle);
         return loader;
     }
     
@@ -47,7 +55,7 @@ public class FrontendComponents {
     }
     
     @Bean
-    public GUIManager guiManager(final Environment environment, final ViewLoader viewLoader) {
-        return new GUIManager(environment, viewLoader);
+    public GUIManager guiManager(final Environment environment, final ViewLoader viewLoader, final ResourceBundle resourceBundle) {
+        return new GUIManager(environment, viewLoader, resourceBundle);
     }
 }

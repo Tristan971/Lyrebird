@@ -50,6 +50,33 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
             </plugin>
+            <!-- SASS -> CSS plugin -->
+            <plugin>
+                <groupId>nl.geodienstencentrum.maven</groupId>
+                <artifactId>sass-maven-plugin</artifactId>
+                <version>2.23</version>
+                <configuration>
+                    <sassSourceDirectory>${basedir}/src/main/resources</sassSourceDirectory>
+                    <destination>${project.build.outputDirectory}</destination>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>lint-scss</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>scss-lint</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>transpile-css</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>update-stylesheets</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- JaCoCo test coverage reporting -->
             <plugin>
                 <groupId>org.jacoco</groupId>
