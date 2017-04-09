@@ -1,11 +1,11 @@
 package moe.lyrebird.lang;
 
+import javaslang.control.Try;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -28,19 +28,13 @@ public final class PathUtils {
      *         (where resources are located, and used for them, thus the name)
      * @return The path associated with resource at said relative path to classpath.
      */
-    public static Path getPathForResource(final String resourceName) {
-        final URL resURL = PathUtils.class.getClassLoader().getResource(resourceName);
-        URI resURI = null;
-        try {
-            assert resURL != null :
-                    "Could not access file " + resourceName;
-            resURI = resURL.toURI();
-        } catch (final URISyntaxException e) {
-            e.printStackTrace();
-        }
-        assert resURI != null :
-                "Maven probably didn't copy contents of src/main/resources into target folder. But idk why.";
-        return Paths.get(resURI);
+    public static Try<Path> getPathForResource(final String resourceName) {
+        return Try.of(() -> {
+            final URL resURL = PathUtils.class.getClassLoader().getResource(resourceName);
+            assert resURL != null;
+            final URI resURI = resURL.toURI();
+            return Paths.get(resURI);
+        });
     }
     
     /**
