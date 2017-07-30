@@ -1,6 +1,5 @@
 package moe.lyrebird.model.sessions;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +16,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static lombok.AccessLevel.NONE;
+
 /**
  * The session manager is responsible for persisting the sessions in database
  * and providing handles to them should another component need access to them
@@ -26,11 +27,12 @@ import java.util.stream.Collectors;
 @Data
 public class SessionManager {
 
-    @Getter(AccessLevel.NONE)
+    @Getter(NONE)
     private final ApplicationContext context;
 
-    @Getter(AccessLevel.NONE)
+    @Getter(NONE)
     private final SessionRepository sessionRepository;
+
     private final Map<Session, TwitterHandler> loadedSessions;
     private Entry<Session, TwitterHandler> currentSession;
     
@@ -115,10 +117,7 @@ public class SessionManager {
     
     /**
      * Saves all sessions.
-     * Do not use bulk-save as it crashes under null reference saving.
-     * We want to make absolutely sure to never corrupt the database.
      */
-    @SuppressWarnings("UseBulkOperation")
     public void saveAllSessions() {
         this.loadedSessions.keySet().forEach(this.sessionRepository::save);
         log.info("Saving sessions {}", this.loadedSessions.keySet().toString());

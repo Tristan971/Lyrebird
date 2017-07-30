@@ -176,11 +176,10 @@
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
 
-        <!-- Database (H2) -->
+        <!-- Persistence -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.194</version>
         </dependency>
 
         <!-- Twitter4J -->
