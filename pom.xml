@@ -168,6 +168,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
@@ -176,7 +180,7 @@
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
 
-        <!-- Persistence -->
+        <!-- DB (H2) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

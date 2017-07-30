@@ -2,8 +2,10 @@ package moe.lyrebird.model.sessions;
 
 import lombok.*;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
+import org.hibernate.annotations.Columns;
 import twitter4j.auth.AccessToken;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -28,5 +30,8 @@ public class Session implements Serializable {
     private String userId;
 
     @NonNull
+    @Columns(columns = {
+            @Column(length = 1000, name = "access_token"),
+    })
     private AccessToken accessToken;
 }

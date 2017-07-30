@@ -87,7 +87,7 @@ public class LoginViewController implements Controller {
                                 token.getScreenName())
                 );
             } else {
-                ErrorPane.displayErrorPaneOf("Could not authenticate you!", null);
+                ErrorPane.displayErrorPaneOf("Could not authenticate you!", new Exception("No token could be used."));
             }
             this.guiManager.getStages().get(this.getClass()).hide();
         }

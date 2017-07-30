@@ -102,6 +102,7 @@ public class SessionManager {
         handler.setAccessToken(session.getAccessToken());
         this.loadedSessions.put(session, handler);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
+        this.saveAllSessions();
     }
 
     public void addTwitterHandler(final TwitterHandler twitterHandler) {
@@ -111,7 +112,7 @@ public class SessionManager {
                 .accessToken(accessToken)
                 .build();
 
-        this.loadedSessions.put(session, twitterHandler);
+        addSession(session);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
     }
     
