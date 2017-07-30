@@ -31,6 +31,8 @@ public class RootViewController implements Controller {
     @FXML
     private Button timelineButton;
     @FXML
+    private Button tweetButton;
+    @FXML
     private Pane contentPane;
     
     @Autowired
@@ -42,6 +44,7 @@ public class RootViewController implements Controller {
     public void initialize() {
         this.loginButton.addEventHandler(MOUSE_RELEASED, event -> this.openLoginWindow());
         this.timelineButton.addEventHandler(MOUSE_RELEASED, event -> this.loadTimeline());
+        this.tweetButton.addEventHandler(MOUSE_RELEASED, event -> this.openTweetWindow());
     }
     
     private void openLoginWindow() {
@@ -58,5 +61,14 @@ public class RootViewController implements Controller {
         final Pane timelinePane = this.guiManager.getViewLoader().loadPane(Views.TIMELINE_VIEW);
         this.contentPane.getChildren().add(timelinePane);
         log.info("Loaded timeline!");
+    }
+
+    private void openTweetWindow() {
+        log.info("User requested login.");
+        final Pane tweetPane = this.guiManager.getViewLoader().loadPane(Views.TWEET_VIEW);
+        final Stage tweetStage = StageUtils.stageOf("Tweet", tweetPane);
+        tweetStage.initModality(Modality.APPLICATION_MODAL);
+        Platform.runLater(tweetStage::show);
+        this.guiManager.registerStage(TweetController.class, tweetStage);
     }
 }

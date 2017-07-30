@@ -58,8 +58,6 @@ public class LoginViewController implements Controller {
         
         this.pinCodeField.addEventHandler(ANY, this::pinCodeTextListener);
         this.loginButton.addEventFilter(MOUSE_RELEASED, this::startNewSession);
-        
-        this.guiManager.getMainStage().setOpacity(0.5f);
     }
     
     @SuppressWarnings("unused")

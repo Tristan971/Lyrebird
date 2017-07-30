@@ -18,9 +18,6 @@ public class StageUtils {
     public static Stage stageOf(final String title, final Pane pane, final boolean enableTheming) {
         final Stage stage = new Stage(StageStyle.DECORATED);
         stage.setTitle(title);
-        if (enableTheming) {
-            ViewLoader.enableStylesheet(pane);
-        }
         stage.setScene(new Scene(pane));
         return stage;
     }

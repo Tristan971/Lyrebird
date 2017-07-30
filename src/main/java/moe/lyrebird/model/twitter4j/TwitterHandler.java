@@ -1,6 +1,6 @@
 package moe.lyrebird.model.twitter4j;
 
-import javaslang.control.Try;
+import io.vavr.control.Try;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
