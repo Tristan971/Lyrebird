@@ -12,7 +12,7 @@
             <items>
                 <Button fx:id="loginButton" alignment="CENTER_RIGHT" mnemonicParsing="false" text="%rootWindow.loginButton" />
                 <Button fx:id="timelineButton" mnemonicParsing="false" text="%rootWindow.loadTimelineButton" />
-            <Button fx:id="tweetButton" mnemonicParsing="false" text="\%rootWindow.tweetButton" />
+            <Button fx:id="tweetButton" mnemonicParsing="false" text="%rootWindow.tweetButton" />
             </items>
         </ToolBar>
     </children>

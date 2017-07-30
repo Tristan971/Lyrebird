@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import moe.lyrebird.lang.javafx.EventUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.views.Controller;
 import moe.lyrebird.view.views.ErrorPane;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
 
 import static io.vavr.API.*;
+import static javafx.scene.input.KeyEvent.KEY_RELEASED;
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 import static javafx.scene.paint.Color.*;
 
@@ -36,14 +38,15 @@ public class TweetController implements Controller {
 
     @Autowired
     public TweetController(final TwitterHandler twitterHandler) {
-
         this.twitterHandler = twitterHandler;
     }
 
     @Override
     public void initialize() {
-        tweetTextArea.addEventHandler(KeyEvent.KEY_RELEASED, keyEventHandler());
+        tweetTextArea.addEventHandler(KEY_RELEASED, keyEventHandler());
         sendButton.addEventHandler(MOUSE_RELEASED, e -> sendTweet(this.tweetTextArea.getText()));
+
+        tweetTextArea.fireEvent(EventUtils.dummyKeyEvent(KEY_RELEASED));
     }
 
     private Tuple2<Color, Integer> validateCharactersLeft(final String currentText) {
