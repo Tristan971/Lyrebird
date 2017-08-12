@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import twitter4j.auth.AccessToken;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,9 +26,6 @@ public class SessionRepositoryTest {
 
     @Before
     public void setUp() {
-        final List<Session> sessionsBefore = sessionRepository.findAll();
-        assertThat(sessionsBefore).isEmpty();
-
         session = new Session(
                 "test_uid",
                 new AccessToken("test_token", "test_token_secret", 1010)

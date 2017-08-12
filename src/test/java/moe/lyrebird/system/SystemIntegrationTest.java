@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import moe.lyrebird.lang.SneakyThrow;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.net.URL;
  * Created by Tristan on 04/03/2017.
  */
 @SpringBootTest
+@Ignore
 @RunWith(SpringRunner.class)
 public class SystemIntegrationTest extends ApplicationTest {
     
