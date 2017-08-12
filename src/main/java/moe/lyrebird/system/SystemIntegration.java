@@ -23,7 +23,6 @@ public class SystemIntegration {
     }
     
     public void openBrowser(final URL url) {
-        log.info("Requested opening browser at address : {}", url.toString());
         if (!Desktop.isDesktopSupported()) {
             SystemIntegration.couldNotOpenDefaultBrowser(url);
             return;
@@ -32,6 +31,7 @@ public class SystemIntegration {
         final URI uri = SneakyThrow.unchecked(url::toURI);
         this.backgroundService.run(() -> {
             try {
+                log.info("Requested opening browser at address : {}", url.toString());
                 Desktop.getDesktop().browse(uri);
             } catch (final IOException e) {
                 SystemIntegration.couldNotOpenDefaultBrowser(url, e);

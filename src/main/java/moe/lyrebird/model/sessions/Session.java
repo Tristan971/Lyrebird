@@ -1,6 +1,8 @@
 package moe.lyrebird.model.sessions;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.hibernate.annotations.Columns;
 import twitter4j.auth.AccessToken;
@@ -18,18 +20,15 @@ import java.io.Serializable;
  */
 @Data
 @Entity
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Session implements Serializable {
     
     private static final long serialVersionUID = -9038797949832585362L;
     
     @Id
-    @NonNull
     private String userId;
 
-    @NonNull
     @Columns(columns = {
             @Column(length = 1000, name = "access_token"),
     })

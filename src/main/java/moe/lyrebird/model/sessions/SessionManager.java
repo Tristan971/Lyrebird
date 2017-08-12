@@ -39,9 +39,8 @@ public class SessionManager {
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
 
-        log.info("Started the twitter session manager!");
+        log.info("Started the Twitter session manager!");
         this.sessionRepository = sessionRepository;
-        log.info("Loaded the session repository : {}", sessionRepository.toString());
         this.loadedSessions = new ConcurrentHashMap<>(1);
     }
     
@@ -102,15 +101,11 @@ public class SessionManager {
         handler.setAccessToken(session.getAccessToken());
         this.loadedSessions.put(session, handler);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
-        this.saveAllSessions();
     }
 
     public void addTwitterHandler(final TwitterHandler twitterHandler) {
         final AccessToken accessToken = twitterHandler.getAccessToken();
-        final Session session = Session.builder()
-                .userId(accessToken.getScreenName())
-                .accessToken(accessToken)
-                .build();
+        final Session session = new Session(accessToken.getScreenName(), accessToken);
 
         addSession(session);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));

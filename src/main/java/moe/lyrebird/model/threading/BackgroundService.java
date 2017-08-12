@@ -2,6 +2,7 @@ package moe.lyrebird.model.threading;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;
 
@@ -18,26 +19,32 @@ public class BackgroundService {
     }
     
     public void run(@NonNull final Runnable runnable) {
-        log.info("Submitted a task for execution.");
+        log.info("{} submitted a task for execution.", getCallerClass());
         this.executorService.submit(runnable);
     }
     
     public <V> Future<V> run(@NonNull final Callable<V> callable) {
-        log.info("Submitted call for computation.");
+        log.info("{} submitted call for computation.", getCallerClass());
         return this.executorService.submit(callable);
     }
     
     public void runlater(@NonNull final Runnable runnable, final long time, final TimeUnit timeUnit) {
-        log.info("Submitted task for execution in {} {}", runnable, time, timeUnit.toString());
+        log.info("{} submitted task for execution in {} {}", getCallerClass(), runnable, time, timeUnit.toString());
         this.executorService.schedule(runnable, time, timeUnit);
     }
     
     public <V> ScheduledFuture<V> runLater(@NonNull final Callable<V> callable, final long time, final TimeUnit timeUnit) {
-        log.info("Submitted call for computation in {} {}", callable, time, timeUnit.toString());
+        log.info("{} submitted call for computation in {} {}", getCallerClass(), callable, time, timeUnit.toString());
         return this.executorService.schedule(callable, time, timeUnit);
     }
     
     public void cleanUp() {
         this.executorService.shutdown();
+    }
+
+    @NotNull
+    @SuppressWarnings("deprecation")
+    private String getCallerClass() {
+        return sun.reflect.Reflection.getCallerClass(4).getSimpleName();
     }
 }
