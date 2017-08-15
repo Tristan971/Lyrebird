@@ -101,13 +101,14 @@ public class SessionManager {
         handler.setAccessToken(session.getAccessToken());
         this.loadedSessions.put(session, handler);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
+        this.saveAllSessions();
     }
 
     public void addTwitterHandler(final TwitterHandler twitterHandler) {
         final AccessToken accessToken = twitterHandler.getAccessToken();
         final Session session = new Session(accessToken.getScreenName(), accessToken);
 
-        addSession(session);
+        this.addSession(session);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
     }
     
@@ -115,7 +116,9 @@ public class SessionManager {
      * Saves all sessions.
      */
     public void saveAllSessions() {
-        this.loadedSessions.keySet().forEach(this.sessionRepository::save);
+        this.loadedSessions.keySet().stream()
+                .peek(session -> log.info("Saving Twitter session : {}", session.toString()))
+                .forEach(this.sessionRepository::save);
         log.info("Saving sessions {}", this.loadedSessions.keySet().toString());
     }
 }

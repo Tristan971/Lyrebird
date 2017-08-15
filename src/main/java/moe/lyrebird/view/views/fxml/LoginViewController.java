@@ -12,7 +12,6 @@ import moe.lyrebird.view.GUIManager;
 import moe.lyrebird.view.views.Controller;
 import moe.lyrebird.view.views.ErrorPane;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import twitter4j.auth.AccessToken;
@@ -45,10 +44,10 @@ public class LoginViewController implements Controller {
     private boolean pinIsValid = false;
     
     @Autowired
-    public LoginViewController(final ApplicationContext applicationContext) {
-        this.twitterHandler = applicationContext.getBean(TwitterHandler.class);
-        this.guiManager = applicationContext.getBean(GUIManager.class);
-        this.systemIntegration = applicationContext.getBean(SystemIntegration.class);
+    public LoginViewController(final TwitterHandler twitterHandler, final GUIManager guiManager, final SystemIntegration systemIntegration) {
+        this.twitterHandler = twitterHandler;
+        this.guiManager = guiManager;
+        this.systemIntegration = systemIntegration;
     }
     
     @Override
@@ -68,8 +67,8 @@ public class LoginViewController implements Controller {
 
         this.loginButton.setDisable(true);
         this.pinCodeField.setVisible(true);
-        this.pinCodeButton.setVisible(true);
         this.pinCodeButton.addEventHandler(MOUSE_RELEASED, e -> this.registerPinCode(tokenUrl.getSecond()));
+        this.pinCodeButton.setVisible(true);
     }
     
     private void registerPinCode(final RequestToken requestToken) {
@@ -89,7 +88,7 @@ public class LoginViewController implements Controller {
             } else {
                 ErrorPane.displayErrorPaneOf("Could not authenticate you!", new Exception("No token could be used."));
             }
-            this.guiManager.getStages().get(this.getClass()).hide();
+            this.guiManager.hide(this);
         }
     }
     
