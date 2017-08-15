@@ -38,20 +38,25 @@ public class TimelineController implements Controller {
     }
     
     private void updateTimeline() {
-        List<Status> statuses;
         try {
-            statuses = this.twitterHandler.getTwitter().getHomeTimeline();
-        } catch (final TwitterException e) {
-            log.error("Could not load timeline!", e);
-            statuses = Collections.emptyList();
+            List<Status> statuses;
+            try {
+                statuses = this.twitterHandler.getTwitter().getHomeTimeline();
+            } catch (final TwitterException e) {
+                log.error("Could not load timeline!", e);
+                statuses = Collections.emptyList();
+            }
+
+            log.info("Loaded {} new statuses", statuses.size());
+
+            final List<String> statusesStr = statuses.stream()
+                    .map(Tweet::of)
+                    .collect(Collectors.toList());
+
+            this.tweets.setItems(FXCollections.observableArrayList(statusesStr));
+        } catch (final IllegalStateException e) {
+            this.tweets.setItems(FXCollections.observableArrayList("You are not logged in ! Please click login."));
         }
-        
-        log.info("Loaded {} new statuses", statuses.size());
-    
-        final List<String> statusesStr = statuses.stream()
-                .map(Tweet::of)
-                .collect(Collectors.toList());
-    
-        this.tweets.setItems(FXCollections.observableArrayList(statusesStr));
+
     }
 }
