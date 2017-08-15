@@ -44,8 +44,8 @@ public class SystemIntegration {
         ErrorPane.displayErrorPaneOf(
                 "Browser unavailable!\n" +
                         "We couldn't open your default browser, so you need" +
-                        "to access the following URL " + url.toString() +
-                        "manually with your preferred browser.",
+                        " to access the following URL " + url.toString() +
+                        " manually with your preferred browser.",
                 exception.length != 0 ? exception[0] : new IOException("No exception was thrown")
         );
     }
