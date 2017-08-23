@@ -4,16 +4,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.lang.PathUtils;
-import moe.lyrebird.lang.SneakyThrow;
 import moe.lyrebird.view.views.ErrorPane;
 import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -51,21 +48,7 @@ public class ViewLoader {
     
     public Scene getRootScene() {
         final Pane rootPane = this.loadPane(Views.ROOT_VIEW);
-        return new Scene(enableStylesheet(rootPane));
-    }
-    
-    public static Pane enableStylesheet(final Pane pane) {
-        getDefaultStyleSheet().ifPresent(pane.getStylesheets()::add);
-        
-        PathUtils.filesInDirectory(CUSTOM_CSS_PATH)
-                .filter(file -> file.getFileName().toString().equals("lyrebird.css"))
-                .map(Path::toUri)
-                .map(uri -> SneakyThrow.unchecked(uri::toURL))
-                .map(URL::toString)
-                .filter(Objects::nonNull)
-                .findAny()
-                .ifPresent(customTheme -> pane.getStylesheets().setAll(customTheme));
-        return pane;
+        return new Scene(rootPane);
     }
     
     private static Optional<String> getDefaultStyleSheet() {

@@ -1,6 +1,6 @@
 package moe.lyrebird.lang;
 
-import javaslang.control.Try;
+import io.vavr.control.Try;
 import moe.lyrebird.Lombok;
 import moe.lyrebird.lang.SneakyThrow.ThrowingSupplier;
 import org.junit.Assert;

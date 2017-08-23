@@ -3,6 +3,7 @@ package moe.lyrebird.view;
 import javafx.stage.Stage;
 import moe.lyrebird.view.views.Controller;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.testfx.framework.junit.ApplicationTest;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@Ignore
 public class GUIManagerTest extends ApplicationTest {
     @Autowired
     private GUIManager guiManager;

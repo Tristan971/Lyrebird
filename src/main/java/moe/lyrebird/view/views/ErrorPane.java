@@ -5,6 +5,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.util.FXDOMUtils;
 import moe.lyrebird.view.util.StageUtils;
 
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Tristan on 06/02/2017.
  */
+@Slf4j
 @UtilityClass
 public class ErrorPane {
     public static Pane of(final String message, final Throwable throwable) {
@@ -25,7 +27,7 @@ public class ErrorPane {
         return new AnchorPane(messageLabel, throwableDataLabel);
     }
     
-    public static String formatErrorMessage(Throwable t) {
+    public static String formatErrorMessage(final Throwable t) {
         return "Message : \n" +
                 t.getMessage() +
                 "\nStackTrace:\n" +
@@ -35,6 +37,12 @@ public class ErrorPane {
     }
     
     public static void displayErrorPaneOf(final String message, final Throwable throwable) {
-        StageUtils.stageOf(message, of(message, throwable), false);
+        log.warn(
+                "Requested spawning ErrorPane for exception of type {} ({}) with message {}",
+                throwable.getClass().getSimpleName(),
+                throwable.getMessage(),
+                message
+        );
+        StageUtils.stageOf(message, of(message, throwable), false).show();
     }
 }

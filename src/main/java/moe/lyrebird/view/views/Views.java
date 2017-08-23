@@ -9,7 +9,8 @@ public enum Views {
     
     ROOT_VIEW("RootView.fxml"),
     LOGIN_VIEW("Login.fxml"),
-    TIMELINE_VIEW("Timeline.fxml");
+    TIMELINE_VIEW("Timeline.fxml"),
+    TWEET_VIEW("Tweet.fxml");
     
     private final String fileName;
     

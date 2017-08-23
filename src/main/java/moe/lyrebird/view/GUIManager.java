@@ -65,4 +65,8 @@ public class GUIManager {
     public static void enableAWT() {
         java.awt.Toolkit.getDefaultToolkit();
     }
+
+    public <C extends Controller> void hide(final C controller) {
+        this.getStages().get(controller.getClass()).hide();
+    }
 }

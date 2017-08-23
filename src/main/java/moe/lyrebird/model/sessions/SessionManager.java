@@ -1,6 +1,5 @@
 package moe.lyrebird.model.sessions;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +16,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static lombok.AccessLevel.NONE;
+
 /**
  * The session manager is responsible for persisting the sessions in database
  * and providing handles to them should another component need access to them
@@ -26,20 +27,20 @@ import java.util.stream.Collectors;
 @Data
 public class SessionManager {
 
-    @Getter(AccessLevel.NONE)
+    @Getter(NONE)
     private final ApplicationContext context;
 
-    @Getter(AccessLevel.NONE)
+    @Getter(NONE)
     private final SessionRepository sessionRepository;
+
     private final Map<Session, TwitterHandler> loadedSessions;
     private Entry<Session, TwitterHandler> currentSession;
     
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
 
-        log.info("Started the twitter session manager!");
+        log.info("Started the Twitter session manager!");
         this.sessionRepository = sessionRepository;
-        log.info("Loaded the session repository : {}", sessionRepository.toString());
         this.loadedSessions = new ConcurrentHashMap<>(1);
     }
     
@@ -100,27 +101,24 @@ public class SessionManager {
         handler.setAccessToken(session.getAccessToken());
         this.loadedSessions.put(session, handler);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
+        this.saveAllSessions();
     }
 
     public void addTwitterHandler(final TwitterHandler twitterHandler) {
         final AccessToken accessToken = twitterHandler.getAccessToken();
-        final Session session = Session.builder()
-                .userId(accessToken.getScreenName())
-                .accessToken(accessToken)
-                .build();
+        final Session session = new Session(accessToken.getScreenName(), accessToken);
 
-        this.loadedSessions.put(session, twitterHandler);
+        this.addSession(session);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
     }
     
     /**
      * Saves all sessions.
-     * Do not use bulk-save as it crashes under null reference saving.
-     * We want to make absolutely sure to never corrupt the database.
      */
-    @SuppressWarnings("UseBulkOperation")
     public void saveAllSessions() {
-        this.loadedSessions.keySet().forEach(this.sessionRepository::save);
+        this.loadedSessions.keySet().stream()
+                .peek(session -> log.info("Saving Twitter session : {}", session.toString()))
+                .forEach(this.sessionRepository::save);
         log.info("Saving sessions {}", this.loadedSessions.keySet().toString());
     }
 }

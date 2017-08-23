@@ -1,8 +1,8 @@
 package moe.lyrebird.view.util;
 
+import io.vavr.control.Try;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
-import javaslang.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
