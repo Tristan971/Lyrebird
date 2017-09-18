@@ -2,7 +2,7 @@ package moe.lyrebird.lang;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javaslang.control.Try;
+import io.vavr.control.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.lang.collections.EnumerationUtils;

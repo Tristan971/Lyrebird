@@ -1,5 +1,6 @@
 package moe.lyrebird.view.util;
 
+import io.vavr.control.Try;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,8 @@ import moe.lyrebird.view.views.ErrorPane;
 import moe.lyrebird.view.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -52,12 +54,10 @@ public class ViewLoader {
     }
     
     private static Optional<String> getDefaultStyleSheet() {
-        final Path pathToCssFile = PathUtils.getPathForResource("lyrebird.css");
-        try {
-            return Optional.of(pathToCssFile.toUri().toURL().toString());
-        } catch (final MalformedURLException e) {
-            log.error("Could not load CSS file", e);
-            return Optional.empty();
-        }
+        final Try<Path> pathToCssFile = PathUtils.getPathForResource("lyrebird.css");
+        return pathToCssFile.mapTry(Path::toUri)
+                .mapTry(URI::toURL)
+                .mapTry(URL::toString)
+                .toJavaOptional();
     }
 }

@@ -1,6 +1,6 @@
 package moe.lyrebird.lang;
 
-import javaslang.control.Try;
+import io.vavr.control.Try;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
