@@ -20,7 +20,7 @@ Check out the release pages once we have something working decently.
 
 - [x] Display timeline
 
-- [ ] Tweeting
+- [x] Tweeting
 
 - [ ] Add tabs for mentions and hashtag searches
 
