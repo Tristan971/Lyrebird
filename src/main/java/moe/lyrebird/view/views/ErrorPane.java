@@ -4,10 +4,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.view.util.FXDOMUtils;
-import moe.lyrebird.view.util.StageUtils;
+import moe.tristan.easyfxml.util.DomUtils;
+import moe.tristan.easyfxml.util.StageUtils;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class ErrorPane {
         final TextArea throwableDataLabel = new TextArea(formatErrorMessage(throwable));
     
         messageLabel.getStyleClass().add("errorPane");
-        FXDOMUtils.centerNode(throwableDataLabel, 20.0);
+        DomUtils.centerNode(throwableDataLabel, 20.0);
         return new AnchorPane(messageLabel, throwableDataLabel);
     }
     
@@ -43,6 +44,7 @@ public class ErrorPane {
                 throwable.getMessage(),
                 message
         );
-        StageUtils.stageOf(message, of(message, throwable), false).show();
+        final Stage errorPane = StageUtils.stageOf(message, of(message, throwable));
+        StageUtils.scheduleDisplaying(errorPane);
     }
 }

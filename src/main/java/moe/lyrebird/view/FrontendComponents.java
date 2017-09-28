@@ -2,11 +2,12 @@ package moe.lyrebird.view;
 
 import javafx.fxml.FXMLLoader;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.view.util.EasyFXML;
-import moe.lyrebird.view.util.ViewLoader;
+import moe.tristan.easyfxml.model.views.ViewsManager;
+import moe.tristan.easyfxml.spring.SpringContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 
@@ -18,6 +19,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  * Front-end (views-related) components go here.
  */
 @Configuration
+@Import(SpringContext.class)
 @Slf4j
 public class FrontendComponents {
     
@@ -43,19 +45,9 @@ public class FrontendComponents {
         loader.setResources(resourceBundle);
         return loader;
     }
-    
+
     @Bean
-    public EasyFXML easyFXML(final ApplicationContext context) {
-        return new EasyFXML(context);
-    }
-    
-    @Bean
-    public ViewLoader viewLoader(final EasyFXML easyFXML) {
-        return new ViewLoader(easyFXML);
-    }
-    
-    @Bean
-    public GUIManager guiManager(final Environment environment, final ViewLoader viewLoader, final ResourceBundle resourceBundle) {
-        return new GUIManager(environment, viewLoader, resourceBundle);
+    public GUIManager guiManager(final Environment environment, final ViewsManager viewsManager, final ResourceBundle resourceBundle) {
+        return new GUIManager(environment, viewsManager, resourceBundle);
     }
 }

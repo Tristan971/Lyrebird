@@ -1,12 +1,12 @@
 package moe.lyrebird.view.views;
 
+import moe.tristan.easyfxml.FxmlFile;
+
 /**
  * The views as an enum for easier autocompletion etc.
  */
 @SuppressWarnings("unused")
-public enum Views {
-    VIEWS_ROOT_FOLDER("moe/lyrebird/view/views/fxml/"),
-    
+public enum Views implements FxmlFile {
     ROOT_VIEW("RootView.fxml"),
     LOGIN_VIEW("Login.fxml"),
     TIMELINE_VIEW("Timeline.fxml"),
@@ -19,7 +19,7 @@ public enum Views {
     }
     
     @Override
-    public String toString() {
+    public String getPath() {
         return this.fileName;
     }
 }
