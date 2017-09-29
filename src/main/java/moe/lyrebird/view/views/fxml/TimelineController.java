@@ -1,6 +1,5 @@
 package moe.lyrebird.view.views.fxml;
 
-import io.vavr.CheckedFunction1;
 import io.vavr.control.Option;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -10,17 +9,12 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.format.Tweet;
 import moe.tristan.easyfxml.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionPane;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import twitter4j.ResponseList;
-import twitter4j.Status;
 import twitter4j.Twitter;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import static io.vavr.API.unchecked;
 
 /**
  * Created by tristan on 03/03/2017.
@@ -43,20 +37,20 @@ public class TimelineController implements FxmlController {
     }
     
     private void updateTimeline() {
-        try {
-            List<String> statuses = this.twitterHandler.map(TwitterHandler::getTwitter)
-                    .map(unchecked((CheckedFunction1<Twitter,ResponseList<Status>>) (Twitter::getHomeTimeline)))
-                    .toStream()
-                    .getOrElseThrow(IllegalStateException::new)
-                    .stream()
-                    .map(Tweet::of)
-                    .collect(Collectors.toList());
-
-            log.info("Loaded {} new statuses", statuses.size());
-
-            this.tweets.setItems(FXCollections.observableArrayList(statuses));
-        } catch (final IllegalStateException e) {
-            this.tweets.setItems(FXCollections.observableArrayList("You are not logged in ! Please click login."));
-        }
+        this.twitterHandler.toTry(IllegalStateException::new)
+                .map(TwitterHandler::getTwitter)
+                .mapTry(Twitter::getHomeTimeline)
+                .map(Tweet::ofStatuses)
+                .map(FXCollections::observableArrayList)
+                .onFailure(this::onTimelineRefreshError)
+                .onSuccess(this.tweets::setItems);
+    }
+    
+    private void onTimelineRefreshError(final Throwable reason) {
+        ExceptionPane.displayExceptionPane(
+                "An unexpected error occured",
+                "Could not get your timeline.",
+                reason
+        );
     }
 }
