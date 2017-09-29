@@ -1,5 +1,7 @@
 package moe.lyrebird.view.views.fxml;
 
+import io.vavr.CheckedFunction1;
+import io.vavr.control.Option;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -10,12 +12,15 @@ import moe.lyrebird.view.format.Tweet;
 import moe.tristan.easyfxml.FxmlController;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import twitter4j.ResponseList;
 import twitter4j.Status;
-import twitter4j.TwitterException;
+import twitter4j.Twitter;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static io.vavr.API.unchecked;
 
 /**
  * Created by tristan on 03/03/2017.
@@ -24,12 +29,12 @@ import java.util.stream.Collectors;
 @Component
 @Lazy
 public class TimelineController implements FxmlController {
-    private final TwitterHandler twitterHandler;
+    private final Option<TwitterHandler> twitterHandler;
     @FXML
     private ListView<String> tweets;
     
     public TimelineController(final SessionManager sessionManager) {
-        this.twitterHandler = sessionManager.getCurrentSession().getValue();
+        this.twitterHandler = Option.of(sessionManager.getCurrentSession()).map(Map.Entry::getValue);
     }
     
     @Override
@@ -39,13 +44,9 @@ public class TimelineController implements FxmlController {
     
     private void updateTimeline() {
         try {
-            List<Status> statuses;
-            try {
-                statuses = this.twitterHandler.getTwitter().getHomeTimeline();
-            } catch (final TwitterException e) {
-                log.error("Could not load timeline!", e);
-                statuses = Collections.emptyList();
-            }
+            List<Status> statuses = this.twitterHandler.map(TwitterHandler::getTwitter)
+                        .map(unchecked((CheckedFunction1<Twitter,ResponseList<Status>>) (Twitter::getHomeTimeline)))
+                        .getOrElseThrow(IllegalStateException::new);
 
             log.info("Loaded {} new statuses", statuses.size());
 
