@@ -40,10 +40,6 @@
                     <addResources>false</addResources>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
             <!-- SASS -> CSS plugin -->
             <plugin>
                 <groupId>nl.geodienstencentrum.maven</groupId>
@@ -71,6 +67,10 @@
                 </executions>
             </plugin>
             <!-- JaCoCo test coverage reporting -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

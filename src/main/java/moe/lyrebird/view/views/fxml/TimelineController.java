@@ -44,20 +44,19 @@ public class TimelineController implements FxmlController {
     
     private void updateTimeline() {
         try {
-            List<Status> statuses = this.twitterHandler.map(TwitterHandler::getTwitter)
-                        .map(unchecked((CheckedFunction1<Twitter,ResponseList<Status>>) (Twitter::getHomeTimeline)))
-                        .getOrElseThrow(IllegalStateException::new);
-
-            log.info("Loaded {} new statuses", statuses.size());
-
-            final List<String> statusesStr = statuses.stream()
+            List<String> statuses = this.twitterHandler.map(TwitterHandler::getTwitter)
+                    .map(unchecked((CheckedFunction1<Twitter,ResponseList<Status>>) (Twitter::getHomeTimeline)))
+                    .toStream()
+                    .getOrElseThrow(IllegalStateException::new)
+                    .stream()
                     .map(Tweet::of)
                     .collect(Collectors.toList());
 
-            this.tweets.setItems(FXCollections.observableArrayList(statusesStr));
+            log.info("Loaded {} new statuses", statuses.size());
+
+            this.tweets.setItems(FXCollections.observableArrayList(statuses));
         } catch (final IllegalStateException e) {
             this.tweets.setItems(FXCollections.observableArrayList("You are not logged in ! Please click login."));
         }
-
     }
 }
