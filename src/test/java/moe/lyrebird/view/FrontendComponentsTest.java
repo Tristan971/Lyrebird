@@ -2,7 +2,7 @@ package moe.lyrebird.view;
 
 import javafx.fxml.FXMLLoader;
 import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.model.views.ViewsManager;
+import moe.tristan.easyfxml.model.views.ViewsLoader;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,12 +20,12 @@ public class FrontendComponentsTest {
 
     @Autowired
     private ApplicationContext context;
-    
-    /*
-    Use Object#hashCode here rather than #equals since FXMLLoader overrides
-    equals to set it to point to FXMLLoader#location rather than itself.
-    Yes it breaks the Equals/HashCode contract. Ask Oracle about why, I didn't
-    write it myself.
+
+    /**
+     * Use Object#hashCode here rather than #equals since FXMLLoader overrides
+     * equals to set it to point to FXMLLoader#location rather than itself.
+     * Yes it breaks the Equals/HashCode contract. Ask Oracle about why, I didn't
+     * write it myself.
      */
     @Test
     public void fxmlLoader() {
@@ -51,8 +51,8 @@ public class FrontendComponentsTest {
     public void viewLoader() {
         Assert.assertEquals(
                 "The ViewLoader is reusable and should thus be reused if possible.",
-                this.context.getBean(ViewsManager.class),
-                this.context.getBean(ViewsManager.class)
+                this.context.getBean(ViewsLoader.class),
+                this.context.getBean(ViewsLoader.class)
         );
     }
     

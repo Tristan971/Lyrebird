@@ -5,14 +5,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.view.views.Controller;
 import moe.lyrebird.view.views.Views;
-import moe.tristan.easyfxml.model.views.ViewsManager;
+import moe.tristan.easyfxml.model.views.ViewsLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import static moe.tristan.easyfxml.model.exception.ExceptionPaneBehavior.DIALOG;
@@ -27,29 +24,27 @@ public class GUIManager {
     private final ResourceBundle resourceBundle;
     
     @Getter
-    private final ViewsManager viewsManager;
-    @Getter
-    private final Map<Class<? extends Controller>, Stage> stages = new HashMap<>();
+    private final ViewsLoader viewsLoader;
     @Getter
     private Stage mainStage;
     
     @Autowired
-    public GUIManager(final Environment environment, final ViewsManager viewsManager, final ResourceBundle resourceBundle) {
+    public GUIManager(final Environment environment, final ViewsLoader viewsLoader, final ResourceBundle resourceBundle) {
         this.environment = environment;
-        this.viewsManager = viewsManager;
+        this.viewsLoader = viewsLoader;
         this.resourceBundle = resourceBundle;
     }
     
     public void startGui(final Stage primaryStage) {
         Platform.setImplicitExit(true);
         this.mainStage = primaryStage;
-        primaryStage.setScene(this.getRootScene(viewsManager));
+        primaryStage.setScene(this.getRootScene(viewsLoader));
         primaryStage.setTitle(this.getMainStageTitle());
         primaryStage.show();
     }
 
-    private Scene getRootScene(ViewsManager viewsManager) {
-        return new Scene(viewsManager.loadPaneForView(Views.ROOT_VIEW, DIALOG));
+    private Scene getRootScene(ViewsLoader viewsLoader) {
+        return new Scene(viewsLoader.loadPaneForView(Views.ROOT_VIEW, DIALOG));
     }
 
     private String getMainStageTitle() {
@@ -60,12 +55,6 @@ public class GUIManager {
         );
     }
     
-    public void registerStage(final Class<? extends Controller> controllerClass, final Stage stage) {
-        this.stages.put(controllerClass, stage);
-        final String className = controllerClass.getSimpleName();
-        log.info("Registered {} stage ({})", className, stage.toString());
-    }
-    
     /**
      * Must be called (only once) from a non-JavaFX thread to enable AWT functionnality.
      * Thus the place to do it is {@link moe.lyrebird.Lyrebird#main(String...)}
@@ -74,7 +63,4 @@ public class GUIManager {
         java.awt.Toolkit.getDefaultToolkit();
     }
 
-    public <C extends Controller> void hide(final C controller) {
-        this.getStages().get(controller.getClass()).hide();
-    }
 }

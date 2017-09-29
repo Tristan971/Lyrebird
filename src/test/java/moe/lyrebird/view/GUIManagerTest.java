@@ -1,8 +1,7 @@
 package moe.lyrebird.view;
 
 import javafx.stage.Stage;
-import moe.lyrebird.view.views.Controller;
-import org.junit.Assert;
+import moe.tristan.easyfxml.FxmlController;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,26 +22,13 @@ public class GUIManagerTest extends ApplicationTest {
     private Stage newStage;
     
     @Test
-    public void enableAWT() throws Exception {
+    public void enableAWT() {
         GUIManager.enableAWT();
     }
     
-    @Test
-    public void registerStage() throws Exception {
-        this.guiManager.registerStage(TestController.class, this.newStage);
-        Assert.assertEquals(1, this.guiManager.getStages().size());
-        Assert.assertEquals(this.newStage, this.guiManager.getStages().get(TestController.class));
-    }
-    
     @Override
-    public void start(final Stage stage) throws Exception {
+    public void start(final Stage stage) {
         this.guiManager.startGui(stage);
         this.newStage = new Stage();
-    }
-    
-    private static final class TestController implements Controller {
-        @Override
-        public void initialize() {
-        }
     }
 }

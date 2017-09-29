@@ -2,7 +2,7 @@ package moe.lyrebird.view;
 
 import javafx.fxml.FXMLLoader;
 import lombok.extern.slf4j.Slf4j;
-import moe.tristan.easyfxml.model.views.ViewsManager;
+import moe.tristan.easyfxml.model.views.ViewsLoader;
 import moe.tristan.easyfxml.spring.SpringContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -47,7 +47,7 @@ public class FrontendComponents {
     }
 
     @Bean
-    public GUIManager guiManager(final Environment environment, final ViewsManager viewsManager, final ResourceBundle resourceBundle) {
-        return new GUIManager(environment, viewsManager, resourceBundle);
+    public GUIManager guiManager(final Environment environment, final ViewsLoader viewsLoader, final ResourceBundle resourceBundle) {
+        return new GUIManager(environment, viewsLoader, resourceBundle);
     }
 }

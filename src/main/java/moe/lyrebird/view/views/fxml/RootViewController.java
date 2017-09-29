@@ -7,10 +7,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.GUIManager;
-import moe.lyrebird.view.views.Controller;
+import moe.tristan.easyfxml.FxmlController;
+import moe.tristan.easyfxml.model.views.StageManager;
 import moe.tristan.easyfxml.util.StageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
@@ -24,8 +24,9 @@ import static moe.tristan.easyfxml.model.exception.ExceptionPaneBehavior.INLINE;
  */
 @Component
 @Slf4j
-public class RootViewController implements Controller {
+public class RootViewController implements FxmlController {
     private final GUIManager guiManager;
+    private final StageManager stageManager;
 
     @FXML
     private Button loginButton;
@@ -37,8 +38,9 @@ public class RootViewController implements Controller {
     private Pane contentPane;
     
     @Autowired
-    public RootViewController(final ApplicationContext context) {
-        this.guiManager = context.getBean(GUIManager.class);
+    public RootViewController(final GUIManager guiManager, final StageManager stageManager) {
+        this.guiManager = guiManager;
+        this.stageManager = stageManager;
     }
     
     @Override
@@ -50,27 +52,27 @@ public class RootViewController implements Controller {
     
     private void openLoginWindow() {
         log.info("User requested login.");
-        final Pane loginPane = this.guiManager.getViewsManager().loadPaneForView(LOGIN_VIEW, DIALOG);
+        final Pane loginPane = this.guiManager.getViewsLoader().loadPaneForView(LOGIN_VIEW, DIALOG);
         final Stage loginStage = StageUtils.stageOf("Login", loginPane);
         loginStage.initModality(Modality.APPLICATION_MODAL);
         StageUtils.scheduleDisplaying(loginStage);
-        this.guiManager.registerStage(LoginViewController.class, loginStage);
+        this.stageManager.registerSingleStageController(LoginViewController.class, loginStage);
     }
     
     private void loadTimeline() {
         log.info("Loading timeline.");
-        final Pane timelinePane = this.guiManager.getViewsManager().loadPaneForView(TIMELINE_VIEW, INLINE);
+        final Pane timelinePane = this.guiManager.getViewsLoader().loadPaneForView(TIMELINE_VIEW, INLINE);
         this.contentPane.getChildren().add(timelinePane);
         log.info("Loaded timeline!");
     }
 
     private void openTweetWindow() {
         log.info("Opening new tweet stage...");
-        final Pane tweetPane = this.guiManager.getViewsManager().loadPaneForView(TWEET_VIEW, DIALOG);
+        final Pane tweetPane = this.guiManager.getViewsLoader().loadPaneForView(TWEET_VIEW, DIALOG);
         final Stage tweetStage = StageUtils.stageOf("Tweet", tweetPane);
         tweetStage.initModality(Modality.APPLICATION_MODAL);
         StageUtils.scheduleDisplaying(tweetStage);
-        this.guiManager.registerStage(TweetController.class, tweetStage);
+        this.stageManager.registerSingleStageController(TweetController.class, tweetStage);
         log.info("New tweet stage opened !");
     }
 }

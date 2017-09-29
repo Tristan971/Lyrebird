@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.format.Tweet;
-import moe.lyrebird.view.views.Controller;
+import moe.tristan.easyfxml.FxmlController;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @Lazy
-public class TimelineController implements Controller {
+public class TimelineController implements FxmlController {
     private final TwitterHandler twitterHandler;
     @FXML
     private ListView<String> tweets;

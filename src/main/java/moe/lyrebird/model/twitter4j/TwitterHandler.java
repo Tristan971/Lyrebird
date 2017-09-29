@@ -1,10 +1,10 @@
 package moe.lyrebird.model.twitter4j;
 
+import io.vavr.CheckedFunction0;
 import io.vavr.control.Try;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.lang.SneakyThrow;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +15,8 @@ import twitter4j.auth.RequestToken;
 
 import java.net.URL;
 import java.util.Optional;
+
+import static io.vavr.API.unchecked;
 
 /**
  * This class is a decorator around the {@link Twitter}
@@ -33,10 +35,10 @@ public class TwitterHandler {
     
     public Pair<URL, RequestToken> newSession() {
         log.info("Requesting new Session!");
-        final RequestToken requestToken = SneakyThrow.unchecked(this.twitter::getOAuthRequestToken);
+        final RequestToken requestToken = unchecked((CheckedFunction0<RequestToken>) this.twitter::getOAuthRequestToken).apply();
         log.info("Got request token : {}", requestToken.toString());
         return Pair.of(
-                SneakyThrow.unchecked(() -> new URL(requestToken.getAuthorizationURL())),
+                unchecked((CheckedFunction0<URL>) (() -> new URL(requestToken.getAuthorizationURL()))).apply(),
                 requestToken
         );
     }
@@ -44,7 +46,7 @@ public class TwitterHandler {
     public Optional<AccessToken> registerAccessToken(final RequestToken requestToken, final String pinCode) {
         log.info("Registering token {} with pincode {}", requestToken.toString(), pinCode);
     
-        final Try<AccessToken> tryAccessToken = SneakyThrow.tryUnchecked(() -> {
+        final Try<AccessToken> tryAccessToken = Try.of(() -> {
             // Don't refactor expression lambda into statement lambda. It's too
             // long to be treated that way.
             //noinspection CodeBlock2Expr

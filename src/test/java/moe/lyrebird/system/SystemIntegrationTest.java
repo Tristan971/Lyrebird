@@ -1,7 +1,6 @@
 package moe.lyrebird.system;
 
 import javafx.stage.Stage;
-import moe.lyrebird.lang.SneakyThrow;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,6 +13,8 @@ import org.testfx.service.support.WaitUntilSupport;
 
 import java.net.URL;
 
+import static io.vavr.API.unchecked;
+
 /**
  * Created by Tristan on 04/03/2017.
  */
@@ -22,9 +23,9 @@ import java.net.URL;
 @Ignore(value = "I don't fucking know why but JavaFX is broken...")
 public class SystemIntegrationTest extends ApplicationTest {
     
-    private static final URL GOOGLE = SneakyThrow.unchecked(
+    private static final URL GOOGLE = unchecked(
             () -> new URL("https://www.google.com")
-    );
+    ).apply();
     @Autowired
     private SystemIntegration systemIntegration;
     
@@ -34,7 +35,7 @@ public class SystemIntegrationTest extends ApplicationTest {
     }
     
     @Override
-    public void start(final Stage stage) throws Exception {
+    public void start(final Stage stage) {
         stage.show();
     }
 

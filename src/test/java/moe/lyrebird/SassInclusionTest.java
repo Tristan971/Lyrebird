@@ -2,7 +2,7 @@ package moe.lyrebird;
 
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.lang.PathUtils;
+import moe.tristan.easyfxml.util.PathUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -12,8 +12,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import moe.lyrebird.lang.javafx.EventUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.lyrebird.view.views.Controller;
-import moe.lyrebird.view.views.ErrorPane;
+import moe.tristan.easyfxml.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
@@ -24,7 +24,7 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 import static javafx.scene.paint.Color.*;
 
 @Component
-public class TweetController implements Controller {
+public class TweetController implements FxmlController {
 
     private final TwitterHandler twitterHandler;
     @FXML
@@ -76,8 +76,18 @@ public class TweetController implements Controller {
     private void sendTweet(final String text) {
         try {
             this.twitterHandler.getTwitter().updateStatus(text);
+        } catch (final IllegalStateException e) {
+            ExceptionPane.displayExceptionPane(
+                    "Cannot post tweet",
+                    "You are not connected so we are unable to send this tweet.",
+                    e
+            );
         } catch (final TwitterException e) {
-            ErrorPane.displayErrorPaneOf("Could not send tweet !", e);
+            ExceptionPane.displayExceptionPane(
+                    "Twitter Error",
+                    "We could not send your tweet. The error is :",
+                    e
+            );
         }
     }
 
