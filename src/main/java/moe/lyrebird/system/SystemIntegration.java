@@ -1,14 +1,15 @@
 package moe.lyrebird.system;
 
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.lang.SneakyThrow;
 import moe.lyrebird.model.threading.BackgroundService;
-import moe.lyrebird.view.views.ErrorPane;
+import moe.tristan.easyfxml.model.exception.ExceptionPane;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+
+import static io.vavr.API.unchecked;
 
 /**
  * Created by tristan on 04/03/2017.
@@ -28,7 +29,7 @@ public class SystemIntegration {
             return;
         }
 
-        final URI uri = SneakyThrow.unchecked(url::toURI);
+        final URI uri = unchecked(URL::toURI).apply(url);
         this.backgroundService.run(() -> {
             try {
                 log.info("Requested opening browser at address : {}", url.toString());
@@ -41,12 +42,12 @@ public class SystemIntegration {
     
     private static void couldNotOpenDefaultBrowser(final URL url, final IOException... exception) {
         log.info("Could not get a handle to the OS's browser!");
-        ErrorPane.displayErrorPaneOf(
-                "Browser unavailable!\n" +
-                        "We couldn't open your default browser, so you need" +
-                        " to access the following URL " + url.toString() +
-                        " manually with your preferred browser.",
-                exception.length != 0 ? exception[0] : new IOException("No exception was thrown")
+        ExceptionPane.displayExceptionPane(
+                "3rd-party Application Error",
+                "We could not open your browser for authentication",
+                exception.length != 0 ?
+                        exception[0] :
+                        new IOException("Could not open browser for page : "+ url.toString())
         );
     }
 }

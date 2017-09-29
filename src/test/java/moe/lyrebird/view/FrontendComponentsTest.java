@@ -1,8 +1,8 @@
 package moe.lyrebird.view;
 
 import javafx.fxml.FXMLLoader;
-import moe.lyrebird.view.util.EasyFXML;
-import moe.lyrebird.view.util.ViewLoader;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.model.views.ViewsLoader;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,15 +20,15 @@ public class FrontendComponentsTest {
 
     @Autowired
     private ApplicationContext context;
-    
-    /*
-    Use Object#hashCode here rather than #equals since FXMLLoader overrides
-    equals to set it to point to FXMLLoader#location rather than itself.
-    Yes it breaks the Equals/HashCode contract. Ask Oracle about why, I didn't
-    write it myself.
+
+    /**
+     * Use Object#hashCode here rather than #equals since FXMLLoader overrides
+     * equals to set it to point to FXMLLoader#location rather than itself.
+     * Yes it breaks the Equals/HashCode contract. Ask Oracle about why, I didn't
+     * write it myself.
      */
     @Test
-    public void fxmlLoader() throws Exception {
+    public void fxmlLoader() {
         final FXMLLoader fxmlLoader = this.context.getBean(FXMLLoader.class);
         final FXMLLoader fxmlLoader1 = this.context.getBean(FXMLLoader.class);
         Assert.assertNotEquals(
@@ -39,25 +39,25 @@ public class FrontendComponentsTest {
     }
     
     @Test
-    public void easyFXML() throws Exception {
+    public void easyFXML() {
         Assert.assertEquals(
                 "The EasyFXML is reusable and should thus be reused if possible.",
-                this.context.getBean(EasyFXML.class),
-                this.context.getBean(EasyFXML.class)
+                this.context.getBean(EasyFxml.class),
+                this.context.getBean(EasyFxml.class)
         );
     }
     
     @Test
-    public void viewLoader() throws Exception {
+    public void viewLoader() {
         Assert.assertEquals(
                 "The ViewLoader is reusable and should thus be reused if possible.",
-                this.context.getBean(ViewLoader.class),
-                this.context.getBean(ViewLoader.class)
+                this.context.getBean(ViewsLoader.class),
+                this.context.getBean(ViewsLoader.class)
         );
     }
     
     @Test
-    public void guiManager() throws Exception {
+    public void guiManager() {
     }
     
 }

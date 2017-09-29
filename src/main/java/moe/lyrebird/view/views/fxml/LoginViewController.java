@@ -8,9 +8,10 @@ import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.system.SystemIntegration;
-import moe.lyrebird.view.GUIManager;
-import moe.lyrebird.view.views.Controller;
-import moe.lyrebird.view.views.ErrorPane;
+import moe.tristan.easyfxml.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionPane;
+import moe.tristan.easyfxml.model.views.StageManager;
+import moe.tristan.easyfxml.util.StageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
@@ -28,8 +29,8 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
  */
 @Component
 @Slf4j
-public class LoginViewController implements Controller {
-    private final GUIManager guiManager;
+public class LoginViewController implements FxmlController {
+    private final StageManager stageManager;
     private final TwitterHandler twitterHandler;
     private final SystemIntegration systemIntegration;
     
@@ -44,9 +45,9 @@ public class LoginViewController implements Controller {
     private boolean pinIsValid = false;
     
     @Autowired
-    public LoginViewController(final TwitterHandler twitterHandler, final GUIManager guiManager, final SystemIntegration systemIntegration) {
+    public LoginViewController(final TwitterHandler twitterHandler, StageManager stageManager, final SystemIntegration systemIntegration) {
         this.twitterHandler = twitterHandler;
-        this.guiManager = guiManager;
+        this.stageManager = stageManager;
         this.systemIntegration = systemIntegration;
     }
     
@@ -86,9 +87,13 @@ public class LoginViewController implements Controller {
                                 token.getScreenName())
                 );
             } else {
-                ErrorPane.displayErrorPaneOf("Could not authenticate you!", new Exception("No token could be used."));
+                ExceptionPane.displayExceptionPane(
+                        "Authentication Error",
+                        "Could not authenticate you!",
+                        new Exception("No token could be used.")
+                );
             }
-            this.guiManager.hide(this);
+            this.stageManager.getSingleStageController(this.getClass()).peek(StageUtils::scheduleHiding);
         }
     }
     

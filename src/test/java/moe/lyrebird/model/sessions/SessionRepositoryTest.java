@@ -10,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import twitter4j.auth.AccessToken;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -35,8 +33,8 @@ public class SessionRepositoryTest {
     @Test
     public void testSave() {
         final Session saved = sessionRepository.save(session);
-        final Optional<Session> sessionTryFind = sessionRepository.findById("test_uid");
-        assertThat(sessionTryFind).hasValue(saved);
+        final Session sessionTryFind = sessionRepository.findOne("test_uid");
+        assertThat(sessionTryFind).isEqualTo(saved);
         log.info(
                 "Saved sessions : {}",
                 sessionRepository.findAll().toString()
