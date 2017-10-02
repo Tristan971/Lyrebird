@@ -20,14 +20,14 @@ public class LyrebirdTest extends ApplicationTest {
     private ApplicationContext context;
     
     @Test
-    public void start() throws Exception {
+    public void start() {
         final Lyrebird lyrebird = this.context.getBean(Lyrebird.class);
         lyrebird.init();
         Platform.runLater(() -> lyrebird.start(stage));
     }
     
     @Override
-    public void start(final Stage stage) throws Exception {
+    public void start(final Stage stage) {
         LyrebirdTest.stage = stage;
     }
 }

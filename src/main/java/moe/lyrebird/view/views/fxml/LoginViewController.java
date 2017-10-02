@@ -1,5 +1,6 @@
 package moe.lyrebird.view.views.fxml;
 
+import io.vavr.Tuple2;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,7 +14,6 @@ import moe.tristan.easyfxml.model.exception.ExceptionPane;
 import moe.tristan.easyfxml.model.views.StageManager;
 import moe.tristan.easyfxml.util.StageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -62,13 +62,13 @@ public class LoginViewController implements FxmlController {
     
     @SuppressWarnings("unused")
     private void startNewSession(final Event loginButtonEvent) {
-        final Pair<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
-        log.info("Got authorization URL {}, opening the browser!", tokenUrl.getFirst().toString());
-        this.systemIntegration.openBrowser(tokenUrl.getFirst());
+        final Tuple2<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
+        log.info("Got authorization URL {}, opening the browser!", tokenUrl._1.toString());
+        this.systemIntegration.openBrowser(tokenUrl._1);
 
         this.loginButton.setDisable(true);
         this.pinCodeField.setVisible(true);
-        this.pinCodeButton.addEventHandler(MOUSE_RELEASED, e -> this.registerPinCode(tokenUrl.getSecond()));
+        this.pinCodeButton.addEventHandler(MOUSE_RELEASED, e -> this.registerPinCode(tokenUrl._2));
         this.pinCodeButton.setVisible(true);
     }
     

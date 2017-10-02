@@ -1,12 +1,12 @@
 package moe.lyrebird.model.twitter4j;
 
+import io.vavr.Tuple2;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.util.Pair;
 import org.springframework.test.context.junit4.SpringRunner;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -30,13 +30,13 @@ public class TwitterHandlerTest {
     
     @Test
     public void newSession() throws Exception {
-        final Pair<URL, RequestToken> urlRequestTokenPair = this.twitterHandler.newSession();
-        Assert.assertNotNull(urlRequestTokenPair.getFirst().toURI());
-        Assert.assertNotNull(urlRequestTokenPair.getSecond());
+        final Tuple2<URL, RequestToken> urlRequestTokenPair = this.twitterHandler.newSession();
+        Assert.assertNotNull(urlRequestTokenPair._1.toURI());
+        Assert.assertNotNull(urlRequestTokenPair._2);
     }
     
     @Test
-    public void registerAccessToken() throws Exception {
+    public void registerAccessToken() {
         final Optional<AccessToken> accessToken = this.twitterHandler.registerAccessToken(
                 new RequestToken("fake", "token"),
                 "1234"
@@ -45,12 +45,12 @@ public class TwitterHandlerTest {
     }
     
     @Test
-    public void getTwitter() throws Exception {
+    public void getTwitter() {
         Assert.assertNotNull(this.twitterHandler.getTwitter());
     }
     
     @Test
-    public void getAccessToken() throws Exception {
+    public void getAccessToken() {
         this.twitterHandler = this.context.getBean(TwitterHandler.class);
         Assert.assertNotNull(this.twitterHandler.getAccessToken());
         Assert.assertEquals(this.twitterHandler.getAccessToken(), FAKE_ACCESS_TOKEN);

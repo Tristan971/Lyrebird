@@ -28,19 +28,19 @@ public class MapUtilsTest {
     }
     
     @Test
-    public void entryFor() throws Exception {
+    public void entryFor() {
         final Map.Entry<String, String> testEntry = MapUtils.entryFor(testKey, testMap);
         Assert.assertEquals(testEntry.getKey(), testKey);
         Assert.assertEquals(testEntry.getValue(), testValue);
     }
     
     @Test(expected = NullPointerException.class)
-    public void nullKeyCheck() throws Exception {
+    public void nullKeyCheck() {
         MapUtils.entryFor(null, testMap);
     }
     
     @Test(expected = NullPointerException.class)
-    public void nullMapCheck() throws Exception {
+    public void nullMapCheck() {
         MapUtils.entryFor(testKey, null);
     }
     

@@ -16,7 +16,7 @@ public class SessionManagerTest {
     private SessionManager sessionManager;
     
     @Test
-    public void testSaveAndReload() throws Exception {
+    public void testSaveAndReload() {
         this.sessionManager.addSession(exampleSession);
         this.sessionManager.saveAllSessions();
         this.sessionManager.reloadAllSessions();

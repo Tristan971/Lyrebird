@@ -1,6 +1,8 @@
 package moe.lyrebird.model.twitter4j;
 
 import io.vavr.CheckedFunction0;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.control.Try;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.util.Pair;
 import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -33,11 +34,11 @@ public class TwitterHandler {
     private final Twitter twitter;
     private AccessToken accessToken = FAKE_ACCESS_TOKEN;
     
-    public Pair<URL, RequestToken> newSession() {
+    public Tuple2<URL, RequestToken> newSession() {
         log.info("Requesting new Session!");
         final RequestToken requestToken = unchecked((CheckedFunction0<RequestToken>) this.twitter::getOAuthRequestToken).apply();
         log.info("Got request token : {}", requestToken.toString());
-        return Pair.of(
+        return Tuple.of(
                 unchecked((CheckedFunction0<URL>) (() -> new URL(requestToken.getAuthorizationURL()))).apply(),
                 requestToken
         );

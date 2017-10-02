@@ -25,7 +25,7 @@ public class Twitter4JComponentsTest {
     private Environment environment;
 
     @Test
-    public void configuration() throws Exception {
+    public void configuration() {
         final Configuration configuration = this.context.getBean(Configuration.class);
         Assert.assertEquals(
                 configuration.getOAuthConsumerSecret(),
@@ -38,7 +38,7 @@ public class Twitter4JComponentsTest {
     }
 
     @Test
-    public void twitter() throws Exception {
+    public void twitter() {
         final Twitter twitter = this.context.getBean(Twitter.class);
         Assert.assertNotNull(twitter);
     }

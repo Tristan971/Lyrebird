@@ -21,7 +21,7 @@ public class BackendComponentsTest {
     private ApplicationContext context;
     
     @Test
-    public void twitterHandler() throws Exception {
+    public void twitterHandler() {
         final TwitterHandler twitterHandler1 = this.context.getBean(TwitterHandler.class);
         twitterHandler1.setAccessToken(new AccessToken("some", "token"));
         final TwitterHandler twitterHandler2 = this.context.getBean(TwitterHandler.class);
@@ -30,7 +30,7 @@ public class BackendComponentsTest {
     }
     
     @Test
-    public void sessionManager() throws Exception {
+    public void sessionManager() {
         Assert.assertEquals(this.context.getBean(SessionManager.class), this.context.getBean(SessionManager.class));
     }
     

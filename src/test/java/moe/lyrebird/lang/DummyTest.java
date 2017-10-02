@@ -32,7 +32,7 @@ public class DummyTest {
     }
     
     @Test(expected = RuntimeException.class)
-    public void noCastForPrivateClasses() throws Exception {
+    public void noCastForPrivateClasses() {
         Assert.assertEquals(Dummy.getDummy(System.class).getClass(), System.class);
     }
     
