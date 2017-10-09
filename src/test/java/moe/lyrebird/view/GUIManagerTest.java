@@ -1,7 +1,6 @@
 package moe.lyrebird.view;
 
 import javafx.stage.Stage;
-import moe.tristan.easyfxml.FxmlController;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

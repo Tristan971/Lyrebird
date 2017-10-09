@@ -9,9 +9,10 @@ import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.system.SystemIntegration;
-import moe.tristan.easyfxml.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionPane;
-import moe.tristan.easyfxml.model.views.StageManager;
+import moe.lyrebird.view.views.Views;
+import moe.tristan.easyfxml.model.FxmlController;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.StageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -87,13 +88,13 @@ public class LoginViewController implements FxmlController {
                                 token.getScreenName())
                 );
             } else {
-                ExceptionPane.displayExceptionPane(
+                ExceptionHandler.displayExceptionPane(
                         "Authentication Error",
                         "Could not authenticate you!",
                         new Exception("No token could be used.")
                 );
             }
-            this.stageManager.getSingleStageController(this.getClass()).peek(StageUtils::scheduleHiding);
+            this.stageManager.getSingle(Views.LOGIN_VIEW).peek(StageUtils::scheduleHiding);
         }
     }
     

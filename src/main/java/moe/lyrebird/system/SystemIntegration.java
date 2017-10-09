@@ -2,7 +2,7 @@ package moe.lyrebird.system;
 
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.threading.BackgroundService;
-import moe.tristan.easyfxml.model.exception.ExceptionPane;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 
 import java.awt.*;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class SystemIntegration {
     
     private static void couldNotOpenDefaultBrowser(final URL url, final IOException... exception) {
         log.info("Could not get a handle to the OS's browser!");
-        ExceptionPane.displayExceptionPane(
+        ExceptionHandler.displayExceptionPane(
                 "3rd-party Application Error",
                 "We could not open your browser for authentication",
                 exception.length != 0 ?

@@ -2,7 +2,6 @@ package moe.lyrebird.view;
 
 import javafx.fxml.FXMLLoader;
 import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.model.views.ViewsLoader;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,15 +43,6 @@ public class FrontendComponentsTest {
                 "The EasyFXML is reusable and should thus be reused if possible.",
                 this.context.getBean(EasyFxml.class),
                 this.context.getBean(EasyFxml.class)
-        );
-    }
-    
-    @Test
-    public void viewLoader() {
-        Assert.assertEquals(
-                "The ViewLoader is reusable and should thus be reused if possible.",
-                this.context.getBean(ViewsLoader.class),
-                this.context.getBean(ViewsLoader.class)
         );
     }
     

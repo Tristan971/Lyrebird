@@ -1,8 +1,8 @@
 package moe.lyrebird.view;
 
-import javafx.fxml.FXMLLoader;
 import lombok.extern.slf4j.Slf4j;
-import moe.tristan.easyfxml.model.views.ViewsLoader;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.model.fxml.FxmlLoader;
 import moe.tristan.easyfxml.spring.SpringContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -29,25 +29,20 @@ public class FrontendComponents {
     }
     
     /**
-     * Containerize {@link FXMLLoader} so we can get configured instances
-     * of it through Spring. Namely setting Spring as the provider for
-     * controller instances.
-     *
-     * @param context
-     *         The spring{@link ApplicationContext}.
-     * @return A *new* (non-singleton) configured {@link FXMLLoader}
+     * Containerize {@link FxmlLoader} so we can add our resource bundle.
+
      */
     @Bean
     @Scope(scopeName = SCOPE_PROTOTYPE)
-    public FXMLLoader fxmlLoader(final ApplicationContext context, final ResourceBundle resourceBundle) {
-        final FXMLLoader loader = new FXMLLoader();
+    public FxmlLoader fxmlLoader(final ApplicationContext context, final ResourceBundle resourceBundle) {
+        final FxmlLoader loader = new FxmlLoader();
         loader.setControllerFactory(context::getBean);
         loader.setResources(resourceBundle);
         return loader;
     }
 
     @Bean
-    public GUIManager guiManager(final Environment environment, final ViewsLoader viewsLoader, final ResourceBundle resourceBundle) {
-        return new GUIManager(environment, viewsLoader, resourceBundle);
+    public GUIManager guiManager(final Environment environment, final EasyFxml easyFxml, final ResourceBundle resourceBundle) {
+        return new GUIManager(environment, easyFxml, resourceBundle);
     }
 }

@@ -8,8 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.format.Tweet;
-import moe.tristan.easyfxml.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionPane;
+import moe.tristan.easyfxml.model.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import twitter4j.Twitter;
@@ -47,7 +47,7 @@ public class TimelineController implements FxmlController {
     }
     
     private void onTimelineRefreshError(final Throwable reason) {
-        ExceptionPane.displayExceptionPane(
+        ExceptionHandler.displayExceptionPane(
                 "An unexpected error occured",
                 "Could not get your timeline.",
                 reason
