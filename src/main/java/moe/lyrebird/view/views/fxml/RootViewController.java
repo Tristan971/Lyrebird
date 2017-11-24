@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.GUIManager;
 import moe.lyrebird.view.views.Views;
-import moe.tristan.easyfxml.model.FxmlController;
+import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.StageUtils;

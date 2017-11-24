@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.format.Tweet;
-import moe.tristan.easyfxml.model.FxmlController;
+import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;

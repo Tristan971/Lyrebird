@@ -12,7 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import moe.lyrebird.lang.javafx.EventUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.tristan.easyfxml.model.FxmlController;
+import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

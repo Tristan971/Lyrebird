@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.system.SystemIntegration;
 import moe.lyrebird.view.views.Views;
-import moe.tristan.easyfxml.model.FxmlController;
+import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.StageUtils;
@@ -46,7 +46,7 @@ public class LoginViewController implements FxmlController {
     private boolean pinIsValid = false;
     
     @Autowired
-    public LoginViewController(final TwitterHandler twitterHandler, StageManager stageManager, final SystemIntegration systemIntegration) {
+    public LoginViewController(final TwitterHandler twitterHandler, final StageManager stageManager, final SystemIntegration systemIntegration) {
         this.twitterHandler = twitterHandler;
         this.stageManager = stageManager;
         this.systemIntegration = systemIntegration;

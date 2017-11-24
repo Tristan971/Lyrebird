@@ -1,51 +1,50 @@
 package moe.lyrebird.view.views;
 
-import io.vavr.control.Option;
 import moe.lyrebird.view.views.fxml.LoginViewController;
 import moe.lyrebird.view.views.fxml.RootViewController;
 import moe.lyrebird.view.views.fxml.TimelineController;
 import moe.lyrebird.view.views.fxml.TweetController;
-import moe.tristan.easyfxml.model.FxmlController;
-import moe.tristan.easyfxml.model.FxmlFile;
-import moe.tristan.easyfxml.model.FxmlNode;
-import moe.tristan.easyfxml.model.FxmlStylesheet;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.api.FxmlFile;
+import moe.tristan.easyfxml.api.FxmlNode;
+import moe.tristan.easyfxml.api.FxmlStylesheet;
 
 /**
  * The views as an enum for easier autocompletion etc.
  */
 @SuppressWarnings("unused")
 public enum Views implements FxmlNode {
-    ROOT_VIEW("RootView.fxml", Option.of(RootViewController.class)),
-    LOGIN_VIEW("Login.fxml", Option.of(LoginViewController.class)),
-    TIMELINE_VIEW("Timeline.fxml", Option.of(TimelineController.class)),
-    TWEET_VIEW("Tweet.fxml", Option.of(TweetController.class));
+    ROOT_VIEW("RootView.fxml", RootViewController.class),
+    LOGIN_VIEW("Login.fxml", LoginViewController.class),
+    TIMELINE_VIEW("Timeline.fxml", TimelineController.class),
+    TWEET_VIEW("Tweet.fxml", TweetController.class);
 
     private final String fxmlFile;
-    private final Option<Class<? extends FxmlController>> controllerClass;
-    private final Option<FxmlStylesheet> stylesheet;
+    private final Class<? extends FxmlController> controllerClass;
+    private final FxmlStylesheet stylesheet;
 
-    Views(String fxmlFile, Option<Class<? extends FxmlController>> controllerClass) {
-        this(fxmlFile, controllerClass, Option.none());
+    Views(final String fxmlFile, final Class<? extends FxmlController> controllerClass) {
+        this(fxmlFile, controllerClass, FxmlStylesheet.INHERIT);
     }
 
-    Views(String fxmlFile, Option<Class<? extends FxmlController>> controllerClass, Option<FxmlStylesheet> stylesheet) {
+    Views(final String fxmlFile, final Class<? extends FxmlController> controllerClass, final FxmlStylesheet stylesheet) {
         this.fxmlFile = fxmlFile;
         this.controllerClass = controllerClass;
         this.stylesheet = stylesheet;
     }
 
     @Override
-    public FxmlFile getFxmlFile() {
+    public FxmlFile getFile() {
         return () -> this.fxmlFile;
     }
 
     @Override
-    public Option<Class<? extends FxmlController>> getControllerClass() {
+    public Class<? extends FxmlController> getControllerClass() {
         return this.controllerClass;
     }
 
     @Override
-    public Option<FxmlStylesheet> getStylesheet() {
+    public FxmlStylesheet getStylesheet() {
         return this.stylesheet;
     }
 }
