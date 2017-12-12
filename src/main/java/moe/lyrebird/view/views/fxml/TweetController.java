@@ -2,6 +2,7 @@ package moe.lyrebird.view.views.fxml;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
+import io.vavr.concurrent.Future;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,11 +13,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import moe.lyrebird.lang.javafx.EventUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
+import moe.lyrebird.view.views.Views;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.StageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import twitter4j.TwitterException;
+import twitter4j.Status;
 
 import static io.vavr.API.*;
 import static javafx.scene.input.KeyEvent.KEY_RELEASED;
@@ -36,9 +40,12 @@ public class TweetController implements FxmlController {
     @FXML
     private Label charactersLeft;
 
+    private final StageManager stageManager;
+
     @Autowired
-    public TweetController(final TwitterHandler twitterHandler) {
+    public TweetController(final TwitterHandler twitterHandler, final StageManager stageManager) {
         this.twitterHandler = twitterHandler;
+        this.stageManager = stageManager;
     }
 
     @Override
@@ -74,21 +81,22 @@ public class TweetController implements FxmlController {
     }
 
     private void sendTweet(final String text) {
-        try {
-            this.twitterHandler.getTwitter().updateStatus(text);
-        } catch (final IllegalStateException e) {
-            ExceptionHandler.displayExceptionPane(
-                    "Cannot post tweet",
-                    "You are not connected so we are unable to send this tweet.",
-                    e
+        final Future<Status> updateResult = Future(
+                () -> this.twitterHandler.getTwitter().updateStatus(text)
+        );
+
+        Stream(tweetTextArea, sendButton).forEach(ctr -> ctr.setDisable(true));
+
+        updateResult.onComplete(res -> {
+            res.onFailure(err ->
+                    StageUtils.stageOf(
+                            "Couldn't send tweet !",
+                            new ExceptionHandler(err).asPane()
+                    ).thenAccept(StageUtils::scheduleDisplaying));
+            res.onSuccess(status ->
+                    stageManager.getSingle(Views.TWEET_VIEW).peek(StageUtils::scheduleHiding)
             );
-        } catch (final TwitterException e) {
-            ExceptionHandler.displayExceptionPane(
-                    "Twitter Error",
-                    "We could not send your tweet. The error is :",
-                    e
-            );
-        }
+        });
     }
 
 }
