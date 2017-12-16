@@ -23,7 +23,7 @@ public class TimelineController implements FxmlController {
 
     @FXML
     private ListView<String> tweets;
-    private ObservableList<String> tweetsObservableList = FXCollections.emptyObservableList();
+    private final ObservableList<String> tweetsObservableList = FXCollections.emptyObservableList();
 
     public TimelineController(final TimelineManager timelineManager) {
         log.debug("Initialized");
