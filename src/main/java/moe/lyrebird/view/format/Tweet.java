@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public final class Tweet {
 
-    public static List<String> ofStatuses(final List<Status> statuses) {
+    public static List<String> ofStatuses(final List<? extends Status> statuses) {
         return statuses.stream().map(Tweet::of).collect(Collectors.toList());
     }
     

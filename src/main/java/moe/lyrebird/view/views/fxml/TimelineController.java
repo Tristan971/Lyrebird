@@ -1,6 +1,7 @@
 package moe.lyrebird.view.views.fxml;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +10,6 @@ import moe.lyrebird.view.format.Tweet;
 import moe.tristan.easyfxml.api.FxmlController;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import twitter4j.Status;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by tristan on 03/03/2017.
@@ -27,23 +23,31 @@ public class TimelineController implements FxmlController {
 
     @FXML
     private ListView<String> tweets;
-    
+    private ObservableList<String> tweetsObservableList = FXCollections.emptyObservableList();
+
     public TimelineController(final TimelineManager timelineManager) {
+        log.debug("Initialized");
         this.timelineManager = timelineManager;
     }
     
     @Override
     public void initialize() {
-        tweets.setItems(
-                FXCollections.observableArrayList(
-                        adaptStatuses(timelineManager.getTweets())
-                )
-        );
+        bindModel();
+        bindUi();
     }
 
-    private List<String> adaptStatuses(final Collection<Status> statuses) {
-        return statuses.stream()
-                .map(Tweet::of)
-                .collect(Collectors.toList());
+    private void bindModel() {
+        log.debug("Subscribing to {}", TimelineManager.class.getSimpleName());
+        timelineManager.subscribe(change -> {
+            tweetsObservableList.addAll(Tweet.ofStatuses(change.getAddedSubList()));
+            tweetsObservableList.removeAll(Tweet.ofStatuses(change.getRemoved()));
+        });
+        log.debug("Subscribed.");
+    }
+
+    private void bindUi() {
+        log.debug("Binding tweets displayed to model...");
+        tweets.setItems(tweetsObservableList);
+        log.debug("Binded tweets.");
     }
 }

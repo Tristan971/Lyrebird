@@ -38,12 +38,12 @@ public class RootViewController implements FxmlController {
     }
 
     private void loadTimeline() {
-        log.info("Loading timeline.");
+        log.info("Loading timeline view.");
         final Pane timelinePane = this.guiManager.getEasyFxml()
                 .loadNode(TIMELINE_VIEW)
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
         this.contentPane.setCenter(timelinePane);
-        log.info("Loaded timeline!");
+        log.info("Loaded timeline view.");
     }
 }
