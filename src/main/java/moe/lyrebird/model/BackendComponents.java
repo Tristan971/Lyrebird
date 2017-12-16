@@ -2,11 +2,8 @@ package moe.lyrebird.model;
 
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.sessions.SessionRepository;
-import moe.lyrebird.model.threading.BackgroundService;
 import moe.lyrebird.model.twitter4j.Twitter4JComponents;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.lyrebird.system.CleanupService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,19 +29,8 @@ public class BackendComponents {
     @Bean
     public SessionManager sessionManager(
             final ApplicationContext context,
-            final SessionRepository sessionRepository,
-            final CleanupService cleanupService
+            final SessionRepository sessionRepository
     ) {
-        final SessionManager manager = new SessionManager(context, sessionRepository);
-        cleanupService.registerCleanupTask(manager::saveAllSessions);
-        return manager;
-    }
-    
-    @Bean
-    @Autowired
-    public BackgroundService backgroundService(final CleanupService cleanupService) {
-        final BackgroundService backgroundService = new BackgroundService();
-        cleanupService.registerCleanupTask(backgroundService::cleanUp);
-        return backgroundService;
+        return new SessionManager(context, sessionRepository);
     }
 }
