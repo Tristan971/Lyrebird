@@ -1,0 +1,13 @@
+$bg-color: #cbcbcb;
+
+@mixin bold {
+  -fx-font-weight: bold;
+}
+
+.root {
+  -fx-background-color: $bg-color;
+}
+
+errorPane {
+  @include bold;
+}

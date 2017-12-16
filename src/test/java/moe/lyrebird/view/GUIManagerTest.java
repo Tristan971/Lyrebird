@@ -1,7 +1,7 @@
 package moe.lyrebird.view;
 
 import javafx.stage.Stage;
-import org.junit.Ignore;
+import moe.tristan.easyfxml.util.FxAsyncUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +14,18 @@ import org.testfx.framework.junit.ApplicationTest;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@Ignore
 public class GUIManagerTest extends ApplicationTest {
+
     @Autowired
     private GUIManager guiManager;
-    private Stage newStage;
-    
+
     @Test
-    public void enableAWT() {
-        GUIManager.enableAWT();
+    public void testMainlaunch() {
+        FxAsyncUtils.doOnFxThread(guiManager, manager -> manager.startGui(new Stage()));
     }
-    
+
     @Override
     public void start(final Stage stage) {
-        this.guiManager.startGui(stage);
-        this.newStage = new Stage();
+        // JavaFX initialized
     }
 }
