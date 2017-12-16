@@ -8,9 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.lyrebird.system.SystemIntegration;
 import moe.lyrebird.view.views.Views;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.StageUtils;
@@ -32,9 +32,9 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 @Slf4j
 public class LoginViewController implements FxmlController {
     private final StageManager stageManager;
+    private final BrowserSupport browserSupport;
     private final TwitterHandler twitterHandler;
-    private final SystemIntegration systemIntegration;
-    
+
     @FXML
     private Button loginButton;
     @FXML
@@ -46,10 +46,14 @@ public class LoginViewController implements FxmlController {
     private boolean pinIsValid = false;
     
     @Autowired
-    public LoginViewController(final TwitterHandler twitterHandler, final StageManager stageManager, final SystemIntegration systemIntegration) {
+    public LoginViewController(
+            final TwitterHandler twitterHandler,
+            final StageManager stageManager,
+            final BrowserSupport browserSupport
+    ) {
         this.twitterHandler = twitterHandler;
         this.stageManager = stageManager;
-        this.systemIntegration = systemIntegration;
+        this.browserSupport = browserSupport;
     }
     
     @Override
@@ -65,7 +69,7 @@ public class LoginViewController implements FxmlController {
     private void startNewSession(final Event loginButtonEvent) {
         final Tuple2<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
         log.info("Got authorization URL {}, opening the browser!", tokenUrl._1.toString());
-        this.systemIntegration.openBrowser(tokenUrl._1);
+        browserSupport.openUrl(tokenUrl._1);
 
         this.loginButton.setDisable(true);
         this.pinCodeField.setVisible(true);
