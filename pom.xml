@@ -73,15 +73,9 @@
         </plugins>
 
         <resources>
-            <!-- Maven is too dumb to copy FXML files not
-    in .../resources by default, and SceneBuilder
-    is too dumb to discover Controller classes
-    if they are not in the same folder as FXML
-    files. And IntelliJ is too dumb to syntax check
-    java files in .../resources. So our FXML files
-    lie amidst the Controllers package and we enforce
-    maven to copy the FXML files as resources,
-    preserving the file path. -->
+            <!-- Maven won't copy non-java files under source root (/src/main/java) but because SceneBuilder
+            is basically a broken tool we really want our .fxml files sitting there next to their controller
+            classes. -->
             <resource>
                 <directory>
                     src/main/java
