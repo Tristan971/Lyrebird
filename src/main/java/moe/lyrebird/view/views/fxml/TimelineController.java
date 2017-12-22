@@ -11,6 +11,8 @@ import moe.tristan.easyfxml.api.FxmlController;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
+
 /**
  * Created by tristan on 03/03/2017.
  */
@@ -23,7 +25,7 @@ public class TimelineController implements FxmlController {
 
     @FXML
     private ListView<String> tweets;
-    private final ObservableList<String> tweetsObservableList = FXCollections.emptyObservableList();
+    private final ObservableList<String> tweetsObservableList = FXCollections.observableList(new LinkedList<>());
 
     public TimelineController(final TimelineManager timelineManager) {
         log.debug("Initialized");
@@ -39,8 +41,8 @@ public class TimelineController implements FxmlController {
     private void bindModel() {
         log.debug("Subscribing to {}", TimelineManager.class.getSimpleName());
         timelineManager.subscribe(change -> {
-            tweetsObservableList.addAll(Tweet.ofStatuses(change.getAddedSubList()));
-            tweetsObservableList.removeAll(Tweet.ofStatuses(change.getRemoved()));
+            tweetsObservableList.add(0, Tweet.of(change.getElementAdded()));
+            tweetsObservableList.remove(Tweet.of(change.getElementRemoved()));
         });
         log.debug("Subscribed.");
     }

@@ -72,4 +72,13 @@ public class TwitterHandler {
         this.context.getBean(SessionManager.class).addTwitterHandler(this);
         return Optional.of(successAccessToken);
     }
+
+    public void registerAccessToken(final AccessToken preloadedAccessToken) {
+        this.setAccessToken(preloadedAccessToken);
+        this.twitter.setOAuthAccessToken(preloadedAccessToken);
+    }
+
+    public String getUserScreenName() {
+        return accessToken.getScreenName();
+    }
 }

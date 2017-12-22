@@ -1,9 +1,6 @@
 package moe.lyrebird.view.views;
 
-import moe.lyrebird.view.views.fxml.LoginViewController;
-import moe.lyrebird.view.views.fxml.RootViewController;
-import moe.lyrebird.view.views.fxml.TimelineController;
-import moe.lyrebird.view.views.fxml.TweetController;
+import moe.lyrebird.view.views.fxml.*;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
@@ -17,7 +14,8 @@ public enum Views implements FxmlNode {
     ROOT_VIEW("RootView.fxml", RootViewController.class),
     LOGIN_VIEW("Login.fxml", LoginViewController.class),
     TIMELINE_VIEW("Timeline.fxml", TimelineController.class),
-    TWEET_VIEW("Tweet.fxml", TweetController.class);
+    TWEET_VIEW("Tweet.fxml", TweetController.class),
+    CONTROL_BAR("ControlBar.fxml", ControlBarController.class);
 
     private final String fxmlFile;
     private final Class<? extends FxmlController> controllerClass;

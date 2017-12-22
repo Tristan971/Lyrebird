@@ -2,7 +2,6 @@ package moe.lyrebird.model.threading;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;
 
@@ -42,7 +41,6 @@ public class BackgroundService {
         this.executorService.shutdown();
     }
 
-    @NotNull
     @SuppressWarnings("deprecation")
     private String getCallerClass() {
         return sun.reflect.Reflection.getCallerClass(4).getSimpleName();

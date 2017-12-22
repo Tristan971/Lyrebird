@@ -3,6 +3,7 @@ package moe.lyrebird.view.format;
 import lombok.experimental.UtilityClass;
 import twitter4j.Status;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public final class Tweet {
 
-    public static List<String> ofStatuses(final List<? extends Status> statuses) {
+    public static List<String> ofStatuses(final Collection<? extends Status> statuses) {
         return statuses.stream().map(Tweet::of).collect(Collectors.toList());
     }
     

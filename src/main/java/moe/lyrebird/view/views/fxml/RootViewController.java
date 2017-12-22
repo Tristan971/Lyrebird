@@ -8,9 +8,11 @@ import moe.lyrebird.view.GUIManager;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.FxAsyncUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static moe.lyrebird.view.views.Views.CONTROL_BAR;
 import static moe.lyrebird.view.views.Views.TIMELINE_VIEW;
 
 /**
@@ -34,7 +36,18 @@ public class RootViewController implements FxmlController {
 
     @Override
     public void initialize() {
+        loadControlBar();
         loadTimeline();
+    }
+
+    private void loadControlBar() {
+        log.info("Initializing control bar...");
+        final Pane controlBarPane = this.guiManager.getEasyFxml()
+                .loadNode(CONTROL_BAR)
+                .getOrElseGet(err -> new ExceptionHandler(err).asPane());
+        log.info("Initialized control bar !");
+        log.info("Displaying control bar...");
+        FxAsyncUtils.doOnFxThread(contentPane, root -> root.setLeft(controlBarPane));
     }
 
     private void loadTimeline() {

@@ -98,7 +98,7 @@ public class SessionManager {
     
     public void addSession(final Session session) {
         final TwitterHandler handler = this.context.getBean(TwitterHandler.class);
-        handler.setAccessToken(session.getAccessToken());
+        handler.registerAccessToken(session.getAccessToken());
         this.loadedSessions.put(session, handler);
         this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
         this.saveAllSessions();
