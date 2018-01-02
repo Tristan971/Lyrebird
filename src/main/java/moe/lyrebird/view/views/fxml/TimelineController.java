@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
+import moe.lyrebird.view.cells.SimpleStatusListCell;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.util.FxAsyncUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class TimelineController implements FxmlController {
     
     @Override
     public void initialize() {
+        tweets.setCellFactory(statuses -> new SimpleStatusListCell());
         bindModel();
         bindUi();
     }
