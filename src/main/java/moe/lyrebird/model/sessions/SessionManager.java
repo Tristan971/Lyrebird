@@ -66,13 +66,13 @@ public class SessionManager {
                 .collect(Collectors.toList());
         
         log.info(
-                "Loaded {} new Twitter sessions. " +
+                "Loaded {} Twitter sessions. " +
                         "Total loaded sessions so far is {} : {}",
                 finalSize - initialSize,
                 finalSize,
                 sessionUsernames
         );
-    
+
         return finalSize - initialSize;
     }
 
@@ -86,6 +86,7 @@ public class SessionManager {
         handler.registerAccessToken(session.getAccessToken());
         session.setTwitterHandler(handler);
         this.loadedSessions.add(session);
+        this.setCurrentSession(session);
     }
 
     public void addNewSession(final TwitterHandler twitterHandler) {

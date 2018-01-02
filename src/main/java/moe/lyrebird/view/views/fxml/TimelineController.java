@@ -6,10 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
-import moe.lyrebird.view.format.Tweet;
+import moe.lyrebird.view.timeline.SimpleTweetListCell;
 import moe.tristan.easyfxml.api.FxmlController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import twitter4j.Status;
 
 import java.util.LinkedList;
 
@@ -22,13 +24,15 @@ import java.util.LinkedList;
 public class TimelineController implements FxmlController {
 
     private final TimelineManager timelineManager;
+    private final SimpleTweetListCell simpleTweetListCell;
 
     @FXML
-    private ListView<String> tweets;
-    private final ObservableList<String> tweetsObservableList = FXCollections.observableList(new LinkedList<>());
+    private ListView<Status> tweets;
+    private final ObservableList<Status> tweetsObservableList = FXCollections.observableList(new LinkedList<>());
 
-    public TimelineController(final TimelineManager timelineManager) {
-        log.debug("Initialized");
+    @Autowired
+    public TimelineController(final TimelineManager timelineManager, final SimpleTweetListCell simpleTweetListCell) {
+        this.simpleTweetListCell = simpleTweetListCell;
         this.timelineManager = timelineManager;
     }
     
@@ -41,14 +45,15 @@ public class TimelineController implements FxmlController {
     private void bindModel() {
         log.debug("Subscribing to {}", TimelineManager.class.getSimpleName());
         timelineManager.subscribe(change -> {
-            tweetsObservableList.add(0, Tweet.of(change.getElementAdded()));
-            tweetsObservableList.remove(Tweet.of(change.getElementRemoved()));
+            tweetsObservableList.add(0, change.getElementAdded());
+            tweetsObservableList.remove(change.getElementRemoved());
         });
         log.debug("Subscribed.");
     }
 
     private void bindUi() {
         log.debug("Binding tweets displayed to model...");
+        tweets.setCellFactory(statuses -> simpleTweetListCell);
         tweets.setItems(tweetsObservableList);
         log.debug("Binded tweets.");
     }

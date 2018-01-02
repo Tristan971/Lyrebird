@@ -33,9 +33,11 @@ public class TimelineManager {
         log.debug("Loading timeline from twitter for user : {}", currentSessionTwitter.getUserScreenName());
         Try.of(currentSessionTwitter::getTwitter)
                 .mapTry(Twitter::getHomeTimeline)
-                .onSuccess(loadedTweets::addAll)
-                .onFailure(err -> log.error("Could not refresh timeline !", err));
-        log.info("Finished refreshing tweets !");
+                .onSuccess(statuses -> {
+                    this.loadedTweets.addAll(statuses);
+                    log.debug("Loaded {} tweets successfully.", statuses.size());
+                })
+                .onFailure(err -> log.error("Could not refresh timeline!", err));
     }
 
     private SetChangeListener<Status> newTweetsLoggerListener() {
