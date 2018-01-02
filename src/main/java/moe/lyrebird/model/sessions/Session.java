@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import org.hibernate.annotations.Columns;
 import twitter4j.auth.AccessToken;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -29,8 +29,10 @@ public class Session implements Serializable {
     @Id
     private String userId;
 
-    @Columns(columns = {
-            @Column(length = 1000, name = "access_token"),
-    })
+    @Column(length = 1000, name = "access_token")
     private AccessToken accessToken;
+
+    @Transient
+    private transient TwitterHandler twitterHandler;
+
 }

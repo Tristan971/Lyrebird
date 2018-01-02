@@ -58,7 +58,7 @@ public class ControlBarController implements FxmlController {
         this.loginButton.addEventHandler(MOUSE_CLICKED, event -> this.openLoginWindow());
         this.tweetButton.addEventHandler(MOUSE_CLICKED, event -> this.openTweetWindow());
         this.timelineButton.addEventHandler(MOUSE_CLICKED, event -> this.requestTimelineRefresh());
-        this.currentUser.setText(sessionManager.getCurrentSession().getKey().getUserId());
+        this.currentUser.setText(sessionManager.getCurrentSession().getUserId());
     }
 
     private void requestTimelineRefresh() {

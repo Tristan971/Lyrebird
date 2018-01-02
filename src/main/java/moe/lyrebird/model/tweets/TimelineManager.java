@@ -29,7 +29,7 @@ public class TimelineManager {
     }
 
     public void refreshTweets() {
-        final TwitterHandler currentSessionTwitter = sessionManager.getCurrentSession().getValue();
+        final TwitterHandler currentSessionTwitter = sessionManager.getCurrentSession().getTwitterHandler();
         log.debug("Loading timeline from twitter for user : {}", currentSessionTwitter.getUserScreenName());
         Try.of(currentSessionTwitter::getTwitter)
                 .mapTry(Twitter::getHomeTimeline)

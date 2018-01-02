@@ -69,7 +69,7 @@ public class TwitterHandler {
         );
         this.accessToken = successAccessToken;
 
-        this.context.getBean(SessionManager.class).addTwitterHandler(this);
+        this.context.getBean(SessionManager.class).addNewSession(this);
         return Optional.of(successAccessToken);
     }
 

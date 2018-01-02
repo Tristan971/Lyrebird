@@ -3,17 +3,15 @@ package moe.lyrebird.model.sessions;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.lang.collections.MapUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.springframework.context.ApplicationContext;
 import twitter4j.auth.AccessToken;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.NONE;
@@ -33,32 +31,21 @@ public class SessionManager {
     @Getter(NONE)
     private final SessionRepository sessionRepository;
 
-    private final Map<Session, TwitterHandler> loadedSessions;
-    private Entry<Session, TwitterHandler> currentSession;
+    private final Set<Session> loadedSessions;
+    private Session currentSession;
     
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
 
         log.info("Started the Twitter session manager!");
         this.sessionRepository = sessionRepository;
-        this.loadedSessions = new ConcurrentHashMap<>(1);
+        this.loadedSessions = new HashSet<>(1);
     }
     
-    public Optional<Session> getSession(final String userId) {
-        return this.loadedSessions.keySet().stream()
+    public Optional<Session> getSessionForUser(final String userId) {
+        return this.loadedSessions.stream()
                 .filter(session -> session.getUserId().equals(userId))
                 .findFirst();
-    }
-    
-    /**
-     * Returns the Twitter instance associated to a session if it exists.
-     *
-     * @param session
-     *         The session which's {@link TwitterHandler} we look for.
-     * @return The potential TwitterHandler for this session.
-     */
-    public Optional<TwitterHandler> getTwitterHandler(final Session session) {
-        return Optional.ofNullable(this.loadedSessions.get(session));
     }
     
     /**
@@ -70,11 +57,11 @@ public class SessionManager {
     private long loadAllSessions() {
         final long initialSize = this.loadedSessions.size();
         
-        this.sessionRepository.findAll().forEach(this::addSession);
+        this.sessionRepository.findAll().forEach(this::loadSession);
         
         final long finalSize = this.loadedSessions.size();
     
-        final List<String> sessionUsernames = this.loadedSessions.keySet().stream()
+        final List<String> sessionUsernames = this.loadedSessions.stream()
                 .map(Session::getUserId)
                 .collect(Collectors.toList());
         
@@ -89,36 +76,38 @@ public class SessionManager {
         return finalSize - initialSize;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public long reloadAllSessions() {
-        // "force" kill all references to avoid memory leaks
-        this.loadedSessions.forEach((s, t) -> this.loadedSessions.remove(s));
+        this.loadedSessions.clear();
         return this.loadAllSessions();
     }
     
-    public void addSession(final Session session) {
+    public void loadSession(final Session session) {
         final TwitterHandler handler = this.context.getBean(TwitterHandler.class);
         handler.registerAccessToken(session.getAccessToken());
-        this.loadedSessions.put(session, handler);
-        this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
-        this.saveAllSessions();
+        session.setTwitterHandler(handler);
+        this.loadedSessions.add(session);
     }
 
-    public void addTwitterHandler(final TwitterHandler twitterHandler) {
+    public void addNewSession(final TwitterHandler twitterHandler) {
         final AccessToken accessToken = twitterHandler.getAccessToken();
-        final Session session = new Session(accessToken.getScreenName(), accessToken);
+        final Session session = new Session(
+                accessToken.getScreenName(),
+                accessToken,
+                twitterHandler
+        );
 
-        this.addSession(session);
-        this.setCurrentSession(MapUtils.entryFor(session, this.loadedSessions));
+        this.loadSession(session);
+        this.setCurrentSession(session);
+        this.saveAllSessions();
     }
     
     /**
      * Saves all sessions.
      */
     public void saveAllSessions() {
-        this.loadedSessions.keySet().stream()
+        this.loadedSessions.stream()
                 .peek(session -> log.info("Saving Twitter session : {}", session.toString()))
                 .forEach(this.sessionRepository::save);
-        log.info("Saving sessions {}", this.loadedSessions.keySet().toString());
+        log.debug("Saved all sessions !");
     }
 }

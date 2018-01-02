@@ -1,12 +1,14 @@
 package moe.lyrebird.model.sessions;
 
 import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import twitter4j.auth.AccessToken;
 
@@ -20,13 +22,17 @@ public class SessionRepositoryTest {
     @Autowired
     private SessionRepository sessionRepository;
 
+    @Autowired
+    private ApplicationContext context;
+
     private Session session = null;
 
     @Before
     public void setUp() {
         session = new Session(
                 "test_uid",
-                new AccessToken("test_token", "test_token_secret", 1010)
+                new AccessToken("test_token", "test_token_secret", 1010),
+                context.getBean(TwitterHandler.class)
         );
     }
 
