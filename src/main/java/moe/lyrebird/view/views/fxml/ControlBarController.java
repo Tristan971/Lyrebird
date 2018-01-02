@@ -12,6 +12,7 @@ import moe.lyrebird.view.views.Views;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.FxAsyncUtils;
 import moe.tristan.easyfxml.util.StageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -62,7 +63,9 @@ public class ControlBarController implements FxmlController {
     }
 
     private void requestTimelineRefresh() {
-        CompletableFuture.runAsync(this.timelineManager::refreshTweets);
+        FxAsyncUtils.doOnFxThread(timelineButton, btn -> btn.setDisable(true));
+        CompletableFuture.runAsync(this.timelineManager::refreshTweets)
+                .thenRunAsync(() -> FxAsyncUtils.doOnFxThread(timelineButton, btn -> btn.setDisable(false)));
     }
 
     private void openLoginWindow() {
