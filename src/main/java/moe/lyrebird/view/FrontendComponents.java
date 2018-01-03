@@ -42,7 +42,7 @@ public class FrontendComponents {
     }
 
     @Bean
-    public GUIManager guiManager(final Environment environment, final EasyFxml easyFxml, final ResourceBundle resourceBundle) {
-        return new GUIManager(environment, easyFxml, resourceBundle);
+    public GuiBootstraper guiManager(final Environment environment, final EasyFxml easyFxml, final ResourceBundle resourceBundle) {
+        return new GuiBootstraper(environment, resourceBundle, easyFxml);
     }
 }

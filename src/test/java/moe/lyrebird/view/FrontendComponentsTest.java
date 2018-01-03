@@ -46,8 +46,4 @@ public class FrontendComponentsTest {
         );
     }
     
-    @Test
-    public void guiManager() {
-    }
-    
 }

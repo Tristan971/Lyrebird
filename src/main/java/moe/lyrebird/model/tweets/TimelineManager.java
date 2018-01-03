@@ -3,11 +3,11 @@ package moe.lyrebird.model.tweets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -16,21 +16,13 @@ import java.util.LinkedHashSet;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class TimelineManager {
 
     private final SessionManager sessionManager;
-
-    private final ObservableSet<Status> loadedTweets;
-
-    @Autowired
-    public TimelineManager(final SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-        this.loadedTweets = FXCollections.observableSet(new LinkedHashSet<>());
-    }
+    private final ObservableSet<Status> loadedTweets = FXCollections.observableSet(new LinkedHashSet<>());
 
     public void refreshTweets() {
-
-
         sessionManager.getCurrentSession()
                 .toTry()
                 .map(Session::getTwitterHandler)

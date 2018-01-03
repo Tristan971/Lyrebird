@@ -14,14 +14,14 @@ import org.testfx.framework.junit.ApplicationTest;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class GUIManagerTest extends ApplicationTest {
+public class GuiBootstraperTest extends ApplicationTest {
 
     @Autowired
-    private GUIManager guiManager;
+    private GuiBootstraper guiBootstraper;
 
     @Test
     public void testMainlaunch() {
-        FxAsyncUtils.doOnFxThread(guiManager, manager -> manager.startGui(new Stage()));
+        FxAsyncUtils.doOnFxThread(guiBootstraper, manager -> manager.startGui(new Stage()));
     }
 
     @Override

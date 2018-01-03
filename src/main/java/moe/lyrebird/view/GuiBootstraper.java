@@ -6,35 +6,29 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.views.Views;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 import java.util.ResourceBundle;
 
 /**
- * The {@link GUIManager} is responsible for bootstraping the
+ * The {@link GuiBootstraper} is responsible for bootstraping the
  * GUI of the application correctly.
  */
 @Slf4j
-public class GUIManager {
+@RequiredArgsConstructor
+public class GuiBootstraper {
+
     private final Environment environment;
     private final ResourceBundle resourceBundle;
+    private final EasyFxml easyFxml;
 
     @Getter
-    private final EasyFxml easyFxml;
-    @Getter
     private Stage mainStage;
-    
-    @Autowired
-    public GUIManager(final Environment environment, final EasyFxml easyFxml, final ResourceBundle resourceBundle) {
-        this.environment = environment;
-        this.resourceBundle = resourceBundle;
-        this.easyFxml = easyFxml;
-    }
     
     public void startGui(final Stage primaryStage) {
         Platform.setImplicitExit(true);
@@ -44,7 +38,7 @@ public class GUIManager {
         primaryStage.show();
     }
 
-    private Scene getRootScene(EasyFxml easyFxml) {
+    private Scene getRootScene(final EasyFxml easyFxml) {
         final Try<Pane> rootPane = easyFxml
                 .loadNode(Views.ROOT_VIEW)
                 .recover(err -> new ExceptionHandler(err).asPane());

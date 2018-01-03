@@ -4,13 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
 import moe.lyrebird.view.cells.SimpleStatusListCell;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.util.FxAsyncUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
 
@@ -21,20 +20,15 @@ import java.util.LinkedList;
  */
 @Slf4j
 @Component
-@Lazy
+@RequiredArgsConstructor
 public class TimelineController implements FxmlController {
-
-    private final TimelineManager timelineManager;
 
     @FXML
     private ListView<Status> tweets;
+
+    private final TimelineManager timelineManager;
     private final ObservableList<Status> tweetsObservableList = FXCollections.observableList(new LinkedList<>());
 
-    @Autowired
-    public TimelineController(final TimelineManager timelineManager) {
-        this.timelineManager = timelineManager;
-    }
-    
     @Override
     public void initialize() {
         tweets.setCellFactory(statuses -> new SimpleStatusListCell());

@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import lombok.RequiredArgsConstructor;
 import moe.lyrebird.lang.javafx.EventUtils;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.views.Views;
@@ -18,7 +19,6 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.StageUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
 
@@ -28,9 +28,9 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 import static javafx.scene.paint.Color.*;
 
 @Component
+@RequiredArgsConstructor
 public class TweetController implements FxmlController {
 
-    private final TwitterHandler twitterHandler;
     @FXML
     private Button sendButton;
 
@@ -40,13 +40,8 @@ public class TweetController implements FxmlController {
     @FXML
     private Label charactersLeft;
 
+    private final TwitterHandler twitterHandler;
     private final StageManager stageManager;
-
-    @Autowired
-    public TweetController(final TwitterHandler twitterHandler, final StageManager stageManager) {
-        this.twitterHandler = twitterHandler;
-        this.stageManager = stageManager;
-    }
 
     @Override
     public void initialize() {

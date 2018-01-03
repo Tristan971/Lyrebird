@@ -3,7 +3,7 @@ package moe.lyrebird;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.view.GUIManager;
+import moe.lyrebird.view.GuiBootstraper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,7 +23,7 @@ public class Lyrebird extends Application {
     
     @Override
     public void start(final Stage primaryStage) {
-        this.context.getBean(GUIManager.class).startGui(primaryStage);
+        this.context.getBean(GuiBootstraper.class).startGui(primaryStage);
     }
     
     @Override
@@ -32,7 +32,7 @@ public class Lyrebird extends Application {
     }
     
     public static void main(final String... args) {
-        GUIManager.enableAWT();
+        GuiBootstraper.enableAWT();
         Application.launch(args);
     }
     

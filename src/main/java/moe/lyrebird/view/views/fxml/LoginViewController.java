@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.views.Views;
@@ -14,7 +15,6 @@ import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.StageUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -28,34 +28,29 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 /**
  * Created by Tristan on 01/03/2017.
  */
-@Component
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class LoginViewController implements FxmlController {
-    private final StageManager stageManager;
-    private final BrowserSupport browserSupport;
-    private final TwitterHandler twitterHandler;
 
     @FXML
     private Button loginButton;
+
     @FXML
     private Label loginLabel;
+
     @FXML
     private TextField pinCodeField;
+
     @FXML
     private Button pinCodeButton;
+
     private boolean pinIsValid = false;
-    
-    @Autowired
-    public LoginViewController(
-            final TwitterHandler twitterHandler,
-            final StageManager stageManager,
-            final BrowserSupport browserSupport
-    ) {
-        this.twitterHandler = twitterHandler;
-        this.stageManager = stageManager;
-        this.browserSupport = browserSupport;
-    }
-    
+
+    private final BrowserSupport browserSupport;
+    private final TwitterHandler twitterHandler;
+    private final StageManager stageManager;
+
     @Override
     public void initialize() {
         this.pinCodeButton.setVisible(false);

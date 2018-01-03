@@ -46,7 +46,7 @@ public class DummyTest {
         }
     }
     
-    private static class InstantiablePrivateClass {
+    private static final class InstantiablePrivateClass {
         private InstantiablePrivateClass() {
         }
     }

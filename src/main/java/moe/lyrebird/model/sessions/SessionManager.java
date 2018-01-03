@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import twitter4j.auth.AccessToken;
 
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
  * (i.e. the JavaFX controllers per example).
  */
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class SessionManager {
 
     private final ApplicationContext context;

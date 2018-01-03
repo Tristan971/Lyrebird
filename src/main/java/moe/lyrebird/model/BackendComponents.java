@@ -22,8 +22,8 @@ public class BackendComponents {
     
     @Bean
     @Scope(scopeName = SCOPE_PROTOTYPE)
-    public TwitterHandler twitterHandler(final ApplicationContext context, final Twitter twitter) {
-        return new TwitterHandler(context, twitter);
+    public TwitterHandler twitterHandler(final SessionManager sessionManager, final Twitter twitter) {
+        return new TwitterHandler(sessionManager, twitter);
     }
     
     @Bean

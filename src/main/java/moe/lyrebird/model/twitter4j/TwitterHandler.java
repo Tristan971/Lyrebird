@@ -8,8 +8,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.SessionManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -25,13 +23,14 @@ import static io.vavr.API.unchecked;
  */
 @Data
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class TwitterHandler {
+
     public static final AccessToken FAKE_ACCESS_TOKEN = new AccessToken("fake", "token");
     
-    private final ApplicationContext context;
-
+    private final SessionManager sessionManager;
     private final Twitter twitter;
+
     private AccessToken accessToken = FAKE_ACCESS_TOKEN;
     
     public Tuple2<URL, RequestToken> newSession() {
@@ -69,7 +68,7 @@ public class TwitterHandler {
         );
         this.accessToken = successAccessToken;
 
-        this.context.getBean(SessionManager.class).addNewSession(this);
+        this.sessionManager.addNewSession(this);
         return Optional.of(successAccessToken);
     }
 
@@ -78,7 +77,4 @@ public class TwitterHandler {
         this.twitter.setOAuthAccessToken(preloadedAccessToken);
     }
 
-    public String getUserScreenName() {
-        return accessToken.getScreenName();
-    }
 }

@@ -36,12 +36,12 @@ public class MapUtilsTest {
     
     @Test(expected = NullPointerException.class)
     public void nullKeyCheck() {
-        MapUtils.entryFor(null, testMap);
+        final Map.Entry<String, String> entry = MapUtils.entryFor(null, testMap);
     }
     
     @Test(expected = NullPointerException.class)
     public void nullMapCheck() {
-        MapUtils.entryFor(testKey, null);
+        final Map.Entry<String, Object> entry = MapUtils.entryFor(testKey, null);
     }
     
     @Test(expected = InvocationTargetException.class)
