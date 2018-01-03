@@ -14,11 +14,6 @@
       "name": "twitter.consumerSecret",
       "type": "java.lang.String",
       "description": "This is the consumer secret. Will be exposed via server config later."
-    },
-    {
-      "name": "timelineQueue.size",
-      "type": "java.lang.Integer",
-      "description": "The maximum number of tweets to actually keep loaded in cache when loading a timeline."
     }
   ]
 }
