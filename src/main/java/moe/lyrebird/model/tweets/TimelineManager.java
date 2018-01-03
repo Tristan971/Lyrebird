@@ -1,10 +1,10 @@
 package moe.lyrebird.model.tweets;
 
-import io.vavr.control.Try;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +29,19 @@ public class TimelineManager {
     }
 
     public void refreshTweets() {
-        final TwitterHandler currentSessionTwitter = sessionManager.getCurrentSession().getTwitterHandler();
-        log.debug("Loading timeline from twitter for user : {}", currentSessionTwitter.getUserScreenName());
-        Try.of(currentSessionTwitter::getTwitter)
+
+
+        sessionManager.getCurrentSession()
+                .toTry()
+                .map(Session::getTwitterHandler)
+                .map(TwitterHandler::getTwitter)
+                .andThenTry(session -> log.debug("Loading timeline from twitter for user : {}", session.getScreenName()))
                 .mapTry(Twitter::getHomeTimeline)
                 .onSuccess(statuses -> {
                     this.loadedTweets.addAll(statuses);
                     log.debug("Loaded {} tweets successfully.", statuses.size());
                 })
                 .onFailure(err -> log.error("Could not refresh timeline!", err));
-    }
-
-    private SetChangeListener<Status> newTweetsLoggerListener() {
-        return change -> log.info("Loaded {} new tweets !", change.getSet().size());
     }
 
     public void subscribe(final SetChangeListener<Status> tweetChangeListener) {

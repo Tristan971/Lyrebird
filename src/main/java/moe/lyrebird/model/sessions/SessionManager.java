@@ -1,9 +1,12 @@
 package moe.lyrebird.model.sessions;
 
-import lombok.Data;
+import io.vavr.control.Option;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import twitter4j.auth.AccessToken;
 
@@ -14,33 +17,23 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static lombok.AccessLevel.NONE;
-
 /**
  * The session manager is responsible for persisting the sessions in database
  * and providing handles to them should another component need access to them
  * (i.e. the JavaFX controllers per example).
  */
 @Slf4j
-@Data
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SessionManager {
 
-    @Getter(NONE)
     private final ApplicationContext context;
-
-    @Getter(NONE)
     private final SessionRepository sessionRepository;
 
-    private final Set<Session> loadedSessions;
-    private Session currentSession;
-    
-    public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
-        this.context = context;
+    private final Set<Session> loadedSessions = new HashSet<>();
 
-        log.info("Started the Twitter session manager!");
-        this.sessionRepository = sessionRepository;
-        this.loadedSessions = new HashSet<>(1);
-    }
+    @Getter
+    @Setter
+    private Option<Session> currentSession = Option.none();
     
     public Optional<Session> getSessionForUser(final String userId) {
         return this.loadedSessions.stream()
@@ -76,9 +69,9 @@ public class SessionManager {
         return finalSize - initialSize;
     }
 
-    public long reloadAllSessions() {
+    public void reloadAllSessions() {
         this.loadedSessions.clear();
-        return this.loadAllSessions();
+        this.loadAllSessions();
     }
     
     public void loadSession(final Session session) {
@@ -86,7 +79,7 @@ public class SessionManager {
         handler.registerAccessToken(session.getAccessToken());
         session.setTwitterHandler(handler);
         this.loadedSessions.add(session);
-        this.setCurrentSession(session);
+        this.setCurrentSession(Option.of(session));
     }
 
     public void addNewSession(final TwitterHandler twitterHandler) {
@@ -98,7 +91,7 @@ public class SessionManager {
         );
 
         this.loadSession(session);
-        this.setCurrentSession(session);
+        this.setCurrentSession(Option.of(session));
         this.saveAllSessions();
     }
     

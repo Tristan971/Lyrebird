@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.tweets.TimelineManager;
 import moe.lyrebird.view.GUIManager;
@@ -59,7 +60,9 @@ public class ControlBarController implements FxmlController {
         this.loginButton.addEventHandler(MOUSE_CLICKED, event -> this.openLoginWindow());
         this.tweetButton.addEventHandler(MOUSE_CLICKED, event -> this.openTweetWindow());
         this.timelineButton.addEventHandler(MOUSE_CLICKED, event -> this.requestTimelineRefresh());
-        this.currentUser.setText(sessionManager.getCurrentSession().getUserId());
+        sessionManager.getCurrentSession().map(Session::getUserId)
+                .peek(this.currentUser::setText)
+                .onEmpty(() -> this.currentUser.setText("No account yet"));
     }
 
     private void requestTimelineRefresh() {
