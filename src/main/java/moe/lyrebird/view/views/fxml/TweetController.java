@@ -18,7 +18,7 @@ import moe.lyrebird.view.views.Views;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.StageUtils;
+import moe.tristan.easyfxml.util.Stages;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
 
@@ -84,12 +84,12 @@ public class TweetController implements FxmlController {
 
         updateResult.onComplete(res -> {
             res.onFailure(err ->
-                    StageUtils.stageOf(
+                    Stages.stageOf(
                             "Couldn't send tweet !",
                             new ExceptionHandler(err).asPane()
-                    ).thenAccept(StageUtils::scheduleDisplaying));
+                    ).thenAccept(Stages::scheduleDisplaying));
             res.onSuccess(status ->
-                    stageManager.getSingle(Views.TWEET_VIEW).peek(StageUtils::scheduleHiding)
+                    stageManager.getSingle(Views.TWEET_VIEW).peek(Stages::scheduleHiding)
             );
         });
     }

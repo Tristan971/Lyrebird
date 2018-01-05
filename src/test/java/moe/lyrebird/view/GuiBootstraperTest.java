@@ -1,7 +1,7 @@
 package moe.lyrebird.view;
 
 import javafx.stage.Stage;
-import moe.tristan.easyfxml.util.FxAsyncUtils;
+import moe.tristan.easyfxml.util.FxAsync;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class GuiBootstraperTest extends ApplicationTest {
 
     @Test
     public void testMainlaunch() {
-        FxAsyncUtils.doOnFxThread(guiBootstraper, manager -> manager.startGui(new Stage()));
+        FxAsync.doOnFxThread(guiBootstraper, manager -> manager.startGui(new Stage()));
     }
 
     @Override

@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.FxAsyncUtils;
+import moe.tristan.easyfxml.util.FxAsync;
 import org.springframework.stereotype.Component;
 
 import static moe.lyrebird.view.views.Views.CONTROL_BAR;
@@ -40,7 +40,7 @@ public class RootViewController implements FxmlController {
                 .loadNode(CONTROL_BAR)
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
         log.debug("Initialized control bar !");
-        FxAsyncUtils.doOnFxThread(contentPane, root -> root.setLeft(controlBarPane));
+        FxAsync.doOnFxThread(contentPane, root -> root.setLeft(controlBarPane));
     }
 
     private void loadTimeline() {

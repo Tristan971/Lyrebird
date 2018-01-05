@@ -14,8 +14,8 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.FxAsyncUtils;
-import moe.tristan.easyfxml.util.StageUtils;
+import moe.tristan.easyfxml.util.FxAsync;
+import moe.tristan.easyfxml.util.Stages;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
@@ -54,9 +54,9 @@ public class ControlBarController implements FxmlController {
     }
 
     private void requestTimelineRefresh() {
-        FxAsyncUtils.doOnFxThread(timelineButton, btn -> btn.setDisable(true));
+        FxAsync.doOnFxThread(timelineButton, btn -> btn.setDisable(true));
         CompletableFuture.runAsync(this.timelineManager::refreshTweets)
-                .thenRunAsync(() -> FxAsyncUtils.doOnFxThread(timelineButton, btn -> btn.setDisable(false)));
+                .thenRunAsync(() -> FxAsync.doOnFxThread(timelineButton, btn -> btn.setDisable(false)));
     }
 
     private void openLoginWindow() {
@@ -65,8 +65,8 @@ public class ControlBarController implements FxmlController {
                 .loadNode(LOGIN_VIEW)
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
-        StageUtils.stageOf("Login", loginPane)
-                .thenCompose(StageUtils::scheduleDisplaying)
+        Stages.stageOf("Login", loginPane)
+                .thenCompose(Stages::scheduleDisplaying)
                 .thenAccept(stage -> this.stageManager.registerSingle(Views.LOGIN_VIEW, stage));
     }
 
@@ -76,8 +76,8 @@ public class ControlBarController implements FxmlController {
                 .loadNode(TWEET_VIEW)
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
-        StageUtils.stageOf("Tweet", tweetPane)
-                .thenCompose(StageUtils::scheduleDisplaying)
+        Stages.stageOf("Tweet", tweetPane)
+                .thenCompose(Stages::scheduleDisplaying)
                 .thenAccept(stage -> this.stageManager.registerSingle(TWEET_VIEW, stage))
                 .thenRun(() -> log.info("New tweet stage opened !"));
     }

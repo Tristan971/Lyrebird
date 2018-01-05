@@ -2,7 +2,7 @@ package moe.lyrebird;
 
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
-import moe.tristan.easyfxml.util.PathUtils;
+import moe.tristan.easyfxml.util.Paths;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SassInclusionTest {
     @Test
     public void testCssLocation() throws IOException {
-        final Try<Path> cssFilePath = PathUtils.getPathForResource("lyrebird.css");
+        final Try<Path> cssFilePath = Paths.getPathForResource("lyrebird.css");
         assertThat(cssFilePath.isSuccess()).isTrue();
 
         log.info(

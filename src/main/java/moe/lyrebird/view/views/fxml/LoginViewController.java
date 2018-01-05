@@ -14,7 +14,7 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.StageUtils;
+import moe.tristan.easyfxml.util.Stages;
 import org.springframework.stereotype.Component;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -93,7 +93,7 @@ public class LoginViewController implements FxmlController {
                         new Exception("No token could be used.")
                 );
             }
-            this.stageManager.getSingle(Views.LOGIN_VIEW).peek(StageUtils::scheduleHiding);
+            this.stageManager.getSingle(Views.LOGIN_VIEW).peek(Stages::scheduleHiding);
         }
     }
     

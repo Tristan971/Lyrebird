@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
 import moe.lyrebird.view.cells.SimpleStatusListCell;
 import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.util.FxAsyncUtils;
+import moe.tristan.easyfxml.util.FxAsync;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
 
@@ -39,7 +39,7 @@ public class TimelineController implements FxmlController {
     private void bindModel() {
         log.debug("Subscribing to {}", TimelineManager.class.getSimpleName());
         timelineManager.subscribe(change ->
-                FxAsyncUtils.doOnFxThread(tweetsObservableList, list -> {
+                FxAsync.doOnFxThread(tweetsObservableList, list -> {
                     list.add(0, change.getElementAdded());
                     list.remove(change.getElementRemoved());
                 })
