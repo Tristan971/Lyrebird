@@ -42,29 +42,21 @@
             </plugin>
             <!-- SASS -> CSS plugin -->
             <plugin>
-                <groupId>nl.geodienstencentrum.maven</groupId>
-                <artifactId>sass-maven-plugin</artifactId>
-                <version>2.23</version>
-                <configuration>
-                    <sassSourceDirectory>${basedir}/src/main/resources</sassSourceDirectory>
-                    <destination>${project.build.outputDirectory}</destination>
-                </configuration>
+                <groupId>com.github.warmuuh</groupId>
+                <artifactId>libsass-maven-plugin</artifactId>
+                <version>0.2.8-libsass_3.4.4</version>
                 <executions>
                     <execution>
-                        <id>lint-scss</id>
-                        <phase>validate</phase>
+                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>scss-lint</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>transpile-css</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>update-stylesheets</goal>
+                            <goal>compile</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <inputPath>${basedir}/src/main/resources/</inputPath>
+                    <outputPath>${basedir}/target/classes/</outputPath>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -35,12 +35,11 @@ public class RootViewController implements FxmlController {
     }
 
     private void loadControlBar() {
-        log.info("Initializing control bar...");
+        log.debug("Initializing control bar...");
         final Pane controlBarPane = this.easyFxml
                 .loadNode(CONTROL_BAR)
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
-        log.info("Initialized control bar !");
-        log.info("Displaying control bar...");
+        log.debug("Initialized control bar !");
         FxAsyncUtils.doOnFxThread(contentPane, root -> root.setLeft(controlBarPane));
     }
 

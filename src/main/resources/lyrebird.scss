@@ -6,6 +6,8 @@ $bg-color: #cbcbcb;
 
 .root {
   -fx-background-color: $bg-color;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
 }
 
 errorPane {
