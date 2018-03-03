@@ -8,9 +8,11 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.view.views.Styles;
 import moe.lyrebird.view.views.Views;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Stages;
 import org.springframework.core.env.Environment;
 
 import java.util.ResourceBundle;
@@ -35,6 +37,7 @@ public class GuiBootstraper {
         this.mainStage = primaryStage;
         primaryStage.setScene(this.getRootScene());
         primaryStage.setTitle(this.getMainStageTitle());
+        Stages.setStylesheet(mainStage, Styles.LYREBIRD);
         primaryStage.show();
     }
 
