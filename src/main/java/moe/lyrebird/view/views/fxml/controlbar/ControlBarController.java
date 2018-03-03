@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.fxml;
+package moe.lyrebird.view.views.fxml.controlbar;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

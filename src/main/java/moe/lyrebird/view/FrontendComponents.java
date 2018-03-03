@@ -30,7 +30,6 @@ public class FrontendComponents {
     
     /**
      * Containerize {@link FxmlLoader} so we can add our resource bundle.
-
      */
     @Bean
     @Scope(scopeName = SCOPE_PROTOTYPE)

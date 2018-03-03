@@ -29,16 +29,16 @@ public class GuiBootstraper {
 
     @Getter
     private Stage mainStage;
-    
+
     public void startGui(final Stage primaryStage) {
         Platform.setImplicitExit(true);
         this.mainStage = primaryStage;
-        primaryStage.setScene(this.getRootScene(easyFxml));
+        primaryStage.setScene(this.getRootScene());
         primaryStage.setTitle(this.getMainStageTitle());
         primaryStage.show();
     }
 
-    private Scene getRootScene(final EasyFxml easyFxml) {
+    private Scene getRootScene() {
         final Try<Pane> rootPane = easyFxml
                 .loadNode(Views.ROOT_VIEW)
                 .recover(err -> new ExceptionHandler(err).asPane());

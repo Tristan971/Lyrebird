@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.fxml;
+package moe.lyrebird.view.views.fxml.timeline;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.fxml;
+package moe.lyrebird.view.views.fxml.login;
 
 import io.vavr.Tuple2;
 import javafx.event.Event;

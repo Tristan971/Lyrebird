@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.fxml;
+package moe.lyrebird.view.views.fxml.newtweet;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -29,7 +29,7 @@ import static javafx.scene.paint.Color.*;
 
 @Component
 @RequiredArgsConstructor
-public class TweetController implements FxmlController {
+public class NewTweetController implements FxmlController {
 
     @FXML
     private Button sendButton;
