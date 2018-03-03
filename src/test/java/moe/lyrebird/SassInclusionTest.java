@@ -4,9 +4,6 @@ import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 import moe.tristan.easyfxml.util.Resources;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,12 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by Tristan on 30/03/2017.
  */
 @Slf4j
-@SpringBootTest
-@RunWith(SpringRunner.class)
 public class SassInclusionTest {
+
     @Test
     public void testCssLocation() throws IOException {
-        final Try<Path> cssFilePath = Resources.getResourcePath("lyrebird.css");
+        final Try<Path> cssFilePath = Resources.getResourcePath("../classes/lyrebird.css");
         assertThat(cssFilePath.isSuccess()).isTrue();
 
         log.info(
@@ -33,4 +29,5 @@ public class SassInclusionTest {
                         .collect(Collectors.joining("\n"))
         );
     }
+
 }
