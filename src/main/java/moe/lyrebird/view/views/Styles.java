@@ -1,9 +1,11 @@
 package moe.lyrebird.view.views;
 
 import moe.tristan.easyfxml.api.FxmlStylesheet;
-import moe.tristan.easyfxml.util.Resources;
 
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public enum Styles implements FxmlStylesheet {
     LYREBIRD("lyrebird.css");
@@ -16,7 +18,13 @@ public enum Styles implements FxmlStylesheet {
 
     @Override
     public Path getPath() {
-        return Resources.getResourcePath(resourceRelativeLocation).get();
+        final URL res = Thread.currentThread().getContextClassLoader().getResource(resourceRelativeLocation);
+        assert res != null;
+        try {
+            return Paths.get(res.toURI());
+        } catch (final URISyntaxException e) {
+            return null;
+        }
     }
 
 }

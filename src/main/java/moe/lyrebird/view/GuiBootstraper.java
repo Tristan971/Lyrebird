@@ -32,7 +32,7 @@ public class GuiBootstraper {
 
     @Autowired
     public GuiBootstraper(
-            @Value("${app.version}:unknown version") final String appVersion,
+            @Value("${app.version}") final String appVersion,
             final EasyFxml easyFxml
     ) {
         this.appVersion = appVersion;
