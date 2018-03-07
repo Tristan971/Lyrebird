@@ -141,7 +141,7 @@
         <dependency>
             <groupId>moe.tristan</groupId>
             <artifactId>easyfxml</artifactId>
-            <version>1.0.9</version>
+            <version>1.0.11</version>
         </dependency>
         <dependency>
             <groupId>org.fxmisc.flowless</groupId>

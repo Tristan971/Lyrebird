@@ -1,26 +1,28 @@
 language: java
-env:
-  global:
 
 os: linux
-dist: yaketty
-sudo: false
+dist: trusty
+sudo: required
 
 cache:
   directories:
   - $HOME/.m2
 
-addons:
-  apt:
-    packages:
-      - maven
-      - oracle-java8-installer
-
 before_script:
+  - "sudo apt install -qq -y maven gtk+3.0 stalonetray"
+  - "touch ~/.stalonetrayrc"
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3
-  - rm ~/.m2/settings.xml
+  - "Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &"
+  - "sleep 3"
+  - "stalonetray &"
+  - "sleep 3"
+  - "rm ~/.m2/settings.xml"
 
 jdk:
   - oraclejdk8
+
+script:
+  - mvn clean package
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
