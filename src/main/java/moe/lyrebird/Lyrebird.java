@@ -3,6 +3,8 @@ package moe.lyrebird;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Import;
+import moe.tristan.easyfxml.spring.SpringContext;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.GuiBootstraper;
 
@@ -14,6 +16,7 @@ import javafx.stage.Stage;
  */
 @Slf4j
 @SpringBootApplication
+@Import(SpringContext.class)
 public class Lyrebird extends Application {
     private ConfigurableApplicationContext context;
 
