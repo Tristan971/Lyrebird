@@ -9,11 +9,11 @@
             fx:controller="moe.lyrebird.view.views.fxml.login.LoginViewController">
     <children>
         <Label fx:id="loginLabel" layoutX="61.0" layoutY="31.0" prefHeight="88.0" prefWidth="344.0"
-               text="%loginWindow.loginDesc"/>
+               text="Please click the Login button to authenticate with Twitter.\nA webpage will open.\nCopy the code on the screen to the code field to authenticate."/>
         <Button fx:id="loginButton" layoutX="353.0" layoutY="120.0" mnemonicParsing="false"
-                text="%loginWindow.loginButton"/>
-        <TextField fx:id="pinCodeField" layoutX="208.0" layoutY="188.0" promptText="%loginWindow.loginFieldPromptText"/>
+                text="Login"/>
+        <TextField fx:id="pinCodeField" layoutX="208.0" layoutY="188.0" promptText="Enter PIN code here"/>
         <Button fx:id="pinCodeButton" layoutX="366.0" layoutY="188.0" mnemonicParsing="false"
-                text="%loginWindow.loginFieldValidate"/>
+                text="OK"/>
     </children>
 </AnchorPane>

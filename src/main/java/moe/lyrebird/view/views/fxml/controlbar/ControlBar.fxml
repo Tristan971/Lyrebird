@@ -11,9 +11,9 @@
                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <Label fx:id="currentUser" text="Current user : @UNKNOWN@"/>
-                <Button fx:id="loginButton" mnemonicParsing="false" text="%controlBar.loginButton"/>
-                <Button fx:id="tweetButton" mnemonicParsing="false" text="%controlBar.newTweetButton"/>
-                <Button fx:id="timelineButton" mnemonicParsing="false" text="%controlBar.refreshTimelineButton"/>
+                <Button fx:id="loginButton" mnemonicParsing="false" text="Login"/>
+                <Button fx:id="tweetButton" mnemonicParsing="false" text="New Tweet"/>
+                <Button fx:id="timelineButton" mnemonicParsing="false" text="Refresh timeline"/>
             </items>
         </ToolBar>
     </children>

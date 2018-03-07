@@ -58,8 +58,7 @@ public class SessionManager {
                                                                  .collect(Collectors.toList());
 
         log.info(
-                "Loaded {} Twitter sessions. " +
-                        "Total loaded sessions so far is {} : {}",
+                "Loaded {} Twitter sessions. Total loaded sessions so far is {}. Sessions : {}",
                 finalSize - initialSize,
                 finalSize,
                 sessionUsernames

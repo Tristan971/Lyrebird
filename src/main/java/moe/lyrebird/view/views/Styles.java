@@ -3,7 +3,7 @@ package moe.lyrebird.view.views;
 import moe.tristan.easyfxml.api.FxmlStylesheet;
 import moe.tristan.easyfxml.util.Resources;
 
-import java.net.URL;
+import java.nio.file.Path;
 
 public enum Styles implements FxmlStylesheet {
     LYREBIRD("lyrebird.css");
@@ -14,10 +14,9 @@ public enum Styles implements FxmlStylesheet {
         this.resourceRelativeLocation = resourceRelativeLocation;
     }
 
-
     @Override
-    public String getExternalForm() {
-        return Resources.getResourceURL(resourceRelativeLocation).map(URL::toExternalForm).get();
+    public Path getPath() {
+        return Resources.getResourcePath(resourceRelativeLocation).get();
     }
 
 }
