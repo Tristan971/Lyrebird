@@ -9,7 +9,7 @@ import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.concurrent.Future;
 import lombok.RequiredArgsConstructor;
-import moe.lyrebird.lang.javafx.EventUtils;
+import moe.lyrebird.view.util.Events;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.views.Views;
 import twitter4j.Status;
@@ -56,7 +56,7 @@ public class NewTweetController implements FxmlController {
         tweetTextArea.addEventHandler(KEY_RELEASED, keyEventHandler());
         sendButton.addEventHandler(MOUSE_RELEASED, e -> sendTweet(this.tweetTextArea.getText()));
 
-        tweetTextArea.fireEvent(EventUtils.dummyKeyEvent(KEY_RELEASED));
+        tweetTextArea.fireEvent(Events.dummyKeyEvent(KEY_RELEASED));
     }
 
     private Tuple2<Color, Integer> validateCharactersLeft(final String currentText) {
