@@ -1,8 +1,19 @@
 package moe.lyrebird.view.views.fxml.newtweet;
 
+import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.concurrent.Future;
+import lombok.RequiredArgsConstructor;
+import moe.lyrebird.lang.javafx.EventUtils;
+import moe.lyrebird.model.twitter4j.TwitterHandler;
+import moe.lyrebird.view.views.Views;
+import twitter4j.Status;
+
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,21 +22,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import lombok.RequiredArgsConstructor;
-import moe.lyrebird.lang.javafx.EventUtils;
-import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.lyrebird.view.views.Views;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.Stages;
-import org.springframework.stereotype.Component;
-import twitter4j.Status;
 
-import static io.vavr.API.*;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Future;
+import static io.vavr.API.Match;
+import static io.vavr.API.Stream;
 import static javafx.scene.input.KeyEvent.KEY_RELEASED;
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
-import static javafx.scene.paint.Color.*;
+import static javafx.scene.paint.Color.BLUE;
+import static javafx.scene.paint.Color.GREEN;
+import static javafx.scene.paint.Color.RED;
+import static javafx.scene.paint.Color.YELLOW;
 
 @Component
 @RequiredArgsConstructor

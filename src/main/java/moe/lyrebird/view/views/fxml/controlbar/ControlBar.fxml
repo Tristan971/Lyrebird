@@ -4,16 +4,17 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
-
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.views.fxml.controlbar.ControlBarController">
-   <children>
-      <ToolBar layoutX="10.0" layoutY="10.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <items>
-            <Label fx:id="currentUser" text="Current user : @UNKNOWN@" />
-            <Button fx:id="loginButton" mnemonicParsing="false" text="%controlBar.loginButton" />
-            <Button fx:id="tweetButton" mnemonicParsing="false" text="%controlBar.newTweetButton" />
-            <Button fx:id="timelineButton" mnemonicParsing="false" text="%controlBar.refreshTimelineButton" />
-         </items>
-      </ToolBar>
-   </children>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="moe.lyrebird.view.views.fxml.controlbar.ControlBarController">
+    <children>
+        <ToolBar layoutX="10.0" layoutY="10.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0"
+                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <items>
+                <Label fx:id="currentUser" text="Current user : @UNKNOWN@"/>
+                <Button fx:id="loginButton" mnemonicParsing="false" text="%controlBar.loginButton"/>
+                <Button fx:id="tweetButton" mnemonicParsing="false" text="%controlBar.newTweetButton"/>
+                <Button fx:id="timelineButton" mnemonicParsing="false" text="%controlBar.refreshTimelineButton"/>
+            </items>
+        </ToolBar>
+    </children>
 </AnchorPane>

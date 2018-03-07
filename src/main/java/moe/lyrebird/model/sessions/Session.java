@@ -13,9 +13,8 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
- * A session represents one {@link AccessToken} and the corresponding
- * user id, which is the primary key.
- *
+ * A session represents one {@link AccessToken} and the corresponding user id, which is the primary key.
+ * <p>
  * It is storable and can be retrieved to construct a {@link TwitterHandler instance}.
  */
 @Data
@@ -23,9 +22,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Session implements Serializable {
-    
+
     private static final long serialVersionUID = -9038797949832585362L;
-    
+
     @Id
     private String userId;
 

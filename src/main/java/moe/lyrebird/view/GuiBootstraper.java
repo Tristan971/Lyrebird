@@ -1,25 +1,25 @@
 package moe.lyrebird.view;
 
+import org.springframework.core.env.Environment;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Stages;
 import io.vavr.control.Try;
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.views.Styles;
 import moe.lyrebird.view.views.Views;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.Stages;
-import org.springframework.core.env.Environment;
+
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.util.ResourceBundle;
 
 /**
- * The {@link GuiBootstraper} is responsible for bootstraping the
- * GUI of the application correctly.
+ * The {@link GuiBootstraper} is responsible for bootstraping the GUI of the application correctly.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -55,10 +55,10 @@ public class GuiBootstraper {
                 this.environment.getProperty("app.version")
         );
     }
-    
+
     /**
-     * Must be called (only once) from a non-JavaFX thread to enable AWT functionnality.
-     * Thus the place to do it is {@link moe.lyrebird.Lyrebird#main(String...)}
+     * Must be called (only once) from a non-JavaFX thread to enable AWT functionnality. Thus the place to do it is
+     * {@link moe.lyrebird.Lyrebird#main(String...)}
      */
     public static void enableAWT() {
         java.awt.Toolkit.getDefaultToolkit();

@@ -1,13 +1,13 @@
 package moe.lyrebird.view.views;
 
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.api.FxmlFile;
+import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.views.fxml.controlbar.ControlBarController;
 import moe.lyrebird.view.views.fxml.login.LoginViewController;
 import moe.lyrebird.view.views.fxml.newtweet.NewTweetController;
 import moe.lyrebird.view.views.fxml.root.RootViewController;
 import moe.lyrebird.view.views.fxml.timeline.TimelineController;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.api.FxmlFile;
-import moe.tristan.easyfxml.api.FxmlNode;
 
 /**
  * The views as an enum for easier autocompletion etc.

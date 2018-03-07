@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
-
-
-<AnchorPane prefHeight="279.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.views.fxml.newtweet.NewTweetController">
-   <children>
-      <TextArea fx:id="tweetTextArea" layoutX="23.0" layoutY="23.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-      <Button fx:id="sendButton" layoutX="527.0" layoutY="238.0" mnemonicParsing="false" text="Tweet" AnchorPane.bottomAnchor="10.0" />
-      <Label layoutX="10.0" layoutY="242.0" prefHeight="27.0" prefWidth="84.0" text="Characters : " />
-      <Label layoutX="126.0" layoutY="247.0" text="/ 140" />
-      <Label fx:id="charactersLeft" layoutX="92.0" layoutY="247.0" text="CUR" />
-   </children>
+<AnchorPane prefHeight="279.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="moe.lyrebird.view.views.fxml.newtweet.NewTweetController">
+    <children>
+        <TextArea fx:id="tweetTextArea" layoutX="23.0" layoutY="23.0" prefHeight="200.0" prefWidth="200.0"
+                  AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+                  AnchorPane.topAnchor="10.0"/>
+        <Button fx:id="sendButton" layoutX="527.0" layoutY="238.0" mnemonicParsing="false" text="Tweet"
+                AnchorPane.bottomAnchor="10.0"/>
+        <Label layoutX="10.0" layoutY="242.0" prefHeight="27.0" prefWidth="84.0" text="Characters : "/>
+        <Label layoutX="126.0" layoutY="247.0" text="/ 140"/>
+        <Label fx:id="charactersLeft" layoutX="92.0" layoutY="247.0" text="CUR"/>
+    </children>
 </AnchorPane>

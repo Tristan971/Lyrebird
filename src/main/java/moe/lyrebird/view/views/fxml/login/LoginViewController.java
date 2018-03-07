@@ -1,23 +1,24 @@
 package moe.lyrebird.view.views.fxml.login;
 
-import io.vavr.Tuple2;
-import javafx.event.Event;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.lyrebird.view.views.Views;
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
-import org.springframework.stereotype.Component;
+import io.vavr.Tuple2;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.model.twitter4j.TwitterHandler;
+import moe.lyrebird.view.views.Views;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
+
+import javafx.event.Event;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.Optional;
@@ -55,11 +56,11 @@ public class LoginViewController implements FxmlController {
     public void initialize() {
         this.pinCodeButton.setVisible(false);
         this.pinCodeField.setVisible(false);
-        
+
         this.pinCodeField.addEventHandler(ANY, this::pinCodeTextListener);
         this.loginButton.addEventFilter(MOUSE_RELEASED, this::startNewSession);
     }
-    
+
     @SuppressWarnings("unused")
     private void startNewSession(final Event loginButtonEvent) {
         final Tuple2<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
@@ -71,7 +72,7 @@ public class LoginViewController implements FxmlController {
         this.pinCodeButton.addEventHandler(MOUSE_RELEASED, e -> this.registerPinCode(tokenUrl._2));
         this.pinCodeButton.setVisible(true);
     }
-    
+
     private void registerPinCode(final RequestToken requestToken) {
         if (this.pinIsValid) {
             final Optional<AccessToken> success = this.twitterHandler.registerAccessToken(
@@ -84,7 +85,8 @@ public class LoginViewController implements FxmlController {
                 this.loginLabel.setText(
                         String.format(
                                 "Successfully logged in account @%s!",
-                                token.getScreenName())
+                                token.getScreenName()
+                        )
                 );
             } else {
                 ExceptionHandler.displayExceptionPane(
@@ -96,7 +98,7 @@ public class LoginViewController implements FxmlController {
             this.stageManager.getSingle(Views.LOGIN_VIEW).peek(Stages::scheduleHiding);
         }
     }
-    
+
     @SuppressWarnings("unused")
     private void pinCodeTextListener(final Event keyEvent) {
         final String text = LoginViewController.this.pinCodeField.getText();

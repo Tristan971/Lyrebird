@@ -1,22 +1,22 @@
 package moe.lyrebird.view.views.fxml.root;
 
-import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.FxAsync;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import javafx.fxml.FXML;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 import static moe.lyrebird.view.views.Views.CONTROL_BAR;
 import static moe.lyrebird.view.views.Views.TIMELINE_VIEW;
 
 /**
- * The RootViewController manages the location of content
- * on the root view scene.
+ * The RootViewController manages the location of content on the root view scene.
  */
 @Slf4j
 @Component

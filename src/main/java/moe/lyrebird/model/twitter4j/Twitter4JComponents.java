@@ -21,15 +21,15 @@ public class Twitter4JComponents {
         cb.setOAuthConsumerKey(consumerKey);
         return cb.build();
     }
-    
+
     @Bean
     public TwitterFactory twitterFactory(final twitter4j.conf.Configuration configuration) {
         return new TwitterFactory(configuration);
     }
-    
+
     @Bean
     public Twitter twitter(final TwitterFactory factory) {
         return factory.getInstance();
     }
-    
+
 }

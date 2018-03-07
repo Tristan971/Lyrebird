@@ -1,8 +1,8 @@
 package moe.lyrebird;
 
+import moe.tristan.easyfxml.util.Resources;
 import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
-import moe.tristan.easyfxml.util.Resources;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class SassInclusionTest {
         log.info(
                 "CSS file : {}",
                 '\n' + Files.lines(cssFilePath.get())
-                        .collect(Collectors.joining("\n"))
+                            .collect(Collectors.joining("\n"))
         );
     }
 

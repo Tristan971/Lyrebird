@@ -1,10 +1,11 @@
 package moe.lyrebird.lang.javafx;
 
+import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.Contract;
+
 import javafx.event.EventType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.Contract;
 
 @UtilityClass
 public final class EventUtils {

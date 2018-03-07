@@ -1,7 +1,8 @@
 package moe.lyrebird.view.cells;
 
-import javafx.scene.control.ListCell;
 import twitter4j.Status;
+
+import javafx.scene.control.ListCell;
 
 public class SimpleStatusListCell extends ListCell<Status> {
 

@@ -20,5 +20,5 @@ public abstract class ExceptionClassifier<X extends Throwable> implements Predic
     public Pane apply(final X x) {
         return managedExceptions.get(x.getCause().getClass()).apply(x);
     }
-    
+
 }

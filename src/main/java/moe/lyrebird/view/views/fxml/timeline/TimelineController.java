@@ -1,17 +1,18 @@
 package moe.lyrebird.view.views.fxml.timeline;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
+import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.util.FxAsync;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
 import moe.lyrebird.view.cells.SimpleStatusListCell;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.util.FxAsync;
-import org.springframework.stereotype.Component;
 import twitter4j.Status;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
 
 import java.util.LinkedList;
 

@@ -1,22 +1,23 @@
 package moe.lyrebird.view.views.fxml.controlbar;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.model.sessions.Session;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.tweets.TimelineManager;
-import moe.lyrebird.view.views.Views;
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.FxAsync;
 import moe.tristan.easyfxml.util.Stages;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import moe.lyrebird.model.sessions.Session;
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.tweets.TimelineManager;
+import moe.lyrebird.view.views.Views;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -49,14 +50,14 @@ public class ControlBarController implements FxmlController {
         this.tweetButton.addEventHandler(MOUSE_CLICKED, event -> this.openTweetWindow());
         this.timelineButton.addEventHandler(MOUSE_CLICKED, event -> this.requestTimelineRefresh());
         sessionManager.getCurrentSession().map(Session::getUserId)
-                .peek(this.currentUser::setText)
-                .onEmpty(() -> this.currentUser.setText("No account yet"));
+                      .peek(this.currentUser::setText)
+                      .onEmpty(() -> this.currentUser.setText("No account yet"));
     }
 
     private void requestTimelineRefresh() {
         FxAsync.doOnFxThread(timelineButton, btn -> btn.setDisable(true));
         CompletableFuture.runAsync(this.timelineManager::refreshTweets)
-                .thenRunAsync(() -> FxAsync.doOnFxThread(timelineButton, btn -> btn.setDisable(false)));
+                         .thenRunAsync(() -> FxAsync.doOnFxThread(timelineButton, btn -> btn.setDisable(false)));
     }
 
     private void openLoginWindow() {
@@ -66,8 +67,8 @@ public class ControlBarController implements FxmlController {
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
         Stages.stageOf("Login", loginPane)
-                .thenCompose(Stages::scheduleDisplaying)
-                .thenAccept(stage -> this.stageManager.registerSingle(Views.LOGIN_VIEW, stage));
+              .thenCompose(Stages::scheduleDisplaying)
+              .thenAccept(stage -> this.stageManager.registerSingle(Views.LOGIN_VIEW, stage));
     }
 
     private void openTweetWindow() {
@@ -77,8 +78,8 @@ public class ControlBarController implements FxmlController {
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
         Stages.stageOf("Tweet", tweetPane)
-                .thenCompose(Stages::scheduleDisplaying)
-                .thenAccept(stage -> this.stageManager.registerSingle(TWEET_VIEW, stage))
-                .thenRun(() -> log.info("New tweet stage opened !"));
+              .thenCompose(Stages::scheduleDisplaying)
+              .thenAccept(stage -> this.stageManager.registerSingle(TWEET_VIEW, stage))
+              .thenRun(() -> log.info("New tweet stage opened !"));
     }
 }
