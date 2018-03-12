@@ -1,0 +1,24 @@
+$bg-color: slategray;
+$focus-color: snow;
+
+@mixin bold {
+  -fx-font-weight: bold;
+}
+
+.root {
+  -fx-focus-color: $focus-color;
+  -fx-faint-focus-color: $focus-color;
+}
+
+.list-view .list-cell:even {
+  -fx-background-color: $bg-color;
+  -fx-text-fill: snow;
+}
+.list-view .list-cell:odd {
+  -fx-background-color: $bg-color;
+  -fx-text-fill: snow;
+}
+
+errorPane {
+  @include bold;
+}
