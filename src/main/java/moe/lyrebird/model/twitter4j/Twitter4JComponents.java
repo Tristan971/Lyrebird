@@ -1,7 +1,9 @@
 package moe.lyrebird.model.twitter4j;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -28,6 +30,7 @@ public class Twitter4JComponents {
     }
 
     @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public Twitter twitter(final TwitterFactory factory) {
         return factory.getInstance();
     }
