@@ -15,14 +15,14 @@ import javafx.stage.Stage;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class LyrebirdUiTest extends ApplicationTest {
+public class LyrebirdUiManagerTest extends ApplicationTest {
 
     @Autowired
-    private LyrebirdUi lyrebirdUi;
+    private LyrebirdUiManager lyrebirdUiManager;
 
     @Test
     public void testMainlaunch() {
-        FxAsync.doOnFxThread(lyrebirdUi, manager -> manager.startGui(new Stage()));
+        FxAsync.doOnFxThread(lyrebirdUiManager, manager -> manager.startGui(new Stage()));
     }
 
     @Override

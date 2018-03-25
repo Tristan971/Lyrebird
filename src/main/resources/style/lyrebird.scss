@@ -1,24 +1,21 @@
-$bg-color: slategray;
-$focus-color: snow;
-
-@mixin bold {
-  -fx-font-weight: bold;
-}
+@import "palette";
+@import "mixins";
 
 .root {
-  -fx-focus-color: $focus-color;
-  -fx-faint-focus-color: $focus-color;
+  -fx-background-color: $background;
 }
 
 .list-view .list-cell:even {
-  -fx-background-color: $bg-color;
+  -fx-background-color: $bg1;
   -fx-text-fill: snow;
 }
+
 .list-view .list-cell:odd {
-  -fx-background-color: $bg-color;
+  -fx-background-color: $bg2;
   -fx-text-fill: snow;
 }
 
 errorPane {
-  @include bold;
+  -fx-font-family: monospace;
+  @include bold-text;
 }

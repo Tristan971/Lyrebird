@@ -1,6 +1,7 @@
 package moe.lyrebird.model.sessions;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import io.vavr.control.Option;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
  * another component need access to them (i.e. the JavaFX controllers per example).
  */
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class SessionManager {
 

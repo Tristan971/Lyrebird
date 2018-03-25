@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public enum Styles implements FxmlStylesheet {
-    LYREBIRD("lyrebird.css");
+    LYREBIRD("style/lyrebird.css");
 
     private final String resourceRelativeLocation;
 
