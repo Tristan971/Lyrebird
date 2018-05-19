@@ -6,7 +6,6 @@ import moe.tristan.easyfxml.util.Resources;
 import java.nio.file.Path;
 
 public enum Styles implements FxmlStylesheet {
-    JAVAFX(null),
     LYREBIRD("style/lyrebird.css");
 
     private final String resourceRelativeLocation;

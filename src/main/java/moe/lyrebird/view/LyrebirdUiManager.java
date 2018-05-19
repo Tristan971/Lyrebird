@@ -8,7 +8,6 @@ import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.api.FxmlStylesheet;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.view.views.Styles;
 import moe.lyrebird.view.views.Views;
 
 import javafx.stage.Stage;
@@ -52,7 +51,7 @@ public class LyrebirdUiManager extends FxUiManager {
 
     @Override
     protected Optional<FxmlStylesheet> getStylesheet() {
-        return Optional.of(Styles.JAVAFX);
+        return Optional.of(FxmlStylesheet.DEFAULT_JAVAFX_STYLE);
     }
 
 }
