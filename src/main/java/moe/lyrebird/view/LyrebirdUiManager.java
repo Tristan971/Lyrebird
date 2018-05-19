@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.views.Styles;
 import moe.lyrebird.view.views.Views;
 
+import javafx.stage.Stage;
+
 import java.util.Optional;
 
 /**
@@ -20,31 +22,37 @@ import java.util.Optional;
 @Component
 public class LyrebirdUiManager extends FxUiManager {
 
-    private final String version;
+    private final Environment environment;
 
     @Autowired
     public LyrebirdUiManager(final EasyFxml easyFxml, final Environment environment) {
         super(easyFxml);
-        this.version = environment.getProperty("app.version");
+        this.environment = environment;
     }
 
     @Override
-    protected String getTitle() {
+    protected String title() {
         return String.format(
                 "%s [%s]",
                 "Lyrebird",
-                version
+                environment.getProperty("app.version")
         );
     }
 
     @Override
-    protected FxmlNode getMainScene() {
+    protected void onStageCreated(Stage mainStage) {
+        mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeigth", Integer.class));
+        mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
+    }
+
+    @Override
+    protected FxmlNode mainComponent() {
         return Views.ROOT_VIEW;
     }
 
     @Override
     protected Optional<FxmlStylesheet> getStylesheet() {
-        return Optional.of(Styles.LYREBIRD);
+        return Optional.of(Styles.JAVAFX);
     }
 
 }
