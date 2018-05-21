@@ -38,6 +38,8 @@ public class ControlBarController implements FxmlController {
     private Button timelineButton;
     @FXML
     private Button tweetButton;
+    @FXML
+    private Button errorButton;
 
     private final EasyFxml easyFxml;
     private final StageManager stageManager;
@@ -46,11 +48,13 @@ public class ControlBarController implements FxmlController {
 
     @Override
     public void initialize() {
-        this.loginButton.addEventHandler(MOUSE_CLICKED, event -> this.openLoginWindow());
-        this.tweetButton.addEventHandler(MOUSE_CLICKED, event -> this.openTweetWindow());
-        this.timelineButton.addEventHandler(MOUSE_CLICKED, event -> this.requestTimelineRefresh());
+        this.loginButton.addEventHandler(MOUSE_CLICKED, e -> openLoginWindow());
+        this.tweetButton.addEventHandler(MOUSE_CLICKED, e -> openTweetWindow());
+        this.timelineButton.addEventHandler(MOUSE_CLICKED, e -> requestTimelineRefresh());
+        this.errorButton.addEventHandler(MOUSE_CLICKED, e -> showErrorTest());
+
         sessionManager.getCurrentSession().map(Session::getUserId)
-                      .peek(this.currentUser::setText)
+                      .peek(value -> this.currentUser.setText(value))
                       .onEmpty(() -> this.currentUser.setText("No account yet"));
     }
 
@@ -81,5 +85,13 @@ public class ControlBarController implements FxmlController {
               .thenCompose(Stages::scheduleDisplaying)
               .thenAccept(stage -> this.stageManager.registerSingle(TWEET_VIEW, stage))
               .thenRun(() -> log.info("New tweet stage opened !"));
+    }
+
+    private void showErrorTest() {
+        ExceptionHandler.displayExceptionPane(
+                "Test error",
+                "Test exception msg\nline 2!!",
+                new RuntimeException("Wew lad")
+        );
     }
 }

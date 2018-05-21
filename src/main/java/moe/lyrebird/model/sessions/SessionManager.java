@@ -1,12 +1,15 @@
 package moe.lyrebird.model.sessions;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import io.vavr.control.Option;
+import io.vavr.control.Try;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
+import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
  * another component need access to them (i.e. the JavaFX controllers per example).
  */
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class SessionManager {
 
@@ -37,6 +41,17 @@ public class SessionManager {
         return this.loadedSessions.stream()
                                   .filter(session -> session.getUserId().equals(userId))
                                   .findFirst();
+    }
+
+    public Try<Twitter> getCurrentTwitter() {
+        return this.getCurrentSession()
+                   .toTry()
+                   .map(Session::getTwitterHandler)
+                   .map(TwitterHandler::getTwitter)
+                   .andThenTry(session -> log.debug(
+                           "Preparing request for user : {}",
+                           session.getScreenName()
+                   ));
     }
 
     /**

@@ -14,6 +14,16 @@
       "name": "twitter.consumerSecret",
       "type": "java.lang.String",
       "description": "This is the consumer secret. Will be exposed via server config later."
+    },
+    {
+      "name": "mainStage.minWidth",
+      "type": "java.lang.Integer",
+      "description": "The main stage's minimal width."
+    },
+    {
+      "name": "mainStage.minHeigth",
+      "type": "java.lang.Integer",
+      "description": "The main stage's minimal heigth."
     }
   ]
 }

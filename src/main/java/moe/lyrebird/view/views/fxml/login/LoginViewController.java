@@ -7,13 +7,13 @@ import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple2;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.views.Views;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,7 +23,6 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.Optional;
 
-import static javafx.event.Event.ANY;
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 
 /**
@@ -31,7 +30,6 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class LoginViewController implements FxmlController {
 
     @FXML
@@ -52,12 +50,18 @@ public class LoginViewController implements FxmlController {
     private final TwitterHandler twitterHandler;
     private final StageManager stageManager;
 
+    public LoginViewController(BrowserSupport browserSupport, TwitterHandler twitterHandler, StageManager stageManager) {
+        this.browserSupport = browserSupport;
+        this.stageManager = stageManager;
+        this.twitterHandler = twitterHandler;
+    }
+
     @Override
     public void initialize() {
         this.pinCodeButton.setVisible(false);
         this.pinCodeField.setVisible(false);
 
-        this.pinCodeField.addEventHandler(ANY, this::pinCodeTextListener);
+        this.pinCodeField.textProperty().addListener(this::pinCodeTextListener);
         this.loginButton.addEventFilter(MOUSE_RELEASED, this::startNewSession);
     }
 
@@ -100,11 +104,10 @@ public class LoginViewController implements FxmlController {
     }
 
     @SuppressWarnings("unused")
-    private void pinCodeTextListener(final Event keyEvent) {
-        final String text = LoginViewController.this.pinCodeField.getText();
+    private void pinCodeTextListener(ObservableValue<? extends String> o, String oldVal, String newVal) {
         try {
             //noinspection ResultOfMethodCallIgnored
-            Integer.parseInt(text);
+            Integer.parseInt(newVal);
             LoginViewController.this.pinIsValid = true;
         } catch (final NumberFormatException e) {
             LoginViewController.this.pinIsValid = false;

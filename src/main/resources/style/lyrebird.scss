@@ -1,0 +1,19 @@
+@import "palette";
+
+.root {
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+  -fx-background-insets: 0, 0, 0, 0;
+}
+
+.list-view .list-cell:even {
+  -fx-background-color: $bg1;
+}
+
+.list-view .list-cell:odd {
+  -fx-background-color: $bg2;
+}
+
+.bg-enabled {
+  -fx-background-color: $background;
+}

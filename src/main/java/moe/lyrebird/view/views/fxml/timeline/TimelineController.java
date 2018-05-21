@@ -2,55 +2,66 @@ package moe.lyrebird.view.views.fxml.timeline;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.util.FxAsync;
-import lombok.RequiredArgsConstructor;
+import com.sun.javafx.scene.control.skin.ListViewSkin;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
 import moe.lyrebird.view.cells.SimpleStatusListCell;
 import twitter4j.Status;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-
-import java.util.LinkedList;
+import javafx.scene.input.ScrollEvent;
 
 /**
  * Created by tristan on 03/03/2017.
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class TimelineController implements FxmlController {
 
     @FXML
-    private ListView<Status> tweets;
+    private ListView<Status> tweetsListView;
 
     private final TimelineManager timelineManager;
-    private final ObservableList<Status> tweetsObservableList = FXCollections.observableList(new LinkedList<>());
+    private final ListProperty<Status> tweetsProperty;
+
+    public TimelineController(TimelineManager timelineManager) {
+        this.timelineManager = timelineManager;
+        this.tweetsProperty = new ReadOnlyListWrapper<>(timelineManager.getLoadedTweets());
+    }
 
     @Override
     public void initialize() {
-        tweets.setCellFactory(statuses -> new SimpleStatusListCell());
-        bindModel();
         bindUi();
-    }
-
-    private void bindModel() {
-        log.debug("Subscribing to {}", TimelineManager.class.getSimpleName());
-        timelineManager.subscribe(change ->
-                FxAsync.doOnFxThread(tweetsObservableList, list -> {
-                    list.add(0, change.getElementAdded());
-                    list.remove(change.getElementRemoved());
-                })
-        );
-        log.debug("Subscribed.");
+        autoloadMoreTweets();
     }
 
     private void bindUi() {
-        log.debug("Binding tweets displayed to model...");
-        tweets.setItems(tweetsObservableList);
-        log.debug("Binded tweets.");
+        tweetsListView.setCellFactory(statuses -> new SimpleStatusListCell());
+        log.debug("Binding displayed tweets to displayable tweets...");
+        tweetsListView.itemsProperty().bind(tweetsProperty);
+        log.debug("Binded.");
     }
+
+    /**
+     * Stupid hack pls fix JavaFX we shouldn't need this...
+     */
+    @SuppressWarnings("unchecked")
+    private void autoloadMoreTweets() {
+        tweetsListView.addEventFilter(ScrollEvent.SCROLL, event -> {
+            final ListViewSkin<Status> ts = (ListViewSkin<Status>) tweetsListView.getSkin();
+            final VirtualFlow<?> vf = (VirtualFlow<?>) ts.getChildren().get(0);
+            final int lastVisible = vf.getLastVisibleCell().getIndex();
+            final int lastPossible = tweetsListView.getItems().size() - 1;
+            final boolean scrolledToEnd = lastVisible == lastPossible;
+            if (scrolledToEnd) {
+                log.debug("Scrolled to end [{}/{}]. Requesting more tweets.", lastVisible, lastPossible);
+                timelineManager.loadMoreTweets();
+            }
+        });
+    }
+
 }
