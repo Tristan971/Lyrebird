@@ -21,7 +21,12 @@ Check out the release pages once we have something working decently.
 ## Currently working :
 - [x] Log in 
 
-- [x] Display timeline
+- [ ] Timeline
+    - [x] Load timeline
+    - [x] Seek older tweets on scrolling to end of displayed ones
+    - [ ] Seek newer tweets all the time
+        - [ ] Scheduled refresh
+        - [ ] Streaming API
 
 - [x] Tweeting
 
