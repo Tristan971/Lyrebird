@@ -1,16 +1,12 @@
 package moe.lyrebird;
 
-import moe.tristan.easyfxml.util.Resources;
-import io.vavr.control.Try;
+import org.springframework.util.StreamUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by Tristan on 30/03/2017.
@@ -20,14 +16,10 @@ public class SassInclusionTest {
 
     @Test
     public void testCssLocation() throws IOException {
-        final Try<Path> cssFilePath = Resources.getResourcePath("../classes/lyrebird.css");
-        assertThat(cssFilePath.isSuccess()).isTrue();
+        final InputStream cssURL = getClass().getClassLoader().getResourceAsStream("style/lyrebird.css");
+        final String cssContent = StreamUtils.copyToString(cssURL, StandardCharsets.UTF_8);
 
-        log.info(
-                "CSS file : {}",
-                '\n' + Files.lines(cssFilePath.get())
-                            .collect(Collectors.joining("\n"))
-        );
+        log.info("CSS file : {}", cssContent);
     }
 
 }
