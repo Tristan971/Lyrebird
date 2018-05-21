@@ -20,7 +20,7 @@ public enum Views implements FxmlNode {
     TWEET_VIEW("newtweet/NewTweet.fxml", NewTweetController.class),
     CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class);
 
-    private static String ROOT_VIEWS_FXML_PATH = "moe/lyrebird/view/views/fxml/";
+    private static String ROOT_VIEWS_FXML_PATH = "moe/lyrebird/view/views/";
 
     private final String fxmlFile;
     private final Class<? extends FxmlController> controllerClass;
