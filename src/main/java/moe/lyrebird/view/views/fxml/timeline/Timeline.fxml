@@ -7,7 +7,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="moe.lyrebird.view.views.fxml.timeline.TimelineController">
     <children>
-        <ListView fx:id="tweets" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
+        <ListView fx:id="tweetsListView" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
     </children>
 </AnchorPane>
