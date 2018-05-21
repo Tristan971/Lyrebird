@@ -6,7 +6,7 @@ import com.sun.javafx.scene.control.skin.ListViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
-import moe.lyrebird.view.components.SimpleStatusListCell;
+import moe.lyrebird.view.components.cells.SimpleStatusListCell;
 import twitter4j.Status;
 
 import javafx.beans.property.ListProperty;
