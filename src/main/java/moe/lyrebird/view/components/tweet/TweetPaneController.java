@@ -32,7 +32,6 @@ public class TweetPaneController implements FxmlController {
 
     public void setStatus(final Status status) {
         Platform.runLater(() -> {
-            log.debug("Filling content for status {}", status.getId());
             author.setText(status.getUser().getName() + "("+ status.getUser().getId() +")");
             content.setText(status.getText());
             this.status = status;

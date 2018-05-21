@@ -1,5 +1,6 @@
 package moe.lyrebird.view.components.timeline;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import com.sun.javafx.scene.control.skin.ListViewSkin;
@@ -15,6 +16,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.input.ScrollEvent;
 
+import java.util.function.Supplier;
+
 /**
  * Created by tristan on 03/03/2017.
  */
@@ -26,13 +29,13 @@ public class TimelineController implements FxmlController {
     private ListView<Status> tweetsListView;
 
     private final TimelineManager timelineManager;
-    private final TweetListCell tweetListCell;
+    private final Supplier<TweetListCell> tweetListCell;
     private final ListProperty<Status> tweetsProperty;
 
-    public TimelineController(TimelineManager timelineManager, TweetListCell tweetListCell) {
+    public TimelineController(TimelineManager timelineManager, ApplicationContext context) {
         this.timelineManager = timelineManager;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timelineManager.getLoadedTweets());
-        this.tweetListCell = tweetListCell;
+        this.tweetListCell = () -> context.getBean(TweetListCell.class);
     }
 
     @Override
@@ -42,7 +45,7 @@ public class TimelineController implements FxmlController {
     }
 
     private void bindUi() {
-        tweetsListView.setCellFactory(statuses -> tweetListCell);
+        tweetsListView.setCellFactory(statuses -> tweetListCell.get());
         log.debug("Binding displayed tweets to displayable tweets...");
         tweetsListView.itemsProperty().bind(tweetsProperty);
         log.debug("Binded.");
