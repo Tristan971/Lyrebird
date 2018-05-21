@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.root;
+package moe.lyrebird.view.screens.root;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
@@ -12,8 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
-import static moe.lyrebird.view.views.Views.CONTROL_BAR;
-import static moe.lyrebird.view.views.Views.TIMELINE_VIEW;
+import static moe.lyrebird.view.components.Components.CONTROL_BAR;
+import static moe.lyrebird.view.components.Components.TIMELINE;
 
 /**
  * The RootViewController manages the location of content on the root view scene.
@@ -46,7 +46,7 @@ public class RootViewController implements FxmlController {
     private void loadTimeline() {
         log.info("Loading timeline view.");
         final Pane timelinePane = this.easyFxml
-                .loadNode(TIMELINE_VIEW)
+                .loadNode(TIMELINE)
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
         this.contentPane.setCenter(timelinePane);

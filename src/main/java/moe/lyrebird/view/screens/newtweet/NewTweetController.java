@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.newtweet;
+package moe.lyrebird.view.screens.newtweet;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
@@ -11,7 +11,7 @@ import io.vavr.concurrent.Future;
 import lombok.RequiredArgsConstructor;
 import moe.lyrebird.view.util.Events;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.lyrebird.view.views.Views;
+import moe.lyrebird.view.screens.Screens;
 import twitter4j.Status;
 
 import javafx.application.Platform;
@@ -97,7 +97,7 @@ public class NewTweetController implements FxmlController {
                             new ExceptionHandler(err).asPane()
                     ).thenAccept(Stages::scheduleDisplaying));
             res.onSuccess(status ->
-                    stageManager.getSingle(Views.TWEET_VIEW).peek(Stages::scheduleHiding)
+                    stageManager.getSingle(Screens.TWEET_VIEW).peek(Stages::scheduleHiding)
             );
         });
     }

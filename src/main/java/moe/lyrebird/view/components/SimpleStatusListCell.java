@@ -1,4 +1,4 @@
-package moe.lyrebird.view.components.timeline;
+package moe.lyrebird.view.components;
 
 import twitter4j.Status;
 

@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views;
+package moe.lyrebird.view.screens;
 
 import moe.tristan.easyfxml.api.FxmlStylesheet;
 import moe.tristan.easyfxml.util.Resources;

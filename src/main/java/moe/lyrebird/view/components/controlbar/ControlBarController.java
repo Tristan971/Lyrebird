@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.controlbar;
+package moe.lyrebird.view.components.controlbar;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.tweets.TimelineManager;
-import moe.lyrebird.view.views.Views;
+import moe.lyrebird.view.screens.Screens;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,8 +22,8 @@ import javafx.scene.layout.Pane;
 import java.util.concurrent.CompletableFuture;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
-import static moe.lyrebird.view.views.Views.LOGIN_VIEW;
-import static moe.lyrebird.view.views.Views.TWEET_VIEW;
+import static moe.lyrebird.view.screens.Screens.LOGIN_VIEW;
+import static moe.lyrebird.view.screens.Screens.TWEET_VIEW;
 
 @Slf4j
 @Component
@@ -72,7 +72,7 @@ public class ControlBarController implements FxmlController {
 
         Stages.stageOf("Login", loginPane)
               .thenCompose(Stages::scheduleDisplaying)
-              .thenAccept(stage -> this.stageManager.registerSingle(Views.LOGIN_VIEW, stage));
+              .thenAccept(stage -> this.stageManager.registerSingle(Screens.LOGIN_VIEW, stage));
     }
 
     private void openTweetWindow() {

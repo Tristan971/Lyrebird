@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="moe.lyrebird.view.views.timeline.TimelineController">
+            fx:controller="moe.lyrebird.view.components.timeline.TimelineController">
     <children>
         <ListView fx:id="tweetsListView" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>

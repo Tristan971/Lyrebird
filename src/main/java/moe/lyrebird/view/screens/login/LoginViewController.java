@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.login;
+package moe.lyrebird.view.screens.login;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
@@ -9,7 +9,7 @@ import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple2;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
-import moe.lyrebird.view.views.Views;
+import moe.lyrebird.view.screens.Screens;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
@@ -99,7 +99,7 @@ public class LoginViewController implements FxmlController {
                         new Exception("No token could be used.")
                 );
             }
-            this.stageManager.getSingle(Views.LOGIN_VIEW).peek(Stages::scheduleHiding);
+            this.stageManager.getSingle(Screens.LOGIN_VIEW).peek(Stages::scheduleHiding);
         }
     }
 

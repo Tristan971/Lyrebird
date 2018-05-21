@@ -8,7 +8,7 @@ import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.api.FxmlStylesheet;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import lombok.extern.slf4j.Slf4j;
-import moe.lyrebird.view.views.Views;
+import moe.lyrebird.view.screens.Screens;
 
 import javafx.stage.Stage;
 
@@ -46,7 +46,7 @@ public class LyrebirdUiManager extends FxUiManager {
 
     @Override
     protected FxmlNode mainComponent() {
-        return Views.ROOT_VIEW;
+        return Screens.ROOT_VIEW;
     }
 
     @Override
