@@ -6,7 +6,7 @@ import com.sun.javafx.scene.control.skin.ListViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
-import moe.lyrebird.view.components.cells.SimpleStatusListCell;
+import moe.lyrebird.view.components.cells.TweetListCell;
 import twitter4j.Status;
 
 import javafx.beans.property.ListProperty;
@@ -26,11 +26,13 @@ public class TimelineController implements FxmlController {
     private ListView<Status> tweetsListView;
 
     private final TimelineManager timelineManager;
+    private final TweetListCell tweetListCell;
     private final ListProperty<Status> tweetsProperty;
 
-    public TimelineController(TimelineManager timelineManager) {
+    public TimelineController(TimelineManager timelineManager, TweetListCell tweetListCell) {
         this.timelineManager = timelineManager;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timelineManager.getLoadedTweets());
+        this.tweetListCell = tweetListCell;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class TimelineController implements FxmlController {
     }
 
     private void bindUi() {
-        tweetsListView.setCellFactory(statuses -> new SimpleStatusListCell());
+        tweetsListView.setCellFactory(statuses -> tweetListCell);
         log.debug("Binding displayed tweets to displayable tweets...");
         tweetsListView.itemsProperty().bind(tweetsProperty);
         log.debug("Binded.");

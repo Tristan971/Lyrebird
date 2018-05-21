@@ -38,6 +38,7 @@ public class RootViewController implements FxmlController {
         log.debug("Initializing control bar...");
         final Pane controlBarPane = this.easyFxml
                 .loadNode(CONTROL_BAR)
+                .getNode()
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
         log.debug("Initialized control bar !");
         FxAsync.doOnFxThread(contentPane, root -> root.setLeft(controlBarPane));
@@ -47,6 +48,7 @@ public class RootViewController implements FxmlController {
         log.info("Loading timeline view.");
         final Pane timelinePane = this.easyFxml
                 .loadNode(TIMELINE)
+                .getNode()
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
         this.contentPane.setCenter(timelinePane);

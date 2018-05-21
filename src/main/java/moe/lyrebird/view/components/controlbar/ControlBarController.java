@@ -68,6 +68,7 @@ public class ControlBarController implements FxmlController {
         log.info("User requested login.");
         final Pane loginPane = this.easyFxml
                 .loadNode(LOGIN_VIEW)
+                .getNode()
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
         Stages.stageOf("Login", loginPane)
@@ -79,6 +80,7 @@ public class ControlBarController implements FxmlController {
         log.info("Opening new tweet stage...");
         final Pane tweetPane = this.easyFxml
                 .loadNode(TWEET_VIEW)
+                .getNode()
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
         Stages.stageOf("Tweet", tweetPane)

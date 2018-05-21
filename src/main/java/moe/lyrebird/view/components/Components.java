@@ -5,10 +5,12 @@ import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.components.controlbar.ControlBarController;
 import moe.lyrebird.view.components.timeline.TimelineController;
+import moe.lyrebird.view.components.tweet.TweetPaneController;
 
 public enum Components implements FxmlNode {
+    CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class),
     TIMELINE("timeline/Timeline.fxml", TimelineController.class),
-    CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class);
+    TWEET("tweet/TweetPane.fxml", TweetPaneController.class);
 
     private static String COMPONENTS_BASE_PATH = "moe/lyrebird/view/components/";
 
