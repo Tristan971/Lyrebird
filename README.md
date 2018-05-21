@@ -22,13 +22,27 @@ Check out the release pages once we have something working decently.
 - [x] Log in 
 
 - [ ] Timeline
-    - [x] Load timeline
+    - [ ] Display timeline
+        - [x] Basic textual display
+        - [ ] Display for chosen list
+        - [ ] Text highlighting
+            - [ ] Mentions
+            - [ ] Hashtags
+        - [ ] Media embedding
+            - [ ] Twitter image embedding
+            - [ ] Direct image embedding
+            - [ ] Twitter video embedding
+            - [ ] Direct video embedding
+            - [ ] Youtube video embedding
     - [x] Seek older tweets on scrolling to end of displayed ones
     - [ ] Seek newer tweets all the time
         - [ ] Scheduled refresh
         - [ ] Streaming API
 
-- [x] Tweeting
+- [ ] Tweeting
+    - [x] Support text
+    - [ ] Support image
+    - [ ] Support location
 
 - [ ] Add tabs for mentions and hashtag searches
 
