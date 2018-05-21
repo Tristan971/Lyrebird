@@ -3,11 +3,11 @@ package moe.lyrebird.view.views;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
-import moe.lyrebird.view.views.fxml.controlbar.ControlBarController;
-import moe.lyrebird.view.views.fxml.login.LoginViewController;
-import moe.lyrebird.view.views.fxml.newtweet.NewTweetController;
-import moe.lyrebird.view.views.fxml.root.RootViewController;
-import moe.lyrebird.view.views.fxml.timeline.TimelineController;
+import moe.lyrebird.view.views.controlbar.ControlBarController;
+import moe.lyrebird.view.views.login.LoginViewController;
+import moe.lyrebird.view.views.newtweet.NewTweetController;
+import moe.lyrebird.view.views.root.RootViewController;
+import moe.lyrebird.view.views.timeline.TimelineController;
 
 /**
  * The views as an enum for easier autocompletion etc.
@@ -20,6 +20,8 @@ public enum Views implements FxmlNode {
     TWEET_VIEW("newtweet/NewTweet.fxml", NewTweetController.class),
     CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class);
 
+    private static String ROOT_VIEWS_FXML_PATH = "moe/lyrebird/view/views/fxml/";
+
     private final String fxmlFile;
     private final Class<? extends FxmlController> controllerClass;
 
@@ -30,7 +32,7 @@ public enum Views implements FxmlNode {
 
     @Override
     public FxmlFile getFile() {
-        return () -> this.fxmlFile;
+        return () -> ROOT_VIEWS_FXML_PATH + this.fxmlFile;
     }
 
     @Override

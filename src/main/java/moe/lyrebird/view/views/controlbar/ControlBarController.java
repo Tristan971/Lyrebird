@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.fxml.controlbar;
+package moe.lyrebird.view.views.controlbar;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="262.0" prefWidth="461.0"
             xmlns="http://javafx.com/javafx/8.0.111"
-            fx:controller="moe.lyrebird.view.views.fxml.login.LoginViewController">
+            fx:controller="moe.lyrebird.view.views.login.LoginViewController">
     <children>
         <Label fx:id="loginLabel" layoutX="61.0" layoutY="31.0" prefHeight="88.0" prefWidth="344.0"
                text="Please click the Login button to authenticate with Twitter.\nA webpage will open.\nCopy the code on the screen to the code field to authenticate."/>

@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.fxml.newtweet;
+package moe.lyrebird.view.views.newtweet;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;

@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.fxml.login;
+package moe.lyrebird.view.views.login;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;

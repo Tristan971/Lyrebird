@@ -1,4 +1,4 @@
-package moe.lyrebird.view.views.fxml.timeline;
+package moe.lyrebird.view.views.timeline;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
@@ -6,7 +6,7 @@ import com.sun.javafx.scene.control.skin.ListViewSkin;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TimelineManager;
-import moe.lyrebird.view.cells.SimpleStatusListCell;
+import moe.lyrebird.view.components.timeline.SimpleStatusListCell;
 import twitter4j.Status;
 
 import javafx.beans.property.ListProperty;
