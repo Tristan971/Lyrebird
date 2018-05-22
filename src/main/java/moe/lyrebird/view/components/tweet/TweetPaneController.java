@@ -9,7 +9,11 @@ import twitter4j.Status;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
+import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
+import static moe.lyrebird.view.components.tweet.TweetFormatter.userProfileImage;
+import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Slf4j
@@ -19,6 +23,9 @@ public class TweetPaneController implements FxmlController {
 
     @FXML
     private Label author;
+
+    @FXML
+    private ImageView authorProfilePicture;
 
     @FXML
     private Label content;
@@ -32,8 +39,9 @@ public class TweetPaneController implements FxmlController {
 
     public void setStatus(final Status status) {
         Platform.runLater(() -> {
-            author.setText(status.getUser().getName() + "("+ status.getUser().getId() +")");
-            content.setText(status.getText());
+            author.setText(username(status.getUser()));
+            authorProfilePicture.setImage(userProfileImage(status.getUser()));
+            content.setText(tweetContent(status));
             this.status = status;
         });
     }

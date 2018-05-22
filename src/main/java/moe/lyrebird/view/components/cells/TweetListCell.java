@@ -42,7 +42,7 @@ public class TweetListCell extends ListCell<Status> {
         if (item == null) {
             setGraphic(null);
         } else {
-            log.debug("Filling TweetPane[{}] with status {}", tweetPane, item.getId());
+            log.trace("Filling TweetPane[{}] with status {}", tweetPane, item.getId());
             tweetPaneController.setStatus(item);
             if (getGraphic() == null) {
                 setGraphic(tweetPane);
