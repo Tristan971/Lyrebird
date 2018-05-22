@@ -9,6 +9,7 @@ import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
 import twitter4j.Status;
 
+import javafx.application.Platform;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.Pane;
 
@@ -32,7 +33,7 @@ public class TweetListCell extends ListCell<Status> {
         );
         this.tweetPane = loadResult.getNode().get();
         this.tweetPaneController = loadResult.getController().get();
-        log.debug("Created a Tweet cell with pane {} and controller {}", tweetPane, tweetPaneController);
+        log.trace("Created a Tweet cell with pane {} and controller {}", tweetPane, tweetPaneController);
     }
 
     @Override
@@ -43,10 +44,12 @@ public class TweetListCell extends ListCell<Status> {
             setGraphic(null);
         } else {
             log.trace("Filling TweetPane[{}] with status {}", tweetPane, item.getId());
-            tweetPaneController.setStatus(item);
-            if (getGraphic() == null) {
-                setGraphic(tweetPane);
-            }
+            Platform.runLater(() -> {
+                tweetPaneController.setStatus(item);
+                if (getGraphic() == null) {
+                    setGraphic(tweetPane);
+                }
+            });
         }
     }
 

@@ -6,7 +6,6 @@ import moe.tristan.easyfxml.api.FxmlController;
 import lombok.extern.slf4j.Slf4j;
 import twitter4j.Status;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -38,11 +37,9 @@ public class TweetPaneController implements FxmlController {
     }
 
     public void setStatus(final Status status) {
-        Platform.runLater(() -> {
-            author.setText(username(status.getUser()));
-            authorProfilePicture.setImage(userProfileImage(status.getUser()));
-            content.setText(tweetContent(status));
-            this.status = status;
-        });
+        author.setText(username(status.getUser()));
+        authorProfilePicture.setImage(userProfileImage(status.getUser()));
+        content.setText(tweetContent(status));
+        this.status = status;
     }
 }
