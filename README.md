@@ -24,16 +24,20 @@ Check out the release pages once we have something working decently.
 - [ ] Timeline
     - [ ] Display timeline
         - [x] Basic textual display
+        - [x] Display username, @screenname and user profile picture
         - [ ] Display for chosen list
         - [ ] Text highlighting
             - [ ] Mentions
             - [ ] Hashtags
         - [ ] Media embedding
-            - [ ] Twitter image embedding
-            - [ ] Direct image embedding
-            - [ ] Twitter video embedding
-            - [ ] Direct video embedding
-            - [ ] Youtube video embedding
+            - [ ] Officially supported
+                - [ ] Twitter image embedding
+                - [ ] Twitter video embedding
+            - [ ] Easy embedding
+                - [ ] Direct image embedding
+                - [ ] Direct video embedding
+            - [ ] Why is it not easy to do ?
+                - [ ] Youtube video embedding
     - [x] Seek older tweets on scrolling to end of displayed ones
     - [ ] Seek newer tweets all the time
         - [ ] Scheduled refresh
