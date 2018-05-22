@@ -20,6 +20,9 @@ Hopefully this works out.
 
 Check out the release pages once we have something working decently.
 
+## Screenshot of current version :
+[![Screenshot of current version](docs/img/screenshot.png)](docs/img/screenshot.png)
+
 ## Currently working :
 - [x] Log in 
 
