@@ -3,7 +3,9 @@
 
 Last build's statuses:
 
-[![Build Status](https://travis-ci.org/Tristan971/Lyrebird.svg?branch=master)](https://travis-ci.org/Tristan971/Lyrebird)
+**Travis :** [![Build Status](https://travis-ci.org/Tristan971/Lyrebird.svg?branch=master)](https://travis-ci.org/Tristan971/Lyrebird)
+ | **Jenkins :** [![Build Status](https://jenkins.tristan.moe/job/Lyrebird/badge/icon)](https://jenkins.tristan.moe/job/Lyrebird/)
+
 [![codecov](https://codecov.io/gh/Tristan971/Lyrebird/branch/master/graph/badge.svg)](https://codecov.io/gh/Tristan971/Lyrebird)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/63206a65b5a146d3a1af5d8c4b90eef7)](https://www.codacy.com/app/Tristan971/Lyrebird)
 [![Known Vulnerabilities](https://snyk.io/test/github/tristan971/lyrebird/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/tristan971/lyrebird?targetFile=pom.xml)
