@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.tweet.TweetPaneController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.tweet.TweetPaneController">
    <children>
-      <ImageView fx:id="authorProfilePicture" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-         <HBox.margin>
-            <Insets right="5.0" />
-         </HBox.margin></ImageView>
-      <VBox>
+      <HBox>
          <children>
-            <Label fx:id="author" text="TWEET_AUTHOR">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <padding>
-                  <Insets right="10.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets bottom="5.0" />
-               </VBox.margin>
-            </Label>
-            <Label fx:id="content" text="TWEET_CONTENT" />
+            <ImageView fx:id="authorProfilePicture" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin></ImageView>
+            <VBox>
+               <children>
+                  <Label fx:id="author" text="TWEET_AUTHOR">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets right="10.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="content" text="TWEET_CONTENT" />
+               </children>
+            </VBox>
          </children>
-      </VBox>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+      <ToolBar fx:id="toolbar" prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="likeButton" mnemonicParsing="false" text="Like" />
+            <Button fx:id="retweetButton" mnemonicParsing="false" text="Retweet" />
+        </items>
+      </ToolBar>
    </children>
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
-</HBox>
+</VBox>

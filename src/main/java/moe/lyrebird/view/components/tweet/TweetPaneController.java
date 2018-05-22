@@ -6,8 +6,12 @@ import moe.tristan.easyfxml.api.FxmlController;
 import lombok.extern.slf4j.Slf4j;
 import twitter4j.Status;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 
 import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
@@ -29,11 +33,22 @@ public class TweetPaneController implements FxmlController {
     @FXML
     private Label content;
 
+    @FXML
+    private ToolBar toolbar;
+
+    @FXML
+    private Button likeButton;
+
+    @FXML
+    private Button retweetButton;
+
     private Status status;
+
+    public final BooleanProperty selected = new SimpleBooleanProperty(false);
 
     @Override
     public void initialize() {
-        // status not yet available !
+        toolbar.visibleProperty().bind(selected);
     }
 
     public void setStatus(final Status status) {

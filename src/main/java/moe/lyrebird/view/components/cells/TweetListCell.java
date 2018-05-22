@@ -46,6 +46,7 @@ public class TweetListCell extends ListCell<Status> {
             log.trace("Filling TweetPane[{}] with status {}", tweetPane, item.getId());
             Platform.runLater(() -> {
                 tweetPaneController.setStatus(item);
+                tweetPaneController.selected.bind(selectedProperty());
                 if (getGraphic() == null) {
                     setGraphic(tweetPane);
                 }
