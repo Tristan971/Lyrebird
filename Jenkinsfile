@@ -3,10 +3,12 @@ pipeline {
   stages {
     stage('Environment') {
       steps {
-        sh '''
-
-Xvfb &; sleep 3'''
-        sh 'touch ~/.stalonetrayrc;  stalonetray &;  sleep 3'
+        sh '''Xvfb &
+sleep 3
+'''
+        sh '''touch ~/.stalonetrayrc
+stalonetray &
+sleep 3'''
       }
     }
     stage('Test') {
