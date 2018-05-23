@@ -11,8 +11,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 
 import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.userProfileImage;
@@ -34,7 +34,7 @@ public class TweetPaneController implements FxmlController {
     private Label content;
 
     @FXML
-    private ToolBar toolbar;
+    private HBox toolbar;
 
     @FXML
     private Button likeButton;
