@@ -15,7 +15,7 @@ Trivia :
 [![LoC](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=ncloc)](https://sonar.tristan.moe/project/activity?graph=coverage&id=moe.lyrebird%3Alyrebird)
 [![Technical debt](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=sqale_index)](https://sonar.tristan.moe/project/issues?facetMode=effort&id=moe.lyrebird%3Alyrebird&resolved=false&types=CODE_SMELL)
 
-![Quality gate status](https://sonar.tristan.moe/api/project_badges/quality_gate?project=moe.lyrebird%3Alyrebird)
+[![Quality gate status](https://sonar.tristan.moe/api/project_badges/quality_gate?project=moe.lyrebird%3Alyrebird)](https://sonar.tristan.moe/dashboard?id=moe.lyrebird%3Alyrebird)
 
 ## Reasoning :
 Currently there is not one good Windows Twitter client.
