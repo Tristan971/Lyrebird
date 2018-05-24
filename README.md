@@ -4,7 +4,7 @@
 Last `master` branch's statistics :
 
 Build : 
-[![Build Status](https://jenkins.tristan.moe/job/CI-Lyrebird/job/master/badge/icon)](https://jenkins.tristan.moe/job/CI-Lyrebird/job/master)
+[![Build Status](https://jenkins.tristan.moe/job/Lyrebird/job/master/badge/icon)](https://jenkins.tristan.moe/job/Lyrebird/job/master)
 
 Quality : 
 [![Coverage](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=coverage)](https://sonar.tristan.moe/project/activity?graph=coverage&id=moe.lyrebird%3Alyrebird)
