@@ -26,7 +26,8 @@ pipeline {
     }
     stage('Clean environment') {
       steps {
-        sh 'kill -15 $(pgrep Xvfb) && kill -15 $(pgrep stalonetray)'
+        sh 'kill -15 $(pgrep Xvfb)'
+        sh 'kill -15 $(pgrep stalonetray)'
       }
     }
     stage('Archive artifacts') {
