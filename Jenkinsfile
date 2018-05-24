@@ -11,11 +11,17 @@ pipeline {
         stage('Environment') {
             steps {
                 sh 'nohup Xvfb $DISPLAY -screen 0 1024x768x24 & sleep $SLEEP_T'
+                sh 'touch .stalonetrayrc && nohup stalonetray &'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn clean test'
+                sh 'mvn clean test -Djava.awt.headless=false'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
             }
         }
         stage('Code quality') {
@@ -30,7 +36,7 @@ pipeline {
         }
         stage('Cleanup') {
             steps {
-                sh 'kill -15 $(pgrep Xvfb)'
+                sh 'kill -15 $(pgrep stalonetray) && rm .stalonetrayrc && kill -15 $(pgrep Xvfb)'
             }
         }
         stage('Archive artifacts') {
