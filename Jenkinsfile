@@ -3,12 +3,8 @@ pipeline {
   stages {
     stage('Environment') {
       steps {
-        sh '''Xvfb &
-sleep 3
-'''
-        sh '''touch ~/.stalonetrayrc
-stalonetray &
-sleep 3'''
+        sh 'nohup Xvfb & sleep 3'
+        sh 'touch ~/.stalonetrayrc && nohup stalonetray & sleep 3'
       }
     }
     stage('Test') {
@@ -23,7 +19,7 @@ sleep 3'''
     }
     stage('Clean environment') {
       steps {
-        sh 'kill -15 $(pgrep Xvfb)'
+        sh 'kill -15 $(pgrep Xvfb) && kill -15 $(pgrep stalonetray)'
       }
     }
     stage('Archive artifacts') {
