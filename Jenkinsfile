@@ -1,10 +1,17 @@
 pipeline {
   agent any
+
+  environment {
+    DISPLAY = ':99'
+    SLEEP_T = '3'
+    MAVEN_OPTS = '-XX:+TieredCompilation -XX:TieredStopAtLevel=1'
+  }
+
   stages {
     stage('Environment') {
       steps {
-        sh 'export DISPLAY=:99.0 && nohup Xvfb :99 -screen 0 1024x768x24 & sleep 3'
-        sh 'touch ~/.stalonetrayrc && nohup stalonetray & sleep 3'
+        sh 'nohup Xvfb $DISPLAY -screen 0 1024x768x24 & sleep $SLEEP_T'
+        sh 'touch ~/.stalonetrayrc && nohup stalonetray & sleep $SLEEP_T'
       }
     }
     stage('Test') {
