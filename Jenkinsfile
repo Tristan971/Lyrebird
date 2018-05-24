@@ -18,19 +18,19 @@ pipeline {
                 sh 'mvn clean test'
             }
         }
-        stage('Package') {
+        stage('Code quality') {
+            steps {
+                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar -Dsonar.host.url=https://sonar.tristan.moe'
+            }
+        }
+        stage('PackageInstall') {
             steps {
                 sh 'mvn clean install -DskipTests'
             }
         }
-        stage('Clean environment') {
+        stage('Cleanup') {
             steps {
                 sh 'kill -15 $(pgrep Xvfb)'
-            }
-        }
-        stage('Code quality') {
-            steps {
-                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar -Dsonar.host.url=https://sonar.tristan.moe'
             }
         }
         stage('Archive artifacts') {
