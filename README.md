@@ -1,16 +1,21 @@
 # Lyrebird
-###### Finally a good cross-platform Twitter client.
+###### A next-generation cross-platform Twitter client that doesn't suck.
 
-Last build's statuses:
+Last `master` branch's statistics :
 
-**Travis :** [![Build Status](https://travis-ci.org/Tristan971/Lyrebird.svg?branch=master)](https://travis-ci.org/Tristan971/Lyrebird)
- | **Jenkins :** [![Build Status](https://jenkins.tristan.moe/job/Lyrebird/badge/icon)](https://jenkins.tristan.moe/job/Lyrebird/)
+Build : 
+[![Build Status](https://jenkins.tristan.moe/job/CI-Lyrebird/job/master/badge/icon)](https://jenkins.tristan.moe/job/CI-Lyrebird/job/master)
 
-[![codecov](https://codecov.io/gh/Tristan971/Lyrebird/branch/master/graph/badge.svg)](https://codecov.io/gh/Tristan971/Lyrebird)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/63206a65b5a146d3a1af5d8c4b90eef7)](https://www.codacy.com/app/Tristan971/Lyrebird)
+Quality : 
+[![Coverage](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=coverage)](https://sonar.tristan.moe/project/activity?graph=coverage&id=moe.lyrebird%3Alyrebird)
+[![Sonar bugs](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=bugs)](https://sonar.tristan.moe/project/issues?id=moe.lyrebird%3Alyrebird&resolved=false&types=BUG)
 [![Known Vulnerabilities](https://snyk.io/test/github/tristan971/lyrebird/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/tristan971/lyrebird?targetFile=pom.xml)
 
-[![Coverage Graph](https://codecov.io/gh/Tristan971/lyrebird/branch/master/graphs/sunburst.svg)](https://codecov.io/gh/Tristan971/Lyrebird)
+Trivia : 
+[![LoC](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=ncloc)](https://sonar.tristan.moe/project/activity?graph=coverage&id=moe.lyrebird%3Alyrebird)
+[![Technical debt](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=sqale_index)](https://sonar.tristan.moe/project/issues?facetMode=effort&id=moe.lyrebird%3Alyrebird&resolved=false&types=CODE_SMELL)
+
+[![Quality gate status](https://sonar.tristan.moe/api/project_badges/quality_gate?project=moe.lyrebird%3Alyrebird)](https://sonar.tristan.moe/dashboard?id=moe.lyrebird%3Alyrebird)
 
 ## Reasoning :
 Currently there is not one good Windows Twitter client.
