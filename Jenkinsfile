@@ -11,7 +11,6 @@ pipeline {
     stage('Environment') {
       steps {
         sh 'nohup Xvfb $DISPLAY -screen 0 1024x768x24 & sleep $SLEEP_T'
-        sh 'touch ~/.stalonetrayrc && nohup stalonetray & sleep $SLEEP_T'
       }
     }
     stage('Test') {
@@ -27,7 +26,6 @@ pipeline {
     stage('Clean environment') {
       steps {
         sh 'kill -15 $(pgrep Xvfb)'
-        sh 'kill -15 $(pgrep stalonetray)'
       }
     }
     stage('Archive artifacts') {
