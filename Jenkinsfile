@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Environment') {
       steps {
-        sh 'nohup Xvfb & sleep 3'
+        sh 'export DISPLAY=:99.0 && nohup Xvfb :99 -screen 0 1024x768x24 & sleep 3'
         sh 'touch ~/.stalonetrayrc && nohup stalonetray & sleep 3'
       }
     }
