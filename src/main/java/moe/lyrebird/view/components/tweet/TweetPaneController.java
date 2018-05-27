@@ -13,10 +13,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.userProfileImage;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
+import static moe.lyrebird.view.util.Nodes.autoresizeContainerOn;
+import static moe.lyrebird.view.util.Nodes.bindContentBiasCalculationTo;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Slf4j
@@ -25,13 +30,16 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 public class TweetPaneController implements FxmlController {
 
     @FXML
+    private VBox container;
+
+    @FXML
     private Label author;
 
     @FXML
     private ImageView authorProfilePicture;
 
     @FXML
-    private Label content;
+    private TextFlow content;
 
     @FXML
     private HBox toolbar;
@@ -48,13 +56,15 @@ public class TweetPaneController implements FxmlController {
 
     @Override
     public void initialize() {
-        toolbar.visibleProperty().bind(selected);
+        autoresizeContainerOn(toolbar, selected);
+        bindContentBiasCalculationTo(toolbar, selected);
     }
 
     public void setStatus(final Status status) {
         author.setText(username(status.getUser()));
         authorProfilePicture.setImage(userProfileImage(status.getUser()));
-        content.setText(tweetContent(status));
+        content.getChildren().clear();
+        content.getChildren().add(new Text(tweetContent(status)));
         this.status = status;
     }
 }
