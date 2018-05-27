@@ -5,7 +5,6 @@ import io.vavr.CheckedFunction0;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.control.Try;
-import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
@@ -26,14 +25,12 @@ public class TwitterHandler {
 
     public static final AccessToken FAKE_ACCESS_TOKEN = new AccessToken("fake", "token");
 
-    private final SessionManager sessionManager;
     private final Twitter twitter;
 
     private AccessToken accessToken = FAKE_ACCESS_TOKEN;
 
     @Autowired
-    public TwitterHandler(final SessionManager sessionManager, final Twitter twitter) {
-        this.sessionManager = sessionManager;
+    public TwitterHandler(final Twitter twitter) {
         this.twitter = twitter;
     }
 
@@ -84,8 +81,6 @@ public class TwitterHandler {
                 successAccessToken.toString()
         );
         this.accessToken = successAccessToken;
-
-        this.sessionManager.addNewSession(this);
         return Optional.of(successAccessToken);
     }
 

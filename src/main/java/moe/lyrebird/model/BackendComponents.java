@@ -1,10 +1,12 @@
 package moe.lyrebird.model;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.sessions.SessionRepository;
 import moe.lyrebird.model.twitter4j.Twitter4JComponents;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import twitter4j.Twitter;
@@ -22,8 +24,15 @@ public class BackendComponents {
     @Bean
     @Lazy
     @Scope(scopeName = SCOPE_PROTOTYPE)
-    public TwitterHandler twitterHandler(final SessionManager sessionManager, final Twitter twitter) {
-        return new TwitterHandler(sessionManager, twitter);
+    public TwitterHandler twitterHandler(final Twitter twitter) {
+        return new TwitterHandler(twitter);
+    }
+
+    @Bean
+    public SessionManager sessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
+        final SessionManager sessionManager = new SessionManager(context, sessionRepository);
+        sessionManager.loadAllSessions();
+        return sessionManager;
     }
 
 }

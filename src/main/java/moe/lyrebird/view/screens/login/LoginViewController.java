@@ -7,6 +7,7 @@ import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple2;
+import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
@@ -51,11 +52,18 @@ public class LoginViewController implements FxmlController {
     private final BrowserSupport browserSupport;
     private final TwitterHandler twitterHandler;
     private final StageManager stageManager;
+    private final SessionManager sessionManager;
 
-    public LoginViewController(final BrowserSupport browserSupport, final TwitterHandler twitterHandler, final StageManager stageManager) {
+    public LoginViewController(
+            final BrowserSupport browserSupport,
+            final TwitterHandler twitterHandler,
+            final StageManager stageManager,
+            final SessionManager sessionManager
+    ) {
         this.browserSupport = browserSupport;
         this.stageManager = stageManager;
         this.twitterHandler = twitterHandler;
+        this.sessionManager = sessionManager;
     }
 
     @Override
@@ -86,6 +94,7 @@ public class LoginViewController implements FxmlController {
                     this.pinCodeField.getText()
             );
             if (success.isPresent()) {
+                sessionManager.addNewSession(this.twitterHandler);
                 final AccessToken token = success.get();
                 this.loginButton.setVisible(false);
                 this.loginLabel.setText(

@@ -1,7 +1,6 @@
 package moe.lyrebird.model.sessions;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
  * The session manager is responsible for persisting the sessions in database and providing handles to them should
  * another component need access to them (i.e. the JavaFX controllers per example).
  */
-@Component
 public class SessionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
@@ -36,7 +34,6 @@ public class SessionManager {
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
         this.sessionRepository = sessionRepository;
-        loadAllSessions();
     }
 
     public Option<Session> getCurrentSession() {
@@ -70,7 +67,7 @@ public class SessionManager {
      *
      * @return The number of new sessions loaded
      */
-    private long loadAllSessions() {
+    public long loadAllSessions() {
         final long initialSize = this.loadedSessions.size();
 
         this.sessionRepository.findAll().forEach(this::loadSession);
