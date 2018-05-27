@@ -164,11 +164,6 @@
             <version>1.0.15</version>
         </dependency>
         <dependency>
-            <groupId>org.fxmisc.flowless</groupId>
-            <artifactId>flowless</artifactId>
-            <version>0.6.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
             <version>4.0.12-alpha</version>
