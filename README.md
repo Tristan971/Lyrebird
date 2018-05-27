@@ -57,6 +57,12 @@ Check out the release pages once we have something working decently.
     - [x] Support text
     - [ ] Support image
     - [ ] Support location
+    
+- [ ] Interraction with tweet
+    - [ ] Reply
+    - [ ] Quote
+    - [x] Like (formerly _favourite_)
+    - [x] Retweet
 
 - [ ] Add tabs for mentions and hashtag searches
 

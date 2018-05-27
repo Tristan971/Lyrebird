@@ -2,6 +2,7 @@ package moe.lyrebird.model.sessions;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import io.vavr.CheckedFunction1;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.Getter;
@@ -52,6 +53,10 @@ public class SessionManager {
                            "Preparing request for user : {}",
                            session.getScreenName()
                    ));
+    }
+
+    public <T> Try<T> doWithCurrentTwitter(final CheckedFunction1<Twitter, T> action) {
+        return getCurrentTwitter().mapTry(action);
     }
 
     /**
