@@ -32,7 +32,7 @@ public class TimelineController implements FxmlController {
     private final Supplier<TweetListCell> tweetListCell;
     private final ListProperty<Status> tweetsProperty;
 
-    public TimelineController(TimelineManager timelineManager, ApplicationContext context) {
+    public TimelineController(final TimelineManager timelineManager, final ApplicationContext context) {
         this.timelineManager = timelineManager;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timelineManager.getLoadedTweets());
         this.tweetListCell = () -> context.getBean(TweetListCell.class);

@@ -50,7 +50,7 @@ public class LoginViewController implements FxmlController {
     private final TwitterHandler twitterHandler;
     private final StageManager stageManager;
 
-    public LoginViewController(BrowserSupport browserSupport, TwitterHandler twitterHandler, StageManager stageManager) {
+    public LoginViewController(final BrowserSupport browserSupport, final TwitterHandler twitterHandler, final StageManager stageManager) {
         this.browserSupport = browserSupport;
         this.stageManager = stageManager;
         this.twitterHandler = twitterHandler;
@@ -104,7 +104,7 @@ public class LoginViewController implements FxmlController {
     }
 
     @SuppressWarnings("unused")
-    private void pinCodeTextListener(ObservableValue<? extends String> o, String oldVal, String newVal) {
+    private void pinCodeTextListener(final ObservableValue<? extends String> o, final String oldVal, final String newVal) {
         try {
             //noinspection ResultOfMethodCallIgnored
             Integer.parseInt(newVal);

@@ -23,7 +23,7 @@ public class TweetListCell extends ListCell<Status> {
     private final Pane tweetPane;
     private final TweetPaneController tweetPaneController;
 
-    public TweetListCell(EasyFxml easyFxml) {
+    public TweetListCell(final EasyFxml easyFxml) {
         super();
 
         final FxmlLoadResult<Pane, TweetPaneController> loadResult = easyFxml.loadNode(

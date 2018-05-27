@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.api.FxmlStylesheet;
+import moe.tristan.easyfxml.model.fxml.FxmlStylesheets;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.screens.Screens;
@@ -39,7 +40,7 @@ public class LyrebirdUiManager extends FxUiManager {
     }
 
     @Override
-    protected void onStageCreated(Stage mainStage) {
+    protected void onStageCreated(final Stage mainStage) {
         mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeigth", Integer.class));
         mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
     }
@@ -51,7 +52,7 @@ public class LyrebirdUiManager extends FxUiManager {
 
     @Override
     protected Optional<FxmlStylesheet> getStylesheet() {
-        return Optional.of(FxmlStylesheet.DEFAULT_JAVAFX_STYLE);
+        return Optional.of(FxmlStylesheets.DEFAULT_JAVAFX_STYLE);
     }
 
 }

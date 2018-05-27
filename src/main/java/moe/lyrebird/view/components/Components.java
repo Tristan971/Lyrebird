@@ -12,7 +12,7 @@ public enum Components implements FxmlNode {
     TIMELINE("timeline/Timeline.fxml", TimelineController.class),
     TWEET("tweet/TweetPane.fxml", TweetPaneController.class);
 
-    private static String COMPONENTS_BASE_PATH = "moe/lyrebird/view/components/";
+    private static final String COMPONENTS_BASE_PATH = "moe/lyrebird/view/components/";
 
     private final String filePath;
     private final Class<? extends FxmlController> controllerClass;
