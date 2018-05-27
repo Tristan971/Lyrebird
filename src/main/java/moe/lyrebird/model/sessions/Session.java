@@ -19,7 +19,6 @@ import java.util.Objects;
 public class Session implements Serializable {
 
     private static final long serialVersionUID = -9038797949832585362L;
-    private String screenName;
 
     @Id
     private String userId;
@@ -32,14 +31,10 @@ public class Session implements Serializable {
 
     public Session() {}
 
-    public Session(final String screenName, final AccessToken accessToken, final TwitterHandler twitterHandler) {
-        this.screenName = screenName;
+    public Session(final String userId, final AccessToken accessToken, final TwitterHandler twitterHandler) {
+        this.userId = userId;
         this.accessToken = accessToken;
         this.twitterHandler = twitterHandler;
-    }
-
-    public String getScreenName() {
-        return screenName;
     }
 
     public String getUserId() {
@@ -71,22 +66,20 @@ public class Session implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Session)) return false;
         final Session session = (Session) o;
-        return Objects.equals(screenName, session.screenName) &&
-                Objects.equals(userId, session.userId) &&
+        return Objects.equals(userId, session.userId) &&
                 Objects.equals(accessToken, session.accessToken) &&
                 Objects.equals(twitterHandler, session.twitterHandler);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(screenName, userId, accessToken, twitterHandler);
+        return Objects.hash(userId, accessToken, twitterHandler);
     }
 
     @Override
     public String toString() {
         return "Session{" +
-                "screenName='" + screenName + '\'' +
-                ", userId='" + userId + '\'' +
+                "userId='" + userId + '\'' +
                 ", accessToken=" + accessToken +
                 '}';
     }
