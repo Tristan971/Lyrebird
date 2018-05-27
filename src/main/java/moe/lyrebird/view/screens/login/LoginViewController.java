@@ -7,9 +7,10 @@ import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple2;
-import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.screens.Screens;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
@@ -28,9 +29,10 @@ import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 /**
  * Created by Tristan on 01/03/2017.
  */
-@Slf4j
 @Component
 public class LoginViewController implements FxmlController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LoginViewController.class);
 
     @FXML
     private Button loginButton;
@@ -68,7 +70,7 @@ public class LoginViewController implements FxmlController {
     @SuppressWarnings("unused")
     private void startNewSession(final Event loginButtonEvent) {
         final Tuple2<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
-        log.info("Got authorization URL {}, opening the browser!", tokenUrl._1.toString());
+        LOG.info("Got authorization URL {}, opening the browser!", tokenUrl._1.toString());
         browserSupport.openUrl(tokenUrl._1);
 
         this.loginButton.setDisable(true);

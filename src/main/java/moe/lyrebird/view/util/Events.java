@@ -1,13 +1,12 @@
 package moe.lyrebird.view.util;
 
-import lombok.experimental.UtilityClass;
-
 import javafx.event.EventType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-@UtilityClass
 public final class Events {
+
+    private Events() {}
 
     public static KeyEvent dummyKeyEvent(final EventType<KeyEvent> eventType) {
         return new KeyEvent(

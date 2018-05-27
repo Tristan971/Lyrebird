@@ -8,7 +8,6 @@ import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.api.FxmlStylesheet;
 import moe.tristan.easyfxml.model.fxml.FxmlStylesheets;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
-import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.view.screens.Screens;
 
 import javafx.stage.Stage;
@@ -18,7 +17,6 @@ import java.util.Optional;
 /**
  * The {@link LyrebirdUiManager} is responsible for bootstraping the GUI of the application correctly.
  */
-@Slf4j
 @Component
 public class LyrebirdUiManager extends FxUiManager {
 

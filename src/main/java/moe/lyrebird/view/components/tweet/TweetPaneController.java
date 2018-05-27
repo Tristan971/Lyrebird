@@ -3,8 +3,9 @@ package moe.lyrebird.view.components.tweet;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
-import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.tweets.TweetInterractionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 import javafx.beans.property.BooleanProperty;
@@ -27,10 +28,11 @@ import static moe.lyrebird.view.util.Nodes.autoresizeContainerOn;
 import static moe.lyrebird.view.util.Nodes.bindContentBiasCalculationTo;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
-@Slf4j
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class TweetPaneController implements FxmlController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
 
     @FXML
     private VBox container;

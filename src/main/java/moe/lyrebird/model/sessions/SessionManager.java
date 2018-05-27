@@ -5,11 +5,9 @@ import org.springframework.stereotype.Component;
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
 
@@ -24,19 +22,26 @@ import java.util.stream.Collectors;
  * The session manager is responsible for persisting the sessions in database and providing handles to them should
  * another component need access to them (i.e. the JavaFX controllers per example).
  */
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class SessionManager {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
 
     private final ApplicationContext context;
     private final SessionRepository sessionRepository;
 
     private final Set<Session> loadedSessions = new HashSet<>();
 
-    @Getter
-    @Setter
     private Option<Session> currentSession = Option.none();
+
+    public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
+        this.context = context;
+        this.sessionRepository = sessionRepository;
+    }
+
+    public Option<Session> getCurrentSession() {
+        return currentSession;
+    }
 
     public Optional<Session> getSessionForUser(final String userId) {
         return this.loadedSessions.stream()
@@ -45,11 +50,11 @@ public class SessionManager {
     }
 
     public Try<Twitter> getCurrentTwitter() {
-        return this.getCurrentSession()
+        return this.currentSession
                    .toTry()
                    .map(Session::getTwitterHandler)
                    .map(TwitterHandler::getTwitter)
-                   .andThenTry(session -> log.debug(
+                   .andThenTry(session -> LOG.debug(
                            "Preparing request for user : {}",
                            session.getScreenName()
                    ));
@@ -77,7 +82,7 @@ public class SessionManager {
                                                                  .map(Session::getUserId)
                                                                  .collect(Collectors.toList());
 
-        log.info(
+        LOG.info(
                 "Loaded {} Twitter sessions. Total loaded sessions so far is {}. Sessions : {}",
                 finalSize - initialSize,
                 finalSize,
@@ -97,7 +102,7 @@ public class SessionManager {
         handler.registerAccessToken(session.getAccessToken());
         session.setTwitterHandler(handler);
         this.loadedSessions.add(session);
-        this.setCurrentSession(Option.of(session));
+        this.currentSession = Option.of(session);
     }
 
     public void addNewSession(final TwitterHandler twitterHandler) {
@@ -109,7 +114,7 @@ public class SessionManager {
         );
 
         this.loadSession(session);
-        this.setCurrentSession(Option.of(session));
+        this.currentSession = Option.of(session);
         this.saveAllSessions();
     }
 
@@ -118,8 +123,8 @@ public class SessionManager {
      */
     public void saveAllSessions() {
         this.loadedSessions.stream()
-                           .peek(session -> log.info("Saving Twitter session : {}", session.toString()))
+                           .peek(session -> LOG.info("Saving Twitter session : {}", session.toString()))
                            .forEach(this.sessionRepository::save);
-        log.debug("Saved all sessions !");
+        LOG.debug("Saved all sessions !");
     }
 }

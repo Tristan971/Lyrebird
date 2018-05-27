@@ -1,8 +1,5 @@
 package moe.lyrebird.model.sessions;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import twitter4j.auth.AccessToken;
 
@@ -11,19 +8,18 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A session represents one {@link AccessToken} and the corresponding user id, which is the primary key.
  * <p>
  * It is storable and can be retrieved to construct a {@link TwitterHandler instance}.
  */
-@Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 public class Session implements Serializable {
 
     private static final long serialVersionUID = -9038797949832585362L;
+    private String screenName;
 
     @Id
     private String userId;
@@ -34,4 +30,64 @@ public class Session implements Serializable {
     @Transient
     private transient TwitterHandler twitterHandler;
 
+    public Session() {}
+
+    public Session(final String screenName, final AccessToken accessToken, final TwitterHandler twitterHandler) {
+        this.screenName = screenName;
+        this.accessToken = accessToken;
+        this.twitterHandler = twitterHandler;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(final String userId) {
+        this.userId = userId;
+    }
+
+    public AccessToken getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(final AccessToken accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public TwitterHandler getTwitterHandler() {
+        return twitterHandler;
+    }
+
+    public void setTwitterHandler(final TwitterHandler twitterHandler) {
+        this.twitterHandler = twitterHandler;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Session)) return false;
+        final Session session = (Session) o;
+        return Objects.equals(screenName, session.screenName) &&
+                Objects.equals(userId, session.userId) &&
+                Objects.equals(accessToken, session.accessToken) &&
+                Objects.equals(twitterHandler, session.twitterHandler);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(screenName, userId, accessToken, twitterHandler);
+    }
+
+    @Override
+    public String toString() {
+        return "Session{" +
+                "screenName='" + screenName + '\'' +
+                ", userId='" + userId + '\'' +
+                ", accessToken=" + accessToken +
+                '}';
+    }
 }

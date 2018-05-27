@@ -8,10 +8,9 @@ import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.concurrent.Future;
-import lombok.RequiredArgsConstructor;
-import moe.lyrebird.view.util.Events;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.util.Events;
 import twitter4j.Status;
 
 import javafx.application.Platform;
@@ -36,7 +35,6 @@ import static javafx.scene.paint.Color.RED;
 import static javafx.scene.paint.Color.YELLOW;
 
 @Component
-@RequiredArgsConstructor
 public class NewTweetController implements FxmlController {
 
     @FXML
@@ -50,6 +48,11 @@ public class NewTweetController implements FxmlController {
 
     private final TwitterHandler twitterHandler;
     private final StageManager stageManager;
+
+    public NewTweetController(final TwitterHandler twitterHandler, final StageManager stageManager) {
+        this.twitterHandler = twitterHandler;
+        this.stageManager = stageManager;
+    }
 
     @Override
     public void initialize() {

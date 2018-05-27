@@ -144,12 +144,6 @@
             <version>[4.0,)</version>
         </dependency>
 
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
         <!-- Vavr (formerly JavaSlang) -->
         <dependency>
             <groupId>io.vavr</groupId>

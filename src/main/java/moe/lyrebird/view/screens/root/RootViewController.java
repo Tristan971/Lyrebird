@@ -5,8 +5,8 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.FxAsync;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
@@ -18,15 +18,19 @@ import static moe.lyrebird.view.components.Components.TIMELINE;
 /**
  * The RootViewController manages the location of content on the root view scene.
  */
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class RootViewController implements FxmlController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RootViewController.class);
 
     @FXML
     private BorderPane contentPane;
 
     private final EasyFxml easyFxml;
+
+    public RootViewController(final EasyFxml easyFxml) {
+        this.easyFxml = easyFxml;
+    }
 
     @Override
     public void initialize() {
@@ -35,23 +39,23 @@ public class RootViewController implements FxmlController {
     }
 
     private void loadControlBar() {
-        log.debug("Initializing control bar...");
+        LOG.debug("Initializing control bar...");
         final Pane controlBarPane = this.easyFxml
                 .loadNode(CONTROL_BAR)
                 .getNode()
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
-        log.debug("Initialized control bar !");
+        LOG.debug("Initialized control bar !");
         FxAsync.doOnFxThread(contentPane, root -> root.setLeft(controlBarPane));
     }
 
     private void loadTimeline() {
-        log.info("Loading timeline view.");
+        LOG.info("Loading timeline view.");
         final Pane timelinePane = this.easyFxml
                 .loadNode(TIMELINE)
                 .getNode()
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
         this.contentPane.setCenter(timelinePane);
-        log.info("Loaded timeline view.");
+        LOG.info("Loaded timeline view.");
     }
 }

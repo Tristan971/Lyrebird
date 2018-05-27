@@ -4,22 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.twitter4j.TwitterHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.auth.AccessToken;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SessionRepositoryTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SessionRepositoryTest.class);
 
     @Autowired
     private SessionRepository sessionRepository;
@@ -44,7 +46,7 @@ public class SessionRepositoryTest {
         final Optional<Session> sessionTryFind = sessionRepository.findById("test_uid");
         assertThat(sessionTryFind).isPresent();
         assertThat(sessionTryFind).hasValue(saved);
-        log.info(
+        LOG.info(
                 "Saved sessions : {}",
                 sessionRepository.findAll().toString()
         );

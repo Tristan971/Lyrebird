@@ -1,10 +1,9 @@
 package moe.lyrebird.model.tweets;
 
 import org.springframework.stereotype.Component;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import moe.lyrebird.model.sessions.SessionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
@@ -16,28 +15,35 @@ import javafx.collections.ObservableList;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-@Slf4j
 @Component
-@RequiredArgsConstructor
 public class TimelineManager {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(TimelineManager.class);
 
     private final SessionManager sessionManager;
 
-    @Getter
     private final ObservableList<Status> loadedTweets = FXCollections.observableList(new LinkedList<>());
+
+    public TimelineManager(final SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
+
+    public ObservableList<Status> getLoadedTweets() {
+        return loadedTweets;
+    }
 
     public void refreshTweets() {
         sessionManager.getCurrentTwitter()
                       .mapTry(Twitter::getHomeTimeline)
                       .onSuccess(this::addLoadedTweets)
-                      .onFailure(err -> log.error("Could not refresh timeline!", err));
+                      .onFailure(err -> LOG.error("Could not refresh timeline!", err));
     }
 
     public void loadMoreTweets() {
-        log.debug("Requesting more tweets.");
+        LOG.debug("Requesting more tweets.");
         final Paging requestPaging = new Paging();
         final Status oldestLoadedTweet = loadedTweets.get(loadedTweets.size() - 1);
-        log.debug("Oldest tweets previously loaded : {}", oldestLoadedTweet);
+        LOG.debug("Oldest tweets previously loaded : {}", oldestLoadedTweet);
         requestPaging.setMaxId(oldestLoadedTweet.getId());
 
         sessionManager.getCurrentTwitter()
@@ -51,6 +57,6 @@ public class TimelineManager {
                     .forEach(this.loadedTweets::add);
         this.loadedTweets.addAll(loadedTweets);
         loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
-        log.debug("Loaded {} tweets successfully.", loadedTweets.size());
+        LOG.debug("Loaded {} tweets successfully.", loadedTweets.size());
     }
 }
