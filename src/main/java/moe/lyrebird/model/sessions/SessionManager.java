@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
 
-import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +36,7 @@ public class SessionManager {
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
         this.sessionRepository = sessionRepository;
+        loadAllSessions();
     }
 
     public Option<Session> getCurrentSession() {
@@ -70,7 +70,6 @@ public class SessionManager {
      *
      * @return The number of new sessions loaded
      */
-    @PostConstruct
     private long loadAllSessions() {
         final long initialSize = this.loadedSessions.size();
 
