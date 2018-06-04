@@ -7,7 +7,6 @@ import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.FxAsync;
 import moe.tristan.easyfxml.util.Stages;
-import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Timeline;
 import moe.lyrebird.view.screens.Screens;
@@ -31,7 +30,7 @@ public class ControlBarController implements FxmlController {
     private static final Logger LOG = LoggerFactory.getLogger(ControlBarController.class);
 
     @FXML
-    private Label currentUser;
+    private Label currentUserLabel;
 
     @FXML
     private Button loginButton;
@@ -49,6 +48,7 @@ public class ControlBarController implements FxmlController {
     private final StageManager stageManager;
     private final Timeline timeline;
     private final SessionManager sessionManager;
+
 
     public ControlBarController(
             final EasyFxml easyFxml, 
@@ -68,17 +68,10 @@ public class ControlBarController implements FxmlController {
         this.tweetButton.addEventHandler(MOUSE_CLICKED, e -> openTweetWindow());
         this.errorButton.addEventHandler(MOUSE_CLICKED, e -> showErrorTest());
 
-        sessionManager.getCurrentSession()
-                      .map(Session::getUserId)
-                      .peek(userName -> {
-                          LOG.info("Detected loagged-in user {}", userName);
-                          this.currentUser.setText(userName);
-                      })
-                      .onEmpty(() -> {
-                          LOG.info("No user logged-in, adding a manual refresh button for later.");
-                          this.currentUser.setText("No account yet");
-                          this.timelineButton.addEventHandler(MOUSE_CLICKED, e -> requestTimelineRefresh());
-                      });
+        currentUserLabel.setText();
+        sessionManager.currentSessionProperty().addListener(
+                (ref, oldVal, newVal) -> this.currentUserLabel.setText(newVal.getUserScreenName())
+        );
     }
 
     private void requestTimelineRefresh() {
@@ -87,7 +80,7 @@ public class ControlBarController implements FxmlController {
     }
 
     private void openLoginWindow() {
-        LOG.info("User requested LOGin.");
+        LOG.info("User requested login.");
         final Pane LOGinPane = this.easyFxml
                 .loadNode(LOGIN_VIEW)
                 .getNode()

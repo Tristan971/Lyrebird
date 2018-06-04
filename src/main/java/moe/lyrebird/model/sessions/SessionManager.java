@@ -2,13 +2,15 @@ package moe.lyrebird.model.sessions;
 
 import org.springframework.context.ApplicationContext;
 import io.vavr.CheckedFunction1;
-import io.vavr.control.Option;
 import io.vavr.control.Try;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
+
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,14 +31,18 @@ public class SessionManager {
 
     private final Set<Session> loadedSessions = new HashSet<>();
 
-    private Option<Session> currentSession = Option.none();
+    private final Property<Session> currentSession;
 
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
         this.sessionRepository = sessionRepository;
+        this.currentSession = new SimpleObjectProperty<>(null);
+        this.currentSession.addListener(
+                (ref, oldVal, newVal) -> LOG.debug("Current session property changed from {} to {}", oldVal, newVal)
+        );
     }
 
-    public Option<Session> getCurrentSession() {
+    public Property<Session> currentSessionProperty() {
         return currentSession;
     }
 
@@ -47,14 +53,14 @@ public class SessionManager {
     }
 
     public Try<Twitter> getCurrentTwitter() {
-        return this.currentSession
-                   .toTry()
-                   .map(Session::getTwitterHandler)
-                   .map(TwitterHandler::getTwitter)
-                   .andThenTry(session -> LOG.debug(
-                           "Preparing request for user : {}",
-                           session.getScreenName()
-                   ));
+        return Try.of(() -> currentSession)
+                  .map(Property::getValue)
+                  .map(Session::getTwitterHandler)
+                  .map(TwitterHandler::getTwitter)
+                  .andThenTry(session -> LOG.debug(
+                          "Preparing request for user : {}",
+                          session.getScreenName()
+                  ));
     }
 
     public <T> Try<T> doWithCurrentTwitter(final CheckedFunction1<Twitter, T> action) {
@@ -93,12 +99,13 @@ public class SessionManager {
         this.loadAllSessions();
     }
 
-    public void loadSession(final Session session) {
+    protected void loadSession(final Session session) {
         final TwitterHandler handler = this.context.getBean(TwitterHandler.class);
         handler.registerAccessToken(session.getAccessToken());
         session.setTwitterHandler(handler);
         this.loadedSessions.add(session);
-        this.currentSession = Option.of(session);
+        LOG.debug("Setting current session to {}", session);
+        this.currentSession.setValue(session);
     }
 
     public void addNewSession(final TwitterHandler twitterHandler) {
@@ -110,7 +117,8 @@ public class SessionManager {
         );
 
         this.loadSession(session);
-        this.currentSession = Option.of(session);
+        LOG.debug("Setting current session to {}", session);
+        this.currentSession.setValue(session);
         this.saveAllSessions();
     }
 

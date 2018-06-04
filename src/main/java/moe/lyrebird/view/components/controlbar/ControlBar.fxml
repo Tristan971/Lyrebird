@@ -9,7 +9,7 @@
     <children>
         <ToolBar layoutX="10.0" layoutY="10.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <Label fx:id="currentUser" text="Current user : @UNKNOWN@" />
+                <Label fx:id="currentUserLabel" text="Current user : @UNKNOWN@" />
                 <Button fx:id="loginButton" mnemonicParsing="false" text="Login" />
                 <Button fx:id="tweetButton" mnemonicParsing="false" text="New Tweet" />
                 <Button fx:id="timelineButton" mnemonicParsing="false" text="Refresh timeline" />

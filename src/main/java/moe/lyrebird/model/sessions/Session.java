@@ -45,6 +45,10 @@ public class Session implements Serializable {
         this.userId = userId;
     }
 
+    public String getUserScreenName() {
+        return accessToken.getScreenName();
+    }
+
     public AccessToken getAccessToken() {
         return accessToken;
     }
