@@ -1,6 +1,6 @@
 package moe.lyrebird.model.sessions;
 
-import moe.lyrebird.model.twitter4j.TwitterHandler;
+import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import twitter4j.auth.AccessToken;
 
 import javax.persistence.Column;

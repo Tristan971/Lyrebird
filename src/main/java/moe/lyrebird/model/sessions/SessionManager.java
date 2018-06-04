@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationContext;
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
-import moe.lyrebird.model.twitter4j.TwitterHandler;
+import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;

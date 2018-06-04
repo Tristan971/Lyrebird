@@ -1,4 +1,4 @@
-package moe.lyrebird.model.tweets;
+package moe.lyrebird.model.twitter.services;
 
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;

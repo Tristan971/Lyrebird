@@ -1,11 +1,10 @@
-package moe.lyrebird.model.tweets;
+package moe.lyrebird.model.twitter.observables;
 
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Paging;
-import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 
@@ -14,28 +13,29 @@ import javafx.collections.ObservableList;
 
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 @Component
-public class TimelineManager {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(TimelineManager.class);
+public class Timeline {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Timeline.class);
 
     private final SessionManager sessionManager;
 
     private final ObservableList<Status> loadedTweets = FXCollections.observableList(new LinkedList<>());
 
-    public TimelineManager(final SessionManager sessionManager) {
+    public Timeline(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
-    public ObservableList<Status> getLoadedTweets() {
-        return loadedTweets;
+    public ObservableList<Status> loadedTweets() {
+        return FXCollections.unmodifiableObservableList(loadedTweets);
     }
 
-    public void refreshTweets() {
+    public void manuallyRefreshTweets() {
         sessionManager.getCurrentTwitter()
                       .mapTry(Twitter::getHomeTimeline)
-                      .onSuccess(this::addLoadedTweets)
+                      .onSuccess(this::addTweets)
                       .onFailure(err -> LOG.error("Could not refresh timeline!", err));
     }
 
@@ -48,15 +48,27 @@ public class TimelineManager {
 
         sessionManager.getCurrentTwitter()
                       .mapTry(twitter -> twitter.getHomeTimeline(requestPaging))
-                      .onSuccess(this::addLoadedTweets);
+                      .onSuccess(this::addTweets);
     }
 
-    private void addLoadedTweets(final ResponseList<Status> loadedTweets) {
-        loadedTweets.stream()
-                    .filter(status -> !this.loadedTweets.contains(status))
-                    .forEach(this.loadedTweets::add);
-        this.loadedTweets.addAll(loadedTweets);
-        loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
-        LOG.debug("Loaded {} tweets successfully.", loadedTweets.size());
+    private void addTweets(final List<Status> receivedTweets) {
+        receivedTweets.forEach(this::addTweet);
+        LOG.debug("Loaded {} tweets successfully.", receivedTweets.size());
     }
+
+    public void addTweet(final Status newTweet) {
+        if (!this.loadedTweets.contains(newTweet)) {
+            this.loadedTweets.add(newTweet);
+            this.loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
+        }
+
+    }
+
+    public void removeTweet(final long removedId) {
+        this.loadedTweets.stream()
+                                    .filter(status -> status.getId() == removedId)
+                                    .findFirst()
+                                    .ifPresent(this.loadedTweets::remove);
+    }
+
 }

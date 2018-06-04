@@ -1,4 +1,4 @@
-package moe.lyrebird.model.twitter4j;
+package moe.lyrebird.model.twitter.twitter4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import io.vavr.CheckedFunction0;

@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter4j.TwitterHandler;
+import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

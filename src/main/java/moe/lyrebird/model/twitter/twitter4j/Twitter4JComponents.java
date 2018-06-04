@@ -1,13 +1,16 @@
-package moe.lyrebird.model.twitter4j;
+package moe.lyrebird.model.twitter.twitter4j;
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
+
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * Created by Tristan on 22/02/2017.
@@ -30,9 +33,19 @@ public class Twitter4JComponents {
     }
 
     @Bean
-    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    @Scope(value = SCOPE_PROTOTYPE)
     public Twitter twitter(final TwitterFactory factory) {
         return factory.getInstance();
+    }
+
+    @Bean
+    public TwitterStreamFactory twitterStreamFactory(final twitter4j.conf.Configuration configuration) {
+        return new TwitterStreamFactory(configuration);
+    }
+
+    @Bean
+    public TwitterStream twitterStream(final TwitterStreamFactory streamFactory) {
+        return streamFactory.getInstance();
     }
 
 }

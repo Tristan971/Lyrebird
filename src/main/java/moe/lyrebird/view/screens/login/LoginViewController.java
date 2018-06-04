@@ -8,7 +8,7 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple2;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter4j.TwitterHandler;
+import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

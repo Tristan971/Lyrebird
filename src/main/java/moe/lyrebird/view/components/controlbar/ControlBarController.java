@@ -9,7 +9,7 @@ import moe.tristan.easyfxml.util.FxAsync;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.tweets.TimelineManager;
+import moe.lyrebird.model.twitter.observables.Timeline;
 import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,18 +47,18 @@ public class ControlBarController implements FxmlController {
 
     private final EasyFxml easyFxml;
     private final StageManager stageManager;
-    private final TimelineManager timelineManager;
+    private final Timeline timeline;
     private final SessionManager sessionManager;
 
     public ControlBarController(
             final EasyFxml easyFxml, 
             final StageManager stageManager, 
-            final TimelineManager timelineManager,
+            final Timeline timeline,
             final SessionManager sessionManager
     ) {
         this.easyFxml = easyFxml;
         this.stageManager = stageManager;
-        this.timelineManager = timelineManager;
+        this.timeline = timeline;
         this.sessionManager = sessionManager;
     }
 
@@ -66,18 +66,24 @@ public class ControlBarController implements FxmlController {
     public void initialize() {
         this.loginButton.addEventHandler(MOUSE_CLICKED, e -> openLoginWindow());
         this.tweetButton.addEventHandler(MOUSE_CLICKED, e -> openTweetWindow());
-        this.timelineButton.addEventHandler(MOUSE_CLICKED, e -> requestTimelineRefresh());
         this.errorButton.addEventHandler(MOUSE_CLICKED, e -> showErrorTest());
 
-        sessionManager.getCurrentSession().map(Session::getUserId)
-                      .peek(value -> this.currentUser.setText(value))
-                      .onEmpty(() -> this.currentUser.setText("No account yet"));
+        sessionManager.getCurrentSession()
+                      .map(Session::getUserId)
+                      .peek(userName -> {
+                          LOG.info("Detected loagged-in user {}", userName);
+                          this.currentUser.setText(userName);
+                      })
+                      .onEmpty(() -> {
+                          LOG.info("No user logged-in, adding a manual refresh button for later.");
+                          this.currentUser.setText("No account yet");
+                          this.timelineButton.addEventHandler(MOUSE_CLICKED, e -> requestTimelineRefresh());
+                      });
     }
 
     private void requestTimelineRefresh() {
         FxAsync.doOnFxThread(timelineButton, btn -> btn.setDisable(true));
-        CompletableFuture.runAsync(this.timelineManager::refreshTweets)
-                         .thenRunAsync(() -> FxAsync.doOnFxThread(timelineButton, btn -> btn.setDisable(false)));
+        CompletableFuture.runAsync(this.timeline::manuallyRefreshTweets);
     }
 
     private void openLoginWindow() {

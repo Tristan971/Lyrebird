@@ -1,4 +1,4 @@
-package moe.lyrebird.model.twitter4j;
+package moe.lyrebird.model.twitter.twitter4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ import twitter4j.auth.RequestToken;
 import java.net.URL;
 import java.util.Optional;
 
-import static moe.lyrebird.model.twitter4j.TwitterHandler.FAKE_ACCESS_TOKEN;
+import static moe.lyrebird.model.twitter.twitter4j.TwitterHandler.FAKE_ACCESS_TOKEN;
 
 /**
  * Created by Tristan on 04/03/2017.
