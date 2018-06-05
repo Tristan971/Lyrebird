@@ -78,12 +78,12 @@ public class ControlBarController implements FxmlController {
 
     private void openLoginWindow() {
         LOG.info("User requested login.");
-        final Pane LOGinPane = this.easyFxml
+        final Pane loginPane = this.easyFxml
                 .loadNode(LOGIN_VIEW)
                 .getNode()
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
 
-        Stages.stageOf("Login", LOGinPane)
+        Stages.stageOf("Login", loginPane)
               .thenCompose(Stages::scheduleDisplaying)
               .thenAccept(stage -> this.stageManager.registerSingle(Screens.LOGIN_VIEW, stage));
     }
