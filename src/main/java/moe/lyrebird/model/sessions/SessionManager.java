@@ -11,6 +11,7 @@ import twitter4j.auth.AccessToken;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.HashSet;
 import java.util.List;
@@ -32,18 +33,27 @@ public class SessionManager {
     private final Set<Session> loadedSessions = new HashSet<>();
 
     private final Property<Session> currentSession;
+    private final Property<String> currentSessionUsername;
 
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
         this.sessionRepository = sessionRepository;
         this.currentSession = new SimpleObjectProperty<>(null);
+        this.currentSessionUsername = new SimpleStringProperty("Logged out");
         this.currentSession.addListener(
-                (ref, oldVal, newVal) -> LOG.debug("Current session property changed from {} to {}", oldVal, newVal)
+                (ref, oldVal, newVal) -> {
+                    LOG.debug("Current session property changed from {} to {}", oldVal, newVal);
+                    currentSessionUsername.setValue(newVal.getUserScreenName());
+                }
         );
     }
 
     public Property<Session> currentSessionProperty() {
         return currentSession;
+    }
+
+    public Property<String> currentSessionUsernameProperty() {
+        return currentSessionUsername;
     }
 
     public Optional<Session> getSessionForUser(final String userId) {

@@ -46,6 +46,9 @@ public class Session implements Serializable {
     }
 
     public String getUserScreenName() {
+        if (accessToken == null) {
+            return "<NOT_LOGGED_IN>";
+        }
         return accessToken.getScreenName();
     }
 
