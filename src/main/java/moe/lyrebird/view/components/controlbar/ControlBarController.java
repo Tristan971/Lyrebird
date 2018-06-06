@@ -41,9 +41,6 @@ public class ControlBarController implements FxmlController {
     @FXML
     private Button tweetButton;
 
-    @FXML
-    private Button errorButton;
-
     private final EasyFxml easyFxml;
     private final StageManager stageManager;
     private final Timeline timeline;
@@ -66,7 +63,6 @@ public class ControlBarController implements FxmlController {
     public void initialize() {
         this.loginButton.addEventHandler(MOUSE_CLICKED, e -> openLoginWindow());
         this.tweetButton.addEventHandler(MOUSE_CLICKED, e -> openTweetWindow());
-        this.errorButton.addEventHandler(MOUSE_CLICKED, e -> showErrorTest());
 
         this.currentUserLabel.textProperty().bind(sessionManager.currentSessionUsernameProperty());
     }
@@ -99,13 +95,5 @@ public class ControlBarController implements FxmlController {
               .thenCompose(Stages::scheduleDisplaying)
               .thenAccept(stage -> this.stageManager.registerSingle(TWEET_VIEW, stage))
               .thenRun(() -> LOG.info("New tweet stage opened !"));
-    }
-
-    private void showErrorTest() {
-        ExceptionHandler.displayExceptionPane(
-                "Test error",
-                "Test exception msg\nline 2!!",
-                new RuntimeException("Wew lad")
-        );
     }
 }

@@ -13,7 +13,6 @@
                 <Button fx:id="loginButton" mnemonicParsing="false" text="Login" />
                 <Button fx:id="tweetButton" mnemonicParsing="false" text="New Tweet" />
                 <Button fx:id="timelineButton" mnemonicParsing="false" text="Refresh timeline" />
-            <Button fx:id="errorButton" mnemonicParsing="false" text="Show error" />
             </items>
         </ToolBar>
     </children>
