@@ -2,6 +2,7 @@ package moe.lyrebird.model.twitter.twitter4j;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.lyrebird.model.twitter.observables.DirectMessages;
 import moe.lyrebird.model.twitter.observables.Timeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,18 @@ public class TwitterUserListener implements UserStreamListener {
     private static final Logger LOG = LoggerFactory.getLogger(TwitterUserListener.class);
 
     private final Timeline timeline;
+    private final DirectMessages directMessages;
 
-    public TwitterUserListener(Timeline timeline) {
+    public TwitterUserListener(
+            final Timeline timeline,
+            final DirectMessages directMessages
+    ) {
+        LOG.debug("Initializing twitter streaming listening.");
+        LOG.debug("Starting timeline management...");
         this.timeline = timeline;
+        LOG.debug("Starting dirrect messages management...");
+        this.directMessages = directMessages;
+        LOG.debug("Initialized twitter streaming listener!");
     }
 
     @Override
@@ -70,7 +80,8 @@ public class TwitterUserListener implements UserStreamListener {
 
     @Override
     public void onDeletionNotice(long directMessageId, long userId) {
-
+        LOG.debug("DM {} from {} requested to be deleted.", directMessageId, userId);
+        directMessages.removeDirectMessage(userId, directMessageId);
     }
 
     @Override
@@ -100,7 +111,8 @@ public class TwitterUserListener implements UserStreamListener {
 
     @Override
     public void onDirectMessage(DirectMessage directMessage) {
-
+        LOG.debug("Received DM {}", directMessage);
+        directMessages.addDirectMessage(directMessage);
     }
 
     @Override

@@ -5,7 +5,6 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.FxAsync;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Timeline;
@@ -17,8 +16,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-
-import java.util.concurrent.CompletableFuture;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
 import static moe.lyrebird.view.screens.Screens.LOGIN_VIEW;
@@ -65,11 +62,6 @@ public class ControlBarController implements FxmlController {
         this.tweetButton.addEventHandler(MOUSE_CLICKED, e -> openTweetWindow());
 
         this.currentUserLabel.textProperty().bind(sessionManager.currentSessionUsernameProperty());
-    }
-
-    private void requestTimelineRefresh() {
-        FxAsync.doOnFxThread(timelineButton, btn -> btn.setDisable(true));
-        CompletableFuture.runAsync(this.timeline::manuallyRefreshTweets);
     }
 
     private void openLoginWindow() {

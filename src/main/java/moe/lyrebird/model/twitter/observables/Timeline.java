@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Paging;
 import twitter4j.Status;
-import twitter4j.Twitter;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,18 +24,12 @@ public class Timeline {
     private final ObservableList<Status> loadedTweets = FXCollections.observableList(new LinkedList<>());
 
     public Timeline(final SessionManager sessionManager) {
+        LOG.debug("Initializing timeline manager.");
         this.sessionManager = sessionManager;
     }
 
     public ObservableList<Status> loadedTweets() {
         return FXCollections.unmodifiableObservableList(loadedTweets);
-    }
-
-    public void manuallyRefreshTweets() {
-        sessionManager.getCurrentTwitter()
-                      .mapTry(Twitter::getHomeTimeline)
-                      .onSuccess(this::addTweets)
-                      .onFailure(err -> LOG.error("Could not refresh timeline!", err));
     }
 
     public void loadMoreTweets() {
