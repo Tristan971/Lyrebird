@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Paging;
 import twitter4j.Status;
+import twitter4j.api.TimelinesResources;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,15 +33,21 @@ public class Timeline {
         return FXCollections.unmodifiableObservableList(loadedTweets);
     }
 
-    public void loadMoreTweets() {
+    public void loadMoreTweets(final long loadUntilThisStatus) {
         LOG.debug("Requesting more tweets.");
         final Paging requestPaging = new Paging();
-        final Status oldestLoadedTweet = loadedTweets.get(loadedTweets.size() - 1);
-        LOG.debug("Oldest tweets previously loaded : {}", oldestLoadedTweet);
-        requestPaging.setMaxId(oldestLoadedTweet.getId());
+        LOG.debug("Oldest tweets previously loaded : {}");
+        requestPaging.setMaxId(loadUntilThisStatus);
 
         sessionManager.getCurrentTwitter()
                       .mapTry(twitter -> twitter.getHomeTimeline(requestPaging))
+                      .onSuccess(this::addTweets);
+    }
+
+    public void loadLastTweets() {
+        LOG.debug("Requesting last tweets in timeline.");
+        sessionManager.getCurrentTwitter()
+                      .mapTry(TimelinesResources::getHomeTimeline)
                       .onSuccess(this::addTweets);
     }
 
