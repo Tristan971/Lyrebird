@@ -10,6 +10,8 @@ import twitter4j.TwitterStream;
 
 import javafx.beans.property.Property;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Component
 public class TwitterStreamingService {
 
@@ -19,11 +21,14 @@ public class TwitterStreamingService {
     private final SessionManager sessionManager;
     private final TwitterUserListener twitterUserListener;
 
+    private final AtomicBoolean currentlyListening;
+
     public TwitterStreamingService(
             TwitterStream twitterStream, SessionManager sessionManager,
             TwitterUserListener twitterUserListener
     ) {
         LOG.debug("Starting twitter stream connection...");
+        this.currentlyListening = new AtomicBoolean(false);
         this.twitterStream = twitterStream;
         this.sessionManager = sessionManager;
         this.twitterUserListener = twitterUserListener;
@@ -34,11 +39,21 @@ public class TwitterStreamingService {
         LOG.debug("Preparing streaming service...");
         final Property<Session> currentSessionBinding = sessionManager.currentSessionProperty();
         currentSessionBinding.addListener((observable, oldValue, newValue) -> {
+            this.currentlyListening.set(true);
             if (oldValue != null) {
                 closeSession();
             }
             switchToSession(newValue);
         });
+
+        if (!currentlyListening.get()) {
+            if (currentSessionBinding.getValue() != null) {
+                LOG.debug("Performing initial session initialization.");
+                switchToSession(currentSessionBinding.getValue());
+            } else {
+                LOG.debug("Not logged in. Not starting streaming service.");
+            }
+        }
     }
 
     private void switchToSession(final Session newSession) {
