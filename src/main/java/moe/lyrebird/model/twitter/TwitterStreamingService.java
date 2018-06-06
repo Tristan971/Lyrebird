@@ -23,33 +23,33 @@ public class TwitterStreamingService {
             TwitterStream twitterStream, SessionManager sessionManager,
             TwitterUserListener twitterUserListener
     ) {
-        LOG.debug("Starting twitter streaming management...");
+        LOG.debug("Starting twitter stream connection...");
         this.twitterStream = twitterStream;
         this.sessionManager = sessionManager;
         this.twitterUserListener = twitterUserListener;
         startListening();
-        LOG.debug("Started twitter streaming management!");
     }
 
     private void startListening() {
+        LOG.debug("Preparing streaming service...");
         final Property<Session> currentSessionBinding = sessionManager.currentSessionProperty();
         currentSessionBinding.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
-                LOG.info("Stopping streaming for session {}", oldValue);
+                closeSession();
             }
-            LOG.info("Starting streaming for session {}", newValue);
-            closeSession();
             switchToSession(newValue);
         });
     }
 
     private void switchToSession(final Session newSession) {
+        LOG.info("Starting streaming for session {}", newSession);
         twitterStream.setOAuthAccessToken(newSession.getAccessToken());
         twitterStream.addListener(twitterUserListener);
         twitterStream.user();
     }
 
     private void closeSession() {
+        LOG.info("Stopping streaming for current session.");
         twitterStream.clearListeners();
         twitterStream.cleanUp();
         twitterStream.shutdown();

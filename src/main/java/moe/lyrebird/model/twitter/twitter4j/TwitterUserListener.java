@@ -28,12 +28,11 @@ public class TwitterUserListener implements UserStreamListener {
             final Timeline timeline,
             final DirectMessages directMessages
     ) {
-        LOG.debug("Initializing twitter streaming listening.");
-        LOG.debug("Starting timeline management...");
+        LOG.debug("Initializing twitter data listener.");
+        LOG.debug("\t-> Timeline... OK");
         this.timeline = timeline;
-        LOG.debug("Starting dirrect messages management...");
+        LOG.debug("\t-> DMs... OK");
         this.directMessages = directMessages;
-        LOG.debug("Initialized twitter streaming listener!");
     }
 
     @Override
