@@ -78,7 +78,7 @@ public class LoginViewController implements FxmlController {
     @SuppressWarnings("unused")
     private void startNewSession(final Event loginButtonEvent) {
         final Tuple2<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
-        LOG.info("Got authorization URL {}, opening the browser!", tokenUrl._1.toString());
+        LOG.info("Got authorization URL {}, opening the browser!", tokenUrl._1);
         browserSupport.openUrl(tokenUrl._1);
 
         this.loginButton.setDisable(true);

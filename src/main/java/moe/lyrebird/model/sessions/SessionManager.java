@@ -137,7 +137,7 @@ public class SessionManager {
      */
     public void saveAllSessions() {
         this.loadedSessions.stream()
-                           .peek(session -> LOG.info("Saving Twitter session : {}", session.toString()))
+                           .peek(session -> LOG.info("Saving Twitter session : {}", session))
                            .forEach(this.sessionRepository::save);
         LOG.debug("Saved all sessions !");
     }

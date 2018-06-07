@@ -50,7 +50,7 @@ public class TwitterHandler {
         LOG.info("Requesting new Session!");
         final RequestToken requestToken = unchecked((CheckedFunction0<RequestToken>) this.twitter::getOAuthRequestToken)
                 .apply();
-        LOG.info("Got request token : {}", requestToken.toString());
+        LOG.info("Got request token : {}", requestToken);
         return Tuple.of(
                 unchecked((CheckedFunction0<URL>) (() -> new URL(requestToken.getAuthorizationURL()))).apply(),
                 requestToken
@@ -58,7 +58,7 @@ public class TwitterHandler {
     }
 
     public Optional<AccessToken> registerAccessToken(final RequestToken requestToken, final String pinCode) {
-        LOG.info("Registering token {} with pincode {}", requestToken.toString(), pinCode);
+        LOG.info("Registering token {} with pincode {}", requestToken, pinCode);
 
         final Try<AccessToken> tryAccessToken = Try.of(() -> {
             // Don't refactor expression lambda into statement lambda. It's too
