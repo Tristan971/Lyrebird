@@ -3,6 +3,7 @@ package moe.lyrebird.view.components.timeline;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Timeline;
 import moe.lyrebird.view.components.cells.TweetListCell;
 import org.slf4j.Logger;
@@ -37,10 +38,15 @@ public class TimelineController implements FxmlController {
     private final Supplier<TweetListCell> tweetListCell;
     private final ListProperty<Status> tweetsProperty;
 
-    public TimelineController(final Timeline timeline, final ApplicationContext context) {
+    public TimelineController(
+            final Timeline timeline,
+            final SessionManager sessionManager,
+            final ApplicationContext context
+    ) {
         this.timeline = timeline;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timeline.loadedTweets());
         this.tweetListCell = () -> context.getBean(TweetListCell.class);
+        sessionManager.currentSessionProperty().addListener(change -> timeline.loadLastTweets());
     }
 
     @Override
