@@ -58,14 +58,20 @@ public class TimelineController implements FxmlController {
     }
 
     private void loadMoreTweets() {
-        getOldestTweetLoaded().ifPresent(oldestStatus -> timeline.loadMoreTweets(oldestStatus.getId()));
+        getOldestTweetLoaded().ifPresent(oldestStatus -> {
+            LOG.debug("Loading tweets before {}", oldestStatus.getId());
+            timeline.loadMoreTweets(oldestStatus.getId());
+        });
     }
 
     private Optional<Status> getOldestTweetLoaded() {
-        if (tweetsProperty.isEmpty()) {
+        if (tweetsProperty.isEmpty() || tweetsProperty.size() < 20) {
+            LOG.debug("No older tweets to load.");
             return Optional.empty();
         }
-        return Optional.of(tweetsProperty.get(0));
+        final Status oldest = tweetsProperty.getValue().get(0);
+        LOG.debug("Loading tweets before {}", oldest.getId());
+        return Optional.of(oldest);
     }
 
 }
