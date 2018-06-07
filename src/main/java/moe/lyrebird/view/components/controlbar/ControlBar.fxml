@@ -12,7 +12,6 @@
                 <Label fx:id="currentUserLabel" text="Current user : @UNKNOWN@" />
                 <Button fx:id="loginButton" mnemonicParsing="false" text="Login" />
                 <Button fx:id="tweetButton" mnemonicParsing="false" text="New Tweet" />
-                <Button fx:id="timelineButton" mnemonicParsing="false" text="Refresh timeline" />
             </items>
         </ToolBar>
     </children>

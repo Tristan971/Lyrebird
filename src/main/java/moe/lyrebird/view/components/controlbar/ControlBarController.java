@@ -7,7 +7,6 @@ import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.observables.Timeline;
 import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,26 +32,20 @@ public class ControlBarController implements FxmlController {
     private Button loginButton;
 
     @FXML
-    private Button timelineButton;
-
-    @FXML
     private Button tweetButton;
 
     private final EasyFxml easyFxml;
     private final StageManager stageManager;
-    private final Timeline timeline;
     private final SessionManager sessionManager;
 
 
     public ControlBarController(
             final EasyFxml easyFxml, 
             final StageManager stageManager, 
-            final Timeline timeline,
             final SessionManager sessionManager
     ) {
         this.easyFxml = easyFxml;
         this.stageManager = stageManager;
-        this.timeline = timeline;
         this.sessionManager = sessionManager;
     }
 
