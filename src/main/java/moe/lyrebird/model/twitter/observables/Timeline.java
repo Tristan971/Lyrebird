@@ -58,7 +58,6 @@ public class Timeline {
 
     public void addTweet(final Status newTweet) {
         if (!this.loadedTweets.contains(newTweet)) {
-            LOG.debug("Adding new tweet {}", newTweet.getId());
             this.loadedTweets.add(newTweet);
             this.loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
         }

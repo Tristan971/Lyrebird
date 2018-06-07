@@ -4,20 +4,16 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.lyrebird.model.twitter.services.TweetInterractionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -31,11 +27,6 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class TweetPaneController implements FxmlController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
-
-    @FXML
-    private VBox container;
 
     @FXML
     private Label author;
@@ -69,8 +60,8 @@ public class TweetPaneController implements FxmlController {
     public void initialize() {
         autoresizeContainerOn(toolbar, selected);
         bindContentBiasCalculationTo(toolbar, selected);
-        likeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onLike);
-        retweetButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onRewteet);
+        likeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, clickedEvent -> onLike());
+        retweetButton.addEventHandler(MouseEvent.MOUSE_CLICKED, clickedEvent -> onRewteet());
     }
 
     public void setStatus(final Status status) {
@@ -81,11 +72,13 @@ public class TweetPaneController implements FxmlController {
         this.status = status;
     }
 
-    private void onLike(final Event clickedEvent) {
+    private void onLike() {
         interractionService.like(status);
+        likeButton.setDisable(true);
     }
 
-    private void onRewteet(final Event clickedEvent) {
+    private void onRewteet() {
+        retweetButton.setDisable(true);
         interractionService.retweet(status);
     }
 }
