@@ -36,12 +36,12 @@ public class Timeline {
     public void loadMoreTweets(final long loadUntilThisStatus) {
         LOG.debug("Requesting more tweets.");
         final Paging requestPaging = new Paging();
-        LOG.debug("Oldest tweets previously loaded : {}");
         requestPaging.setMaxId(loadUntilThisStatus);
 
         sessionManager.getCurrentTwitter()
                       .mapTry(twitter -> twitter.getHomeTimeline(requestPaging))
                       .onSuccess(this::addTweets);
+        LOG.debug("Finished loading more tweets.");
     }
 
     public void loadLastTweets() {

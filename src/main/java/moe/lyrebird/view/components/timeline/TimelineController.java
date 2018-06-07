@@ -69,7 +69,7 @@ public class TimelineController implements FxmlController {
             LOG.debug("No older tweets to load.");
             return Optional.empty();
         }
-        final Status oldest = tweetsProperty.getValue().get(0);
+        final Status oldest = tweetsProperty.getValue().get(tweetsProperty.size() - 1);
         LOG.debug("Loading tweets before {}", oldest.getId());
         return Optional.of(oldest);
     }
