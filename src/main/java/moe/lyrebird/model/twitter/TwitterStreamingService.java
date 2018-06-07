@@ -1,6 +1,8 @@
 package moe.lyrebird.model.twitter;
 
 import org.springframework.stereotype.Component;
+import moe.lyrebird.model.interrupts.CleanupOperation;
+import moe.lyrebird.model.interrupts.CleanupService;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.twitter4j.TwitterUserListener;
@@ -19,14 +21,17 @@ public class TwitterStreamingService {
 
     private final TwitterStream twitterStream;
     private final SessionManager sessionManager;
+    private final CleanupService cleanupService;
     private final TwitterUserListener twitterUserListener;
 
     private final AtomicBoolean currentlyListening;
 
     public TwitterStreamingService(
-            TwitterStream twitterStream, SessionManager sessionManager,
-            TwitterUserListener twitterUserListener
+            TwitterStream twitterStream,
+            SessionManager sessionManager,
+            CleanupService cleanupService, TwitterUserListener twitterUserListener
     ) {
+        this.cleanupService = cleanupService;
         LOG.debug("Starting twitter stream connection...");
         this.currentlyListening = new AtomicBoolean(false);
         this.twitterStream = twitterStream;
@@ -54,6 +59,15 @@ public class TwitterStreamingService {
                 LOG.debug("Not logged in. Not starting streaming service.");
             }
         }
+
+        cleanupService.registerCleanupOperation(new CleanupOperation(
+                "Stop Twitter streaming listeners",
+                this::closeSession
+        ));
+        cleanupService.registerCleanupOperation(new CleanupOperation(
+                "Stop Twitter4J's internal dispatcher thread",
+                twitterStream::shutdown
+        ));
     }
 
     private void switchToSession(final Session newSession) {
@@ -66,8 +80,6 @@ public class TwitterStreamingService {
     private void closeSession() {
         LOG.info("Stopping streaming for current session.");
         twitterStream.clearListeners();
-        twitterStream.cleanUp();
-        twitterStream.shutdown();
     }
 
 }

@@ -17,7 +17,7 @@
     <packaging>jar</packaging>
 
     <name>lyrebird</name>
-    <description>Twitter client</description>
+    <name>Twitter client</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
