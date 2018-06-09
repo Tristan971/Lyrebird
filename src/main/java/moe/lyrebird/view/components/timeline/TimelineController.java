@@ -71,7 +71,7 @@ public class TimelineController implements FxmlController {
     }
 
     private Optional<Status> getOldestTweetLoaded() {
-        if (tweetsProperty.isEmpty() || tweetsProperty.size() < 20) {
+        if (tweetsProperty.isEmpty()) {
             LOG.debug("No older tweets to load.");
             return Optional.empty();
         }
