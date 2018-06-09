@@ -5,6 +5,7 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.FxAsync;
+import moe.lyrebird.view.components.Components;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 import static moe.lyrebird.view.components.Components.CONTROL_BAR;
-import static moe.lyrebird.view.components.Components.TIMELINE;
 
 /**
  * The RootViewController manages the location of content on the root view scene.
@@ -35,7 +35,17 @@ public class RootViewController implements FxmlController {
     @Override
     public void initialize() {
         loadControlBar();
-        loadTimeline();
+    }
+
+    public void setContent(final Components component) {
+        LOG.info("Switching content of root pane to {}", component.name());
+        final Pane contentNode = this.easyFxml
+                .loadNode(component)
+                .getNode()
+                .getOrElseGet(err -> new ExceptionHandler(err).asPane());
+
+        this.contentPane.setCenter(contentNode);
+        LOG.info("Set content of root pane to {}", component.name());
     }
 
     private void loadControlBar() {
@@ -48,14 +58,4 @@ public class RootViewController implements FxmlController {
         FxAsync.doOnFxThread(contentPane, root -> root.setLeft(controlBarPane));
     }
 
-    private void loadTimeline() {
-        LOG.info("Loading timeline view.");
-        final Pane timelinePane = this.easyFxml
-                .loadNode(TIMELINE)
-                .getNode()
-                .getOrElseGet(err -> new ExceptionHandler(err).asPane());
-
-        this.contentPane.setCenter(timelinePane);
-        LOG.info("Loaded timeline view.");
-    }
 }
