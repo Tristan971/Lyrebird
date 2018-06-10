@@ -1,8 +1,6 @@
 package moe.lyrebird.model.twitter.observables;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.MultiValueMap;
 import io.vavr.Predicates;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
@@ -10,11 +8,17 @@ import org.slf4j.LoggerFactory;
 import twitter4j.DirectMessage;
 import twitter4j.User;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.springframework.util.CollectionUtils.toMultiValueMap;
 
 @Component
 public class DirectMessages {
@@ -22,12 +26,18 @@ public class DirectMessages {
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
     private final SessionManager sessionManager;
-    private final MultiValueMap<User, DirectMessage> directMessages;
+    private final ObservableMap<User, List<DirectMessage>> directMessages;
 
     public DirectMessages(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
-        this.directMessages = CollectionUtils.toMultiValueMap(new ConcurrentHashMap<>());
+        this.directMessages = FXCollections.observableMap(toMultiValueMap(new ConcurrentHashMap<>()));
+    }
+
+    public ObservableSet<User> loadedConversations() {
+        return FXCollections.unmodifiableObservableSet(
+                FXCollections.observableSet(directMessages.keySet())
+        );
     }
 
     public void addDirectMessage(final DirectMessage directMessage) {
