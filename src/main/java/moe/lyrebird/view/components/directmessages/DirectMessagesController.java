@@ -9,15 +9,18 @@ import moe.lyrebird.model.twitter.observables.DirectMessages;
 import moe.lyrebird.view.components.Components;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.DirectMessage;
 import twitter4j.User;
 
-import javafx.collections.SetChangeListener.Change;
+import javafx.collections.MapChangeListener;
+import javafx.collections.MapChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -42,16 +45,20 @@ public class DirectMessagesController implements FxmlController {
 
     @Override
     public void initialize() {
-        directMessages.loadedConversations().addListener(DirectMessagesController.this::handleConversationsChange);
+        directMessages.loadedConversations()
+                      .addListener((MapChangeListener<? super User, ? super List<DirectMessage>>) this::handleConversationsChange);
         LOG.info("Loading direct messages!");
         directMessages.loadLatestDirectMessages();
     }
 
-    private void handleConversationsChange(final Change<? extends User> change) {
+    private void handleConversationsChange(final Change<? extends User, ? extends List<DirectMessage>> change) {
         if (change.wasAdded()) {
-            addConversation(change.getElementAdded());
+            if (change.getValueRemoved() == null) {
+                addConversation(change.getKey());
+            }
         } else if (change.wasRemoved()) {
-            removeConversation(change.getElementRemoved());
+            if (change.getValueAdded() == null)
+            removeConversation(change.getKey());
         }
     }
 

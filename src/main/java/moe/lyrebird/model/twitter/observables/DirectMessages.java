@@ -12,7 +12,6 @@ import twitter4j.User;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -36,10 +35,8 @@ public class DirectMessages {
         this.directMessages = FXCollections.observableMap(toMultiValueMap(new ConcurrentHashMap<>()));
     }
 
-    public ObservableSet<User> loadedConversations() {
-        return FXCollections.unmodifiableObservableSet(
-                FXCollections.observableSet(directMessages.keySet())
-        );
+    public ObservableMap<User, List<DirectMessage>> loadedConversations() {
+        return FXCollections.unmodifiableObservableMap(directMessages);
     }
 
     public void loadMoreDirectMessages(final long loadUntilThisStatus) {
@@ -57,10 +54,16 @@ public class DirectMessages {
         LOG.debug("Requesting latest direct messages.");
         sessionManager.getCurrentTwitter()
                       .mapTry(Twitter::getDirectMessages)
-                      .onSuccess(messages -> messages.forEach(this::addDirectMessage));
+                      .onSuccess(messages -> messages.forEach(this::addDirectMessage))
+                      .onFailure(err -> LOG.error("Could not load direct messages successfully!", err));
     }
 
     public void addDirectMessage(final DirectMessage directMessage) {
+        LOG.debug(
+                "Adding new direct message to model : [id = {}, sender = {}]",
+                directMessage.getId(),
+                directMessage.getSender().getScreenName()
+        );
         final User sender = directMessage.getSender();
         if (!directMessages.keySet().contains(sender)) {
             directMessages.put(sender, new ArrayList<>());
