@@ -59,11 +59,6 @@ public class DirectMessages {
     }
 
     public void addDirectMessage(final DirectMessage directMessage) {
-        LOG.debug(
-                "Adding new direct message to model : [id = {}, sender = {}]",
-                directMessage.getId(),
-                directMessage.getSender().getScreenName()
-        );
         final User sender = directMessage.getSender();
         if (!directMessages.keySet().contains(sender)) {
             directMessages.put(sender, new ArrayList<>());
