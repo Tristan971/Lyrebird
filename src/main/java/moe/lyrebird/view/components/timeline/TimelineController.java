@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.observables.Timeline;
+import moe.lyrebird.model.twitter.observables.TwitterTimelineBaseModel;
 import moe.lyrebird.view.components.cells.TweetListCell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +34,12 @@ public class TimelineController implements FxmlController {
     @FXML
     private Button loadMoreButton;
 
-    private final Timeline timeline;
+    private final TwitterTimelineBaseModel timeline;
     private final Supplier<TweetListCell> tweetListCell;
     private final ListProperty<Status> tweetsProperty;
 
     public TimelineController(
-            final Timeline timeline,
+            final TwitterTimelineBaseModel timeline,
             final SessionManager sessionManager,
             final ApplicationContext context
     ) {

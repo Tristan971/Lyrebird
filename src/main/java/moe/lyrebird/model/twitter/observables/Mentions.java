@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
 
 @Component
-public class Timeline extends TwitterTimelineBaseModel {
+public class Mentions extends TwitterTimelineBaseModel {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TwitterTimelineBaseModel.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Mentions.class);
 
-    public Timeline(final SessionManager sessionManager) {
-        super(sessionManager, Twitter::getHomeTimeline, Twitter::getHomeTimeline);
+    public Mentions(SessionManager sessionManager) {
+        super(sessionManager, Twitter::getMentionsTimeline, Twitter::getMentionsTimeline);
     }
 
     @Override

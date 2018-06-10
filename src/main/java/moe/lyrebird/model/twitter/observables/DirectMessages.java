@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import io.vavr.Predicates;
+import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.DirectMessage;
@@ -20,9 +21,11 @@ public class DirectMessages {
 
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
+    private final SessionManager sessionManager;
     private final MultiValueMap<User, DirectMessage> directMessages;
 
-    public DirectMessages() {
+    public DirectMessages(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
         this.directMessages = CollectionUtils.toMultiValueMap(new ConcurrentHashMap<>());
     }

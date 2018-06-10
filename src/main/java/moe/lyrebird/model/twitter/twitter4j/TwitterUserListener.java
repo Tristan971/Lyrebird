@@ -3,6 +3,7 @@ package moe.lyrebird.model.twitter.twitter4j;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
+import moe.lyrebird.model.twitter.observables.Mentions;
 import moe.lyrebird.model.twitter.observables.Timeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +23,19 @@ public class TwitterUserListener implements UserStreamListener {
     private static final Logger LOG = LoggerFactory.getLogger(TwitterUserListener.class);
 
     private final Timeline timeline;
+    private final Mentions mentions;
     private final DirectMessages directMessages;
 
     public TwitterUserListener(
             final Timeline timeline,
+            final Mentions mentions,
             final DirectMessages directMessages
     ) {
         LOG.debug("Initializing twitter data listener.");
         LOG.debug("\t-> Timeline... OK");
         this.timeline = timeline;
+        LOG.debug("\t-> Mentions... OK");
+        this.mentions = mentions;
         LOG.debug("\t-> DMs... OK");
         this.directMessages = directMessages;
     }
