@@ -31,8 +31,11 @@ Check out the release pages once we have something working decently.
 ## Currently working :
 - [x] Log in 
 
-- [ ] Timeline
-    - [ ] Display timeline
+- [ ] Tweets-based systems
+    - Systems :
+        - [x] Timeline
+        - [x] Mentions
+    - Display features :
         - [x] Basic textual display
         - [x] Display username, @screenname and user profile picture
         - [ ] Display for chosen list
@@ -48,10 +51,9 @@ Check out the release pages once we have something working decently.
                 - [ ] Direct video embedding
             - [ ] Why is it not easy to do ?
                 - [ ] Youtube video embedding
-    - [x] Seek older tweets on scrolling to end of displayed ones
-    - [ ] Seek newer tweets all the time
-        - [ ] Scheduled refresh
-        - [ ] Streaming API
+    - Loading features :
+        - [x] Seeking older tweets by-demand (scroll or button)
+        - [x] Seek newer tweets all the time using streaming API
 
 - [ ] Tweeting
     - [x] Support text
@@ -64,7 +66,7 @@ Check out the release pages once we have something working decently.
     - [x] Like (formerly _favourite_)
     - [x] Retweet
 
-- [ ] Add tabs for mentions and hashtag searches
+- [ ] Add searches
 
 - [ ] Add reply and retweet options
 
