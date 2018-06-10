@@ -6,6 +6,8 @@ import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.DirectMessage;
+import twitter4j.Paging;
+import twitter4j.Twitter;
 import twitter4j.User;
 
 import javafx.collections.FXCollections;
@@ -38,6 +40,24 @@ public class DirectMessages {
         return FXCollections.unmodifiableObservableSet(
                 FXCollections.observableSet(directMessages.keySet())
         );
+    }
+
+    public void loadMoreDirectMessages(final long loadUntilThisStatus) {
+        LOG.debug("Requesting more direct messages.");
+        final Paging requestPaging = new Paging();
+        requestPaging.setMaxId(loadUntilThisStatus);
+
+        sessionManager.getCurrentTwitter()
+                      .mapTry(twitter -> twitter.getDirectMessages(requestPaging))
+                      .onSuccess(messages -> messages.forEach(this::addDirectMessage));
+        LOG.debug("Finished loading more direct messages.");
+    }
+
+    public void loadLatestDirectMessages() {
+        LOG.debug("Requesting latest direct messages.");
+        sessionManager.getCurrentTwitter()
+                      .mapTry(Twitter::getDirectMessages)
+                      .onSuccess(messages -> messages.forEach(this::addDirectMessage));
     }
 
     public void addDirectMessage(final DirectMessage directMessage) {

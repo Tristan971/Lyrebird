@@ -43,6 +43,8 @@ public class DirectMessagesController implements FxmlController {
     @Override
     public void initialize() {
         directMessages.loadedConversations().addListener(DirectMessagesController.this::handleConversationsChange);
+        LOG.info("Loading direct messages!");
+        directMessages.loadLatestDirectMessages();
     }
 
     private void handleConversationsChange(final Change<? extends User> change) {
@@ -54,6 +56,8 @@ public class DirectMessagesController implements FxmlController {
     }
 
     private void addConversation(final User user) {
+        LOG.debug("New conversation detected with {}", user.getScreenName());
+
         final FxmlLoadResult<Pane, DMConversationController> conversationLoad = easyFxml.loadNode(
                 Components.DIRECT_MESSAGE_CONVERSATION,
                 Pane.class,
@@ -77,6 +81,8 @@ public class DirectMessagesController implements FxmlController {
     }
 
     private void removeConversation(final User user) {
+        LOG.debug("Deleting conversation with {}", user.getScreenName());
+
         final Tab associatedTab = tabs.get(user);
 
         if (associatedTab == null) {
