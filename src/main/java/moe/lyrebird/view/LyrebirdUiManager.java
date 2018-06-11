@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.api.FxmlStylesheet;
-import moe.tristan.easyfxml.model.fxml.FxmlStylesheets;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Styles;
 
 import javafx.stage.Stage;
 
@@ -50,7 +50,7 @@ public class LyrebirdUiManager extends FxUiManager {
 
     @Override
     protected Optional<FxmlStylesheet> getStylesheet() {
-        return Optional.of(FxmlStylesheets.DEFAULT_JAVAFX_STYLE);
+        return Optional.of(Styles.LYREBIRD);
     }
 
 }

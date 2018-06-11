@@ -34,24 +34,6 @@
                     <addResources>false</addResources>
                 </configuration>
             </plugin>
-            <!-- SASS -> CSS plugin -->
-            <plugin>
-                <groupId>com.github.warmuuh</groupId>
-                <artifactId>libsass-maven-plugin</artifactId>
-                <version>0.2.9-libsass_3.4.7</version>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <inputPath>src/main/resources</inputPath>
-                    <outputPath>target/classes</outputPath>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

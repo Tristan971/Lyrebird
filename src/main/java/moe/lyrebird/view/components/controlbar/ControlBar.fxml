@@ -6,14 +6,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="controlBar" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.controlbar.ControlBarController">
+<AnchorPane style="-fx-background-color: rgba(30, 30, 30, 0.90);" stylesheets="@../../../../../../resources/style/lyrebird.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.controlbar.ControlBarController">
     <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <VBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                      <Label fx:id="currentUserLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Current user : @UNKNOWN@" textAlignment="CENTER" />
+                      <Label fx:id="currentUserLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Current user : @UNKNOWN@" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
                       <Button fx:id="loginButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add account" textAlignment="CENTER" />
                </children>
                <BorderPane.margin>
@@ -24,7 +28,10 @@
          <bottom>
             <VBox spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                      <Button fx:id="tweetButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="New Tweet" textAlignment="CENTER" />
+                      <Button fx:id="tweetButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #00aced;" text="New Tweet" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Button>
                </children>
                <BorderPane.margin>
                   <Insets top="10.0" />

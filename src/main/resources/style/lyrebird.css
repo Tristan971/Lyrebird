@@ -1,0 +1,29 @@
+.root {
+    -fx-background-insets: 0, 0, 0, 0;
+    -fx-faint-focus-color: transparent;
+    -fx-border-insets: 0, 0, 0, 0;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: #ececec;
+}
+
+.list-view .list-cell:odd {
+    -fx-background-color: #ececec;
+}
+
+.list-view .list-cell:focused {
+    -fx-background-color: #f7f7f7;
+}
+
+#retweetButton {
+    -fx-text-fill: #3faa4d;
+}
+
+#likeButton {
+    -fx-text-fill: #ff6162;
+}
+
+#tweetButton {
+    -fx-background-color: #00aced;
+}
