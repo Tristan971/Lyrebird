@@ -35,6 +35,7 @@ Check out the release pages once we have something working decently.
     - Systems :
         - [x] Timeline
         - [x] Mentions
+        - [x] Direct messages
     - Display features :
         - [x] Basic textual display
         - [x] Display username, @screenname and user profile picture
