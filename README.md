@@ -28,15 +28,15 @@ Check out the release pages once we have something working decently.
 ## Screenshot of current version :
 [![Screenshot of current version](docs/img/screenshot.png)](docs/img/screenshot.png)
 
-## Currently working :
-- [x] Log in 
+## Current state :
 
+- [x] Log in 
 - [ ] Tweets-based systems
-    - Systems :
+    - [x] Base ystems :
         - [x] Timeline
         - [x] Mentions
         - [x] Direct messages
-    - Display features :
+    - [ ] Display features :
         - [x] Basic textual display
         - [x] Display username, @screenname and user profile picture
         - [ ] Display for chosen list
@@ -67,10 +67,4 @@ Check out the release pages once we have something working decently.
     - [x] Like (formerly _favourite_)
     - [x] Retweet
 
-- [ ] Add searches
-
-- [ ] Add reply and retweet options
-
-- [ ] Open pictures from within the app
-
-- [ ] Show DM list
+- [ ] Searches
