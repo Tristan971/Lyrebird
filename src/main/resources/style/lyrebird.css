@@ -11,6 +11,11 @@
     -fx-background-color: -fx-background-dark;
 }
 
+.noFocus .list-view {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
 .list-view .list-cell:focused {
     -fx-background-color: -fx-background;
 }
