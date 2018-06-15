@@ -17,6 +17,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.util.concurrent.CompletableFuture;
+
 import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.userProfileImage;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
@@ -66,10 +68,12 @@ public class TweetPaneController implements FxmlController {
 
     public void setStatus(final Status status) {
         author.setText(username(status.getUser()));
-        authorProfilePicture.setImage(userProfileImage(status.getUser()));
         content.getChildren().clear();
         content.getChildren().add(new Text(tweetContent(status)));
         this.status = status;
+
+        CompletableFuture.supplyAsync(() -> userProfileImage(status.getUser()))
+                         .thenAccept(authorProfilePicture::setImage);
     }
 
     private void onLike() {

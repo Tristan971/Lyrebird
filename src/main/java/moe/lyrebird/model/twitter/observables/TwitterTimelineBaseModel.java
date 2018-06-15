@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class TwitterTimelineBaseModel {
 
@@ -41,21 +42,25 @@ public abstract class TwitterTimelineBaseModel {
     }
 
     public void loadMoreTweets(final long loadUntilThisStatus) {
-        getLocalLogger().debug("Requesting more tweets.");
-        final Paging requestPaging = new Paging();
-        requestPaging.setMaxId(loadUntilThisStatus);
+        CompletableFuture.runAsync(() -> {
+            getLocalLogger().debug("Requesting more tweets.");
+            final Paging requestPaging = new Paging();
+            requestPaging.setMaxId(loadUntilThisStatus);
 
-        sessionManager.getCurrentTwitter()
-                      .mapTry(twitter -> backFillCall.apply(twitter, requestPaging))
-                      .onSuccess(this::addTweets);
-        getLocalLogger().debug("Finished loading more tweets.");
+            sessionManager.getCurrentTwitter()
+                          .mapTry(twitter -> backFillCall.apply(twitter, requestPaging))
+                          .onSuccess(this::addTweets);
+            getLocalLogger().debug("Finished loading more tweets.");
+        });
     }
 
     public void loadLastTweets() {
-        getLocalLogger().debug("Requesting last tweets in timeline.");
-        sessionManager.getCurrentTwitter()
-                      .mapTry(initialLoadCall)
-                      .onSuccess(this::addTweets);
+        CompletableFuture.runAsync(() -> {
+            getLocalLogger().debug("Requesting last tweets in timeline.");
+            sessionManager.getCurrentTwitter()
+                          .mapTry(initialLoadCall)
+                          .onSuccess(this::addTweets);
+        });
     }
 
     private void addTweets(final List<Status> receivedTweets) {

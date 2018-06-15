@@ -13,6 +13,7 @@ import moe.lyrebird.view.screens.root.RootViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -100,6 +101,8 @@ public class ControlBarController implements FxmlController {
     }
 
     private void bindButtonToLoadingView(final Button button, final Components component) {
-        button.addEventHandler(MOUSE_CLICKED, e -> rootViewController.setContent(component));
+        button.addEventHandler(MOUSE_CLICKED, e ->
+                Platform.runLater( () -> rootViewController.setContent(component))
+        );
     }
 }
