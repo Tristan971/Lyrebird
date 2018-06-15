@@ -1,36 +1,30 @@
 .root {
-    -fx-base: #2a2b2c;
-    -fx-background-insets: 0, 0, 0, 0;
-    -fx-border-color: transparent;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-    -fx-border-insets: 0, 0, 0, 0;
+    -fx-background: -fx-base;
+    -fx-background-dark: rgb(28, 28, 28);
+
+    -fx-accent: rgb(230, 241, 255);
+    -fx-focus-color: rgb(55, 122, 224);
 }
 
-.titled-pane > .content > * {
-    -fx-padding: 0px;
-}
-
-.list-view .list-cell:even {
-    -fx-background-color: #2a2b2c;
-}
-
-.list-view .list-cell:odd {
-    -fx-background-color: #2a2b2c;
+.dark {
+    -fx-base: -fx-background-dark;
+    -fx-background-color: -fx-background-dark;
 }
 
 .list-view .list-cell:focused {
-    -fx-background-color: #3c3e3f;
+    -fx-background-color: -fx-background;
 }
 
 #retweetButton {
     -fx-text-fill: #3faa4d;
+    -fx-background-color: rgba(0, 0, 0, 0);
 }
 
 #likeButton {
     -fx-text-fill: #ff6162;
+    -fx-background-color: rgba(0, 0, 0, 0);
 }
 
 #tweetButton {
-    -fx-background-color: #00aced;
+    -fx-background-color: -fx-focus-color;
 }

@@ -55,7 +55,7 @@ public class RootViewController implements FxmlController {
                 .getNode()
                 .getOrElseGet(err -> new ExceptionHandler(err).asPane());
         LOG.debug("Initialized control bar !");
-        FxAsync.doOnFxThread(contentPane, root -> root.setLeft(controlBarPane));
+        contentPane.setLeft(controlBarPane);
     }
 
 }

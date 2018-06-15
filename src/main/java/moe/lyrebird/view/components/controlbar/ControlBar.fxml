@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane style="-fx-background-color: rgba(30, 30, 30, 0.90);" stylesheets="@../../../../../../resources/style/lyrebird.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.controlbar.ControlBarController">
+<AnchorPane stylesheets="@../../../../../../resources/style/lyrebird.css" styleClass="dark" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.controlbar.ControlBarController">
     <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -28,7 +28,7 @@
          <bottom>
             <VBox spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                      <Button fx:id="tweetButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #00aced;" text="New Tweet" textAlignment="CENTER" textFill="WHITE">
+                      <Button fx:id="tweetButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="New Tweet" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Button>
@@ -42,7 +42,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <center>
-            <VBox spacing="10.0" BorderPane.alignment="CENTER">
+            <VBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="10.0" top="10.0" />
                </BorderPane.margin>
