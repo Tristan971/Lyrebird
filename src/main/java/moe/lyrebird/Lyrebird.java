@@ -1,6 +1,7 @@
 package moe.lyrebird;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import moe.tristan.easyfxml.spring.application.FxSpringApplication;
 import moe.tristan.easyfxml.spring.application.FxSpringContext;
@@ -10,6 +11,7 @@ import moe.lyrebird.model.interrupts.CleanupService;
  * Main application entry point.
  */
 @SpringBootApplication
+@EnableCaching
 @Import(FxSpringContext.class)
 public class Lyrebird extends FxSpringApplication {
 

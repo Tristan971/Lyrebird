@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.lyrebird.model.twitter.services.TweetInterractionService;
+import moe.lyrebird.view.CachedDataService;
 import twitter4j.Status;
 
 import javafx.beans.property.BooleanProperty;
@@ -20,7 +21,6 @@ import javafx.scene.text.TextFlow;
 import java.util.concurrent.CompletableFuture;
 
 import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
-import static moe.lyrebird.view.components.tweet.TweetFormatter.userProfileImage;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
 import static moe.lyrebird.view.util.Nodes.autoresizeContainerOn;
 import static moe.lyrebird.view.util.Nodes.bindContentBiasCalculationTo;
@@ -49,13 +49,17 @@ public class TweetPaneController implements FxmlController {
     private Button retweetButton;
 
     private final TweetInterractionService interractionService;
+    private final CachedDataService cachedDataService;
 
     private Status status;
-
     public final BooleanProperty selected = new SimpleBooleanProperty(false);
 
-    public TweetPaneController(final TweetInterractionService interractionService) {
+    public TweetPaneController(
+            final TweetInterractionService interractionService,
+            final CachedDataService cachedDataService
+    ) {
         this.interractionService = interractionService;
+        this.cachedDataService = cachedDataService;
     }
 
     @Override
@@ -72,7 +76,7 @@ public class TweetPaneController implements FxmlController {
         content.getChildren().add(new Text(tweetContent(status)));
         this.status = status;
 
-        CompletableFuture.supplyAsync(() -> userProfileImage(status.getUser()))
+        CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(status.getUser()))
                          .thenAccept(authorProfilePicture::setImage);
     }
 
