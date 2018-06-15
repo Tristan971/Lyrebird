@@ -27,9 +27,10 @@ public class TwitterStreamingService {
     private final AtomicBoolean currentlyListening;
 
     public TwitterStreamingService(
-            TwitterStream twitterStream,
-            SessionManager sessionManager,
-            CleanupService cleanupService, TwitterUserListener twitterUserListener
+            final TwitterStream twitterStream,
+            final SessionManager sessionManager,
+            final CleanupService cleanupService,
+            final TwitterUserListener twitterUserListener
     ) {
         this.cleanupService = cleanupService;
         LOG.debug("Starting twitter stream connection...");

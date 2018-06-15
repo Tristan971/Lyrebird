@@ -41,29 +41,29 @@ public class TwitterUserListener implements UserStreamListener {
     }
 
     @Override
-    public void onStatus(Status status) {
-        LOG.debug("New tweet streamed : {}", status);
+    public void onStatus(final Status status) {
+        LOG.debug("New tweet streamed : [@{} : {}]", status.getUser().getScreenName(), status.getText());
         timeline.addTweet(status);
     }
 
     @Override
-    public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+    public void onDeletionNotice(final StatusDeletionNotice statusDeletionNotice) {
         LOG.debug("New tweet deletion : {}", statusDeletionNotice.getStatusId());
         timeline.removeTweet(statusDeletionNotice.getStatusId());
     }
 
     @Override
-    public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+    public void onTrackLimitationNotice(final int numberOfLimitedStatuses) {
         LOG.debug("Current streamed track is too fast for following. Dropping tweets.");
     }
 
     @Override
-    public void onScrubGeo(long userId, long upToStatusId) {
+    public void onScrubGeo(final long userId, final long upToStatusId) {
         LOG.debug("Location info removad request for tweets by {} until tweet {}.", userId, upToStatusId);
     }
 
     @Override
-    public void onStallWarning(StallWarning warning) {
+    public void onStallWarning(final StallWarning warning) {
         LOG.debug("Internet connection was too slow and could not keep-alive the stream.");
         ExceptionHandler.displayExceptionPane(
                 "Stall warning",
@@ -73,7 +73,7 @@ public class TwitterUserListener implements UserStreamListener {
     }
 
     @Override
-    public void onException(Exception ex) {
+    public void onException(final Exception ex) {
         LOG.error("Twitter streaming broke.", ex);
         ExceptionHandler.displayExceptionPane(
                 "Exception on twitter streaming service.",
@@ -83,114 +83,114 @@ public class TwitterUserListener implements UserStreamListener {
     }
 
     @Override
-    public void onDeletionNotice(long directMessageId, long userId) {
+    public void onDeletionNotice(final long directMessageId, final long userId) {
         LOG.debug("DM {} from {} requested to be deleted.", directMessageId, userId);
         directMessages.removeDirectMessage(userId, directMessageId);
     }
 
     @Override
-    public void onFriendList(long[] friendIds) {
+    public void onFriendList(final long[] friendIds) {
 
     }
 
     @Override
-    public void onFavorite(User source, User target, Status favoritedStatus) {
+    public void onFavorite(final User source, final User target, final Status favoritedStatus) {
 
     }
 
     @Override
-    public void onUnfavorite(User source, User target, Status unfavoritedStatus) {
+    public void onUnfavorite(final User source, final User target, final Status unfavoritedStatus) {
 
     }
 
     @Override
-    public void onFollow(User source, User followedUser) {
+    public void onFollow(final User source, final User followedUser) {
 
     }
 
     @Override
-    public void onUnfollow(User source, User unfollowedUser) {
+    public void onUnfollow(final User source, final User unfollowedUser) {
 
     }
 
     @Override
-    public void onDirectMessage(DirectMessage directMessage) {
+    public void onDirectMessage(final DirectMessage directMessage) {
         LOG.debug("Received DM {}", directMessage);
         directMessages.addDirectMessage(directMessage);
     }
 
     @Override
-    public void onUserListMemberAddition(User addedMember, User listOwner, UserList list) {
+    public void onUserListMemberAddition(final User addedMember, final User listOwner, final UserList list) {
 
     }
 
     @Override
-    public void onUserListMemberDeletion(User deletedMember, User listOwner, UserList list) {
+    public void onUserListMemberDeletion(final User deletedMember, final User listOwner, final UserList list) {
 
     }
 
     @Override
-    public void onUserListSubscription(User subscriber, User listOwner, UserList list) {
+    public void onUserListSubscription(final User subscriber, final User listOwner, final UserList list) {
 
     }
 
     @Override
-    public void onUserListUnsubscription(User subscriber, User listOwner, UserList list) {
+    public void onUserListUnsubscription(final User subscriber, final User listOwner, final UserList list) {
 
     }
 
     @Override
-    public void onUserListCreation(User listOwner, UserList list) {
+    public void onUserListCreation(final User listOwner, final UserList list) {
 
     }
 
     @Override
-    public void onUserListUpdate(User listOwner, UserList list) {
+    public void onUserListUpdate(final User listOwner, final UserList list) {
 
     }
 
     @Override
-    public void onUserListDeletion(User listOwner, UserList list) {
+    public void onUserListDeletion(final User listOwner, final UserList list) {
 
     }
 
     @Override
-    public void onUserProfileUpdate(User updatedUser) {
+    public void onUserProfileUpdate(final User updatedUser) {
 
     }
 
     @Override
-    public void onUserSuspension(long suspendedUser) {
+    public void onUserSuspension(final long suspendedUser) {
 
     }
 
     @Override
-    public void onUserDeletion(long deletedUser) {
+    public void onUserDeletion(final long deletedUser) {
 
     }
 
     @Override
-    public void onBlock(User source, User blockedUser) {
+    public void onBlock(final User source, final User blockedUser) {
 
     }
 
     @Override
-    public void onUnblock(User source, User unblockedUser) {
+    public void onUnblock(final User source, final User unblockedUser) {
 
     }
 
     @Override
-    public void onRetweetedRetweet(User source, User target, Status retweetedStatus) {
+    public void onRetweetedRetweet(final User source, final User target, final Status retweetedStatus) {
 
     }
 
     @Override
-    public void onFavoritedRetweet(User source, User target, Status favoritedRetweeet) {
+    public void onFavoritedRetweet(final User source, final User target, final Status favoritedRetweeet) {
 
     }
 
     @Override
-    public void onQuotedTweet(User source, User target, Status quotingTweet) {
+    public void onQuotedTweet(final User source, final User target, final Status quotingTweet) {
 
     }
 }
