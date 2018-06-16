@@ -4,6 +4,7 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.components.controlbar.ControlBarController;
+import moe.lyrebird.view.components.currentaccount.CurrentAccountController;
 import moe.lyrebird.view.components.directmessages.DMConversationController;
 import moe.lyrebird.view.components.directmessages.DirectMessagesController;
 import moe.lyrebird.view.components.mentions.MentionsController;
@@ -12,6 +13,8 @@ import moe.lyrebird.view.components.tweet.TweetPaneController;
 
 public enum Components implements FxmlNode {
     CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class),
+
+    CURRENT_ACCOUNT("currentaccount/CurrentAccount.fxml", CurrentAccountController.class),
 
     TIMELINE("timeline/Timeline.fxml", TimelineController.class),
     MENTIONS("mentions/Mentions.fxml", MentionsController.class),

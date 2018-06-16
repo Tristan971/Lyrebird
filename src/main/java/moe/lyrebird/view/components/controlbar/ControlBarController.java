@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
@@ -27,9 +26,6 @@ import static moe.lyrebird.view.screens.Screens.TWEET_VIEW;
 public class ControlBarController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ControlBarController.class);
-
-    @FXML
-    private Label currentUserLabel;
 
     @FXML
     private Button loginButton;
@@ -65,14 +61,11 @@ public class ControlBarController implements FxmlController {
 
     @Override
     public void initialize() {
-        this.loginButton.addEventHandler(MOUSE_CLICKED, e -> openLoginWindow());
         this.tweetButton.addEventHandler(MOUSE_CLICKED, e -> openTweetWindow());
 
         bindButtonToLoadingView(timelineViewButton, Components.TIMELINE);
         bindButtonToLoadingView(mentionsViewButton, Components.MENTIONS);
         bindButtonToLoadingView(directMessagesViewButton, Components.DIRECT_MESSAGES);
-
-        this.currentUserLabel.textProperty().bind(sessionManager.currentSessionUsernameProperty());
     }
 
     private void openLoginWindow() {

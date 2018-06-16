@@ -1,6 +1,9 @@
 package moe.lyrebird.model.sessions;
 
+import io.vavr.control.Try;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
+import twitter4j.Twitter;
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 
 import javax.persistence.Column;
@@ -66,6 +69,10 @@ public class Session implements Serializable {
 
     public void setTwitterHandler(final TwitterHandler twitterHandler) {
         this.twitterHandler = twitterHandler;
+    }
+
+    public Try<User> getTwitterUser() {
+        return Try.of(twitterHandler::getTwitter).mapTry(Twitter::verifyCredentials);
     }
 
     @Override
