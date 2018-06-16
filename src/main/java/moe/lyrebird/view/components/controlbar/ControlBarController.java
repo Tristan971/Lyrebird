@@ -8,7 +8,6 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.view.components.Components;
-import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.root.RootViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +15,12 @@ import org.slf4j.LoggerFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
-import static moe.lyrebird.view.screens.Screens.LOGIN_VIEW;
 import static moe.lyrebird.view.screens.Screens.TWEET_VIEW;
+import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 @Component
 public class ControlBarController implements FxmlController {
@@ -28,7 +28,7 @@ public class ControlBarController implements FxmlController {
     private static final Logger LOG = LoggerFactory.getLogger(ControlBarController.class);
 
     @FXML
-    private Button loginButton;
+    private BorderPane container;
 
     @FXML
     private Button tweetButton;
@@ -66,18 +66,19 @@ public class ControlBarController implements FxmlController {
         bindButtonToLoadingView(timelineViewButton, Components.TIMELINE);
         bindButtonToLoadingView(mentionsViewButton, Components.MENTIONS);
         bindButtonToLoadingView(directMessagesViewButton, Components.DIRECT_MESSAGES);
+
+        loadCurrentAccountPanel();
     }
 
-    private void openLoginWindow() {
-        LOG.info("User requested login.");
-        final Pane loginPane = this.easyFxml
-                .loadNode(LOGIN_VIEW)
+    private void loadCurrentAccountPanel() {
+        easyFxml.loadNode(Components.CURRENT_ACCOUNT)
                 .getNode()
-                .getOrElseGet(err -> new ExceptionHandler(err).asPane());
-
-        Stages.stageOf("Login", loginPane)
-              .thenCompose(Stages::scheduleDisplaying)
-              .thenAccept(stage -> this.stageManager.registerSingle(Screens.LOGIN_VIEW, stage));
+                .onSuccess(container::setTop)
+                .onFailure(err -> displayExceptionPane(
+                        "Could not load current user!",
+                        "There was an error mapping the current session to a twitter account.",
+                        err
+                ));
     }
 
     private void openTweetWindow() {
