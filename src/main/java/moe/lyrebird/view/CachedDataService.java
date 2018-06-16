@@ -16,7 +16,7 @@ public class CachedDataService {
     @Cacheable("userProfileImage")
     public Image userProfileImage(final User user) {
         LOG.debug("First load of user pp for user : @{}", user.getScreenName());
-        return new Image(user.getBiggerProfileImageURLHttps());
+        return new Image(user.getOriginalProfileImageURLHttps());
     }
 
 }
