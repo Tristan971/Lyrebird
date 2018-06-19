@@ -8,6 +8,7 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.root.RootViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,9 @@ public class ControlBarController implements FxmlController {
     @FXML
     private Button directMessagesViewButton;
 
+    @FXML
+    private Button creditsButton;
+
     private final EasyFxml easyFxml;
     private final StageManager stageManager;
     private final SessionManager sessionManager;
@@ -66,6 +70,14 @@ public class ControlBarController implements FxmlController {
         bindButtonToLoadingView(timelineViewButton, Components.TIMELINE);
         bindButtonToLoadingView(mentionsViewButton, Components.MENTIONS);
         bindButtonToLoadingView(directMessagesViewButton, Components.DIRECT_MESSAGES);
+
+        creditsButton.addEventHandler(MOUSE_CLICKED, e ->
+                easyFxml.loadNode(Screens.CREDITS_VIEW)
+                        .getNode()
+                        .recover(err -> new ExceptionHandler(err).asPane())
+                        .map(pane -> Stages.stageOf("Credits", pane))
+                        .andThen(creation -> creation.thenComposeAsync(Stages::scheduleDisplaying))
+        );
 
         loadCurrentAccountPanel();
     }
@@ -96,7 +108,7 @@ public class ControlBarController implements FxmlController {
 
     private void bindButtonToLoadingView(final Button button, final Components component) {
         button.addEventHandler(MOUSE_CLICKED, e ->
-                Platform.runLater( () -> rootViewController.setContent(component))
+                Platform.runLater(() -> rootViewController.setContent(component))
         );
     }
 }

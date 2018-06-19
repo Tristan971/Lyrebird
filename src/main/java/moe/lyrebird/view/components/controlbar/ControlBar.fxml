@@ -35,6 +35,7 @@
                   <Button fx:id="timelineViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Timeline" />
                   <Button fx:id="mentionsViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mentions" />
                   <Button fx:id="directMessagesViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="DM" />
+                  <Button fx:id="creditsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Credits" />
                </children>
             </VBox>
          </center>
