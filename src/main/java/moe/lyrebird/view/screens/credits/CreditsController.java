@@ -1,5 +1,6 @@
 package moe.lyrebird.view.screens.credits;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,7 @@ public class CreditsController implements FxmlController {
                              }).forEach(creditsVBox.getChildren()::add);
     }
 
+    @Cacheable("creditsComponents")
     public List<String> findAllCreditsPages() {
         try {
             final Resource[] credits = pmrpr.getResources("classpath:assets/credits/*");
