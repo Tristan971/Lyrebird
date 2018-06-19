@@ -20,6 +20,7 @@ import javafx.scene.text.TextFlow;
 
 import java.util.concurrent.CompletableFuture;
 
+import static moe.lyrebird.view.components.ImageResources.BLANK_USER_PROFILE_PICTURE;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
 import static moe.lyrebird.view.util.Nodes.autoresizeContainerOn;
@@ -68,6 +69,7 @@ public class TweetPaneController implements FxmlController {
         bindContentBiasCalculationTo(toolbar, selected);
         likeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, clickedEvent -> onLike());
         retweetButton.addEventHandler(MouseEvent.MOUSE_CLICKED, clickedEvent -> onRewteet());
+        authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
     }
 
     public void setStatus(final Status status) {
@@ -75,7 +77,7 @@ public class TweetPaneController implements FxmlController {
         content.getChildren().clear();
         content.getChildren().add(new Text(tweetContent(status)));
         this.status = status;
-
+        authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
         CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(status.getUser()))
                          .thenAccept(authorProfilePicture::setImage);
     }
