@@ -1,8 +1,7 @@
 package moe.lyrebird.view.components;
 
-import org.springframework.context.ApplicationContext;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.components.listview.CustomListViewBase;
+import org.springframework.context.ConfigurableApplicationContext;
+import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.TwitterTimelineBaseModel;
 import moe.lyrebird.view.components.cells.TweetListCell;
@@ -17,7 +16,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
 
-public abstract class TimelineBasedController extends CustomListViewBase<Status> implements FxmlController {
+public abstract class TimelineBasedController extends ComponentListViewFxmlController<Status> {
 
     @FXML
     private Button loadMoreButton;
@@ -28,7 +27,7 @@ public abstract class TimelineBasedController extends CustomListViewBase<Status>
     public TimelineBasedController(
             final TwitterTimelineBaseModel timelineBase,
             final SessionManager sessionManager,
-            final ApplicationContext context
+            final ConfigurableApplicationContext context
     ) {
         super(context, TweetListCell.class);
         this.timelineBase = timelineBase;

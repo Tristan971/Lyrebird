@@ -1,6 +1,6 @@
 package moe.lyrebird.view.components.mentions;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Mentions;
@@ -16,7 +16,7 @@ public class MentionsController extends TimelineBasedController {
     public MentionsController(
             final Mentions mentions,
             final SessionManager sessionManager,
-            final ApplicationContext context
+            final ConfigurableApplicationContext context
     ) {
         super(mentions, sessionManager, context);
     }

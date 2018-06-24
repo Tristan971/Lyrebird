@@ -2,15 +2,15 @@ package moe.lyrebird.view.components.tweet;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.model.components.listview.CustomListViewCellController;
+import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.lyrebird.model.twitter.services.TweetInterractionService;
 import moe.lyrebird.view.CachedDataService;
 import twitter4j.Status;
 
+import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,7 +29,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
-public class TweetPaneController implements CustomListViewCellController<Status> {
+public class TweetPaneController implements ComponentCellFxmlController<Status> {
 
     @FXML
     private Label author;
@@ -77,7 +77,7 @@ public class TweetPaneController implements CustomListViewCellController<Status>
     }
 
     @Override
-    public <U extends ObservableValue<Boolean>> void selectedProperty(final U selected) {
+    public void selectedProperty(final BooleanExpression selected) {
         this.selected.bind(selected);
     }
 
