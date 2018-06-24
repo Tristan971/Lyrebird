@@ -82,6 +82,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private void setStatus(final Status status) {
+        if (status == null) return;
+
         author.setText(username(status.getUser()));
         content.getChildren().clear();
         content.getChildren().add(new Text(tweetContent(status)));

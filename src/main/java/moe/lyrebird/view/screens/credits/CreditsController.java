@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -26,6 +28,8 @@ import static org.springframework.util.MimeTypeUtils.TEXT_HTML_VALUE;
 @Component
 public class CreditsController implements FxmlController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CreditsController.class);
+
     private final PathMatchingResourcePatternResolver pmrpr;
 
     @FXML
@@ -37,6 +41,11 @@ public class CreditsController implements FxmlController {
 
     @Override
     public void initialize() {
+        LOG.debug(
+                "Loading credits with controller [{}] and box [{}]",
+                this.hashCode(),
+                this.creditsVBox.hashCode()
+        );
         findAllCreditsPages().stream()
                              .map(html -> {
                                  final WebView webView = new WebView();
