@@ -1,7 +1,7 @@
 package moe.lyrebird.view.components;
 
-import org.springframework.context.ApplicationContext;
-import moe.tristan.easyfxml.api.FxmlController;
+import org.springframework.context.ConfigurableApplicationContext;
+import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.TwitterTimelineBaseModel;
 import moe.lyrebird.view.components.cells.TweetListCell;
@@ -12,47 +12,35 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
-public abstract class TimelineBasedController implements FxmlController {
-
-    @FXML
-    private ListView<Status> tweetsListView;
+public abstract class TimelineBasedController extends ComponentListViewFxmlController<Status> {
 
     @FXML
     private Button loadMoreButton;
 
     private final TwitterTimelineBaseModel timelineBase;
-    private final Supplier<TweetListCell> tweetListCell;
     private final ListProperty<Status> tweetsProperty;
 
     public TimelineBasedController(
             final TwitterTimelineBaseModel timelineBase,
             final SessionManager sessionManager,
-            final ApplicationContext context
+            final ConfigurableApplicationContext context
     ) {
+        super(context, TweetListCell.class);
         this.timelineBase = timelineBase;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timelineBase.loadedTweets());
-        this.tweetListCell = () -> context.getBean(TweetListCell.class);
         sessionManager.currentSessionProperty().addListener(change -> timelineBase.loadLastTweets());
     }
 
     @Override
     public void initialize() {
-        bindUi();
+        super.initialize();
         timelineBase.loadLastTweets();
         loadMoreButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> loadMoreTweets());
-    }
-
-    private void bindUi() {
-        tweetsListView.setCellFactory(statuses -> tweetListCell.get());
-        LOG().debug("Binding displayed tweets to displayable tweets...");
-        tweetsListView.itemsProperty().bind(tweetsProperty);
-        LOG().debug("Binded.");
+        listView.itemsProperty().bind(new ReadOnlyListWrapper<>(timelineBase.loadedTweets()));
     }
 
     private void loadMoreTweets() {
@@ -71,6 +59,8 @@ public abstract class TimelineBasedController implements FxmlController {
         LOG().debug("Loading tweets before {}", oldest.getId());
         return Optional.of(oldest);
     }
+
+
     
     protected abstract Logger LOG();
 

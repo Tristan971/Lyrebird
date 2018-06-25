@@ -5,6 +5,7 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple2;
 import moe.lyrebird.model.sessions.SessionManager;
@@ -16,7 +17,6 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,8 +24,6 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.Optional;
-
-import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 
 /**
  * Created by Tristan on 01/03/2017.
@@ -72,18 +70,17 @@ public class LoginViewController implements FxmlController {
         this.pinCodeField.setVisible(false);
 
         this.pinCodeField.textProperty().addListener(this::pinCodeTextListener);
-        this.loginButton.addEventFilter(MOUSE_RELEASED, this::startNewSession);
+        Buttons.setOnClick(loginButton, this::startNewSession);
     }
 
-    @SuppressWarnings("unused")
-    private void startNewSession(final Event loginButtonEvent) {
+    private void startNewSession() {
         final Tuple2<URL, RequestToken> tokenUrl = this.twitterHandler.newSession();
         LOG.info("Got authorization URL {}, opening the browser!", tokenUrl._1);
         browserSupport.openUrl(tokenUrl._1);
 
         this.loginButton.setDisable(true);
         this.pinCodeField.setVisible(true);
-        this.pinCodeButton.addEventHandler(MOUSE_RELEASED, e -> this.registerPinCode(tokenUrl._2));
+        Buttons.setOnClick(pinCodeButton, () -> this.registerPinCode(tokenUrl._2));
         this.pinCodeButton.setVisible(true);
     }
 

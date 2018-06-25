@@ -1,6 +1,6 @@
 package moe.lyrebird.view.components.timeline;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Timeline;
@@ -16,7 +16,7 @@ public class TimelineController extends TimelineBasedController {
     public TimelineController(
             final Timeline timeline,
             final SessionManager sessionManager,
-            final ApplicationContext context
+            final ConfigurableApplicationContext context
     ) {
         super(timeline, sessionManager, context);
     }

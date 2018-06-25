@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.FxAsync;
 import moe.lyrebird.view.components.Components;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +41,7 @@ public class RootViewController implements FxmlController {
         final Pane contentNode = this.easyFxml
                 .loadNode(component)
                 .getNode()
-                .getOrElseGet(err -> new ExceptionHandler(err).asPane());
+                .getOrElseGet(ExceptionHandler::fromThrowable);
 
         this.contentPane.setCenter(contentNode);
         LOG.info("Set content of root pane to {}", component.name());
@@ -53,7 +52,7 @@ public class RootViewController implements FxmlController {
         final Pane controlBarPane = this.easyFxml
                 .loadNode(CONTROL_BAR)
                 .getNode()
-                .getOrElseGet(err -> new ExceptionHandler(err).asPane());
+                .getOrElseGet(ExceptionHandler::fromThrowable);
         LOG.debug("Initialized control bar !");
         contentPane.setLeft(controlBarPane);
     }

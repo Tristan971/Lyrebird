@@ -7,10 +7,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
-import javafx.scene.web.WebView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,15 +21,19 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static org.springframework.util.MimeTypeUtils.TEXT_HTML_VALUE;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class CreditsController implements FxmlController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CreditsController.class);
+
     private final PathMatchingResourcePatternResolver pmrpr;
 
     @FXML
+    private VBox parentVBox;
+
     private VBox creditsVBox;
 
     public CreditsController() {
@@ -37,12 +42,24 @@ public class CreditsController implements FxmlController {
 
     @Override
     public void initialize() {
-        findAllCreditsPages().stream()
-                             .map(html -> {
-                                 final WebView webView = new WebView();
-                                 webView.getEngine().loadContent(html, TEXT_HTML_VALUE);
-                                 return webView;
-                             }).forEach(creditsVBox.getChildren()::add);
+        Executors.newSingleThreadScheduledExecutor()
+                 .scheduleAtFixedRate(
+                         () -> System.out.println("ParentVBox = " + parentVBox),
+                         1,
+                         1,
+                         TimeUnit.SECONDS
+                 );
+        //LOG.debug(
+        //        "Loading credits with controller [{}] and box [{}]",
+        //        this.hashCode(),
+        //        this.creditsVBox.hashCode()
+        //);
+        //findAllCreditsPages().stream()
+        //                     .map(html -> {
+        //                         final WebView webView = new WebView();
+        //                         webView.getEngine().loadContent(html, TEXT_HTML_VALUE);
+        //                         return webView;
+        //                     }).forEach(creditsVBox.getChildren()::add);
     }
 
     @Cacheable("creditsComponents")

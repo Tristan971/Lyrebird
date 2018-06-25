@@ -73,7 +73,7 @@ public class DirectMessagesController implements FxmlController {
 
         final Pane conversationPane =
                 conversationLoad.getNode()
-                                .getOrElseGet(err -> new ExceptionHandler(err).asPane());
+                                .getOrElseGet(ExceptionHandler::fromThrowable);
 
         final DMConversationController conversationController =
                 conversationLoad.getController()
