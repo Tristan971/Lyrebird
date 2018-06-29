@@ -4,10 +4,9 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.util.Stages;
-import io.vavr.control.Try;
-import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.services.NewTweetService;
 import moe.lyrebird.view.screens.Screens;
-import twitter4j.Twitter;
+import twitter4j.Status;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,7 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Collections;
+import java.util.concurrent.CompletionStage;
 import java.util.stream.Stream;
 
 import static io.vavr.API.$;
@@ -41,12 +41,13 @@ public class NewTweetController implements FxmlController {
     @FXML
     private Label charactersLeft;
 
-    private final SessionManager sessionManager;
-    private final StageManager stageManager;
 
-    public NewTweetController(final SessionManager sessionManager, final StageManager stageManager) {
-        this.sessionManager = sessionManager;
+    private final StageManager stageManager;
+    private final NewTweetService newTweetService;
+
+    public NewTweetController(final StageManager stageManager, final NewTweetService newTweetService) {
         this.stageManager = stageManager;
+        this.newTweetService = newTweetService;
     }
 
     @Override
@@ -71,11 +72,7 @@ public class NewTweetController implements FxmlController {
     }
 
     private void sendTweet(final String text) {
-        final Try<Twitter> currentTwitter = sessionManager.getCurrentTwitter();
-
-        CompletableFuture<Void> tweetRequest = CompletableFuture.runAsync(
-                () -> currentTwitter.andThenTry(twitter -> twitter.updateStatus(text))
-        );
+        final CompletionStage<Status> tweetRequest = newTweetService.sendNewTweet(text, Collections.emptyList());
 
         Stream.of(tweetTextArea, sendButton).forEach(ctr -> ctr.setDisable(true));
 
