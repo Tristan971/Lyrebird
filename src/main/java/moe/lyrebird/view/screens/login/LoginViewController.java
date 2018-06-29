@@ -1,16 +1,15 @@
 package moe.lyrebird.view.screens.login;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Buttons;
-import moe.tristan.easyfxml.util.Stages;
 import io.vavr.Tuple2;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
-import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.auth.AccessToken;
@@ -18,59 +17,82 @@ import twitter4j.auth.RequestToken;
 
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Created by Tristan on 01/03/2017.
  */
 @Component
+@Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class LoginViewController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginViewController.class);
 
     @FXML
-    private Button loginButton;
+    private VBox step1Box;
+    @FXML
+    private Button openLoginUrlButton;
 
     @FXML
-    private Label loginLabel;
-
+    private VBox step2Box;
     @FXML
     private TextField pinCodeField;
+    @FXML
+    private Button validatePinCodeButton;
 
     @FXML
-    private Button pinCodeButton;
+    private VBox step3Box;
+    @FXML
+    private Label loggedUsernameLabel;
 
-    private boolean pinIsValid = false;
+    @FXML
+    private Separator separator1;
+    @FXML
+    private Separator separator2;
 
     private final BrowserSupport browserSupport;
     private final TwitterHandler twitterHandler;
-    private final StageManager stageManager;
     private final SessionManager sessionManager;
 
     public LoginViewController(
             final BrowserSupport browserSupport,
             final TwitterHandler twitterHandler,
-            final StageManager stageManager,
             final SessionManager sessionManager
     ) {
         this.browserSupport = browserSupport;
-        this.stageManager = stageManager;
         this.twitterHandler = twitterHandler;
         this.sessionManager = sessionManager;
     }
 
     @Override
     public void initialize() {
-        this.pinCodeButton.setVisible(false);
-        this.pinCodeField.setVisible(false);
+        Stream.of(step1Box, step2Box, step3Box, separator1, separator2).forEach(node -> setNodeVisiblity(node, false));
+        uiStep1();
 
+        Buttons.setOnClick(openLoginUrlButton, this::startNewSession);
         this.pinCodeField.textProperty().addListener(this::pinCodeTextListener);
-        Buttons.setOnClick(loginButton, this::startNewSession);
+
+    }
+
+    private void uiStep1() {
+        setNodeVisiblity(step1Box, true);
+    }
+
+    private void uiStep2() {
+        Stream.of(separator1, step2Box).forEach(node -> setNodeVisiblity(node, true));
+    }
+
+    private void uiStep3() {
+        Stream.of(separator2, step3Box).forEach(node -> setNodeVisiblity(node, true));
     }
 
     private void startNewSession() {
@@ -78,37 +100,29 @@ public class LoginViewController implements FxmlController {
         LOG.info("Got authorization URL {}, opening the browser!", tokenUrl._1);
         browserSupport.openUrl(tokenUrl._1);
 
-        this.loginButton.setDisable(true);
-        this.pinCodeField.setVisible(true);
-        Buttons.setOnClick(pinCodeButton, () -> this.registerPinCode(tokenUrl._2));
-        this.pinCodeButton.setVisible(true);
+        this.openLoginUrlButton.setDisable(true);
+        Buttons.setOnClick(validatePinCodeButton, () -> this.registerPinCode(tokenUrl._2));
+        uiStep2();
     }
 
     private void registerPinCode(final RequestToken requestToken) {
-        if (this.pinIsValid) {
-            final Optional<AccessToken> success = this.twitterHandler.registerAccessToken(
-                    requestToken,
-                    this.pinCodeField.getText()
+        final Optional<AccessToken> success = this.twitterHandler.registerAccessToken(
+                requestToken,
+                this.pinCodeField.getText()
+        );
+        if (success.isPresent()) {
+            sessionManager.addNewSession(this.twitterHandler);
+            final AccessToken token = success.get();
+            this.openLoginUrlButton.setVisible(false);
+            this.loggedUsernameLabel.setText(token.getScreenName());
+        } else {
+            ExceptionHandler.displayExceptionPane(
+                    "Authentication Error",
+                    "Could not authenticate you!",
+                    new Exception("No token could be used.")
             );
-            if (success.isPresent()) {
-                sessionManager.addNewSession(this.twitterHandler);
-                final AccessToken token = success.get();
-                this.loginButton.setVisible(false);
-                this.loginLabel.setText(
-                        String.format(
-                                "Successfully logged in account @%s!",
-                                token.getScreenName()
-                        )
-                );
-            } else {
-                ExceptionHandler.displayExceptionPane(
-                        "Authentication Error",
-                        "Could not authenticate you!",
-                        new Exception("No token could be used.")
-                );
-            }
-            this.stageManager.getSingle(Screens.LOGIN_VIEW).peek(Stages::scheduleHiding);
         }
+        uiStep3();
     }
 
     @SuppressWarnings("unused")
@@ -116,9 +130,14 @@ public class LoginViewController implements FxmlController {
         try {
             //noinspection ResultOfMethodCallIgnored
             Integer.parseInt(newVal);
-            LoginViewController.this.pinIsValid = true;
+            validatePinCodeButton.setDisable(false);
         } catch (final NumberFormatException e) {
-            LoginViewController.this.pinIsValid = false;
+            validatePinCodeButton.setDisable(true);
         }
+    }
+
+    private void setNodeVisiblity(final Node node, final boolean visible) {
+        node.setVisible(visible);
+        node.setManaged(visible);
     }
 }

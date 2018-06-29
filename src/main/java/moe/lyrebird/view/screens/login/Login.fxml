@@ -1,19 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="262.0" prefWidth="461.0"
-            xmlns="http://javafx.com/javafx/8.0.111"
-            fx:controller="moe.lyrebird.view.screens.login.LoginViewController">
-    <children>
-        <Label fx:id="loginLabel" layoutX="61.0" layoutY="31.0" prefHeight="88.0" prefWidth="344.0"
-               text="Please click the Login button to authenticate with Twitter.\nA webpage will open.\nCopy the code on the screen to the code field to authenticate."/>
-        <Button fx:id="loginButton" layoutX="353.0" layoutY="120.0" mnemonicParsing="false"
-                text="Login"/>
-        <TextField fx:id="pinCodeField" layoutX="208.0" layoutY="188.0" promptText="Enter PIN code here"/>
-        <Button fx:id="pinCodeButton" layoutX="366.0" layoutY="188.0" mnemonicParsing="false"
-                text="OK"/>
-    </children>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="310.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.login.LoginViewController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="310.0" prefWidth="500.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox fx:id="step1Box" alignment="CENTER" spacing="20.0">
+               <children>
+                  <Label alignment="TOP_LEFT" text="To add a new account, click on the button below to authenticate through Twitter." textOverrun="CLIP" wrapText="true" />
+                  <Button fx:id="openLoginUrlButton" mnemonicParsing="false" text="Open Twitter to authenticate" />
+               </children>
+            </VBox>
+            <Separator fx:id="separator1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+            <VBox fx:id="step2Box" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
+               <children>
+                  <Label alignment="TOP_LEFT" text="Input the pin code you received from Twitter below:" wrapText="true" />
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <TextField fx:id="pinCodeField" promptText="Pin code">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </TextField>
+                        <Button fx:id="validatePinCodeButton" mnemonicParsing="false" text="Validate pin code" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Separator fx:id="separator2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+            <VBox fx:id="step3Box" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
+               <children>
+                  <HBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <Label alignment="TOP_LEFT" text="Successfully authenticated with Twitter as :" wrapText="true" />
+                        <Label fx:id="loggedUsernameLabel" style="-fx-font-weight: bold; -fx-font-family: monospace" text="[USERNAME]" textAlignment="CENTER" underline="true" />
+                     </children>
+                  </HBox>
+                  <Label alignment="TOP_LEFT" text="Hope you will enjoy using Lyrebird!" wrapText="true" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </children>
 </AnchorPane>
