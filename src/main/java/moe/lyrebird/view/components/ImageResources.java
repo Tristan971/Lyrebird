@@ -5,7 +5,8 @@ import javafx.scene.image.Image;
 public enum ImageResources {
 
     BLANK_USER_PROFILE_PICTURE("user_avatar_icon.png"),
-    BLANK_USER_PROFILE_PICTURE_LIGHT("user_avatar_icon_light.png");
+    BLANK_USER_PROFILE_PICTURE_LIGHT("user_avatar_icon_light.png"),
+    BLANK_USER_PROFILE_PICTURE_LIGHT_DISCONNECTED("user_avatar_icon_light_disconnected.png");
 
     private final Image backingImage;
 

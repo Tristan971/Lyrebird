@@ -52,6 +52,10 @@ public class SessionManager {
         return currentSession;
     }
 
+    public boolean isLoggedIn() {
+        return currentSession.getValue() != null;
+    }
+
     public Property<String> currentSessionUsernameProperty() {
         return currentSessionUsername;
     }
