@@ -75,12 +75,12 @@ public class LoginViewController implements FxmlController {
 
     @Override
     public void initialize() {
+        validatePinCodeButton.setDisable(true);
         Stream.of(step1Box, step2Box, step3Box, separator1, separator2).forEach(node -> setNodeVisiblity(node, false));
         uiStep1();
 
         Buttons.setOnClick(openLoginUrlButton, this::startNewSession);
         this.pinCodeField.textProperty().addListener(this::pinCodeTextListener);
-
     }
 
     private void uiStep1() {
@@ -113,8 +113,11 @@ public class LoginViewController implements FxmlController {
         if (success.isPresent()) {
             sessionManager.addNewSession(this.twitterHandler);
             final AccessToken token = success.get();
-            this.openLoginUrlButton.setVisible(false);
             this.loggedUsernameLabel.setText(token.getScreenName());
+            validatePinCodeButton.setDisable(true);
+            pinCodeField.setDisable(true);
+            pinCodeField.setEditable(false);
+            uiStep3();
         } else {
             ExceptionHandler.displayExceptionPane(
                     "Authentication Error",
@@ -122,13 +125,11 @@ public class LoginViewController implements FxmlController {
                     new Exception("No token could be used.")
             );
         }
-        uiStep3();
     }
 
     @SuppressWarnings("unused")
     private void pinCodeTextListener(final ObservableValue<? extends String> o, final String oldVal, final String newVal) {
         try {
-            //noinspection ResultOfMethodCallIgnored
             Integer.parseInt(newVal);
             validatePinCodeButton.setDisable(false);
         } catch (final NumberFormatException e) {
