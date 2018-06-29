@@ -15,8 +15,8 @@
 
     <packaging>pom</packaging>
 
-    <name>lyrebird-parent</name>
-    <description>Launcher and updater for Lyrebird</description>
+    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
+    <description>Maven parent for Lyrebird</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
