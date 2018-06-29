@@ -144,7 +144,9 @@ public class NewTweetController implements FxmlController {
     private CompletionStage<List<File>> pickMedia() {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Pick a media for your tweet");
-        fileChooser.setSelectedExtensionFilter(twitterMediaExtensionFilter.extensionFilter);
+        final FileChooser.ExtensionFilter extensionFilter = twitterMediaExtensionFilter.extensionFilter;
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        fileChooser.setSelectedExtensionFilter(extensionFilter);
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
 
         final CompletableFuture<List<File>> pickedFiles = new CompletableFuture<>();

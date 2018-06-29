@@ -2,6 +2,8 @@ package moe.lyrebird.model.twitter;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -11,6 +13,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class TwitterMediaExtensionFilter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterMediaExtensionFilter.class);
 
     public final ExtensionFilter extensionFilter;
 
@@ -24,6 +28,7 @@ public class TwitterMediaExtensionFilter {
                                      .map(ext -> "*." + ext)
                                      .collect(Collectors.toList());
 
+        LOG.debug("Allowed media formats for tweet attachments are : {}", allowedExtensions);
         return new ExtensionFilter("Supported twitter medias", allowedExtensions);
     }
 
