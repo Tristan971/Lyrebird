@@ -11,6 +11,24 @@
     -fx-background-color: -fx-background-dark;
 }
 
+.text-area {
+    -fx-stroke-width: 1;
+    -fx-background-color: snow;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
 .noFocus .list-view {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
