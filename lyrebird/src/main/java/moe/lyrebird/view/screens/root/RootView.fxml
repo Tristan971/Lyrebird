@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.scene.layout.BorderPane?>
-
-
-<BorderPane fx:id="contentPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="100.0" prefHeight="400.0" prefWidth="600.0" styleClass="noFocus" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.root.RootViewController" />
+<BorderPane fx:id="contentPane"
+            maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308"
+            minHeight="100.0"
+            minWidth="100.0"
+            prefHeight="400.0"
+            prefWidth="600.0"
+            styleClass="noFocus"
+            stylesheets="@/style/lyrebird.css"
+            xmlns="http://javafx.com/javafx/8.0.141"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="moe.lyrebird.view.screens.root.RootViewController"/>

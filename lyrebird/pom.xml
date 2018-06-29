@@ -38,6 +38,19 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.zenjava</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>8.9.0-SNAPSHOT</version>
+                <configuration>
+                    <vendor>Tristan Deloche</vendor>
+                    <mainClass>moe.lyrebird.Lyrebird</mainClass>
+                    <verbose>true</verbose>
+                    <bundleArguments>
+                        <dropinResourcesRoot>${project.basedir}/src/main/java</dropinResourcesRoot>
+                    </bundleArguments>
+                </configuration>
+            </plugin>
         </plugins>
 
         <resources>
@@ -141,5 +154,16 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
     </dependencies>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>oss-sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 
 </project>

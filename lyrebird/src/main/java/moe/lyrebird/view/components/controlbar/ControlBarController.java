@@ -9,7 +9,6 @@ import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.Screens;
-import moe.lyrebird.view.screens.Styles;
 import moe.lyrebird.view.screens.root.RootViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +95,6 @@ public class ControlBarController implements FxmlController {
                 .getOrElseGet(ExceptionHandler::fromThrowable);
 
         Stages.stageOf("Tweet", tweetPane)
-              .thenCompose(stage -> Stages.setStylesheet(stage, Styles.LYREBIRD))
               .thenCompose(Stages::scheduleDisplaying)
               .thenAccept(stage -> this.stageManager.registerSingle(NEW_TWEET_VIEW, stage))
               .thenRun(() -> LOG.info("New tweet stage opened !"));

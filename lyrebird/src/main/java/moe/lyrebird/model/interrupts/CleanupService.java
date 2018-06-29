@@ -36,7 +36,7 @@ public class CleanupService {
     private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
         LOG.debug("\t-> {}", cleanupOperation.getName());
         try {
-            CompletableFuture.runAsync(cleanupOperation.getOperation()).get(5, TimeUnit.SECONDS);
+            CompletableFuture.runAsync(cleanupOperation.getOperation()).get(1, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             LOG.error("Could not actually call the following hook [{}] !", cleanupOperation.getName(), e);
             Thread.currentThread().interrupt();

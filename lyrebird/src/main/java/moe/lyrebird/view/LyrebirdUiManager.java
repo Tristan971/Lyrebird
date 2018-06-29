@@ -5,14 +5,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlNode;
-import moe.tristan.easyfxml.api.FxmlStylesheet;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import moe.lyrebird.view.screens.Screens;
-import moe.lyrebird.view.screens.Styles;
 
 import javafx.stage.Stage;
-
-import java.util.Optional;
 
 /**
  * The {@link LyrebirdUiManager} is responsible for bootstraping the GUI of the application correctly.
@@ -46,11 +42,6 @@ public class LyrebirdUiManager extends FxUiManager {
     @Override
     protected FxmlNode mainComponent() {
         return Screens.ROOT_VIEW;
-    }
-
-    @Override
-    protected Optional<FxmlStylesheet> getStylesheet() {
-        return Optional.of(Styles.LYREBIRD);
     }
 
 }
