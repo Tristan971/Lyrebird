@@ -7,7 +7,6 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.api.FxmlStylesheet;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
-import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.Styles;
 
@@ -27,7 +26,6 @@ public class LyrebirdUiManager extends FxUiManager {
     public LyrebirdUiManager(final EasyFxml easyFxml, final Environment environment) {
         super(easyFxml);
         this.environment = environment;
-        SvgImageLoaderFactory.install();
     }
 
     @Override
