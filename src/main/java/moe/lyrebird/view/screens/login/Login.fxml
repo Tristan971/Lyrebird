@@ -46,6 +46,11 @@
                      </children>
                   </HBox>
                   <Label alignment="TOP_LEFT" text="Hope you will enjoy using Lyrebird!" wrapText="true" />
+                  <Label text="(you can safely close this window now)">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
                </children>
             </VBox>
          </children>
