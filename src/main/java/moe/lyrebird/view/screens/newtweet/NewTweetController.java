@@ -1,11 +1,17 @@
 package moe.lyrebird.view.screens.newtweet;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
+import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
-import moe.lyrebird.view.screens.Screens;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 import javafx.application.Platform;
@@ -13,27 +19,40 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 
-import java.util.Collections;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Stream;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
-import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 import static javafx.scene.paint.Color.BLUE;
 import static javafx.scene.paint.Color.GREEN;
 import static javafx.scene.paint.Color.ORANGE;
 import static javafx.scene.paint.Color.RED;
+import static moe.lyrebird.view.screens.Screens.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 @Component
+@Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NewTweetController implements FxmlController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(NewTweetController.class);
 
     @FXML
     private Button sendButton;
+
+    @FXML
+    private Button pickMediaButton;
 
     @FXML
     private TextArea tweetTextArea;
@@ -41,19 +60,30 @@ public class NewTweetController implements FxmlController {
     @FXML
     private Label charactersLeft;
 
+    @FXML
+    private VBox mediaList;
 
     private final StageManager stageManager;
     private final NewTweetService newTweetService;
+    private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
+    private final Set<File> mediasToUpload;
 
-    public NewTweetController(final StageManager stageManager, final NewTweetService newTweetService) {
+    public NewTweetController(
+            final StageManager stageManager,
+            final NewTweetService newTweetService,
+            final TwitterMediaExtensionFilter extensionFilter
+    ) {
         this.stageManager = stageManager;
         this.newTweetService = newTweetService;
+        this.twitterMediaExtensionFilter = extensionFilter;
+        this.mediasToUpload = new HashSet<>();
     }
 
     @Override
     public void initialize() {
         enableTweetLengthCheck();
-        sendButton.addEventHandler(MOUSE_RELEASED, e -> sendTweet(this.tweetTextArea.getText()));
+        Buttons.setOnClick(sendButton, this::sendTweet);
+        Buttons.setOnClick(pickMediaButton, this::openFilePicker);
     }
 
     private void enableTweetLengthCheck() {
@@ -71,8 +101,11 @@ public class NewTweetController implements FxmlController {
         });
     }
 
-    private void sendTweet(final String text) {
-        final CompletionStage<Status> tweetRequest = newTweetService.sendNewTweet(text, Collections.emptyList());
+    private void sendTweet() {
+        final CompletionStage<Status> tweetRequest = newTweetService.sendNewTweet(
+                tweetTextArea.getText(),
+                new ArrayList<>(mediasToUpload)
+        );
 
         Stream.of(tweetTextArea, sendButton).forEach(ctr -> ctr.setDisable(true));
 
@@ -84,9 +117,47 @@ public class NewTweetController implements FxmlController {
                         err
                 );
             } else {
-                stageManager.getSingle(Screens.NEW_TWEET_VIEW).peek(Stages::scheduleHiding);
+                stageManager.getSingle(NEW_TWEET_VIEW).peek(Stages::scheduleHiding);
             }
         });
+    }
+
+    private void openFilePicker() {
+        pickMediaButton.setDisable(true);
+        final CompletionStage<List<File>> pickedMedia = pickMedia();
+        pickedMedia.whenCompleteAsync((files, err) -> {
+            if (err != null) {
+                ExceptionHandler.displayExceptionPane(
+                        "Could not pick files",
+                        "",
+                        err
+                );
+                LOG.error("Could not pick files.", err);
+            } else {
+                mediasToUpload.addAll(files);
+                LOG.debug("Added media files for upload with next tweet : {}", files);
+            }
+            pickMediaButton.setDisable(false);
+        });
+    }
+
+    private CompletionStage<List<File>> pickMedia() {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Pick a media for your tweet");
+        fileChooser.setSelectedExtensionFilter(twitterMediaExtensionFilter.extensionFilter);
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+
+        final CompletableFuture<List<File>> pickedFiles = new CompletableFuture<>();
+        stageManager.getSingle(NEW_TWEET_VIEW)
+                    .peek(newTweetStage -> Platform.runLater(
+                            () -> pickedFiles.complete(
+                                    fileChooser.showOpenMultipleDialog(newTweetStage)
+                            )
+                    ))
+                    .onEmpty(() -> pickedFiles.completeExceptionally(
+                            new IllegalStateException("Cannot find NewTweet window."))
+                    );
+        return pickedFiles;
     }
 
 }
