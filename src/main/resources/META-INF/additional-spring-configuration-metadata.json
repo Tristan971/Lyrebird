@@ -24,6 +24,11 @@
       "name": "mainStage.minHeigth",
       "type": "java.lang.Integer",
       "description": "The main stage's minimal heigth."
+    },
+    {
+      "name": "twitter.media.allowedExtensions",
+      "type": "java.lang.String",
+      "description": "Supported extensions for twitter medias."
     }
   ]
 }
