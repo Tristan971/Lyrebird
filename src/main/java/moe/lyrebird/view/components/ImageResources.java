@@ -4,8 +4,8 @@ import javafx.scene.image.Image;
 
 public enum ImageResources {
 
-    BLANK_USER_PROFILE_PICTURE("user_avatar_icon.svg"),
-    BLANK_USER_PROFILE_PICTURE_LIGHT("user_avatar_icon_light.svg");
+    BLANK_USER_PROFILE_PICTURE("user_avatar_icon.png"),
+    BLANK_USER_PROFILE_PICTURE_LIGHT("user_avatar_icon_light.png");
 
     private final Image backingImage;
 
