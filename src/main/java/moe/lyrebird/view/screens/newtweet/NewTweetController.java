@@ -4,8 +4,6 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.util.Stages;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.control.Try;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.view.screens.Screens;
@@ -13,12 +11,10 @@ import moe.lyrebird.view.util.Events;
 import twitter4j.Twitter;
 
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 import java.util.concurrent.CompletableFuture;
@@ -31,8 +27,8 @@ import static javafx.scene.input.KeyEvent.KEY_RELEASED;
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 import static javafx.scene.paint.Color.BLUE;
 import static javafx.scene.paint.Color.GREEN;
+import static javafx.scene.paint.Color.ORANGE;
 import static javafx.scene.paint.Color.RED;
-import static javafx.scene.paint.Color.YELLOW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 @Component
@@ -57,34 +53,25 @@ public class NewTweetController implements FxmlController {
 
     @Override
     public void initialize() {
-        tweetTextArea.addEventHandler(KEY_RELEASED, keyEventHandler());
+        enableTweetLengthCheck();
         sendButton.addEventHandler(MOUSE_RELEASED, e -> sendTweet(this.tweetTextArea.getText()));
 
         tweetTextArea.fireEvent(Events.dummyKeyEvent(KEY_RELEASED));
     }
 
-    private Tuple2<Color, Integer> validateCharactersLeft(final String currentText) {
-        final Integer len = currentText.length();
-
-        final Color color = Match(len).of(
-                Case($(tweetLen -> tweetLen < 130), GREEN),
-                Case($(tweetLen -> tweetLen > 130 && tweetLen < 140), YELLOW),
-                Case($(tweetLen -> tweetLen > 140), RED),
-                Case($(tweetLen -> tweetLen == 140), BLUE)
-        );
-
-        return Tuple.of(color, len);
-    }
-
-    private EventHandler<KeyEvent> keyEventHandler() {
-        return keyEvent -> {
-            final Tuple2<Color, Integer> checkUpResult = validateCharactersLeft(tweetTextArea.getText());
-
+    private void enableTweetLengthCheck() {
+        tweetTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            final Color color = Match(newValue.length()).of(
+                    Case($(tweetLen -> tweetLen < 130), GREEN),
+                    Case($(tweetLen -> tweetLen >= 130 && tweetLen < 140), ORANGE),
+                    Case($(tweetLen -> tweetLen > 140), RED),
+                    Case($(tweetLen -> tweetLen == 140), BLUE)
+            );
             Platform.runLater(() -> {
-                charactersLeft.setText(String.valueOf(checkUpResult._2));
-                charactersLeft.setTextFill(checkUpResult._1);
+                charactersLeft.setText(Integer.toString(newValue.length()));
+                charactersLeft.setTextFill(color);
             });
-        };
+        });
     }
 
     private void sendTweet(final String text) {
