@@ -83,7 +83,7 @@ public class NewTweetController implements FxmlController {
     public void initialize() {
         enableTweetLengthCheck();
         Buttons.setOnClick(sendButton, this::sendTweet);
-        Buttons.setOnClick(pickMediaButton, this::openFilePicker);
+        Buttons.setOnClick(pickMediaButton, this::openMediaAttachmentsFilePicker);
     }
 
     private void enableTweetLengthCheck() {
@@ -122,9 +122,9 @@ public class NewTweetController implements FxmlController {
         });
     }
 
-    private void openFilePicker() {
+    private void openMediaAttachmentsFilePicker() {
         pickMediaButton.setDisable(true);
-        final CompletionStage<List<File>> pickedMedia = pickMedia();
+        final CompletionStage<List<File>> pickedMedia = openFileChooserForMedia();
         pickedMedia.whenCompleteAsync((files, err) -> {
             if (err != null) {
                 ExceptionHandler.displayExceptionPane(
@@ -141,13 +141,17 @@ public class NewTweetController implements FxmlController {
         });
     }
 
-    private CompletionStage<List<File>> pickMedia() {
+    private void updateMediaAttachmentsPreview() {
+
+    }
+
+    private CompletionStage<List<File>> openFileChooserForMedia() {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Pick a media for your tweet");
         final FileChooser.ExtensionFilter extensionFilter = twitterMediaExtensionFilter.extensionFilter;
         fileChooser.getExtensionFilters().add(extensionFilter);
         fileChooser.setSelectedExtensionFilter(extensionFilter);
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         final CompletableFuture<List<File>> pickedFiles = new CompletableFuture<>();
         stageManager.getSingle(NEW_TWEET_VIEW)

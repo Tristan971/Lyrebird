@@ -29,7 +29,7 @@ public class TwitterMediaExtensionFilter {
                                      .collect(Collectors.toList());
 
         LOG.debug("Allowed media formats for tweet attachments are : {}", allowedExtensions);
-        return new ExtensionFilter("Supported twitter medias", allowedExtensions);
+        return new ExtensionFilter("Supported media types", allowedExtensions);
     }
 
 }
