@@ -34,15 +34,15 @@ pipeline {
                 sh 'mvn clean install -DskipTests'
             }
         }
-        stage('Cleanup') {
-            steps {
-                sh 'kill -15 $(pgrep stalonetray) && rm .stalonetrayrc && kill -15 $(pgrep Xvfb)'
-            }
-        }
         stage('Archive artifacts') {
             steps {
                 archiveArtifacts 'target/lyrebird*.jar'
             }
+        }
+    }
+    post('Cleanup') {
+        always {
+            sh 'kill -15 $(pgrep stalonetray) && rm .stalonetrayrc && kill -15 $(pgrep Xvfb)'
         }
     }
 }
