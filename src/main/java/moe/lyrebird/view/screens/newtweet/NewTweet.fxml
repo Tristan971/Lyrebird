@@ -17,14 +17,14 @@
          <bottom>
             <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="10000.0">
                      <children>
                           <Label text="Characters : " />
                           <Label fx:id="charactersLeft" text="0" />
                           <Label text="/ 140" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="10000.0">
                      <children>
                           <Button fx:id="sendButton" mnemonicParsing="false" text="Tweet" />
                      </children>

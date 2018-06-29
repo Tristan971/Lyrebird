@@ -7,7 +7,6 @@ import moe.tristan.easyfxml.util.Stages;
 import io.vavr.control.Try;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.view.screens.Screens;
-import moe.lyrebird.view.util.Events;
 import twitter4j.Twitter;
 
 import javafx.application.Platform;
@@ -23,7 +22,6 @@ import java.util.stream.Stream;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
-import static javafx.scene.input.KeyEvent.KEY_RELEASED;
 import static javafx.scene.input.MouseEvent.MOUSE_RELEASED;
 import static javafx.scene.paint.Color.BLUE;
 import static javafx.scene.paint.Color.GREEN;
@@ -55,17 +53,15 @@ public class NewTweetController implements FxmlController {
     public void initialize() {
         enableTweetLengthCheck();
         sendButton.addEventHandler(MOUSE_RELEASED, e -> sendTweet(this.tweetTextArea.getText()));
-
-        tweetTextArea.fireEvent(Events.dummyKeyEvent(KEY_RELEASED));
     }
 
     private void enableTweetLengthCheck() {
         tweetTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
             final Color color = Match(newValue.length()).of(
-                    Case($(tweetLen -> tweetLen < 130), GREEN),
-                    Case($(tweetLen -> tweetLen >= 130 && tweetLen < 140), ORANGE),
-                    Case($(tweetLen -> tweetLen > 140), RED),
-                    Case($(tweetLen -> tweetLen == 140), BLUE)
+                    Case($(tweetLen -> tweetLen < 250), GREEN),
+                    Case($(tweetLen -> tweetLen >= 250 && tweetLen < 280), ORANGE),
+                    Case($(tweetLen -> tweetLen > 280), RED),
+                    Case($(tweetLen -> tweetLen == 280), BLUE)
             );
             Platform.runLater(() -> {
                 charactersLeft.setText(Integer.toString(newValue.length()));
@@ -91,7 +87,7 @@ public class NewTweetController implements FxmlController {
                         err
                 );
             } else {
-                stageManager.getSingle(Screens.TWEET_VIEW).peek(Stages::scheduleHiding);
+                stageManager.getSingle(Screens.NEW_TWEET_VIEW).peek(Stages::scheduleHiding);
             }
         });
     }

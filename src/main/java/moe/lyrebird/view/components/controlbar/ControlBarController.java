@@ -18,7 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
-import static moe.lyrebird.view.screens.Screens.TWEET_VIEW;
+import static moe.lyrebird.view.screens.Screens.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 @Component
@@ -90,13 +90,13 @@ public class ControlBarController implements FxmlController {
     private void openTweetWindow() {
         LOG.info("Opening new tweet stage...");
         final Pane tweetPane = this.easyFxml
-                .loadNode(TWEET_VIEW)
+                .loadNode(NEW_TWEET_VIEW)
                 .getNode()
                 .getOrElseGet(ExceptionHandler::fromThrowable);
 
         Stages.stageOf("Tweet", tweetPane)
               .thenCompose(Stages::scheduleDisplaying)
-              .thenAccept(stage -> this.stageManager.registerSingle(TWEET_VIEW, stage))
+              .thenAccept(stage -> this.stageManager.registerSingle(NEW_TWEET_VIEW, stage))
               .thenRun(() -> LOG.info("New tweet stage opened !"));
     }
 

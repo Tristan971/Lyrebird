@@ -16,7 +16,7 @@ public enum Screens implements FxmlNode {
 
     ROOT_VIEW("root/RootView.fxml", RootViewController.class),
     LOGIN_VIEW("login/Login.fxml", LoginViewController.class),
-    TWEET_VIEW("newtweet/NewTweet.fxml", NewTweetController.class),
+    NEW_TWEET_VIEW("newtweet/NewTweet.fxml", NewTweetController.class),
     CREDITS_VIEW("credits/Credits.fxml", CreditsController.class);
 
     private static final String SCREENS_BASE_PATH = "moe/lyrebird/view/screens/";
