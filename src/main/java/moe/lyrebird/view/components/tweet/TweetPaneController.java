@@ -53,7 +53,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private final CachedDataService cachedDataService;
 
     private Status status;
-    public final BooleanProperty selected = new SimpleBooleanProperty(false);
+    private final BooleanProperty selected = new SimpleBooleanProperty(false);
 
     public TweetPaneController(
             final TweetInterractionService interractionService,
