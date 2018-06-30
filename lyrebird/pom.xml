@@ -54,6 +54,11 @@
                     <bundleArguments>
                         <dropinResourcesRoot>${project.basedir}/src/main/java</dropinResourcesRoot>
                         <icon.ico>${project.basedir}/src/main/deploy/package/windows/Lyrebird.ico</icon.ico>
+                        <icon.icns>${project.basedir}/src/main/deploy/package/macosx/Lyrebird.icns</icon.icns>
+                        <mac.CFBundleIdentifier>moe.tristan.Lyrebird</mac.CFBundleIdentifier>
+                        <mac.CFBundleName>Lyrebird</mac.CFBundleName>
+                        <mac.CFBundleVersion>${project.version}</mac.CFBundleVersion>
+                        <mac.dmg.simple>true</mac.dmg.simple>
                         <installdirChooser>true</installdirChooser>
                     </bundleArguments>
                 </configuration>
