@@ -3,11 +3,15 @@ package moe.lyrebird.view.components.tweet;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
+import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
-import moe.lyrebird.model.twitter.services.TweetInterractionService;
+import moe.lyrebird.model.twitter.services.interraction.TweetInterractionService;
 import moe.lyrebird.view.CachedDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -15,13 +19,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.util.concurrent.CompletableFuture;
 
+import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
+import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
 import static moe.lyrebird.view.components.ImageResources.BLANK_USER_PROFILE_PICTURE;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
@@ -30,6 +35,8 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class TweetPaneController implements ComponentCellFxmlController<Status> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
 
     @FXML
     private Label author;
@@ -66,8 +73,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     @Override
     public void initialize() {
         Nodes.hideAndResizeParentIf(toolbar, selected);
-        likeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, clickedEvent -> onLike());
-        retweetButton.addEventHandler(MouseEvent.MOUSE_CLICKED, clickedEvent -> onRewteet());
+        Buttons.setOnClick(likeButton, this::onLike);
+        Buttons.setOnClick(retweetButton, this::onRewteet);
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
     }
 
@@ -82,24 +89,34 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private void setStatus(final Status status) {
-        if (status == null) return;
+        if (status == null) {
+            return;
+        }
 
+        this.status = status;
         author.setText(username(status.getUser()));
         content.getChildren().clear();
         content.getChildren().add(new Text(tweetContent(status)));
-        this.status = status;
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
         CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(status.getUser()))
                          .thenAccept(authorProfilePicture::setImage);
     }
 
     private void onLike() {
-        interractionService.like(status);
+        LOG.debug("Like interraction on status {}", status.getId());
+        final CompletableFuture<Status> likeRequest = CompletableFuture.supplyAsync(
+                        () -> interractionService.interract(status, LIKE)
+        );
         likeButton.setDisable(true);
+        likeRequest.whenCompleteAsync((res, err) -> likeButton.setDisable(false), Platform::runLater);
     }
 
     private void onRewteet() {
+        LOG.debug("Retweet interraction on status {}", status.getId());
+        final CompletableFuture<Status> retweetRequest = CompletableFuture.supplyAsync(
+                () -> interractionService.interract(status, RETWEET)
+        );
         retweetButton.setDisable(true);
-        interractionService.retweet(status);
+        retweetRequest.whenCompleteAsync((res, err) -> retweetButton.setDisable(false), Platform::runLater);
     }
 }
