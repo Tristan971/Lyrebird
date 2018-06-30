@@ -24,6 +24,7 @@ public class Twitter4JComponents {
         final String consumerSecret = environment.getProperty("twitter.consumerSecret");
         cb.setOAuthConsumerSecret(consumerSecret);
         cb.setOAuthConsumerKey(consumerKey);
+        cb.setTweetModeExtended(true);
         return cb.build();
     }
 
