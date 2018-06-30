@@ -50,8 +50,11 @@
                     <needMenu>true</needMenu>
                     <needShortcut>true</needShortcut>
                     <skipJNLP>true</skipJNLP>
+                    <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
                     <bundleArguments>
                         <dropinResourcesRoot>${project.basedir}/src/main/java</dropinResourcesRoot>
+                        <icon.ico>${project.basedir}/src/main/deploy/package/windows/Lyrebird.ico</icon.ico>
+                        <installdirChooser>true</installdirChooser>
                     </bundleArguments>
                 </configuration>
             </plugin>
