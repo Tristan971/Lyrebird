@@ -6,7 +6,7 @@ public enum ImageResources {
 
     BLANK_USER_PROFILE_PICTURE("user_avatar_icon.png"),
     BLANK_USER_PROFILE_PICTURE_LIGHT("user_avatar_icon_light.png"),
-    BLANK_USER_PROFILE_PICTURE_LIGHT_DISCONNECTED("user_avatar_icon_light_disconnected.png");
+    ADD_USER_PROFILE_PICTURE("add_user.png");
 
     private final Image backingImage;
 
