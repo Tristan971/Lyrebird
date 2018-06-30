@@ -32,7 +32,7 @@ Check out the release pages once we have something working decently.
 
 - [x] Log in 
 - [ ] Tweets-based systems
-    - [x] Base ystems :
+    - [x] Base systems :
         - [x] Timeline
         - [x] Mentions
         - [x] Direct messages
