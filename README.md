@@ -52,14 +52,14 @@ Check out the release pages once we have something working decently.
                 - [ ] Direct video embedding
             - [ ] Why is it not easy to do ?
                 - [ ] Youtube video embedding
-    - Loading features :
+    - [ ] Data loading features :
         - [x] Seeking older tweets by-demand (scroll or button)
         - [x] Seek newer tweets all the time using streaming API
 
 - [ ] Tweeting
     - [x] Support text
-    - [ ] Support image
-    - [ ] Support location
+    - [x] Support attachments
+    - [ ] Support geolocation
     
 - [ ] Interraction with tweet
     - [ ] Reply
