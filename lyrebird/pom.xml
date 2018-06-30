@@ -43,9 +43,13 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.9.0-SNAPSHOT</version>
                 <configuration>
+                    <appName>Lyrebird</appName>
+                    <identifier>Lyrebird</identifier>
                     <vendor>Tristan Deloche</vendor>
                     <mainClass>moe.lyrebird.Lyrebird</mainClass>
-                    <verbose>true</verbose>
+                    <needMenu>true</needMenu>
+                    <needShortcut>true</needShortcut>
+                    <skipJNLP>true</skipJNLP>
                     <bundleArguments>
                         <dropinResourcesRoot>${project.basedir}/src/main/java</dropinResourcesRoot>
                     </bundleArguments>
