@@ -82,24 +82,34 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private void setStatus(final Status status) {
-        if (status == null) return;
+        if (status == null) {
+            return;
+        }
 
+        this.status = status;
         author.setText(username(status.getUser()));
         content.getChildren().clear();
         content.getChildren().add(new Text(tweetContent(status)));
-        this.status = status;
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
         CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(status.getUser()))
                          .thenAccept(authorProfilePicture::setImage);
     }
 
     private void onLike() {
-        interractionService.like(status);
-        likeButton.setDisable(true);
+        interractionService.interractBinaryAction(
+                status,
+                interractionService::unlike,
+                interractionService::like,
+                status.isFavorited()
+        );
     }
 
     private void onRewteet() {
-        retweetButton.setDisable(true);
-        interractionService.retweet(status);
+        interractionService.interractBinaryAction(
+                status,
+                interractionService::unretweet,
+                interractionService::retweet,
+                status.isRetweetedByMe()
+        );
     }
 }
