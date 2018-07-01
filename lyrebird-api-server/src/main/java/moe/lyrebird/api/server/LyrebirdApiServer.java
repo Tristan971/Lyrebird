@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LyrebirdApiServer {
 
     public static void main(String[] args) {
-        SpringApplication.run(LyrebirdApiServer.class);
+        SpringApplication.run(LyrebirdApiServer.class, args);
     }
 
 }

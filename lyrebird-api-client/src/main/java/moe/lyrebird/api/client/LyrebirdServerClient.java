@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import moe.lyrebird.api.server.LyrebirdApiServer;
+import moe.lyrebird.api.server.controllers.Endpoints;
+import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 
 @Component
 public class LyrebirdServerClient {
