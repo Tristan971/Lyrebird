@@ -9,12 +9,18 @@
         <version>1.0.1</version>
     </parent>
 
-    <artifactId>lyrebird-launcher</artifactId>
+    <artifactId>lyrebird-client</artifactId>
     <version>1.0.1</version>
-    <packaging>jar</packaging>
 
-    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
-    <description>Launcher and updater for Lyrebird</description>
+    <packaging>jar</packaging>
+    <name>lyrebird-client</name>
+    <description>Lyrebird client API</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>10</java.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -26,6 +32,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>moe.lyrebird</groupId>
+            <artifactId>lyrebird-server</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

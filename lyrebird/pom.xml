@@ -166,6 +166,12 @@
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>moe.lyrebird</groupId>
+            <artifactId>lyrebird-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <pluginRepositories>
