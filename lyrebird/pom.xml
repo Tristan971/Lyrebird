@@ -169,7 +169,7 @@
 
         <dependency>
             <groupId>moe.lyrebird</groupId>
-            <artifactId>lyrebird-client</artifactId>
+            <artifactId>lyrebird-api-client</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
