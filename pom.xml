@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>moe.tristan</groupId>
+    <groupId>moe.lyrebird</groupId>
     <artifactId>lyrebird-parent</artifactId>
     <version>1.0.1</version>
 

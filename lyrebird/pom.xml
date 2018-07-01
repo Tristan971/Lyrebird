@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>moe.tristan</groupId>
+        <groupId>moe.lyrebird</groupId>
         <artifactId>lyrebird-parent</artifactId>
         <version>1.0.1</version>
     </parent>
