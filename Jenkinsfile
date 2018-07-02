@@ -18,11 +18,6 @@ pipeline {
             steps {
                 sh 'mvn clean test -Djava.awt.headless=false'
             }
-            post {
-                always {
-                    junit 'target/surefire-reports/**/*.xml'
-                }
-            }
         }
         stage('Code quality') {
             steps {
@@ -36,7 +31,7 @@ pipeline {
         }
         stage('Archive artifacts') {
             steps {
-                archiveArtifacts 'target/lyrebird*.jar'
+                archiveArtifacts 'lyrebird/target/lyrebird*.jar'
             }
         }
     }
