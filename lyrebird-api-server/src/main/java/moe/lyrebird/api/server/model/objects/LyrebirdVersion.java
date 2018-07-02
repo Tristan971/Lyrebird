@@ -1,5 +1,8 @@
 package moe.lyrebird.api.server.model.objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.net.URL;
 import java.util.List;
 
@@ -10,11 +13,12 @@ public class LyrebirdVersion {
     private final URL changenotesUrl;
     private final List<LyrebirdPackage> packages;
 
+    @JsonCreator
     public LyrebirdVersion(
-            String version,
-            String buildVersion,
-            URL changenotesUrl,
-            List<LyrebirdPackage> packages
+            @JsonProperty("version") final String version,
+            @JsonProperty("buildVersion") final String buildVersion,
+            @JsonProperty("changenotesUrl") final URL changenotesUrl,
+            @JsonProperty("packages") final List<LyrebirdPackage> packages
     ) {
         this.version = version;
         this.buildVersion = buildVersion;
@@ -38,4 +42,13 @@ public class LyrebirdVersion {
         return packages;
     }
 
+    @Override
+    public String toString() {
+        return "LyrebirdVersion{" +
+               "version='" + version + '\'' +
+               ", buildVersion='" + buildVersion + '\'' +
+               ", changenotesUrl=" + changenotesUrl +
+               ", packages=" + packages +
+               '}';
+    }
 }

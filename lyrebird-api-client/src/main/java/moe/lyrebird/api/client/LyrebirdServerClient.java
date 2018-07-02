@@ -1,6 +1,7 @@
 package moe.lyrebird.api.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import moe.lyrebird.api.server.controllers.Endpoints;
@@ -9,13 +10,13 @@ import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 @Component
 public class LyrebirdServerClient {
 
-    private static final String API_URL = "https://tristan.moe";
-
     private final RestTemplate restTemplate;
+    private final String apiUrl;
 
     @Autowired
-    public LyrebirdServerClient(RestTemplate restTemplate) {
+    public LyrebirdServerClient(final RestTemplate restTemplate, @Value("${api.url}") final String apiUrl) {
         this.restTemplate = restTemplate;
+        this.apiUrl = apiUrl;
     }
 
     public LyrebirdVersion getLatestVersion() {
@@ -26,7 +27,7 @@ public class LyrebirdServerClient {
     }
 
     private String buildUrl(final String controller, final String method) {
-        return API_URL + "/" + controller + "/" + method;
+        return apiUrl + "/" + controller + "/" + method;
     }
 
 }

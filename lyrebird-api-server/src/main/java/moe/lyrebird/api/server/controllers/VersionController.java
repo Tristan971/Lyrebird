@@ -11,8 +11,11 @@ import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 
 import java.net.MalformedURLException;
 
+import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CONTROLLER;
+import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_LATEST;
+
 @RestController
-@RequestMapping(Endpoints.VERSIONS_CONTROLLER)
+@RequestMapping(VERSIONS_CONTROLLER)
 public class VersionController {
 
     private final VersionService versionService;
@@ -22,7 +25,7 @@ public class VersionController {
         this.versionService = versionService;
     }
 
-    @GetMapping(value = Endpoints.VERSIONS_LATEST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = VERSIONS_LATEST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public LyrebirdVersion getLatestVersion() throws MalformedURLException {
         return versionService.getLatestVersion();
     }
