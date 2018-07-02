@@ -7,7 +7,6 @@ public class LyrebirdVersion {
 
     private final String version;
     private final String buildVersion;
-
     private final URL changenotesUrl;
     private final List<LyrebirdPackage> packages;
 
@@ -22,4 +21,21 @@ public class LyrebirdVersion {
         this.changenotesUrl = changenotesUrl;
         this.packages = packages;
     }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getBuildVersion() {
+        return buildVersion;
+    }
+
+    public URL getChangenotesUrl() {
+        return changenotesUrl;
+    }
+
+    public List<LyrebirdPackage> getPackages() {
+        return packages;
+    }
+
 }
