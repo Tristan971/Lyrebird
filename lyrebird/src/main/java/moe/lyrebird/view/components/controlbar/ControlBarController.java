@@ -7,16 +7,21 @@ import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
+import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.root.RootViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+
+import java.util.List;
 
 import static moe.lyrebird.view.screens.Screens.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
@@ -47,19 +52,32 @@ public class ControlBarController implements FxmlController {
     private final EasyFxml easyFxml;
     private final StageManager stageManager;
     private final RootViewController rootViewController;
+    private final SessionManager sessionManager;
+
+    private final Property<Button> currentViewButton;
 
     public ControlBarController(
             final EasyFxml easyFxml,
             final StageManager stageManager,
-            final RootViewController rootViewController
+            final RootViewController rootViewController,
+            final SessionManager sessionManager
     ) {
         this.easyFxml = easyFxml;
         this.stageManager = stageManager;
         this.rootViewController = rootViewController;
+        this.sessionManager = sessionManager;
+        this.currentViewButton = new SimpleObjectProperty<>(null);
     }
 
     @Override
     public void initialize() {
+        currentViewButton.addListener((o, prev, current) -> {
+            if (prev != null) {
+                prev.setDisable(false);
+            }
+            current.setDisable(true);
+        });
+
         Buttons.setOnClick(tweetButton, this::openTweetWindow);
 
         bindButtonToLoadingView(timelineViewButton, Components.TIMELINE);
@@ -73,6 +91,8 @@ public class ControlBarController implements FxmlController {
                         .andThen(Stages::scheduleDisplaying)
         );
 
+        sessionManager.isLoggedInProperty().addListener((o, prev, cur) -> handleLogStatusChange(prev, cur));
+        handleLogStatusChange(false, sessionManager.isLoggedInProperty().getValue());
         loadCurrentAccountPanel();
     }
 
@@ -100,7 +120,24 @@ public class ControlBarController implements FxmlController {
               .thenRun(() -> LOG.info("New tweet stage opened !"));
     }
 
+    private void handleLogStatusChange(final boolean previous, final boolean current) {
+        final List<Button> loggedOnlyButtons = List.of(
+                timelineViewButton,
+                tweetButton,
+                mentionsViewButton,
+                directMessagesViewButton,
+                tweetButton
+        );
+        loggedOnlyButtons.forEach(btn -> btn.setVisible(current));
+        if (!previous && current) {
+            timelineViewButton.fire();
+        }
+    }
+
     private void bindButtonToLoadingView(final Button button, final Components component) {
-        Buttons.setOnClick(button, () -> rootViewController.setContent(component));
+        Buttons.setOnClick(button, () -> {
+            currentViewButton.setValue(button);
+            rootViewController.setContent(component);
+        });
     }
 }
