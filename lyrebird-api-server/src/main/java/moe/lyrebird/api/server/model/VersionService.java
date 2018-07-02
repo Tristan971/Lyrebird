@@ -30,10 +30,7 @@ public class VersionService {
             final ObjectMapper mapper = new ObjectMapper();
             return Arrays.stream(versionResources)
                          .map(unchecked(Resource::getInputStream))
-                         .map(unchecked(is -> mapper.readValue(
-                                 is,
-                                 LyrebirdVersion.class
-                         )))
+                         .map(unchecked(is -> mapper.readValue(is, LyrebirdVersion.class)))
                          .sorted(Comparator.comparing(LyrebirdVersion::getBuildVersion))
                          .collect(Collectors.toList());
         } catch (IOException e) {

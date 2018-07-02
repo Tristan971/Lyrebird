@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.URL;
 
-public class LyrebirdPackage {
+public final class LyrebirdPackage {
 
     private final TargetPlatform targetPlatform;
     private final URL packageUrl;

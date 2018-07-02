@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.URL;
 import java.util.List;
 
-public class LyrebirdVersion {
+public final class LyrebirdVersion {
 
     private final String version;
     private final String buildVersion;
