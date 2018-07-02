@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>moe.tristan</groupId>
+        <groupId>moe.lyrebird</groupId>
         <artifactId>lyrebird-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>lyrebird</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>Lyrebird</name>
@@ -56,7 +56,7 @@
                         <icon.ico>${project.basedir}/src/main/deploy/package/windows/Lyrebird.ico</icon.ico>
                         <icon.icns>${project.basedir}/src/main/deploy/package/macosx/Lyrebird.icns</icon.icns>
                         <icon.png>${project.basedir}/src/main/deploy/package/linux/Lyrebird.png</icon.png>
-                        <mac.CFBundleIdentifier>moe.tristan.Lyrebird</mac.CFBundleIdentifier>
+                        <mac.CFBundleIdentifier>moe.lyrebird.Lyrebird</mac.CFBundleIdentifier>
                         <mac.CFBundleName>Lyrebird</mac.CFBundleName>
                         <mac.CFBundleVersion>${project.version}</mac.CFBundleVersion>
                         <mac.dmg.simple>true</mac.dmg.simple>
@@ -165,6 +165,12 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>moe.lyrebird</groupId>
+            <artifactId>lyrebird-api-client</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

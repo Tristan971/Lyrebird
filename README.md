@@ -1,34 +1,41 @@
-# Lyrebird
-###### A next-generation cross-platform Twitter client that doesn't suck.
+![Promo logo](docs/img/promo-logo-png.png)
 
 Last `master` branch's statistics :
 
-Build : 
 [![Build Status](https://jenkins.tristan.moe/job/Lyrebird/job/master/badge/icon)](https://jenkins.tristan.moe/job/Lyrebird/job/master)
-
-Quality : 
-[![Coverage](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=coverage)](https://sonar.tristan.moe/project/activity?graph=coverage&id=moe.lyrebird%3Alyrebird)
 [![Sonar bugs](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=bugs)](https://sonar.tristan.moe/project/issues?id=moe.lyrebird%3Alyrebird&resolved=false&types=BUG)
 [![Known Vulnerabilities](https://snyk.io/test/github/tristan971/lyrebird/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/tristan971/lyrebird?targetFile=pom.xml)
-
-Trivia : 
-[![LoC](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=ncloc)](https://sonar.tristan.moe/project/activity?graph=coverage&id=moe.lyrebird%3Alyrebird)
-[![Technical debt](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird&metric=sqale_index)](https://sonar.tristan.moe/project/issues?facetMode=effort&id=moe.lyrebird%3Alyrebird&resolved=false&types=CODE_SMELL)
 
 [![Quality gate status](https://sonar.tristan.moe/api/project_badges/quality_gate?project=moe.lyrebird%3Alyrebird)](https://sonar.tristan.moe/dashboard?id=moe.lyrebird%3Alyrebird)
 
 ## Reasoning :
-Currently there is not one good Windows Twitter client.
-We aim to fix this, but multiplatform-wise.
+Currently there are no good Twitter clients on Windows and Linux.
+The aime is to fix this, but also support macOS, and do all of that while being fully open-source.
 
 Hopefully this works out.
 
-Check out the release pages once we have something working decently.
 
-## Screenshot of current version :
+## How to get it
+
+#### [Precompiled releases](https://github.com/Tristan971/Lyrebird/releases)
+
+#### Build it yourself
+
+Requirements:
+- A Java 10+ development kit with JavaFX components included (i.e. an Oracle JDK or an OpenJDK+OpenJFX combo)
+- Apache Maven (works at least with version 3.5.2)
+- For native images you need either InnoSetup tools on Windows or ``dpkg-deb``/``rpmutils`` on Linux depending on
+what system you want to target. You can only build native images for the current system type.
+
+Any of the following (execute command in this README's directory):
+- Execute only (no packaging): ``cd lyrebird && mvn clean spring-boot:run``
+- For a native image: ``cd lyrebird && mvn clean jfx:native -DskipTests``
+- For a portable JAR file ``mvn clean package -DskipTests``
+
+## What does it look like?
 [![Screenshot of current version](docs/img/screenshot.png)](docs/img/screenshot.png)
 
-## Current state :
+## Current state of development:
 
 - [x] Log in 
 - [ ] Tweets-based systems
@@ -68,3 +75,12 @@ Check out the release pages once we have something working decently.
     - [x] Retweet
 
 - [ ] Searches
+
+## Can I contribute?
+Please do!
+
+It should be fairly easy to understand the general idea of the back-end model for any
+seasoned Java developer with some Spring Framework experience.
+
+For the UI/JavaFX model a lot of the work is delegated to a JavaFX framework called
+EasyFXML which you can read about [here](https://github.com/Tristan971/EasyFXML).

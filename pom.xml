@@ -9,13 +9,13 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>moe.tristan</groupId>
+    <groupId>moe.lyrebird</groupId>
     <artifactId>lyrebird-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <packaging>pom</packaging>
 
-    <name>${project.groupId}:${project.artifactId}:${project.version}</name>
+    <name>lyrebird-parent</name>
     <description>Maven parent for Lyrebird</description>
 
     <developers>
@@ -27,8 +27,8 @@
     </developers>
 
     <organization>
-        <name>Tristan Deloche</name>
-        <url>https://tristan.moe</url>
+        <name>Lyrebird</name>
+        <url>https://lyrebird.moe</url>
     </organization>
 
     <properties>
@@ -39,7 +39,8 @@
 
     <modules>
         <module>lyrebird</module>
-        <module>lyrebird-launcher</module>
+        <module>lyrebird-api-server</module>
+        <module>lyrebird-api-client</module>
     </modules>
 
     <build>

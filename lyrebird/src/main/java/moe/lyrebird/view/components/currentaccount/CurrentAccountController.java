@@ -20,7 +20,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.concurrent.CompletableFuture;
 
-import static moe.lyrebird.view.components.ImageResources.BLANK_USER_PROFILE_PICTURE_LIGHT_DISCONNECTED;
+import static moe.lyrebird.view.components.ImageResources.ADD_USER_PROFILE_PICTURE;
 
 @Component
 public class CurrentAccountController implements FxmlController {
@@ -50,7 +50,7 @@ public class CurrentAccountController implements FxmlController {
 
     @Override
     public void initialize() {
-        userProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE_LIGHT_DISCONNECTED.getImage());
+        userProfilePicture.setImage(ADD_USER_PROFILE_PICTURE.getImage());
         userProfilePicture.setOnMouseClicked(e -> handleClickOnProfile());
         bindUsername();
         bindProfilePicture();

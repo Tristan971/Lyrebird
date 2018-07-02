@@ -10,6 +10,7 @@ import twitter4j.Twitter;
 import twitter4j.auth.AccessToken;
 
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -34,16 +35,19 @@ public class SessionManager {
 
     private final Property<Session> currentSession;
     private final Property<String> currentSessionUsername;
+    private final Property<Boolean> isLoggedInProperty;
 
     public SessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         this.context = context;
         this.sessionRepository = sessionRepository;
         this.currentSession = new SimpleObjectProperty<>(null);
         this.currentSessionUsername = new SimpleStringProperty("Logged out");
+        this.isLoggedInProperty = new SimpleBooleanProperty(false);
         this.currentSession.addListener(
                 (ref, oldVal, newVal) -> {
                     LOG.debug("Current session property changed from {} to {}", oldVal, newVal);
                     currentSessionUsername.setValue(newVal.getUserScreenName());
+                    isLoggedInProperty.setValue(true);
                 }
         );
     }
@@ -52,8 +56,8 @@ public class SessionManager {
         return currentSession;
     }
 
-    public boolean isLoggedIn() {
-        return currentSession.getValue() != null;
+    public Property<Boolean> isLoggedInProperty() {
+        return isLoggedInProperty;
     }
 
     public Property<String> currentSessionUsernameProperty() {
@@ -113,7 +117,7 @@ public class SessionManager {
         this.loadAllSessions();
     }
 
-    protected void loadSession(final Session session) {
+    private void loadSession(final Session session) {
         final TwitterHandler handler = this.context.getBean(TwitterHandler.class);
         handler.registerAccessToken(session.getAccessToken());
         session.setTwitterHandler(handler);
@@ -139,7 +143,7 @@ public class SessionManager {
     /**
      * Saves all sessions.
      */
-    public void saveAllSessions() {
+    private void saveAllSessions() {
         this.loadedSessions.stream()
                            .peek(session -> LOG.info("Saving Twitter session : {}", session))
                            .forEach(this.sessionRepository::save);
