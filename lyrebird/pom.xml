@@ -135,7 +135,7 @@
             <version>4.0.6</version>
         </dependency>
 
-        <!-- Vavr (formerly JavaSlang) -->
+        <!-- Vavr -->
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>

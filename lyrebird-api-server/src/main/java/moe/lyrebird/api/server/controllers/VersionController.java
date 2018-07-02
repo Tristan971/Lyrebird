@@ -5,11 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import moe.lyrebird.api.server.model.VersionService;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
-
-import java.net.MalformedURLException;
 
 import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CONTROLLER;
 import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_LATEST;
@@ -26,7 +23,7 @@ public class VersionController {
     }
 
     @GetMapping(value = VERSIONS_LATEST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public LyrebirdVersion getLatestVersion() throws MalformedURLException {
+    public LyrebirdVersion getLatestVersion() {
         return versionService.getLatestVersion();
     }
 
