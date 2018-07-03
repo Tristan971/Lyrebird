@@ -15,7 +15,6 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -38,29 +37,21 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
 
-    @FXML
-    private Label author;
-
-    @FXML
-    private ImageView authorProfilePicture;
-
-    @FXML
-    private TextFlow content;
-
-    @FXML
-    private HBox toolbar;
-
-    @FXML
-    private Button likeButton;
-
-    @FXML
-    private Button retweetButton;
+    public Label author;
+    public ImageView authorProfilePicture;
+    public TextFlow content;
+    public HBox toolbar;
+    public Button likeButton;
+    public Button retweetButton;
+    public Label retweeterLabel;
+    public HBox retweetHbox;
 
     private final TweetInterractionService interractionService;
     private final CachedDataService cachedDataService;
 
     private Status status;
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
+    private final BooleanProperty isRetweet = new SimpleBooleanProperty(false);
 
     public TweetPaneController(
             final TweetInterractionService interractionService,
@@ -73,6 +64,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     @Override
     public void initialize() {
         Nodes.hideAndResizeParentIf(toolbar, selected);
+        Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         Buttons.setOnClick(likeButton, this::onLike);
         Buttons.setOnClick(retweetButton, this::onRewteet);
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
@@ -94,11 +86,26 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         }
 
         this.status = status;
-        author.setText(username(status.getUser()));
-        content.getChildren().clear();
-        content.getChildren().add(new Text(tweetContent(status)));
+        this.isRetweet.set(status.isRetweet());
+
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
-        CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(status.getUser()))
+        if (status.isRetweet()) {
+            handleRetweet(status);
+        } else {
+            setStatusDisplay(status);
+        }
+    }
+
+    private void handleRetweet(final Status status) {
+        retweeterLabel.setText(status.getUser().getScreenName());
+        setStatusDisplay(status.getRetweetedStatus());
+    }
+
+    private void setStatusDisplay(final Status statusToDisplay) {
+        author.setText(username(statusToDisplay.getUser()));
+        content.getChildren().clear();
+        content.getChildren().add(new Text(tweetContent(statusToDisplay)));
+        CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(statusToDisplay.getUser()))
                          .thenAccept(authorProfilePicture::setImage);
     }
 
