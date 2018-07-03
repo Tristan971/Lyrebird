@@ -41,11 +41,23 @@
 #retweetButton {
     -fx-text-fill: #3faa4d;
     -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-padding: 3px;
+}
+
+#retweetButton:hover {
+    -fx-background-color: #1a4620;
+    -fx-border-radius: 10px;
 }
 
 #likeButton {
     -fx-text-fill: #ff6162;
     -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-padding: 3px;
+}
+
+#likeButton:hover {
+    -fx-background-color: #5e2424;
+    -fx-border-radius: 10px;
 }
 
 #tweetButton {
