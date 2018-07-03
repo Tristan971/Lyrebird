@@ -14,7 +14,6 @@ import twitter4j.User;
 
 import javafx.collections.MapChangeListener;
 import javafx.collections.MapChangeListener.Change;
-import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
@@ -29,8 +28,7 @@ public class DirectMessagesController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessagesController.class);
 
-    @FXML
-    private TabPane conversationsPane;
+    public TabPane conversationsPane;
 
     private final EasyFxml easyFxml;
     private final DirectMessages directMessages;

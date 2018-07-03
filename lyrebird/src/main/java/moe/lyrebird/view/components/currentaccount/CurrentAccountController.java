@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.User;
 
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
@@ -27,11 +26,9 @@ public class CurrentAccountController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CurrentAccountController.class);
 
-    @FXML
-    private ImageView userProfilePicture;
+    public ImageView userProfilePicture;
 
-    @FXML
-    private Label userScreenName;
+    public Label userScreenName;
 
     private final SessionManager sessionManager;
     private final CachedDataService cachedDataService;

@@ -16,7 +16,6 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
 import java.util.Collections;
@@ -30,8 +29,7 @@ public class DMConversationController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DMConversationController.class);
 
-    @FXML
-    private ListView<DirectMessage> messageListView;
+    public ListView<DirectMessage> messageListView;
 
     private final DirectMessages directMessages;
     private final Supplier<DirectMessageListCell> directMessageListCellSupplier;

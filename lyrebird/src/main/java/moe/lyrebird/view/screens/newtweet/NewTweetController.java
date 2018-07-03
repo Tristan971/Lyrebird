@@ -48,20 +48,11 @@ public class NewTweetController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewTweetController.class);
 
-    @FXML
-    private Button sendButton;
-
-    @FXML
-    private Button pickMediaButton;
-
-    @FXML
-    private TextArea tweetTextArea;
-
-    @FXML
-    private Label charactersLeft;
-
-    @FXML
-    private VBox mediaList;
+    public Button sendButton;
+    public Button pickMediaButton;
+    public TextArea tweetTextArea;
+    public Label charactersLeft;
+    public VBox mediaList;
 
     private final StageManager stageManager;
     private final NewTweetService newTweetService;
