@@ -42,11 +42,11 @@
     -fx-text-fill: #3faa4d;
     -fx-background-color: rgba(0, 0, 0, 0);
     -fx-padding: 3px;
+    -fx-font-weight: bold;
 }
 
 #retweetButton:hover {
     -fx-text-fill: white;
-    -fx-font-weight: bold;
     -fx-background-color: #3faa4d;
     -fx-border-radius: 10px;
 }
@@ -55,11 +55,11 @@
     -fx-text-fill: #ff6162;
     -fx-background-color: rgba(0, 0, 0, 0);
     -fx-padding: 3px;
+    -fx-font-weight: bold;
 }
 
 #likeButton:hover {
     -fx-text-fill: white;
-    -fx-font-weight: bold;
     -fx-background-color: #ff6162;
     -fx-border-radius: 10px;
 }
