@@ -19,7 +19,7 @@
 package moe.lyrebird.view.components.credits;
 
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
-import moe.lyrebird.model.credits.CreditedWork;
+import moe.lyrebird.model.credits.objects.CreditedWork;
 
 import javafx.beans.binding.BooleanExpression;
 

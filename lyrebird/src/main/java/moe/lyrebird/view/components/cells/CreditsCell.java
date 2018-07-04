@@ -20,7 +20,7 @@ package moe.lyrebird.view.components.cells;
 
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import moe.lyrebird.model.credits.CreditedWork;
+import moe.lyrebird.model.credits.objects.CreditedWork;
 import moe.lyrebird.view.components.Components;
 
 public class CreditsCell extends ComponentListCell<CreditedWork> {
