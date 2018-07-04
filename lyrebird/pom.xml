@@ -45,7 +45,7 @@
                 <configuration>
                     <appName>Lyrebird</appName>
                     <identifier>Lyrebird</identifier>
-                    <vendor>Tristan Deloche</vendor>
+                    <vendor>Lyrebird</vendor>
                     <mainClass>moe.lyrebird.Lyrebird</mainClass>
                     <needMenu>true</needMenu>
                     <needShortcut>true</needShortcut>
