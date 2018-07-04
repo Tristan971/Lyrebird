@@ -18,7 +18,6 @@
 
 package moe.lyrebird.model.credits;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
@@ -26,19 +25,10 @@ import java.util.Objects;
 public final class CreditedWork {
 
     @JsonProperty
-    private final String creditedWorkTitle;
+    private String creditedWorkTitle;
 
     @JsonProperty
-    private final String creditedWorkAuthor;
-
-    @JsonCreator
-    public CreditedWork(
-            final String creditedWorkTitle,
-            final String creditedWorkAuthor
-    ) {
-        this.creditedWorkTitle = creditedWorkTitle;
-        this.creditedWorkAuthor = creditedWorkAuthor;
-    }
+    private String creditedWorkAuthor;
 
     public String getCreditedWorkTitle() {
         return creditedWorkTitle;
