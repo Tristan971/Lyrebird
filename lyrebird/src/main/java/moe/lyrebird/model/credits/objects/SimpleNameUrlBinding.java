@@ -16,34 +16,33 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.credits;
+package moe.lyrebird.model.credits.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Objects;
 
-public final class CreditedWork {
+public abstract class SimpleNameUrlBinding {
 
     @JsonProperty
-    private String creditedWorkTitle;
+    protected final String name;
 
     @JsonProperty
-    private String creditedWorkAuthor;
+    protected final URL url;
 
-    public String getCreditedWorkTitle() {
-        return creditedWorkTitle;
+    SimpleNameUrlBinding(String name, String url) throws MalformedURLException {
+        this.name = name;
+        this.url = new URL(url);
     }
 
-    public String getCreditedWorkAuthor() {
-        return creditedWorkAuthor;
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public String toString() {
-        return "CreditedWork{" +
-               "creditedWorkTitle='" + creditedWorkTitle + '\'' +
-               ", creditedWorkAuthor='" + creditedWorkAuthor + '\'' +
-               '}';
+    public URL getUrl() {
+        return url;
     }
 
     @Override
@@ -51,17 +50,17 @@ public final class CreditedWork {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof CreditedWork)) {
+        if (!(o instanceof SimpleNameUrlBinding)) {
             return false;
         }
-        CreditedWork that = (CreditedWork) o;
-        return Objects.equals(getCreditedWorkTitle(), that.getCreditedWorkTitle()) &&
-               Objects.equals(getCreditedWorkAuthor(), that.getCreditedWorkAuthor());
+        SimpleNameUrlBinding that = (SimpleNameUrlBinding) o;
+        return Objects.equals(getName(), that.getName()) &&
+               Objects.equals(getUrl(), that.getUrl());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCreditedWorkTitle(), getCreditedWorkAuthor());
+        return Objects.hash(getName(), getUrl());
     }
 
 }
