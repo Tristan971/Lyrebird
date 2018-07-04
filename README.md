@@ -11,7 +11,7 @@ Last `master` branch's statistics :
 
 ## Reasoning :
 Currently there are no good Twitter clients on Windows and Linux.
-The aime is to fix this, but also support macOS, and do all of that while being fully open-source.
+The aim is to fix this, but also support macOS, and do all of that while being fully open-source.
 
 Hopefully this works out.
 
@@ -50,7 +50,14 @@ Any of the following (execute command in this README's directory):
         - [ ] Display for chosen list
         - [ ] Text highlighting
             - [ ] Mentions
+                - [ ] Color
+                - [ ] Clickable
             - [ ] Hashtags
+                - [ ] Color
+                - [ ] Clickable
+            - [x] URLs
+                - [x] Color
+                - [x] Clickable
         - [ ] Media embedding
             - [ ] Officially supported
                 - [ ] Twitter image embedding

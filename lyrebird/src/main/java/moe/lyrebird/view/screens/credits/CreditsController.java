@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 
@@ -32,8 +31,7 @@ public class CreditsController implements FxmlController {
 
     private static final PathMatchingResourcePatternResolver PMPR = new PathMatchingResourcePatternResolver();
 
-    @FXML
-    private VBox creditsBox;
+    public VBox creditsBox;
 
     @Override
     public void initialize() {

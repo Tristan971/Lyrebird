@@ -10,7 +10,6 @@ import twitter4j.Status;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
@@ -18,8 +17,7 @@ import java.util.Optional;
 
 public abstract class TimelineBasedController extends ComponentListViewFxmlController<Status> {
 
-    @FXML
-    private Button loadMoreButton;
+    public Button loadMoreButton;
 
     private final TwitterTimelineBaseModel timelineBase;
     private final ListProperty<Status> tweetsProperty;
