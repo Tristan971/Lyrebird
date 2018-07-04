@@ -18,12 +18,18 @@
 
 package moe.lyrebird.view.components.cells;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import moe.lyrebird.model.credits.objects.CreditedWork;
+import moe.lyrebird.model.credits.objects.CredittedWork;
 import moe.lyrebird.view.components.Components;
 
-public class CreditsCell extends ComponentListCell<CreditedWork> {
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
+@Component
+@Scope(scopeName = SCOPE_PROTOTYPE)
+public class CreditsCell extends ComponentListCell<CredittedWork> {
 
     public CreditsCell(EasyFxml easyFxml) {
         super(easyFxml, Components.CREDIT);

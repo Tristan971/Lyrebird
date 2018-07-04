@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.collection.Stream;
 import io.vavr.control.Try;
-import moe.lyrebird.model.credits.objects.CreditedWork;
+import moe.lyrebird.model.credits.objects.CredittedWork;
 
 import javafx.collections.ObservableList;
 
@@ -42,17 +42,17 @@ public class CreditsService {
 
     private static final String CREDITS_RESOURCES_PATH = "classpath:assets/credits/*.json";
 
-    private final ObservableList<CreditedWork> creditedWorks;
+    private final ObservableList<CredittedWork> credittedWorks;
 
     @Autowired
     public CreditsService(ObjectMapper objectMapper) {
-        this.creditedWorks = unmodifiableObservableList(observableList(loadCreditsFiles(
+        this.credittedWorks = unmodifiableObservableList(observableList(loadCreditsFiles(
                 objectMapper,
                 new PathMatchingResourcePatternResolver()
         )));
     }
 
-    private List<CreditedWork> loadCreditsFiles(
+    private List<CredittedWork> loadCreditsFiles(
             final ObjectMapper objectMapper,
             final PathMatchingResourcePatternResolver pmpr
     ) {
@@ -60,12 +60,12 @@ public class CreditsService {
                   .toStream()
                   .flatMap(Stream::of)
                   .map(unchecked(Resource::getInputStream))
-                  .map(unchecked(cis -> objectMapper.readValue(cis, CreditedWork.class)))
+                  .map(unchecked(cis -> objectMapper.readValue(cis, CredittedWork.class)))
                   .toJavaList();
     }
 
-    public ObservableList<CreditedWork> creditedWorks() {
-        return creditedWorks;
+    public ObservableList<CredittedWork> creditedWorks() {
+        return credittedWorks;
     }
 
 }

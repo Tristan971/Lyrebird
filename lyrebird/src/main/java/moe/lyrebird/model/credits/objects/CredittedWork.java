@@ -21,7 +21,7 @@ package moe.lyrebird.model.credits.objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public final class CreditedWork {
+public final class CredittedWork {
 
     @JsonProperty
     private final String title;
@@ -36,7 +36,7 @@ public final class CreditedWork {
     private final CredittedWorkLicense license;
 
     @JsonCreator
-    public CreditedWork(
+    public CredittedWork(
             @JsonProperty("title") final String title,
             @JsonProperty("author") final CredittedWorkAuthor author,
             @JsonProperty("licensor") final CredittedWorkLicensor licensor,
@@ -46,6 +46,22 @@ public final class CreditedWork {
         this.author = author;
         this.licensor = licensor;
         this.license = license;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public CredittedWorkAuthor getAuthor() {
+        return author;
+    }
+
+    public CredittedWorkLicensor getLicensor() {
+        return licensor;
+    }
+
+    public CredittedWorkLicense getLicense() {
+        return license;
     }
 
 }

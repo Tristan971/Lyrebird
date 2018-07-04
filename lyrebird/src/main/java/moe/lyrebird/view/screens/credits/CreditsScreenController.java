@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
 import moe.lyrebird.model.credits.CreditsService;
-import moe.lyrebird.model.credits.objects.CreditedWork;
+import moe.lyrebird.model.credits.objects.CredittedWork;
 import moe.lyrebird.view.components.cells.CreditsCell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ import javafx.beans.property.ReadOnlyListWrapper;
 
 @Lazy
 @Component
-public class CreditsScreenController extends ComponentListViewFxmlController<CreditedWork> {
+public class CreditsScreenController extends ComponentListViewFxmlController<CredittedWork> {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreditsScreenController.class);
 
