@@ -23,6 +23,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.sessions.SessionRepository;
 import moe.lyrebird.model.twitter.twitter4j.Twitter4JComponents;
@@ -56,6 +58,18 @@ public class BackendComponents {
         long loadedSessions = sessionManager.loadAllSessions();
         LOG.info("Loaded {} previously saved sessions.", loadedSessions);
         return sessionManager;
+    }
+
+    @Lazy
+    @Bean
+    public ObjectMapper objectMapper() {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(
+                DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES,
+                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                DeserializationFeature.FAIL_ON_TRAILING_TOKENS
+        );
+        return objectMapper;
     }
 
 }
