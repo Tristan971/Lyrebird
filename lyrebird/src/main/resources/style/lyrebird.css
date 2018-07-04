@@ -45,7 +45,9 @@
 }
 
 #retweetButton:hover {
-    -fx-background-color: #1a4620;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: #3faa4d;
     -fx-border-radius: 10px;
 }
 
@@ -56,7 +58,9 @@
 }
 
 #likeButton:hover {
-    -fx-background-color: #5e2424;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: #ff6162;
     -fx-border-radius: 10px;
 }
 
