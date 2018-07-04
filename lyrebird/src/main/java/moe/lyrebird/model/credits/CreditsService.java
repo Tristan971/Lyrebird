@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.collection.Stream;
 import io.vavr.control.Try;
+import moe.lyrebird.model.credits.objects.CreditedWork;
 
 import javafx.collections.ObservableList;
 
@@ -38,6 +39,8 @@ import static javafx.collections.FXCollections.unmodifiableObservableList;
 @Lazy
 @Component
 public class CreditsService {
+
+    private static final String CREDITS_RESOURCES_PATH = "classpath:assets/credits/*.json";
 
     private final ObservableList<CreditedWork> creditedWorks;
 
@@ -53,7 +56,7 @@ public class CreditsService {
             final ObjectMapper objectMapper,
             final PathMatchingResourcePatternResolver pmpr
     ) {
-        return Try.of(() -> pmpr.getResources("classpath:assets/credits/*.json"))
+        return Try.of(() -> pmpr.getResources(CREDITS_RESOURCES_PATH))
                   .toStream()
                   .flatMap(Stream::of)
                   .map(unchecked(Resource::getInputStream))
