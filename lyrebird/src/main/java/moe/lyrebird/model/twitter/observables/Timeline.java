@@ -18,12 +18,14 @@
 
 package moe.lyrebird.model.twitter.observables;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
 
+@Lazy
 @Component
 public class Timeline extends TwitterTimelineBaseModel {
 
