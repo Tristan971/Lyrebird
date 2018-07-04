@@ -21,10 +21,10 @@ package moe.lyrebird.view.screens;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
-import moe.lyrebird.view.screens.credits.CreditsController;
-import moe.lyrebird.view.screens.login.LoginViewController;
-import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.screens.root.RootViewController;
+import moe.lyrebird.view.screens.credits.CreditsScreenController;
+import moe.lyrebird.view.screens.login.LoginScreenController;
+import moe.lyrebird.view.screens.newtweet.NewScreenController;
+import moe.lyrebird.view.screens.root.RootScreenController;
 
 /**
  * The screens as an enum for easier autocompletion etc.
@@ -32,10 +32,10 @@ import moe.lyrebird.view.screens.root.RootViewController;
 @SuppressWarnings("unused")
 public enum Screens implements FxmlNode {
 
-    ROOT_VIEW("root/RootView.fxml", RootViewController.class),
-    LOGIN_VIEW("login/Login.fxml", LoginViewController.class),
-    NEW_TWEET_VIEW("newtweet/NewTweet.fxml", NewTweetController.class),
-    CREDITS_VIEW("credits/Credits.fxml", CreditsController.class);
+    ROOT_VIEW("root/RootView.fxml", RootScreenController.class),
+    LOGIN_VIEW("login/Login.fxml", LoginScreenController.class),
+    NEW_TWEET_VIEW("newtweet/NewTweet.fxml", NewScreenController.class),
+    CREDITS_VIEW("credits/Credits.fxml", CreditsScreenController.class);
 
     private static final String SCREENS_BASE_PATH = "moe/lyrebird/view/screens/";
 

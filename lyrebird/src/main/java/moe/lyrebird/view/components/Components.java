@@ -22,6 +22,7 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.components.controlbar.ControlBarController;
+import moe.lyrebird.view.components.credits.CreditController;
 import moe.lyrebird.view.components.currentaccount.CurrentAccountController;
 import moe.lyrebird.view.components.directmessages.DMConversationController;
 import moe.lyrebird.view.components.directmessages.DirectMessagesController;
@@ -40,7 +41,8 @@ public enum Components implements FxmlNode {
     DIRECT_MESSAGES("directmessages/DirectMessages.fxml", DirectMessagesController.class),
     DIRECT_MESSAGE_CONVERSATION("directmessages/DMConversation.fxml", DMConversationController.class),
 
-    TWEET("tweet/TweetPane.fxml", TweetPaneController.class);
+    TWEET("tweet/TweetPane.fxml", TweetPaneController.class),
+    CREDIT("credits/CreditPane.fxml", CreditController.class);
 
     private static final String COMPONENTS_BASE_PATH = "moe/lyrebird/view/components/";
 
