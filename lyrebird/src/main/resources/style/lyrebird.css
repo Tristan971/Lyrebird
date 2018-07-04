@@ -63,3 +63,7 @@
 #tweetButton {
     -fx-background-color: -fx-focus-color;
 }
+
+.hyperlink {
+    -fx-text-fill: #29618b !important;
+}

@@ -2,11 +2,14 @@ package moe.lyrebird.view.components.tweet;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.lyrebird.model.twitter.services.interraction.TweetInterractionService;
 import moe.lyrebird.view.CachedDataService;
+import moe.lyrebird.view.util.BrowserOpeningHyperlink;
+import moe.lyrebird.view.util.HyperlinkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
@@ -22,12 +25,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
 import static moe.lyrebird.view.components.ImageResources.BLANK_USER_PROFILE_PICTURE;
-import static moe.lyrebird.view.components.tweet.TweetFormatter.tweetContent;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -46,6 +49,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     public Label retweeterLabel;
     public HBox retweetHbox;
 
+    private final BrowserSupport browserSupport;
     private final TweetInterractionService interractionService;
     private final CachedDataService cachedDataService;
 
@@ -54,9 +58,11 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private final BooleanProperty isRetweet = new SimpleBooleanProperty(false);
 
     public TweetPaneController(
+            final BrowserSupport browserSupport,
             final TweetInterractionService interractionService,
             final CachedDataService cachedDataService
     ) {
+        this.browserSupport = browserSupport;
         this.interractionService = interractionService;
         this.cachedDataService = cachedDataService;
     }
@@ -97,14 +103,13 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private void handleRetweet(final Status status) {
-        retweeterLabel.setText(status.getUser().getScreenName());
+        retweeterLabel.setText("@" + status.getUser().getScreenName());
         setStatusDisplay(status.getRetweetedStatus());
     }
 
     private void setStatusDisplay(final Status statusToDisplay) {
         author.setText(username(statusToDisplay.getUser()));
-        content.getChildren().clear();
-        content.getChildren().add(new Text(tweetContent(statusToDisplay)));
+        loadTextIntoTextFlow(statusToDisplay.getText());
         CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(statusToDisplay.getUser()))
                          .thenAccept(authorProfilePicture::setImage);
     }
@@ -125,5 +130,16 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         );
         retweetButton.setDisable(true);
         retweetRequest.whenCompleteAsync((res, err) -> retweetButton.setDisable(false), Platform::runLater);
+    }
+
+    private void loadTextIntoTextFlow(final String tweetText) {
+        content.getChildren().clear();
+        final String strippedText = HyperlinkUtils.stripAllUrls(tweetText);
+        final List<String> urlsInText = HyperlinkUtils.findAllUrls(tweetText);
+
+        content.getChildren().add(new Text(strippedText));
+        urlsInText.stream()
+                  .map(url -> new BrowserOpeningHyperlink(browserSupport::openUrl).withTarget(url))
+                  .forEach(content.getChildren()::add);
     }
 }
