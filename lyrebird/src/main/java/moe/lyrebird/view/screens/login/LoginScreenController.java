@@ -19,6 +19,7 @@
 package moe.lyrebird.view.screens.login;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
@@ -48,11 +49,12 @@ import java.util.stream.Stream;
 /**
  * Created by Tristan on 01/03/2017.
  */
+@Lazy
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class LoginViewController implements FxmlController {
+public class LoginScreenController implements FxmlController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LoginViewController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoginScreenController.class);
 
     public VBox step1Box;
     public Button openLoginUrlButton;
@@ -68,7 +70,7 @@ public class LoginViewController implements FxmlController {
     private final TwitterHandler twitterHandler;
     private final SessionManager sessionManager;
 
-    public LoginViewController(
+    public LoginScreenController(
             final BrowserSupport browserSupport,
             final TwitterHandler twitterHandler,
             final SessionManager sessionManager

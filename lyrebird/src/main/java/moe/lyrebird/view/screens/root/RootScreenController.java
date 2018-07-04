@@ -35,15 +35,15 @@ import static moe.lyrebird.view.components.Components.CONTROL_BAR;
  * The RootViewController manages the location of content on the root view scene.
  */
 @Component
-public class RootViewController implements FxmlController {
+public class RootScreenController implements FxmlController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RootViewController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RootScreenController.class);
 
     public BorderPane contentPane;
 
     private final EasyFxml easyFxml;
 
-    public RootViewController(final EasyFxml easyFxml) {
+    public RootScreenController(final EasyFxml easyFxml) {
         this.easyFxml = easyFxml;
     }
 
