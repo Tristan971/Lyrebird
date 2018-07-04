@@ -28,7 +28,7 @@ import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.Screens;
-import moe.lyrebird.view.screens.root.RootViewController;
+import moe.lyrebird.view.screens.root.RootScreenController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class ControlBarController implements FxmlController {
 
     private final EasyFxml easyFxml;
     private final StageManager stageManager;
-    private final RootViewController rootViewController;
+    private final RootScreenController rootScreenController;
     private final SessionManager sessionManager;
 
     private final Property<Button> currentViewButton;
@@ -65,12 +65,12 @@ public class ControlBarController implements FxmlController {
     public ControlBarController(
             final EasyFxml easyFxml,
             final StageManager stageManager,
-            final RootViewController rootViewController,
+            final RootScreenController rootScreenController,
             final SessionManager sessionManager
     ) {
         this.easyFxml = easyFxml;
         this.stageManager = stageManager;
-        this.rootViewController = rootViewController;
+        this.rootScreenController = rootScreenController;
         this.sessionManager = sessionManager;
         this.currentViewButton = new SimpleObjectProperty<>(null);
     }
@@ -143,7 +143,7 @@ public class ControlBarController implements FxmlController {
     private void bindButtonToLoadingView(final Button button, final Components component) {
         Buttons.setOnClick(button, () -> {
             currentViewButton.setValue(button);
-            rootViewController.setContent(component);
+            rootScreenController.setContent(component);
         });
     }
 }
