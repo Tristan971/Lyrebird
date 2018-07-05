@@ -25,14 +25,26 @@ import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
 import moe.lyrebird.model.credits.objects.CredittedWork;
 import moe.lyrebird.view.components.Components;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class CreditsCell extends ComponentListCell<CredittedWork> {
 
+    private BooleanProperty shouldDisplay;
+
     public CreditsCell(EasyFxml easyFxml) {
         super(easyFxml, Components.CREDIT);
+        this.shouldDisplay = new SimpleBooleanProperty(false);
+        this.cellNode.visibleProperty().bind(shouldDisplay);
     }
 
+    @Override
+    protected void updateItem(CredittedWork item, boolean empty) {
+        super.updateItem(item, empty);
+        this.shouldDisplay.setValue(item != null && !empty);
+    }
 }

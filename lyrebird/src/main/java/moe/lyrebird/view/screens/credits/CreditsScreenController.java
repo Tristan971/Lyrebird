@@ -40,13 +40,14 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
     private final CreditsService creditsService;
 
     @Autowired
-    public CreditsScreenController(ApplicationContext context, CreditsService creditsService) {
+    public CreditsScreenController(final ApplicationContext context, final CreditsService creditsService) {
         super(context, CreditsCell.class);
         this.creditsService = creditsService;
     }
 
     @Override
     public void initialize() {
+        super.initialize();
         LOG.debug("Loading credits...");
         listView.itemsProperty().bind(new ReadOnlyListWrapper<>(creditsService.creditedWorks()));
     }

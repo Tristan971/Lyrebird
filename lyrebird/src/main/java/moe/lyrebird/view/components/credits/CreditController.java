@@ -66,15 +66,19 @@ public class CreditController implements ComponentCellFxmlController<CredittedWo
 
     @Override
     public void initialize() {
-        credittedWork.addListener((o, prev, cur) -> Platform.runLater(() -> {
-            title.setText(cur.getTitle());
-            author.setText(cur.getAuthor().getName());
-            author.setOnAction(e -> browserSupport.openUrl(cur.getAuthor().getUrl()));
-            licensor.setText(cur.getLicensor().getName());
-            licensor.setOnAction(e -> browserSupport.openUrl(cur.getLicensor().getUrl()));
-            license.setText(cur.getLicense().getName());
-            license.setOnAction(e -> browserSupport.openUrl(cur.getLicense().getUrl()));
-        }));
+        credittedWork.addListener((o, prev, cur) -> {
+            if (cur != null) {
+                Platform.runLater(() -> {
+                    title.setText(cur.getTitle());
+                    author.setText(cur.getAuthor().getName());
+                    author.setOnAction(e -> browserSupport.openUrl(cur.getAuthor().getUrl()));
+                    licensor.setText(cur.getLicensor().getName());
+                    licensor.setOnAction(e -> browserSupport.openUrl(cur.getLicensor().getUrl()));
+                    license.setText(cur.getLicense().getName());
+                    license.setOnAction(e -> browserSupport.openUrl(cur.getLicense().getUrl()));
+                });
+            }
+        });
     }
 
     @Override

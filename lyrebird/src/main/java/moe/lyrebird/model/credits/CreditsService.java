@@ -40,7 +40,7 @@ import static javafx.collections.FXCollections.unmodifiableObservableList;
 @Component
 public class CreditsService {
 
-    private static final String CREDITS_RESOURCES_PATH = "classpath:assets/credits/*.json";
+    private static final String CREDITS_RESOURCES_PATH = "classpath:assets/credits/third-parties/*.json";
 
     private final ObservableList<CredittedWork> credittedWorks;
 
