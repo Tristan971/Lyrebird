@@ -34,6 +34,7 @@ import twitter4j.User;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -65,6 +66,7 @@ public class CurrentAccountController implements FxmlController {
 
     @Override
     public void initialize() {
+        userProfilePicture.setClip(makePpClip());
         userProfilePicture.setImage(ADD_USER_PROFILE_PICTURE.getImage());
         userProfilePicture.setOnMouseClicked(e -> handleClickOnProfile());
         bindUsername();
@@ -110,6 +112,13 @@ public class CurrentAccountController implements FxmlController {
                     "Error getting profile picture for current user!",
                     err
             ));
+    }
+
+    private Circle makePpClip() {
+        final Circle circle = new Circle(32.0);
+        circle.setCenterX(32.0);
+        circle.setCenterY(32.0);
+        return circle;
     }
 
 }

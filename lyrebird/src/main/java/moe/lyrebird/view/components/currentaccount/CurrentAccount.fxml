@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-
 <!--
   ~     Lyrebird, a free open-source cross-platform twitter client.
   ~     Copyright (C) 2017-2018, Tristan Deloche
@@ -23,11 +18,26 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.currentaccount.CurrentAccountController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.currentaccount.CurrentAccountController">
     <children>
         <VBox alignment="CENTER" layoutX="186.0" layoutY="77.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <ImageView fx:id="userProfilePicture" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+            <Pane maxHeight="65.0" maxWidth="65.0" minHeight="65.0" minWidth="65.0" prefHeight="65.0" prefWidth="65.0" VBox.vgrow="NEVER">
+               <children>
+                      <ImageView fx:id="userProfilePicture" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+                  <Circle centerX="32.0" centerY="32.0" fill="#ffffff00" focusTraversable="true" mouseTransparent="true" radius="32.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" />
+               </children>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Pane>
                 <Label fx:id="userScreenName" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="CURRENT_USER" textAlignment="CENTER" />
             </children>
         </VBox>
