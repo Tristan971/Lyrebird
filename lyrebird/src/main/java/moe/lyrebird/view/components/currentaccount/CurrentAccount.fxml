@@ -35,7 +35,7 @@
                   <Circle centerX="32.0" centerY="32.0" fill="#ffffff00" focusTraversable="true" mouseTransparent="true" radius="32.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.5" />
                </children>
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets />
                </VBox.margin>
             </Pane>
                 <Label fx:id="userScreenName" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="CURRENT_USER" textAlignment="CENTER" />
