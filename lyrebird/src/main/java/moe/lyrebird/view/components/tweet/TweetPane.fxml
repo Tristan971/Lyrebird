@@ -54,7 +54,7 @@
                                  <children>
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@/assets/img/retweet.png" />
+                                          <Image url="@/assets/img/retweet-arrows-symbol.png" />
                                        </image>
                                     </ImageView>
                                     <Label fx:id="retweeterLabel" text="RT_USER" textFill="#358f41" underline="true" wrapText="true">
