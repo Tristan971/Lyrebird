@@ -21,18 +21,26 @@ package moe.lyrebird.view.components.tweet;
 import twitter4j.Status;
 import twitter4j.User;
 
-public final class TweetFormatter {
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
+final class TweetFormatter {
 
     private TweetFormatter() {
         throw new UnsupportedOperationException("Utility class");
     }
 
-    public static String username(final User user) {
-        return user.getName() + " | @" + user.getScreenName();
+    static String username(final User user) {
+        return "@" + user.getScreenName();
     }
 
-    public static String tweetContent(final Status status) {
-        return status.getText();
+    static String time(final Status status) {
+        final Date tweetDate = status.getCreatedAt();
+        final LocalDateTime localDateTime = LocalDateTime.ofInstant(tweetDate.toInstant(), ZoneId.systemDefault());
+
+        return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
 }

@@ -52,6 +52,7 @@ import java.util.concurrent.CompletableFuture;
 import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
 import static moe.lyrebird.view.components.ImageResources.BLANK_USER_PROFILE_PICTURE;
+import static moe.lyrebird.view.components.tweet.TweetFormatter.time;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -63,6 +64,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @FXML
     private Label author;
+
+    @FXML
+    private Label time;
 
     @FXML
     private ImageView authorProfilePicture;
@@ -149,6 +153,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private void setStatusDisplay(final Status statusToDisplay) {
         author.setText(username(statusToDisplay.getUser()));
+        time.setText(time(statusToDisplay));
         loadTextIntoTextFlow(statusToDisplay.getText());
         CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(statusToDisplay.getUser()))
                          .thenAccept(authorProfilePicture::setImage);

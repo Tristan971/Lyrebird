@@ -46,11 +46,11 @@
             </Pane>
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0">
+                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <VBox spacing="5.0">
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                            <children>
-                              <HBox fx:id="retweetHbox" alignment="CENTER_LEFT" minWidth="0.0" spacing="5.0" VBox.vgrow="ALWAYS">
+                              <HBox fx:id="retweetHbox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -64,11 +64,18 @@
                                     </Label>
                                  </children>
                               </HBox>
-                              <Label fx:id="author" minWidth="0.0" text="TWEET_AUTHOR">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Label>
+                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefWidth="50000.0">
+                                 <left>
+                                    <Label fx:id="author" minWidth="0.0" text="AUTHOR" BorderPane.alignment="CENTER_LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                 </left>
+                                 <right>
+                                    <Label fx:id="time" alignment="CENTER_RIGHT" text="TIME" textAlignment="RIGHT" textFill="#7c7c7c" BorderPane.alignment="CENTER_RIGHT" />
+                                 </right>
+                              </BorderPane>
                               <TextFlow fx:id="content" />
                               <HBox fx:id="toolbar" alignment="CENTER_LEFT" spacing="10.0">
                                  <children>
