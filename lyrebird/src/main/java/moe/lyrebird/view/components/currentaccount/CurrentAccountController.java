@@ -1,3 +1,21 @@
+/*
+ *     Lyrebird, a free open-source cross-platform twitter client.
+ *     Copyright (C) 2017-2018, Tristan Deloche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package moe.lyrebird.view.components.currentaccount;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +34,7 @@ import twitter4j.User;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -47,6 +66,7 @@ public class CurrentAccountController implements FxmlController {
 
     @Override
     public void initialize() {
+        userProfilePicture.setClip(makePpClip());
         userProfilePicture.setImage(ADD_USER_PROFILE_PICTURE.getImage());
         userProfilePicture.setOnMouseClicked(e -> handleClickOnProfile());
         bindUsername();
@@ -92,6 +112,13 @@ public class CurrentAccountController implements FxmlController {
                     "Error getting profile picture for current user!",
                     err
             ));
+    }
+
+    private Circle makePpClip() {
+        final Circle circle = new Circle(32.0);
+        circle.setCenterX(32.0);
+        circle.setCenterY(32.0);
+        return circle;
     }
 
 }

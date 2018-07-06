@@ -1,6 +1,25 @@
+/*
+ *     Lyrebird, a free open-source cross-platform twitter client.
+ *     Copyright (C) 2017-2018, Tristan Deloche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package moe.lyrebird.view.screens.login;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
@@ -30,11 +49,12 @@ import java.util.stream.Stream;
 /**
  * Created by Tristan on 01/03/2017.
  */
+@Lazy
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class LoginViewController implements FxmlController {
+public class LoginScreenController implements FxmlController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LoginViewController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LoginScreenController.class);
 
     public VBox step1Box;
     public Button openLoginUrlButton;
@@ -50,7 +70,7 @@ public class LoginViewController implements FxmlController {
     private final TwitterHandler twitterHandler;
     private final SessionManager sessionManager;
 
-    public LoginViewController(
+    public LoginScreenController(
             final BrowserSupport browserSupport,
             final TwitterHandler twitterHandler,
             final SessionManager sessionManager

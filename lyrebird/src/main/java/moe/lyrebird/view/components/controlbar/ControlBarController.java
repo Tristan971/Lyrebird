@@ -1,3 +1,21 @@
+/*
+ *     Lyrebird, a free open-source cross-platform twitter client.
+ *     Copyright (C) 2017-2018, Tristan Deloche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package moe.lyrebird.view.components.controlbar;
 
 import org.springframework.stereotype.Component;
@@ -10,7 +28,7 @@ import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.Screens;
-import moe.lyrebird.view.screens.root.RootViewController;
+import moe.lyrebird.view.screens.root.RootScreenController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +57,7 @@ public class ControlBarController implements FxmlController {
 
     private final EasyFxml easyFxml;
     private final StageManager stageManager;
-    private final RootViewController rootViewController;
+    private final RootScreenController rootScreenController;
     private final SessionManager sessionManager;
 
     private final Property<Button> currentViewButton;
@@ -47,12 +65,12 @@ public class ControlBarController implements FxmlController {
     public ControlBarController(
             final EasyFxml easyFxml,
             final StageManager stageManager,
-            final RootViewController rootViewController,
+            final RootScreenController rootScreenController,
             final SessionManager sessionManager
     ) {
         this.easyFxml = easyFxml;
         this.stageManager = stageManager;
-        this.rootViewController = rootViewController;
+        this.rootScreenController = rootScreenController;
         this.sessionManager = sessionManager;
         this.currentViewButton = new SimpleObjectProperty<>(null);
     }
@@ -125,7 +143,7 @@ public class ControlBarController implements FxmlController {
     private void bindButtonToLoadingView(final Button button, final Components component) {
         Buttons.setOnClick(button, () -> {
             currentViewButton.setValue(button);
-            rootViewController.setContent(component);
+            rootScreenController.setContent(component);
         });
     }
 }

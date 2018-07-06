@@ -1,3 +1,21 @@
+/*
+ *     Lyrebird, a free open-source cross-platform twitter client.
+ *     Copyright (C) 2017-2018, Tristan Deloche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package moe.lyrebird.view.screens.root;
 
 import org.springframework.stereotype.Component;
@@ -17,15 +35,15 @@ import static moe.lyrebird.view.components.Components.CONTROL_BAR;
  * The RootViewController manages the location of content on the root view scene.
  */
 @Component
-public class RootViewController implements FxmlController {
+public class RootScreenController implements FxmlController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RootViewController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RootScreenController.class);
 
     public BorderPane contentPane;
 
     private final EasyFxml easyFxml;
 
-    public RootViewController(final EasyFxml easyFxml) {
+    public RootScreenController(final EasyFxml easyFxml) {
         this.easyFxml = easyFxml;
     }
 

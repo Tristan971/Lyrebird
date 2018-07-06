@@ -1,9 +1,28 @@
+/*
+ *     Lyrebird, a free open-source cross-platform twitter client.
+ *     Copyright (C) 2017-2018, Tristan Deloche
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package moe.lyrebird.view.components;
 
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.components.controlbar.ControlBarController;
+import moe.lyrebird.view.components.credits.CreditController;
 import moe.lyrebird.view.components.currentaccount.CurrentAccountController;
 import moe.lyrebird.view.components.directmessages.DMConversationController;
 import moe.lyrebird.view.components.directmessages.DirectMessagesController;
@@ -22,7 +41,8 @@ public enum Components implements FxmlNode {
     DIRECT_MESSAGES("directmessages/DirectMessages.fxml", DirectMessagesController.class),
     DIRECT_MESSAGE_CONVERSATION("directmessages/DMConversation.fxml", DMConversationController.class),
 
-    TWEET("tweet/TweetPane.fxml", TweetPaneController.class);
+    TWEET("tweet/TweetPane.fxml", TweetPaneController.class),
+    CREDIT("credits/CreditPane.fxml", CreditController.class);
 
     private static final String COMPONENTS_BASE_PATH = "moe/lyrebird/view/components/";
 
