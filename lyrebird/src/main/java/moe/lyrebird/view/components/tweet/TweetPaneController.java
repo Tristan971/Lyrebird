@@ -36,10 +36,13 @@ import javafx.application.Platform;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -58,14 +61,32 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
 
-    public Label author;
-    public ImageView authorProfilePicture;
-    public TextFlow content;
-    public HBox toolbar;
-    public Button likeButton;
-    public Button retweetButton;
-    public Label retweeterLabel;
-    public HBox retweetHbox;
+    @FXML
+    private Label author;
+
+    @FXML
+    private ImageView authorProfilePicture;
+
+    @FXML
+    private Pane authorProfilePicturePane;
+
+    @FXML
+    private TextFlow content;
+
+    @FXML
+    private HBox toolbar;
+
+    @FXML
+    private Button likeButton;
+
+    @FXML
+    private Button retweetButton;
+
+    @FXML
+    private Label retweeterLabel;
+
+    @FXML
+    private HBox retweetHbox;
 
     private final BrowserSupport browserSupport;
     private final TweetInterractionService interractionService;
@@ -87,6 +108,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @Override
     public void initialize() {
+        authorProfilePicturePane.setClip(makePpClip());
         Nodes.hideAndResizeParentIf(toolbar, selected);
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         Buttons.setOnClick(likeButton, this::onLike);
@@ -160,4 +182,12 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
                   .map(url -> new BrowserOpeningHyperlink(browserSupport::openUrl).withTarget(url))
                   .forEach(content.getChildren()::add);
     }
+
+    private Circle makePpClip() {
+        final Circle ppClip = new Circle(24.0);
+        ppClip.setCenterX(24.0);
+        ppClip.setCenterY(24.0);
+        return ppClip;
+    }
+
 }
