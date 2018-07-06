@@ -38,10 +38,10 @@
                         <Image url="@/assets/img/user_avatar_icon.png" />
                      </image>
                   </ImageView>
-                  <Circle centerX="24.0" centerY="24.0" fill="#ffffff00" radius="24.0" stroke="#000000" strokeType="INSIDE" strokeWidth="0.5" />
+                  <Circle centerX="24.0" centerY="24.0" fill="#ffffff00" mouseTransparent="true" radius="24.0" stroke="#000000" strokeType="INSIDE" strokeWidth="0.5" />
                </children>
                <HBox.margin>
-                  <Insets top="4.0" />
+                  <Insets top="3.0" />
                </HBox.margin>
             </Pane>
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
