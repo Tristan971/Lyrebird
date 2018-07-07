@@ -112,7 +112,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
             final BrowserSupport browserSupport,
             final TweetInterractionService interractionService,
             final CachedDataService cachedDataService,
-            MediaEmbeddingService mediaEmbeddingService
+            final MediaEmbeddingService mediaEmbeddingService
     ) {
         this.browserSupport = browserSupport;
         this.interractionService = interractionService;
