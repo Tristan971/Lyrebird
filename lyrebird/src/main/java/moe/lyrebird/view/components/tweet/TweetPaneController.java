@@ -26,10 +26,12 @@ import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.lyrebird.model.twitter.services.interraction.TweetInterractionService;
 import moe.lyrebird.view.CachedDataService;
+import moe.lyrebird.view.MediaEmbeddingService;
 import moe.lyrebird.view.util.BrowserOpeningHyperlink;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.MediaEntity;
 import twitter4j.Status;
 
 import javafx.application.Platform;
@@ -46,6 +48,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -62,6 +65,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
 
+
     @FXML
     private Label author;
 
@@ -76,6 +80,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @FXML
     private TextFlow content;
+
+    @FXML
+    private HBox mediaBox;
 
     @FXML
     private HBox toolbar;
@@ -95,6 +102,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private final BrowserSupport browserSupport;
     private final TweetInterractionService interractionService;
     private final CachedDataService cachedDataService;
+    private final MediaEmbeddingService mediaEmbeddingService;
 
     private Status status;
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
@@ -103,11 +111,13 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     public TweetPaneController(
             final BrowserSupport browserSupport,
             final TweetInterractionService interractionService,
-            final CachedDataService cachedDataService
+            final CachedDataService cachedDataService,
+            MediaEmbeddingService mediaEmbeddingService
     ) {
         this.browserSupport = browserSupport;
         this.interractionService = interractionService;
         this.cachedDataService = cachedDataService;
+        this.mediaEmbeddingService = mediaEmbeddingService;
     }
 
     @Override
@@ -157,6 +167,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         loadTextIntoTextFlow(statusToDisplay.getText());
         CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(statusToDisplay.getUser()))
                          .thenAccept(authorProfilePicture::setImage);
+        readMedias(status.getMediaEntities());
     }
 
     private void onLike() {
@@ -186,6 +197,14 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         urlsInText.stream()
                   .map(url -> new BrowserOpeningHyperlink(browserSupport::openUrl).withTarget(url))
                   .forEach(content.getChildren()::add);
+    }
+
+    private void readMedias(final MediaEntity[] media) {
+        mediaBox.getChildren().clear();
+        Arrays.stream(media)
+              .filter(mediaEmbeddingService::isSupported)
+              .map(mediaEmbeddingService::embed)
+              .forEach(mediaBox.getChildren()::add);
     }
 
     private Circle makePpClip() {
