@@ -30,7 +30,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="640.0" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.credits.CreditsScreenController">
+
+<AnchorPane maxHeight="480.0" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="720.0" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.credits.CreditsScreenController">
    <children>
       <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -48,9 +49,9 @@
                   <Separator prefWidth="200.0" />
                   <HBox alignment="CENTER" minHeight="-Infinity" prefHeight="40.0" spacing="20.0">
                      <children>
-                      <Button mnemonicParsing="false" prefWidth="120.0" text="License" />
-                        <Button mnemonicParsing="false" prefWidth="120.0" text="Source code" />
-                        <Button mnemonicParsing="false" prefWidth="120.0" text="Known issues" />
+                      <Button fx:id="licenseButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="License (GPL v3)" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="sourceCodeButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Source code" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="knownIssuesButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Known issues" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                   <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="25.0">

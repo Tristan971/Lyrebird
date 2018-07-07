@@ -36,6 +36,17 @@
     <name>lyrebird-parent</name>
     <description>Maven parent for Lyrebird</description>
 
+    <scm>
+        <connection>scm:git:git://github.com/Tristan971/Lyrebird.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Tristan971/Lyrebird.git</developerConnection>
+        <url>http://github.com/Tristan971/Lyrebird/tree/master</url>
+    </scm>
+
+    <issueManagement>
+        <system>Github Issues</system>
+        <url>https://github.com/Tristan971/Lyrebird/issues</url>
+    </issueManagement>
+
     <developers>
         <developer>
             <name>Tristan Deloche</name>

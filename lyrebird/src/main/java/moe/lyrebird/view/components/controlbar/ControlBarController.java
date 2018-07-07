@@ -94,6 +94,7 @@ public class ControlBarController implements FxmlController {
                 easyFxml.loadNode(Screens.CREDITS_VIEW)
                         .orExceptionPane()
                         .map(pane -> Stages.stageOf("Credits", pane))
+                        .map(cs -> cs.whenCompleteAsync((stage, err) -> stage.setResizable(false)))
                         .andThen(Stages::scheduleDisplaying)
         );
 

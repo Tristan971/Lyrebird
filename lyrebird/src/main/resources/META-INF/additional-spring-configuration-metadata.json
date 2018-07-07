@@ -29,6 +29,21 @@
       "name": "twitter.media.allowedExtensions",
       "type": "java.lang.String",
       "description": "Supported extensions for twitter medias."
+    },
+    {
+      "name": "credits.license",
+      "type": "java.net.URL",
+      "description": "URL of the license pertaining to Lyrebird as plaintext."
+    },
+    {
+      "name": "credits.sourceCode",
+      "type": "java.net.URL",
+      "description": "Sourcecode location url."
+    },
+    {
+      "name": "credits.knownIssues",
+      "type": "java.net.URL",
+      "description": "Issue management url."
     }
   ]
 }
