@@ -38,7 +38,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
@@ -79,9 +78,6 @@ public class NewScreenController implements FxmlController {
 
     @FXML
     private Label charactersLeft;
-
-    @FXML
-    private VBox mediaList;
 
     private final StageManager stageManager;
     private final NewTweetService newTweetService;
@@ -159,10 +155,6 @@ public class NewScreenController implements FxmlController {
             }
             pickMediaButton.setDisable(false);
         });
-    }
-
-    private void updateMediaAttachmentsPreview() {
-
     }
 
     private CompletionStage<List<File>> openFileChooserForMedia() {

@@ -34,7 +34,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class CreditsCell extends ComponentListCell<CredittedWork> {
 
-    private BooleanProperty shouldDisplay;
+    private final BooleanProperty shouldDisplay;
 
     public CreditsCell(EasyFxml easyFxml) {
         super(easyFxml, Components.CREDIT);
