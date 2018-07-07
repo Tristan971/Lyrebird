@@ -24,8 +24,8 @@ import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
+import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.services.interraction.TweetInterractionService;
-import moe.lyrebird.view.CachedDataService;
 import moe.lyrebird.view.MediaEmbeddingService;
 import moe.lyrebird.view.util.BrowserOpeningHyperlink;
 import moe.lyrebird.view.util.HyperlinkUtils;
@@ -100,7 +100,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private final BrowserSupport browserSupport;
     private final TweetInterractionService interractionService;
-    private final CachedDataService cachedDataService;
+    private final AsyncIO asyncIO;
     private final MediaEmbeddingService mediaEmbeddingService;
 
     private Status status;
@@ -110,12 +110,12 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     public TweetPaneController(
             final BrowserSupport browserSupport,
             final TweetInterractionService interractionService,
-            final CachedDataService cachedDataService,
+            final AsyncIO asyncIO,
             final MediaEmbeddingService mediaEmbeddingService
     ) {
         this.browserSupport = browserSupport;
         this.interractionService = interractionService;
-        this.cachedDataService = cachedDataService;
+        this.asyncIO = asyncIO;
         this.mediaEmbeddingService = mediaEmbeddingService;
     }
 
@@ -164,8 +164,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         author.setText(username(statusToDisplay.getUser()));
         time.setText(time(statusToDisplay));
         loadTextIntoTextFlow(statusToDisplay.getText());
-        CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(statusToDisplay.getUser()))
-                         .thenAccept(authorProfilePicture::setImage);
+        final String ppUrl = statusToDisplay.getUser().getOriginalProfileImageURLHttps();
+        asyncIO.loadImageInImageView(ppUrl, authorProfilePicture);
         readMedias(status.getMediaEntities());
     }
 

@@ -24,9 +24,9 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.util.Stages;
 import io.vavr.control.Try;
+import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.view.CachedDataService;
 import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,17 +53,17 @@ public class CurrentAccountController implements FxmlController {
     private Label userScreenName;
 
     private final SessionManager sessionManager;
-    private final CachedDataService cachedDataService;
+    private final AsyncIO asyncIO;
     private final EasyFxml easyFxml;
 
     @Autowired
     public CurrentAccountController(
             final SessionManager sessionManager,
-            final CachedDataService cachedDataService,
+            final AsyncIO asyncIO,
             final EasyFxml easyFxml
     ) {
         this.sessionManager = sessionManager;
-        this.cachedDataService = cachedDataService;
+        this.asyncIO = asyncIO;
         this.easyFxml = easyFxml;
     }
 
@@ -109,12 +109,8 @@ public class CurrentAccountController implements FxmlController {
     }
 
     private void loadAndSetUserAvatar(final Try<User> user) {
-        user.map(cachedDataService::userProfileImage)
-            .onSuccess(userProfilePicture::setImage)
-            .onFailure(err -> LOG.error(
-                    "Error getting profile picture for current user!",
-                    err
-            ));
+        user.map(User::getOriginalProfileImageURLHttps)
+            .onSuccess(imageUrl -> asyncIO.loadImageInImageView(imageUrl, userProfilePicture));
     }
 
     private Circle makePpClip() {

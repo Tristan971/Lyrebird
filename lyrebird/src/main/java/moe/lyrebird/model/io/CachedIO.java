@@ -16,30 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view;
+package moe.lyrebird.model.io;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4j.User;
 
 import javafx.scene.image.Image;
 
 @Component
-public class CachedDataService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CachedDataService.class);
-
-    @Cacheable("userProfileImage")
-    public Image userProfileImage(final User user) {
-        LOG.debug("First load of user pp for user : @{}", user.getScreenName());
-        return cachedImage(user.getOriginalProfileImageURLHttps());
-    }
+public class CachedIO {
 
     @Cacheable("image")
-    public Image cachedImage(final String imageUrl) {
-        LOG.debug("Loading and caching image at URL : {}", imageUrl);
+    public Image loadImage(final String imageUrl) {
         return new Image(imageUrl);
     }
 
