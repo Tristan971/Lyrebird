@@ -50,9 +50,11 @@ public class CleanupService {
     }
 
     public void executeCleanupOperations() {
-        LOG.debug("Executing cleanup hooks !");
-        cleanupExecutor.execute(() -> onShutdownHooks.forEach(this::executeCleanupOperationWithTimeout));
-        LOG.debug("All cleanup hooks have been executed!");
+        cleanupExecutor.execute(() -> {
+            LOG.debug("Executing cleanup hooks !");
+            onShutdownHooks.forEach(this::executeCleanupOperationWithTimeout);
+            LOG.debug("All cleanup hooks have been executed!");
+        });
     }
 
     private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {

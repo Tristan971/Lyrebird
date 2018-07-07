@@ -21,8 +21,10 @@ package moe.lyrebird.view.components.controlbar;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.beanmanagement.Selector;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
@@ -128,15 +130,18 @@ public class ControlBarController implements FxmlController {
 
     private void openTweetWindow() {
         LOG.info("Opening new tweet stage...");
-        final Pane tweetPane = this.easyFxml
-                .loadNode(NEW_TWEET_VIEW)
-                .getNode()
-                .getOrElseGet(ExceptionHandler::fromThrowable);
+        final FxmlLoadResult<Pane, FxmlController> newTweetViewLoadResult = this.easyFxml.loadNode(NEW_TWEET_VIEW);
+        final Pane newTweetPane = newTweetViewLoadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
+        final FxmlController newTweetController = newTweetViewLoadResult.getController().get();
 
-        Stages.stageOf("Tweet", tweetPane)
-              .thenCompose(Stages::scheduleDisplaying)
-              .thenAccept(stage -> this.stageManager.registerSingle(NEW_TWEET_VIEW, stage))
-              .thenRun(() -> LOG.info("New tweet stage opened !"));
+        Stages.stageOf("Tweet", newTweetPane)
+              .thenComposeAsync(Stages::scheduleDisplaying)
+              .thenAcceptAsync(stage -> this.stageManager.registerMultiple(
+                      NEW_TWEET_VIEW,
+                      new Selector(newTweetController.hashCode()),
+                      stage
+              ))
+              .thenRunAsync(() -> LOG.info("New tweet stage opened !"));
     }
 
     private void handleLogStatusChange(final boolean previous, final boolean current) {

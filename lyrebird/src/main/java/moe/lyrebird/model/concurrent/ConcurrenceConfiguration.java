@@ -61,7 +61,7 @@ public class ConcurrenceConfiguration {
     }
 
     @Bean
-    public Executor twitterIoExecutor() {
+    public Executor twitterExecutor() {
         final ThreadFactory asyncTwitterThreadFactory =
                 new ThreadFactoryBuilder()
                         .setUncaughtExceptionHandler((t, e) -> ExceptionHandler.displayExceptionPane(
