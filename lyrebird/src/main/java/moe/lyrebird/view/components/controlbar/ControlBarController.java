@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -48,12 +49,23 @@ public class ControlBarController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ControlBarController.class);
 
-    public BorderPane container;
-    public Button tweetButton;
-    public Button timelineViewButton;
-    public Button mentionsViewButton;
-    public Button directMessagesViewButton;
-    public Button creditsButton;
+    @FXML
+    private BorderPane container;
+
+    @FXML
+    private Button tweetButton;
+
+    @FXML
+    private Button timelineViewButton;
+
+    @FXML
+    private Button mentionsViewButton;
+
+    @FXML
+    private Button directMessagesViewButton;
+
+    @FXML
+    private Button creditsButton;
 
     private final EasyFxml easyFxml;
     private final StageManager stageManager;

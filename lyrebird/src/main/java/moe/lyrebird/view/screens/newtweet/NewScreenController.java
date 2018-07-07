@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -67,11 +68,20 @@ public class NewScreenController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewScreenController.class);
 
-    public Button sendButton;
-    public Button pickMediaButton;
-    public TextArea tweetTextArea;
-    public Label charactersLeft;
-    public VBox mediaList;
+    @FXML
+    private Button sendButton;
+
+    @FXML
+    private Button pickMediaButton;
+
+    @FXML
+    private TextArea tweetTextArea;
+
+    @FXML
+    private Label charactersLeft;
+
+    @FXML
+    private VBox mediaList;
 
     private final StageManager stageManager;
     private final NewTweetService newTweetService;

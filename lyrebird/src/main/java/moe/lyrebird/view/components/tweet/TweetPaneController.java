@@ -65,7 +65,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
 
-
     @FXML
     private Label author;
 
