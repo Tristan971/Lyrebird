@@ -56,7 +56,6 @@ import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
 import static moe.lyrebird.view.components.ImageResources.BLANK_USER_PROFILE_PICTURE;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.time;
-import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Component
@@ -67,6 +66,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @FXML
     private Label author;
+
+    @FXML
+    private Label authorId;
 
     @FXML
     private Label time;
@@ -94,6 +96,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @FXML
     private Label retweeterLabel;
+
+    @FXML
+    private Label retweeterIdLabel;
 
     @FXML
     private HBox retweetHbox;
@@ -156,12 +161,14 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private void handleRetweet(final Status status) {
-        retweeterLabel.setText("@" + status.getUser().getScreenName());
+        retweeterLabel.setText(status.getUser().getName());
+        retweeterIdLabel.setText("@" + status.getUser().getScreenName());
         setStatusDisplay(status.getRetweetedStatus());
     }
 
     private void setStatusDisplay(final Status statusToDisplay) {
-        author.setText(username(statusToDisplay.getUser()));
+        author.setText(statusToDisplay.getUser().getName());
+        authorId.setText("@" + statusToDisplay.getUser().getScreenName());
         time.setText(time(statusToDisplay));
         loadTextIntoTextFlow(statusToDisplay.getText());
         final String ppUrl = statusToDisplay.getUser().getOriginalProfileImageURLHttps();

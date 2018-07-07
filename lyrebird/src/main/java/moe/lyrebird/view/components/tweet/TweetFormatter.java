@@ -19,7 +19,6 @@
 package moe.lyrebird.view.components.tweet;
 
 import twitter4j.Status;
-import twitter4j.User;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -30,10 +29,6 @@ final class TweetFormatter {
 
     private TweetFormatter() {
         throw new UnsupportedOperationException("Utility class");
-    }
-
-    static String username(final User user) {
-        return "@" + user.getScreenName();
     }
 
     static String time(final Status status) {
