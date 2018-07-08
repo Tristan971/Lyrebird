@@ -22,9 +22,10 @@ import javafx.scene.image.Image;
 
 public enum ImageResources {
 
+    ADD_USER_PROFILE_PICTURE("add_user.png"),
     BLANK_USER_PROFILE_PICTURE("user_avatar_icon.png"),
     BLANK_USER_PROFILE_PICTURE_LIGHT("user_avatar_icon_light.png"),
-    ADD_USER_PROFILE_PICTURE("add_user.png");
+    LOADING_REMOTE("loading-remote.png");
 
     private final Image backingImage;
 
