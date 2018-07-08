@@ -20,21 +20,40 @@ package moe.lyrebird.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.model.beanmanagement.Selector;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
+import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.model.twitter.util.MediaEntityType;
+import moe.lyrebird.model.twitter.media.MediaEntityType;
+import moe.lyrebird.view.screens.media.MediaScreenController;
+import moe.lyrebird.view.screens.media.twitter.TwitterMediaScreen;
 import twitter4j.MediaEntity;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+
+import java.util.function.Function;
 
 @Component
 public class MediaEmbeddingService {
 
     private final AsyncIO asyncIO;
+    private final EasyFxml easyFxml;
+    private final StageManager stageManager;
 
     @Autowired
-    public MediaEmbeddingService(final AsyncIO asyncIO) {
+    public MediaEmbeddingService(
+            final AsyncIO asyncIO,
+            final EasyFxml easyFxml,
+            final StageManager stageManager
+    ) {
         this.asyncIO = asyncIO;
+        this.easyFxml = easyFxml;
+        this.stageManager = stageManager;
     }
 
     public boolean isSupported(final MediaEntity entity) {
@@ -57,6 +76,28 @@ public class MediaEmbeddingService {
         container.setFitWidth(64);
         container.setFitHeight(64);
         asyncIO.loadImageInImageView(imageUrl, container);
+
+        container.setOnMouseClicked(e -> {
+            final FxmlLoadResult<Pane, MediaScreenController> loadResult = easyFxml.loadNode(
+                    TwitterMediaScreen.PHOTO,
+                    Pane.class,
+                    MediaScreenController.class
+            );
+            final Pane photoViewPane = loadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
+            final MediaScreenController photoController =
+                    loadResult.getController()
+                              .getOrElseThrow((Function<? super Throwable, RuntimeException>) RuntimeException::new);
+            photoController.setMediaUrl(imageUrl);
+            Stages.stageOf("", photoViewPane)
+                  .thenAcceptAsync(stage -> {
+                      stageManager.registerMultiple(
+                              TwitterMediaScreen.PHOTO,
+                              new Selector(photoController.hashCode()),
+                              stage
+                      );
+                      Stages.scheduleDisplaying(stage);
+                  });
+        });
         return container;
     }
 

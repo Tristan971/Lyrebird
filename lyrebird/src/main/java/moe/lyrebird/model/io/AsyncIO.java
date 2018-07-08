@@ -28,6 +28,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 @Component
 public class AsyncIO {
@@ -49,7 +50,14 @@ public class AsyncIO {
     }
 
     public void loadImageInImageView(final String imageUrl, final ImageView imageView) {
-        loadImage(imageUrl).thenAcceptAsync(imageView::setImage, Platform::runLater);
+        loadImageInImageView(imageUrl, imageView, img -> {});
+    }
+
+    public void loadImageInImageView(final String imageUrl, final ImageView imageView, final Consumer<Image> andThen) {
+        loadImage(imageUrl).thenAcceptAsync(img -> {
+            imageView.setImage(img);
+            andThen.accept(img);
+        }, Platform::runLater);
     }
 
 }
