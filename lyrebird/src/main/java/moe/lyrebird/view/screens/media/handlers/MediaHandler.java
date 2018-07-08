@@ -16,13 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media;
+package moe.lyrebird.view.screens.media.handlers;
 
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.lyrebird.view.util.StageAware;
+import javafx.scene.Node;
 
-public abstract class MediaScreenController implements FxmlController, StageAware {
+public interface MediaHandler<N extends Node> {
 
-    public abstract void handleMedia(final String mediaUrl);
+    N handleMedia(final String mediaUrl);
 
 }

@@ -18,40 +18,19 @@
 
 package moe.lyrebird.view.screens.media;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.model.beanmanagement.Selector;
-import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
-import moe.tristan.easyfxml.util.Stages;
-import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.view.screens.media.twitter.TwitterMediaScreen;
+import moe.lyrebird.view.screens.media.handlers.twitter.TwitterPhotoHandler;
 import twitter4j.MediaEntity;
 
 import javafx.scene.Node;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-
-import java.util.function.Function;
 
 @Component
 public class MediaEmbeddingService {
 
-    private final AsyncIO asyncIO;
-    private final EasyFxml easyFxml;
-    private final StageManager stageManager;
+    private final TwitterPhotoHandler twitterPhotoHandler;
 
-    @Autowired
-    public MediaEmbeddingService(
-            final AsyncIO asyncIO,
-            final EasyFxml easyFxml,
-            final StageManager stageManager
-    ) {
-        this.asyncIO = asyncIO;
-        this.easyFxml = easyFxml;
-        this.stageManager = stageManager;
+    public MediaEmbeddingService(TwitterPhotoHandler twitterPhotoHandler) {
+        this.twitterPhotoHandler = twitterPhotoHandler;
     }
 
     public boolean isSupported(final MediaEntity entity) {
@@ -62,41 +41,11 @@ public class MediaEmbeddingService {
     public Node embed(MediaEntity entity) {
         switch (MediaEntityType.fromTwitterType(entity.getType())) {
             case PHOTO:
-                return embedImage(entity.getMediaURLHttps());
+                return twitterPhotoHandler.handleMedia(entity.getMediaURLHttps());
             case UNMANAGED:
             default:
                 throw new IllegalArgumentException("Twitter type "+entity.getType()+" is not supported!");
         }
-    }
-
-    private ImageView embedImage(final String imageUrl) {
-        final ImageView container = new ImageView();
-        container.setFitWidth(64);
-        container.setFitHeight(64);
-        asyncIO.loadImageInImageView(imageUrl, container);
-
-        container.setOnMouseClicked(e -> {
-            final FxmlLoadResult<Pane, MediaScreenController> loadResult = easyFxml.loadNode(
-                    TwitterMediaScreen.PHOTO,
-                    Pane.class,
-                    MediaScreenController.class
-            );
-            final Pane photoViewPane = loadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
-            final MediaScreenController photoController =
-                    loadResult.getController()
-                              .getOrElseThrow((Function<? super Throwable, RuntimeException>) RuntimeException::new);
-            photoController.setMediaUrl(imageUrl);
-            Stages.stageOf("", photoViewPane)
-                  .thenAcceptAsync(stage -> {
-                      stageManager.registerMultiple(
-                              TwitterMediaScreen.PHOTO,
-                              new Selector(photoController.hashCode()),
-                              stage
-                      );
-                      Stages.scheduleDisplaying(stage);
-                  });
-        });
-        return container;
     }
 
 }
