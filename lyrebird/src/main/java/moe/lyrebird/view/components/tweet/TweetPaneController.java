@@ -36,11 +36,9 @@ import twitter4j.MediaEntity;
 import twitter4j.Status;
 
 import javafx.application.Platform;
-import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -53,7 +51,6 @@ import javafx.scene.text.TextFlow;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
@@ -109,7 +106,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private final MediaEmbeddingService mediaEmbeddingService;
 
     private Status status;
-    private final BooleanProperty selected = new SimpleBooleanProperty(false);
     private final BooleanProperty isRetweet = new SimpleBooleanProperty(false);
 
     public TweetPaneController(
@@ -136,11 +132,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     @Override
     public void updateWithValue(final Status newValue) {
         setStatus(newValue);
-    }
-
-    @Override
-    public void selectedProperty(final BooleanExpression selected) {
-        this.selected.bind(selected);
     }
 
     private void setStatus(final Status status) {
@@ -206,11 +197,10 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private void readMedias(final MediaEntity[] media) {
         mediaBox.getChildren().clear();
-        final List<Node> miniatureViews = Arrays.stream(media)
-                                                .filter(mediaEmbeddingService::isSupported)
-                                                .map(mediaEmbeddingService::embed)
-                                                .collect(Collectors.toList());
-        miniatureViews.forEach(mediaBox.getChildren()::add);
+        Arrays.stream(media)
+              .filter(mediaEmbeddingService::isSupported)
+              .map(mediaEmbeddingService::embed)
+              .forEach(mediaBox.getChildren()::add);
     }
 
     private Circle makePpClip() {
