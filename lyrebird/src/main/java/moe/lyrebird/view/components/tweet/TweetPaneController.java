@@ -26,7 +26,7 @@ import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.services.interraction.TweetInterractionService;
-import moe.lyrebird.view.MediaEmbeddingService;
+import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.util.BrowserOpeningHyperlink;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.slf4j.Logger;

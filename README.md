@@ -60,7 +60,7 @@ Any of the following (execute command in this README's directory):
                 - [x] Clickable
         - [ ] Media embedding
             - [ ] Officially supported
-                - [ ] Twitter image embedding
+                - [x] Twitter image embedding
                 - [ ] Twitter video embedding
             - [ ] Easy embedding
                 - [ ] Direct image embedding

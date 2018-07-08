@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view;
+package moe.lyrebird.view.screens.media;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,6 @@ import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.media.MediaEntityType;
-import moe.lyrebird.view.screens.media.MediaScreenController;
 import moe.lyrebird.view.screens.media.twitter.TwitterMediaScreen;
 import twitter4j.MediaEntity;
 
