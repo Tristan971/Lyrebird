@@ -22,12 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.model.beanmanagement.Selector;
-import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.view.components.ImageResources;
 import moe.lyrebird.view.screens.media.MediaScreenController;
-import moe.lyrebird.view.screens.media.twitter.TwitterMediaScreen;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,6 +40,8 @@ import javafx.stage.Stage;
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TwitterPhotoScreenController extends MediaScreenController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterPhotoScreenController.class);
+
     @FXML
     private AnchorPane container;
 
@@ -45,37 +49,41 @@ public class TwitterPhotoScreenController extends MediaScreenController {
     private ImageView photoImageView;
 
     private final AsyncIO asyncIO;
-    private final StageManager stageManager;
+
+    private final Property<Image> imageProp = new SimpleObjectProperty<>(ImageResources.LOADING_REMOTE.getImage());
 
     @Autowired
-    public TwitterPhotoScreenController(
-            final AsyncIO asyncIO,
-            final StageManager stageManager
-    ) {
+    public TwitterPhotoScreenController(final AsyncIO asyncIO) {
         this.asyncIO = asyncIO;
-        this.stageManager = stageManager;
     }
 
     @Override
     public void initialize() {
-        mediaUrlProperty.addListener((o, prev, cur) -> {
-            if (cur == null) {
-                return;
-            }
-            asyncIO.loadImageInImageView(cur, photoImageView, this::resizeStageToImageIdealSize);
-        });
+        photoImageView.imageProperty().bind(imageProp);
     }
 
     private void resizeStageToImageIdealSize(final Image image) {
-        final Stage boundStage = stageManager.getMultiple(TwitterMediaScreen.PHOTO, new Selector(this.hashCode()))
-                                             .getOrElseThrow(() -> new IllegalStateException(
-                                                     "Can not find stage bound to controller" + this
-                                             ));
-        container.setPrefWidth(image.getWidth());
-        container.setPrefHeight(image.getHeight());
-        photoImageView.fitHeightProperty().bind(container.heightProperty());
-        photoImageView.fitWidthProperty().bind(container.widthProperty());
-        boundStage.sizeToScene();
+        LOG.debug("Resizing stage to fit size of image {}", image);
+
+        //container.setPrefWidth(image.getWidth());
+        //container.setPrefHeight(image.getHeight());
+        //photoImageView.fitHeightProperty().bind(container.heightProperty());
+        //photoImageView.fitWidthProperty().bind(container.widthProperty());
+        //boundStage.sizeToScene();
+    }
+
+    @Override
+    public void handleMedia(String mediaUrl) {
+        asyncIO.loadImageAndThen(mediaUrl, image -> {
+            LOG.debug("Loading image from {} inside image viewer {}", mediaUrl, this);
+            imageProp.setValue(image);
+            resizeStageToImageIdealSize(image);
+        });
+    }
+
+    @Override
+    public void setStage(Stage stage) {
+
     }
 
 }
