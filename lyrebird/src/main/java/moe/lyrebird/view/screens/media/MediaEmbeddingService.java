@@ -34,8 +34,7 @@ public class MediaEmbeddingService {
     }
 
     public boolean isSupported(final MediaEntity entity) {
-        final MediaEntityType entityType = MediaEntityType.fromTwitterType(entity.getType());
-        return entityType != MediaEntityType.UNMANAGED;
+        return MediaEntityType.fromTwitterType(entity.getType()) != MediaEntityType.UNMANAGED;
     }
 
     public Node embed(MediaEntity entity) {
