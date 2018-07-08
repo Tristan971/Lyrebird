@@ -45,19 +45,16 @@ public class AsyncIO {
         this.cachedIO = cachedIO;
     }
 
-    private CompletableFuture<Image> loadImage(final String imageUrl) {
+    public CompletableFuture<Image> loadImage(final String imageUrl) {
         return CompletableFuture.supplyAsync(() -> cachedIO.loadImage(imageUrl), asyncIoExecutor);
     }
 
     public void loadImageInImageView(final String imageUrl, final ImageView imageView) {
-        loadImageInImageView(imageUrl, imageView, img -> {});
+        loadImageAndThen(imageUrl, imageView::setImage);
     }
 
-    public void loadImageInImageView(final String imageUrl, final ImageView imageView, final Consumer<Image> andThen) {
-        loadImage(imageUrl).thenAcceptAsync(img -> {
-            imageView.setImage(img);
-            andThen.accept(img);
-        }, Platform::runLater);
+    public void loadImageAndThen(final String imageUrl, final Consumer<Image> andThen) {
+        loadImage(imageUrl).thenAcceptAsync(andThen::accept, Platform::runLater);
     }
 
 }
