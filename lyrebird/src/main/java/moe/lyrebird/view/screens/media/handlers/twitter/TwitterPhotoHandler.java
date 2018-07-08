@@ -25,8 +25,8 @@ import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.view.screens.media.MediaScreenController;
+import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
 import moe.lyrebird.view.screens.media.handlers.MediaHandler;
-import moe.lyrebird.view.screens.media.twitter.TwitterMediaScreen;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -54,7 +54,7 @@ public class TwitterPhotoHandler implements MediaHandler<ImageView> {
 
         container.setOnMouseClicked(e -> {
             final FxmlLoadResult<Pane, MediaScreenController> loadResult = easyFxml.loadNode(
-                    TwitterMediaScreen.PHOTO,
+                    MediaDisplaySceen.PHOTO,
                     Pane.class,
                     MediaScreenController.class
             );

@@ -16,28 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media.twitter;
+package moe.lyrebird.view.screens.media.display;
 
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.screens.media.MediaScreenController;
-import moe.lyrebird.view.screens.media.twitter.photo.TwitterPhotoScreenController;
+import moe.lyrebird.view.screens.media.display.twitter.photo.TwitterPhotoScreenController;
 
-public enum TwitterMediaScreen implements FxmlNode {
-    PHOTO("photo/TwitterPhotoScreen.fxml", TwitterPhotoScreenController.class);
+public enum MediaDisplaySceen implements FxmlNode {
+    PHOTO("twitter/photo/TwitterPhotoScreen.fxml", TwitterPhotoScreenController.class);
 
     private final String file;
     private final Class<? extends MediaScreenController> mediaScreenController;
 
-    TwitterMediaScreen(String file, Class<? extends MediaScreenController> mediaScreenController) {
+    MediaDisplaySceen(String file, Class<? extends MediaScreenController> mediaScreenController) {
         this.file = file;
         this.mediaScreenController = mediaScreenController;
     }
 
     @Override
     public FxmlFile getFile() {
-        return () -> "moe/lyrebird/view/screens/media/twitter/" + file;
+        return () -> "moe/lyrebird/view/screens/media/display/" + file;
     }
 
     @Override
