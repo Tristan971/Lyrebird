@@ -27,7 +27,6 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.model.twitter.media.MediaEntityType;
 import moe.lyrebird.view.screens.media.twitter.TwitterMediaScreen;
 import twitter4j.MediaEntity;
 

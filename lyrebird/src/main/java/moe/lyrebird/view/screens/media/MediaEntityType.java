@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.twitter.media;
+package moe.lyrebird.view.screens.media;
 
 import java.util.Arrays;
 
