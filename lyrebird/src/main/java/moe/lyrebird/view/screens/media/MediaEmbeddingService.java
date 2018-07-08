@@ -18,11 +18,17 @@
 
 package moe.lyrebird.view.screens.media;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.view.screens.media.handlers.twitter.TwitterPhotoHandler;
 import twitter4j.MediaEntity;
+import twitter4j.Status;
 
 import javafx.scene.Node;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MediaEmbeddingService {
@@ -36,11 +42,15 @@ public class MediaEmbeddingService {
         this.twitterPhotoHandler = twitterPhotoHandler;
     }
 
-    public boolean isSupported(final MediaEntity entity) {
-        return MediaEntityType.fromTwitterType(entity.getType()) != MediaEntityType.UNMANAGED;
+    @Cacheable("embeddedNodes")
+    public List<Node> embed(Status status) {
+        return Arrays.stream(status.getMediaEntities())
+                .filter(MediaEntityType::isSupported)
+                .map(this::embedOne)
+                .collect(Collectors.toList());
     }
 
-    public Node embed(MediaEntity entity) {
+    private Node embedOne(final MediaEntity entity) {
         switch (MediaEntityType.fromTwitterType(entity.getType())) {
             case PHOTO:
                 return twitterPhotoHandler.handleMedia(entity.getMediaURLHttps());
@@ -49,5 +59,4 @@ public class MediaEmbeddingService {
                 throw new IllegalArgumentException("Twitter type "+entity.getType()+" is not supported!");
         }
     }
-
 }

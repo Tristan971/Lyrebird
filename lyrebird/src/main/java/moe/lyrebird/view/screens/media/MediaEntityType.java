@@ -18,6 +18,8 @@
 
 package moe.lyrebird.view.screens.media;
 
+import twitter4j.MediaEntity;
+
 import java.util.Arrays;
 
 public enum MediaEntityType {
@@ -39,6 +41,10 @@ public enum MediaEntityType {
                 .filter(type -> type.getCodeName().equals(actualCode))
                 .findAny()
                 .orElse(UNMANAGED);
+    }
+
+    public static boolean isSupported(final MediaEntity entity) {
+        return fromTwitterType(entity.getType()) != UNMANAGED;
     }
 
 }

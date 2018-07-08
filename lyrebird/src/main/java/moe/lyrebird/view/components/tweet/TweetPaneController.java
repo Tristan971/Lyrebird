@@ -32,13 +32,13 @@ import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.MediaEntity;
 import twitter4j.Status;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -48,7 +48,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -163,7 +162,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         loadTextIntoTextFlow(statusToDisplay.getText());
         final String ppUrl = statusToDisplay.getUser().getOriginalProfileImageURLHttps();
         asyncIO.loadImageInImageView(ppUrl, authorProfilePicture);
-        readMedias(status.getMediaEntities());
+        readMedias(status);
     }
 
     private void onLike() {
@@ -195,12 +194,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
                   .forEach(content.getChildren()::add);
     }
 
-    private void readMedias(final MediaEntity[] media) {
-        mediaBox.getChildren().clear();
-        Arrays.stream(media)
-              .filter(mediaEmbeddingService::isSupported)
-              .map(mediaEmbeddingService::embed)
-              .forEach(mediaBox.getChildren()::add);
+    private void readMedias(final Status status) {
+        final List<Node> embeddingNodes = mediaEmbeddingService.embed(status);
+        mediaBox.getChildren().setAll(embeddingNodes);
     }
 
     private Circle makePpClip() {
