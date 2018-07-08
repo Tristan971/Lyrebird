@@ -64,14 +64,12 @@ public class TwitterPhotoScreenController extends MediaScreenController {
     @Override
     public void handleMedia(String mediaUrl) {
         asyncIO.loadImageAndThen(mediaUrl, image -> {
-            LOG.debug("Loading image from {} inside image viewer {}", mediaUrl, this);
             imageProp.setValue(image);
             autosizeStage(image);
         });
     }
 
     private void autosizeStage(final Image image) {
-        LOG.debug("Resizing stage to fit size of image {}", image);
         container.setPrefWidth(image.getWidth());
         container.setPrefHeight(image.getHeight());
         photoImageView.fitHeightProperty().bind(container.heightProperty());

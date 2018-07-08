@@ -27,9 +27,14 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.view.screens.media.MediaScreenController;
 import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
 import moe.lyrebird.view.screens.media.handlers.MediaHandler;
+import moe.lyrebird.view.util.Clipping;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
+
+import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MEDIA_RECTANGLE_CORNER_RADIUS;
+import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MEDIA_RECTANGLE_SIDE;
 
 @Component
 public class TwitterPhotoHandler implements MediaHandler<ImageView> {
@@ -48,8 +53,17 @@ public class TwitterPhotoHandler implements MediaHandler<ImageView> {
     @Override
     public ImageView handleMedia(final String imageUrl) {
         final ImageView container = new ImageView();
-        container.setFitWidth(64);
-        container.setFitHeight(64);
+        container.setFitWidth(EMBEDDED_MEDIA_RECTANGLE_SIDE);
+        container.setFitHeight(EMBEDDED_MEDIA_RECTANGLE_SIDE);
+
+        final Rectangle clipRectangle = Clipping.getSquareClip(
+                EMBEDDED_MEDIA_RECTANGLE_SIDE,
+                EMBEDDED_MEDIA_RECTANGLE_CORNER_RADIUS
+        );
+        clipRectangle.layoutXProperty().bind(container.layoutXProperty());
+        clipRectangle.layoutYProperty().bind(container.layoutYProperty());
+        container.setClip(clipRectangle);
+
         asyncIO.loadImageInImageView(imageUrl, container);
 
         container.setOnMouseClicked(e -> {

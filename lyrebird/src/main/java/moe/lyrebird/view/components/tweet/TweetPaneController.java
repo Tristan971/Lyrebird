@@ -28,6 +28,7 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.services.interraction.TweetInterractionService;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.util.BrowserOpeningHyperlink;
+import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -214,9 +215,10 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private Circle makePpClip() {
-        final Circle ppClip = new Circle(24.0);
-        ppClip.setCenterX(24.0);
-        ppClip.setCenterY(24.0);
+        final double clippingRadius = 24.0;
+        final Circle ppClip = Clipping.getCircleClip(clippingRadius);
+        ppClip.setCenterX(clippingRadius);
+        ppClip.setCenterY(clippingRadius);
         return ppClip;
     }
 

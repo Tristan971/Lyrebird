@@ -27,6 +27,9 @@ import javafx.scene.Node;
 @Component
 public class MediaEmbeddingService {
 
+    public static final double EMBEDDED_MEDIA_RECTANGLE_SIDE = 64.0;
+    public static final double EMBEDDED_MEDIA_RECTANGLE_CORNER_RADIUS = 10.0;
+
     private final TwitterPhotoHandler twitterPhotoHandler;
 
     public MediaEmbeddingService(TwitterPhotoHandler twitterPhotoHandler) {

@@ -28,6 +28,7 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.User;
@@ -114,9 +115,10 @@ public class CurrentAccountController implements FxmlController {
     }
 
     private Circle makePpClip() {
-        final Circle circle = new Circle(32.0);
-        circle.setCenterX(32.0);
-        circle.setCenterY(32.0);
+        final double clippingRadius = 32.0;
+        final Circle circle = Clipping.getCircleClip(clippingRadius);
+        circle.setCenterX(clippingRadius);
+        circle.setCenterY(clippingRadius);
         return circle;
     }
 
