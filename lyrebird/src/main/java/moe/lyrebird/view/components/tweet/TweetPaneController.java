@@ -40,6 +40,7 @@ import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -52,6 +53,7 @@ import javafx.scene.text.TextFlow;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
@@ -85,9 +87,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @FXML
     private HBox mediaBox;
-
-    @FXML
-    private HBox toolbar;
 
     @FXML
     private Button likeButton;
@@ -128,7 +127,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     @Override
     public void initialize() {
         authorProfilePicturePane.setClip(makePpClip());
-        Nodes.hideAndResizeParentIf(toolbar, selected);
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         Buttons.setOnClick(likeButton, this::onLike);
         Buttons.setOnClick(retweetButton, this::onRewteet);
@@ -146,7 +144,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private void setStatus(final Status status) {
-        if (status == null) {
+        if (status == null || this.status == status) {
             return;
         }
 
@@ -180,7 +178,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private void onLike() {
         LOG.debug("Like interraction on status {}", status.getId());
         final CompletableFuture<Status> likeRequest = CompletableFuture.supplyAsync(
-                        () -> interractionService.interract(status, LIKE)
+                () -> interractionService.interract(status, LIKE)
         );
         likeButton.setDisable(true);
         likeRequest.whenCompleteAsync((res, err) -> likeButton.setDisable(false), Platform::runLater);
@@ -208,10 +206,11 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private void readMedias(final MediaEntity[] media) {
         mediaBox.getChildren().clear();
-        Arrays.stream(media)
-              .filter(mediaEmbeddingService::isSupported)
-              .map(mediaEmbeddingService::embed)
-              .forEach(mediaBox.getChildren()::add);
+        final List<Node> miniatureViews = Arrays.stream(media)
+                                                .filter(mediaEmbeddingService::isSupported)
+                                                .map(mediaEmbeddingService::embed)
+                                                .collect(Collectors.toList());
+        miniatureViews.forEach(mediaBox.getChildren()::add);
     }
 
     private Circle makePpClip() {

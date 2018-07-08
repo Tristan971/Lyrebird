@@ -90,7 +90,7 @@
                   </BorderPane>
                   <TextFlow fx:id="content" />
                   <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" />
-                  <HBox fx:id="toolbar" alignment="CENTER_LEFT" spacing="10.0">
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
                      <children>
                         <Button fx:id="likeButton" mnemonicParsing="false" text="Like">
                            <HBox.margin>
