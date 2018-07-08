@@ -62,7 +62,7 @@ public class TwitterPhotoHandler implements MediaHandler<ImageView> {
             final MediaScreenController photoController = loadResult.getController().get();
             photoController.handleMedia(imageUrl);
             Stages.stageOf("", photoViewPane)
-                  .thenAcceptAsync(photoController::setStage);
+                  .thenAcceptAsync(Stages::scheduleDisplaying);
         });
         return container;
     }

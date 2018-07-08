@@ -34,7 +34,6 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -62,28 +61,21 @@ public class TwitterPhotoScreenController extends MediaScreenController {
         photoImageView.imageProperty().bind(imageProp);
     }
 
-    private void resizeStageToImageIdealSize(final Image image) {
-        LOG.debug("Resizing stage to fit size of image {}", image);
-
-        //container.setPrefWidth(image.getWidth());
-        //container.setPrefHeight(image.getHeight());
-        //photoImageView.fitHeightProperty().bind(container.heightProperty());
-        //photoImageView.fitWidthProperty().bind(container.widthProperty());
-        //boundStage.sizeToScene();
-    }
-
     @Override
     public void handleMedia(String mediaUrl) {
         asyncIO.loadImageAndThen(mediaUrl, image -> {
             LOG.debug("Loading image from {} inside image viewer {}", mediaUrl, this);
             imageProp.setValue(image);
-            resizeStageToImageIdealSize(image);
+            autosizeStage(image);
         });
     }
 
-    @Override
-    public void setStage(Stage stage) {
-
+    private void autosizeStage(final Image image) {
+        LOG.debug("Resizing stage to fit size of image {}", image);
+        container.setPrefWidth(image.getWidth());
+        container.setPrefHeight(image.getHeight());
+        photoImageView.fitHeightProperty().bind(container.heightProperty());
+        photoImageView.fitWidthProperty().bind(container.widthProperty());
     }
 
 }
