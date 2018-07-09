@@ -27,7 +27,6 @@ import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlControlle
 import moe.lyrebird.model.credits.objects.CredittedWork;
 
 import javafx.application.Platform;
-import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -80,8 +79,5 @@ public class CreditController implements ComponentCellFxmlController<CredittedWo
             }
         });
     }
-
-    @Override
-    public void selectedProperty(BooleanExpression selected) {}
 
 }

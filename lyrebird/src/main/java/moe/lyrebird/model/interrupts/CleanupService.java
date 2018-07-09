@@ -18,6 +18,7 @@
 
 package moe.lyrebird.model.interrupts;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -34,9 +36,11 @@ public class CleanupService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CleanupService.class);
 
+    private final Executor cleanupExecutor;
     private final Queue<CleanupOperation> onShutdownHooks;
 
-    public CleanupService() {
+    public CleanupService(@Qualifier("cleanupExecutor") final Executor cleanupExecutor) {
+        this.cleanupExecutor = cleanupExecutor;
         onShutdownHooks = new LinkedList<>();
     }
 
@@ -46,15 +50,18 @@ public class CleanupService {
     }
 
     public void executeCleanupOperations() {
-        LOG.debug("Executing cleanup hooks !");
-        onShutdownHooks.forEach(this::executeCleanupOperationWithTimeout);
-        LOG.debug("All cleanup hooks have been executed!");
+        cleanupExecutor.execute(() -> {
+            LOG.debug("Executing cleanup hooks !");
+            onShutdownHooks.forEach(this::executeCleanupOperationWithTimeout);
+            LOG.debug("All cleanup hooks have been executed!");
+        });
     }
 
     private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
         LOG.debug("\t-> {}", cleanupOperation.getName());
         try {
-            CompletableFuture.runAsync(cleanupOperation.getOperation()).get(1, TimeUnit.SECONDS);
+            CompletableFuture.runAsync(cleanupOperation.getOperation(), cleanupExecutor)
+                             .get(1, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             LOG.error("Could not actually call the following hook [{}] !", cleanupOperation.getName(), e);
             Thread.currentThread().interrupt();

@@ -78,13 +78,6 @@
                     </BorderPane.margin>
                 </HBox>
             </bottom>
-            <left>
-                <VBox maxWidth="50.0" spacing="5.0" BorderPane.alignment="CENTER" fx:id="mediaList">
-                    <BorderPane.margin>
-                        <Insets/>
-                    </BorderPane.margin>
-                </VBox>
-            </left>
         </BorderPane>
     </children>
 </AnchorPane>

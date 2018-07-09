@@ -18,6 +18,8 @@
 
 package moe.lyrebird.model.twitter.observables;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
@@ -25,14 +27,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
 
+import java.util.concurrent.Executor;
+
 @Lazy
 @Component
 public class Timeline extends TwitterTimelineBaseModel {
 
     private static final Logger LOG = LoggerFactory.getLogger(Timeline.class);
 
-    public Timeline(final SessionManager sessionManager) {
-        super(sessionManager, Twitter::getHomeTimeline, Twitter::getHomeTimeline);
+    @Autowired
+    public Timeline(final SessionManager sessionManager, @Qualifier("twitterExecutor") final Executor twitterExecutor) {
+        super(sessionManager, twitterExecutor, Twitter::getHomeTimeline, Twitter::getHomeTimeline);
     }
 
     @Override

@@ -16,31 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.components;
+package moe.lyrebird.view.screens.media.handlers;
 
-import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 
-public enum ImageResources {
+public interface MediaHandler<T> {
 
-    BLANK_USER_PROFILE_PICTURE("user_avatar_icon.png"),
-    BLANK_USER_PROFILE_PICTURE_LIGHT("user_avatar_icon_light.png"),
-    ADD_USER_PROFILE_PICTURE("add_user.png");
-
-    private final Image backingImage;
-
-    ImageResources(final String path) {
-        this.backingImage = loadImage(path);
-    }
-
-    private static Image loadImage(final String path) {
-        final ClassLoader cl = ImageResources.class.getClassLoader();
-        final String finalPath = "assets/img/" + path;
-
-        return new Image(cl.getResourceAsStream(finalPath));
-    }
-
-    public Image getImage() {
-        return backingImage;
-    }
+    Pane handleMedia(final T mediaSource);
 
 }

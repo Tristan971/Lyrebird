@@ -41,7 +41,7 @@ public class TwitterHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(TwitterHandler.class);
 
-    public static final AccessToken FAKE_ACCESS_TOKEN = new AccessToken("fake", "token");
+    private static final AccessToken FAKE_ACCESS_TOKEN = new AccessToken("fake", "token");
 
     private final Twitter twitter;
 
@@ -58,10 +58,6 @@ public class TwitterHandler {
 
     public AccessToken getAccessToken() {
         return accessToken;
-    }
-
-    public void setAccessToken(final AccessToken accessToken) {
-        this.accessToken = accessToken;
     }
 
     public Tuple2<URL, RequestToken> newSession() {

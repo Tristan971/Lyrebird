@@ -21,8 +21,11 @@ package moe.lyrebird.view.screens.credits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
+import moe.tristan.easyfxml.util.Buttons;
 import moe.lyrebird.model.credits.CreditsService;
 import moe.lyrebird.model.credits.objects.CredittedWork;
 import moe.lyrebird.view.components.cells.CreditsCell;
@@ -30,6 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+
+import java.net.URL;
 
 @Lazy
 @Component
@@ -37,12 +44,30 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
 
     private static final Logger LOG = LoggerFactory.getLogger(CreditsScreenController.class);
 
+    @FXML
+    private Button licenseButton;
+
+    @FXML
+    private Button sourceCodeButton;
+
+    @FXML
+    private Button knownIssuesButton;
+
     private final CreditsService creditsService;
+    private final BrowserSupport browserSupport;
+    private final Environment environment;
 
     @Autowired
-    public CreditsScreenController(final ApplicationContext context, final CreditsService creditsService) {
+    public CreditsScreenController(
+            final ApplicationContext context,
+            final CreditsService creditsService,
+            final BrowserSupport browserSupport,
+            final Environment environment
+    ) {
         super(context, CreditsCell.class);
         this.creditsService = creditsService;
+        this.browserSupport = browserSupport;
+        this.environment = environment;
     }
 
     @Override
@@ -50,6 +75,15 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
         super.initialize();
         LOG.debug("Loading credits...");
         listView.itemsProperty().bind(new ReadOnlyListWrapper<>(creditsService.creditedWorks()));
+
+        bindButtonToOpenHrefEnvProperty(licenseButton, "credits.license");
+        bindButtonToOpenHrefEnvProperty(sourceCodeButton, "credits.sourceCode");
+        bindButtonToOpenHrefEnvProperty(knownIssuesButton, "credits.knownIssues");
+    }
+
+    private void bindButtonToOpenHrefEnvProperty(final Button button, final String prop) {
+        final URL actualUrl = environment.getRequiredProperty(prop, URL.class);
+        Buttons.setOnClick(button, () -> browserSupport.openUrl(actualUrl));
     }
 
 }

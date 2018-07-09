@@ -16,25 +16,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view;
+package moe.lyrebird.view.screens.media.handlers.twitter;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4j.User;
+import moe.lyrebird.view.screens.media.display.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
+import twitter4j.MediaEntity;
 
-import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 @Component
-public class CachedDataService {
+public class TwitterVideoHandler extends VideoHandler<MediaEntity.Variant[]> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CachedDataService.class);
+    public TwitterVideoHandler(EmbeddedMediaViewHelper embeddedMediaViewHelper) {
+        super(embeddedMediaViewHelper);
+    }
 
-    @Cacheable("userProfileImage")
-    public Image userProfileImage(final User user) {
-        LOG.debug("First load of user pp for user : @{}", user.getScreenName());
-        return new Image(user.getOriginalProfileImageURLHttps());
+    @Override
+    public Pane handleMedia(MediaEntity.Variant[] mediaSource) {
+        final var best = Arrays.stream(mediaSource).max(Comparator.comparingInt(MediaEntity.Variant::getBitrate));
+        final MediaEntity.Variant bestVersion = best.orElseThrow();
+        return handleMediaSource(bestVersion.getUrl());
     }
 
 }

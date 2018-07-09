@@ -24,43 +24,48 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.util.Stages;
 import io.vavr.control.Try;
+import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.view.CachedDataService;
 import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.User;
 
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 
 import java.util.concurrent.CompletableFuture;
 
-import static moe.lyrebird.view.components.ImageResources.ADD_USER_PROFILE_PICTURE;
+import static moe.lyrebird.view.assets.ImageResources.ADD_USER_PROFILE_PICTURE;
 
 @Component
 public class CurrentAccountController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CurrentAccountController.class);
 
-    public ImageView userProfilePicture;
+    @FXML
+    private ImageView userProfilePicture;
 
-    public Label userScreenName;
+    @FXML
+    private Label userScreenName;
 
     private final SessionManager sessionManager;
-    private final CachedDataService cachedDataService;
+    private final AsyncIO asyncIO;
     private final EasyFxml easyFxml;
 
     @Autowired
     public CurrentAccountController(
             final SessionManager sessionManager,
-            final CachedDataService cachedDataService,
+            final AsyncIO asyncIO,
             final EasyFxml easyFxml
     ) {
         this.sessionManager = sessionManager;
-        this.cachedDataService = cachedDataService;
+        this.asyncIO = asyncIO;
         this.easyFxml = easyFxml;
     }
 
@@ -106,18 +111,16 @@ public class CurrentAccountController implements FxmlController {
     }
 
     private void loadAndSetUserAvatar(final Try<User> user) {
-        user.map(cachedDataService::userProfileImage)
-            .onSuccess(userProfilePicture::setImage)
-            .onFailure(err -> LOG.error(
-                    "Error getting profile picture for current user!",
-                    err
-            ));
+        user.map(User::getOriginalProfileImageURLHttps)
+            .map(imageUrl -> asyncIO.loadImageMiniature(imageUrl, 128.0, 128.0))
+            .onSuccess(loadRequest -> loadRequest.thenAcceptAsync(userProfilePicture::setImage, Platform::runLater));
     }
 
     private Circle makePpClip() {
-        final Circle circle = new Circle(32.0);
-        circle.setCenterX(32.0);
-        circle.setCenterY(32.0);
+        final double clippingRadius = 32.0;
+        final Circle circle = Clipping.getCircleClip(clippingRadius);
+        circle.setCenterX(clippingRadius);
+        circle.setCenterY(clippingRadius);
         return circle;
     }
 

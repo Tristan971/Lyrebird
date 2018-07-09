@@ -34,10 +34,12 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public abstract class TwitterTimelineBaseModel {
 
     private final SessionManager sessionManager;
+    private final Executor twitterExecutor;
     
     private final CheckedFunction1<Twitter, ResponseList<Status>> initialLoadCall;
     private final CheckedFunction2<Twitter, Paging, ResponseList<Status>> backFillCall;
@@ -46,9 +48,11 @@ public abstract class TwitterTimelineBaseModel {
 
     public TwitterTimelineBaseModel(
             final SessionManager sessionManager,
+            final Executor twitterExecutor,
             final CheckedFunction1<Twitter, ResponseList<Status>> initialLoadCall,
             final CheckedFunction2<Twitter, Paging, ResponseList<Status>> backFillCall
     ) {
+        this.twitterExecutor = twitterExecutor;
         getLocalLogger().info("Initializing tweet timeline model for type : {}", initialLoadCall);
         this.sessionManager = sessionManager;
         this.initialLoadCall = initialLoadCall;
@@ -69,7 +73,7 @@ public abstract class TwitterTimelineBaseModel {
                           .mapTry(twitter -> backFillCall.apply(twitter, requestPaging))
                           .onSuccess(this::addTweets);
             getLocalLogger().debug("Finished loading more tweets.");
-        });
+        }, twitterExecutor);
     }
 
     public void loadLastTweets() {
@@ -78,7 +82,7 @@ public abstract class TwitterTimelineBaseModel {
             sessionManager.getCurrentTwitter()
                           .mapTry(initialLoadCall)
                           .onSuccess(this::addTweets);
-        });
+        }, twitterExecutor);
     }
 
     private void addTweets(final List<Status> receivedTweets) {

@@ -23,21 +23,20 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.beanmanagement.Selector;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Status;
 
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
@@ -58,7 +57,6 @@ import static javafx.scene.paint.Color.GREEN;
 import static javafx.scene.paint.Color.ORANGE;
 import static javafx.scene.paint.Color.RED;
 import static moe.lyrebird.view.screens.Screens.NEW_TWEET_VIEW;
-import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 @Lazy
 @Component
@@ -67,15 +65,22 @@ public class NewScreenController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewScreenController.class);
 
-    public Button sendButton;
-    public Button pickMediaButton;
-    public TextArea tweetTextArea;
-    public Label charactersLeft;
-    public VBox mediaList;
+    @FXML
+    private Button sendButton;
+
+    @FXML
+    private Button pickMediaButton;
+
+    @FXML
+    private TextArea tweetTextArea;
+
+    @FXML
+    private Label charactersLeft;
 
     private final StageManager stageManager;
     private final NewTweetService newTweetService;
     private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
+
     private final Set<File> mediasToUpload;
 
     public NewScreenController(
@@ -112,22 +117,18 @@ public class NewScreenController implements FxmlController {
     }
 
     private void sendTweet() {
-        final CompletionStage<Status> tweetRequest = newTweetService.sendNewTweet(
+        Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
+        newTweetService.sendNewTweet(
                 tweetTextArea.getText(),
                 new ArrayList<>(mediasToUpload)
-        );
-
-        Stream.of(tweetTextArea, sendButton).forEach(ctr -> ctr.setDisable(true));
-
-        tweetRequest.whenCompleteAsync((succ, err) -> {
+        ).whenCompleteAsync((postedStatus, err) -> {
             if (err != null) {
-                displayExceptionPane(
-                        "Could not send tweet!",
-                        "There was an issue posting this tweet.",
-                        err
-                );
+                tweetTextArea.setDisable(false);
+                sendButton.setDisable(false);
+                pickMediaButton.setDisable(false);
+                mediasToUpload.clear();
             } else {
-                stageManager.getSingle(NEW_TWEET_VIEW).peek(Stages::scheduleHiding);
+                stageManager.getMultiple(NEW_TWEET_VIEW, new Selector(this.hashCode())).peek(Stages::scheduleHiding);
             }
         });
     }
@@ -135,24 +136,11 @@ public class NewScreenController implements FxmlController {
     private void openMediaAttachmentsFilePicker() {
         pickMediaButton.setDisable(true);
         final CompletionStage<List<File>> pickedMedia = openFileChooserForMedia();
-        pickedMedia.whenCompleteAsync((files, err) -> {
-            if (err != null) {
-                ExceptionHandler.displayExceptionPane(
-                        "Could not pick files",
-                        "",
-                        err
-                );
-                LOG.error("Could not pick files.", err);
-            } else {
-                mediasToUpload.addAll(files);
-                LOG.debug("Added media files for upload with next tweet : {}", files);
-            }
+        pickedMedia.thenAcceptAsync(files -> {
+            mediasToUpload.addAll(files);
+            LOG.debug("Added media files for upload with next tweet : {}", files);
             pickMediaButton.setDisable(false);
-        });
-    }
-
-    private void updateMediaAttachmentsPreview() {
-
+        }, Platform::runLater);
     }
 
     private CompletionStage<List<File>> openFileChooserForMedia() {
@@ -164,7 +152,7 @@ public class NewScreenController implements FxmlController {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         final CompletableFuture<List<File>> pickedFiles = new CompletableFuture<>();
-        stageManager.getSingle(NEW_TWEET_VIEW)
+        stageManager.getMultiple(NEW_TWEET_VIEW, new Selector(this.hashCode()))
                     .peek(newTweetStage -> Platform.runLater(
                             () -> pickedFiles.complete(
                                     fileChooser.showOpenMultipleDialog(newTweetStage)

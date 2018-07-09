@@ -35,6 +35,7 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -56,15 +57,32 @@ public class LoginScreenController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginScreenController.class);
 
-    public VBox step1Box;
-    public Button openLoginUrlButton;
-    public VBox step2Box;
-    public TextField pinCodeField;
-    public Button validatePinCodeButton;
-    public VBox step3Box;
-    public Label loggedUsernameLabel;
-    public Separator separator1;
-    public Separator separator2;
+    @FXML
+    private VBox step1Box;
+
+    @FXML
+    private Button openLoginUrlButton;
+
+    @FXML
+    private VBox step2Box;
+
+    @FXML
+    private TextField pinCodeField;
+
+    @FXML
+    private Button validatePinCodeButton;
+
+    @FXML
+    private VBox step3Box;
+
+    @FXML
+    private Label loggedUsernameLabel;
+
+    @FXML
+    private Separator separator1;
+
+    @FXML
+    private Separator separator2;
 
     private final BrowserSupport browserSupport;
     private final TwitterHandler twitterHandler;

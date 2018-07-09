@@ -26,6 +26,7 @@ import moe.lyrebird.view.components.Components;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -39,7 +40,8 @@ public class RootScreenController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(RootScreenController.class);
 
-    public BorderPane contentPane;
+    @FXML
+    private BorderPane contentPane;
 
     private final EasyFxml easyFxml;
 

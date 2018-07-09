@@ -24,19 +24,21 @@ import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
+import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.services.interraction.TweetInterractionService;
-import moe.lyrebird.view.CachedDataService;
+import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.util.BrowserOpeningHyperlink;
+import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 import javafx.application.Platform;
-import javafx.beans.binding.BooleanExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -51,9 +53,8 @@ import java.util.concurrent.CompletableFuture;
 
 import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
-import static moe.lyrebird.view.components.ImageResources.BLANK_USER_PROFILE_PICTURE;
+import static moe.lyrebird.view.assets.ImageResources.BLANK_USER_PROFILE_PICTURE;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.time;
-import static moe.lyrebird.view.components.tweet.TweetFormatter.username;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Component
@@ -64,6 +65,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @FXML
     private Label author;
+
+    @FXML
+    private Label authorId;
 
     @FXML
     private Label time;
@@ -78,7 +82,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private TextFlow content;
 
     @FXML
-    private HBox toolbar;
+    private HBox mediaBox;
 
     @FXML
     private Button likeButton;
@@ -90,30 +94,34 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private Label retweeterLabel;
 
     @FXML
+    private Label retweeterIdLabel;
+
+    @FXML
     private HBox retweetHbox;
 
     private final BrowserSupport browserSupport;
     private final TweetInterractionService interractionService;
-    private final CachedDataService cachedDataService;
+    private final AsyncIO asyncIO;
+    private final MediaEmbeddingService mediaEmbeddingService;
 
     private Status status;
-    private final BooleanProperty selected = new SimpleBooleanProperty(false);
     private final BooleanProperty isRetweet = new SimpleBooleanProperty(false);
 
     public TweetPaneController(
             final BrowserSupport browserSupport,
             final TweetInterractionService interractionService,
-            final CachedDataService cachedDataService
+            final AsyncIO asyncIO,
+            final MediaEmbeddingService mediaEmbeddingService
     ) {
         this.browserSupport = browserSupport;
         this.interractionService = interractionService;
-        this.cachedDataService = cachedDataService;
+        this.asyncIO = asyncIO;
+        this.mediaEmbeddingService = mediaEmbeddingService;
     }
 
     @Override
     public void initialize() {
         authorProfilePicturePane.setClip(makePpClip());
-        Nodes.hideAndResizeParentIf(toolbar, selected);
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         Buttons.setOnClick(likeButton, this::onLike);
         Buttons.setOnClick(retweetButton, this::onRewteet);
@@ -125,13 +133,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         setStatus(newValue);
     }
 
-    @Override
-    public void selectedProperty(final BooleanExpression selected) {
-        this.selected.bind(selected);
-    }
-
     private void setStatus(final Status status) {
-        if (status == null) {
+        if (status == null || this.status == status) {
             return;
         }
 
@@ -147,22 +150,26 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private void handleRetweet(final Status status) {
-        retweeterLabel.setText("@" + status.getUser().getScreenName());
+        retweeterLabel.setText(status.getUser().getName());
+        retweeterIdLabel.setText("@" + status.getUser().getScreenName());
         setStatusDisplay(status.getRetweetedStatus());
     }
 
     private void setStatusDisplay(final Status statusToDisplay) {
-        author.setText(username(statusToDisplay.getUser()));
+        author.setText(statusToDisplay.getUser().getName());
+        authorId.setText("@" + statusToDisplay.getUser().getScreenName());
         time.setText(time(statusToDisplay));
         loadTextIntoTextFlow(statusToDisplay.getText());
-        CompletableFuture.supplyAsync(() -> cachedDataService.userProfileImage(statusToDisplay.getUser()))
-                         .thenAccept(authorProfilePicture::setImage);
+        final String ppUrl = statusToDisplay.getUser().getOriginalProfileImageURLHttps();
+        asyncIO.loadImageMiniature(ppUrl, 96.0, 96.0)
+               .thenAcceptAsync(authorProfilePicture::setImage, Platform::runLater);
+        readMedias(status);
     }
 
     private void onLike() {
         LOG.debug("Like interraction on status {}", status.getId());
         final CompletableFuture<Status> likeRequest = CompletableFuture.supplyAsync(
-                        () -> interractionService.interract(status, LIKE)
+                () -> interractionService.interract(status, LIKE)
         );
         likeButton.setDisable(true);
         likeRequest.whenCompleteAsync((res, err) -> likeButton.setDisable(false), Platform::runLater);
@@ -188,10 +195,16 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
                   .forEach(content.getChildren()::add);
     }
 
+    private void readMedias(final Status status) {
+        final List<Node> embeddingNodes = mediaEmbeddingService.embed(status);
+        mediaBox.getChildren().setAll(embeddingNodes);
+    }
+
     private Circle makePpClip() {
-        final Circle ppClip = new Circle(24.0);
-        ppClip.setCenterX(24.0);
-        ppClip.setCenterY(24.0);
+        final double clippingRadius = 24.0;
+        final Circle ppClip = Clipping.getCircleClip(clippingRadius);
+        ppClip.setCenterX(clippingRadius);
+        ppClip.setCenterY(clippingRadius);
         return ppClip;
     }
 

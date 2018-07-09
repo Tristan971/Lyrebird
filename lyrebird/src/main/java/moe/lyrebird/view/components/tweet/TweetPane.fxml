@@ -29,6 +29,31 @@
 <?import javafx.scene.text.TextFlow?>
 <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.tweet.TweetPaneController">
    <children>
+      <HBox fx:id="retweetHbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+         <children>
+            <HBox alignment="BOTTOM_RIGHT" prefWidth="48.0">
+               <children>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@/assets/img/retweet_arrows_symbol.png" />
+                     </image></ImageView>
+               </children></HBox>
+            <HBox alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0">
+               <children>
+                  <Label fx:id="retweeterLabel" text="RT_USER" textFill="#358f41" underline="true" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="retweeterIdLabel" text="\@rtUser" textFill="#358f41">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
       <HBox spacing="5.0" VBox.vgrow="ALWAYS">
          <children>
             <Pane fx:id="authorProfilePicturePane" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefHeight="48.0" prefWidth="48.0" HBox.hgrow="NEVER">
@@ -44,55 +69,39 @@
                   <Insets top="2.5" />
                </HBox.margin>
             </Pane>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
                <children>
-                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefWidth="50000.0">
+                     <right>
+                        <Label fx:id="time" alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="TIME" textAlignment="RIGHT" textFill="#7c7c7c" BorderPane.alignment="CENTER_RIGHT" />
+                     </right>
+                     <left>
+                        <HBox alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" BorderPane.alignment="BOTTOM_LEFT">
                            <children>
-                              <HBox fx:id="retweetHbox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@/assets/img/retweet-arrows-symbol.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label fx:id="retweeterLabel" text="RT_USER" textFill="#358f41" underline="true" wrapText="true">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefWidth="50000.0">
-                                 <left>
-                                    <Label fx:id="author" minWidth="0.0" text="AUTHOR" BorderPane.alignment="CENTER_LEFT">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Label>
-                                 </left>
-                                 <right>
-                                    <Label fx:id="time" alignment="CENTER_RIGHT" text="TIME" textAlignment="RIGHT" textFill="#7c7c7c" BorderPane.alignment="CENTER_RIGHT" />
-                                 </right>
-                              </BorderPane>
-                              <TextFlow fx:id="content" />
-                              <HBox fx:id="toolbar" alignment="CENTER_LEFT" spacing="10.0">
-                                 <children>
-                                    <Button fx:id="likeButton" mnemonicParsing="false" text="Like">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="retweetButton" mnemonicParsing="false" text="Retweet">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </Button>
-                                 </children>
-                              </HBox>
+                              <Label fx:id="author" minWidth="0.0" text="AUTHOR">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="authorId" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="\@author" textFill="#7c7c7c" />
                            </children>
-                        </VBox>
+                        </HBox>
+                     </left>
+                  </BorderPane>
+                  <TextFlow fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                  <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                     <children>
+                        <Button fx:id="likeButton" mnemonicParsing="false" text="Like">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="retweetButton" mnemonicParsing="false" text="Retweet">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
                      </children>
                   </HBox>
                </children>

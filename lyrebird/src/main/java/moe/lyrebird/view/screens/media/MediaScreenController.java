@@ -16,20 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.login;
+package moe.lyrebird.view.screens.media;
 
-public enum LoginSteps {
-    STEP_1(1),
-    STEP_2(2),
-    STEP_3(3);
+import moe.tristan.easyfxml.api.FxmlController;
 
-    private final int stepNumber;
+public abstract class MediaScreenController implements FxmlController {
 
-    LoginSteps(int stepNumber) {
-        this.stepNumber = stepNumber;
-    }
+    public abstract void handleMedia(final String mediaUrl);
 
-    public int getStepNumber() {
-        return stepNumber;
-    }
+    protected abstract void bindViewSizeToParent();
+
 }

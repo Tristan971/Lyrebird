@@ -60,14 +60,15 @@ Any of the following (execute command in this README's directory):
                 - [x] Clickable
         - [ ] Media embedding
             - [ ] Officially supported
-                - [ ] Twitter image embedding
-                - [ ] Twitter video embedding
+                - [x] Twitter image embedding
+                - [x] Twitter video embedding
+                - [ ] Twitter gif images embedding
             - [ ] Easy embedding
                 - [ ] Direct image embedding
                 - [ ] Direct video embedding
             - [ ] Why is it not easy to do ?
                 - [ ] Youtube video embedding
-    - [ ] Data loading features :
+    - [x] Data loading features :
         - [x] Seeking older tweets by-demand (scroll or button)
         - [x] Seek newer tweets all the time using streaming API
 
