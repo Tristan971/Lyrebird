@@ -22,10 +22,12 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.screens.media.MediaScreenController;
-import moe.lyrebird.view.screens.media.display.twitter.photo.TwitterPhotoScreenController;
+import moe.lyrebird.view.screens.media.display.photo.PhotoScreenController;
+import moe.lyrebird.view.screens.media.display.video.VideoScreenController;
 
 public enum MediaDisplaySceen implements FxmlNode {
-    PHOTO("twitter/photo/TwitterPhotoScreen.fxml", TwitterPhotoScreenController.class);
+    PHOTO("photo/PhotoScreen.fxml", PhotoScreenController.class),
+    VIDEO("video/VideoScreen.fxml", VideoScreenController.class);
 
     private final String file;
     private final Class<? extends MediaScreenController> mediaScreenController;

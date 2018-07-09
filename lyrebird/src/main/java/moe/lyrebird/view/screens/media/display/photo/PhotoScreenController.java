@@ -16,14 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media.display.twitter.photo;
+package moe.lyrebird.view.screens.media.display.photo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.io.CachedIO;
-import moe.lyrebird.view.components.ImageResources;
+import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.media.MediaScreenController;
 
 import javafx.beans.property.Property;
@@ -35,7 +35,7 @@ import javafx.scene.layout.AnchorPane;
 
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class TwitterPhotoScreenController extends MediaScreenController {
+public class PhotoScreenController extends MediaScreenController {
 
     @FXML
     private AnchorPane container;
@@ -48,7 +48,7 @@ public class TwitterPhotoScreenController extends MediaScreenController {
     private final Property<Image> imageProp = new SimpleObjectProperty<>(ImageResources.LOADING_REMOTE.getImage());
 
     @Autowired
-    public TwitterPhotoScreenController(final CachedIO cachedIO) {
+    public PhotoScreenController(final CachedIO cachedIO) {
         this.cachedIO = cachedIO;
         imageProp.addListener((observable, oldValue, newValue) -> autosizeStage(newValue));
     }
@@ -60,8 +60,7 @@ public class TwitterPhotoScreenController extends MediaScreenController {
 
     @Override
     public void handleMedia(String mediaUrl) {
-        final Image originalImage = cachedIO.loadImage(mediaUrl);
-        imageProp.setValue(originalImage);
+        imageProp.setValue(cachedIO.loadImage(mediaUrl));
     }
 
     private void autosizeStage(final Image image) {

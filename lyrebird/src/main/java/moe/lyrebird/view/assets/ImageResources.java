@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.components;
+package moe.lyrebird.view.assets;
 
 import javafx.scene.image.Image;
 
