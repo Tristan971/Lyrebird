@@ -53,7 +53,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
-import static moe.lyrebird.view.components.ImageResources.BLANK_USER_PROFILE_PICTURE;
+import static moe.lyrebird.view.assets.ImageResources.BLANK_USER_PROFILE_PICTURE;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.time;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 

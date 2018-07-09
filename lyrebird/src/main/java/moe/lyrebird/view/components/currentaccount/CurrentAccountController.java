@@ -41,7 +41,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.concurrent.CompletableFuture;
 
-import static moe.lyrebird.view.components.ImageResources.ADD_USER_PROFILE_PICTURE;
+import static moe.lyrebird.view.assets.ImageResources.ADD_USER_PROFILE_PICTURE;
 
 @Component
 public class CurrentAccountController implements FxmlController {
