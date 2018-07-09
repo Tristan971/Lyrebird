@@ -16,31 +16,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media.handlers;
+package moe.lyrebird.view.screens.media.handlers.twitter;
 
 import org.springframework.stereotype.Component;
-import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.media.display.EmbeddedMediaViewHelper;
-import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
+import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
+import twitter4j.MediaEntity;
 
 import javafx.scene.layout.Pane;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 @Component
-public class VideoHandler implements MediaHandler {
+public class TwitterVideoHandler extends VideoHandler<MediaEntity.Variant[]> {
 
-    private final EmbeddedMediaViewHelper embeddedMediaViewHelper;
-
-    public VideoHandler(final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
-        this.embeddedMediaViewHelper = embeddedMediaViewHelper;
+    public TwitterVideoHandler(EmbeddedMediaViewHelper embeddedMediaViewHelper) {
+        super(embeddedMediaViewHelper);
     }
 
     @Override
-    public Pane handleMedia(final String mediaUrl) {
-        return embeddedMediaViewHelper.makeWrapperWithIcon(
-                MediaDisplaySceen.VIDEO,
-                ImageResources.VIDEO_PLAYER,
-                mediaUrl
-        );
+    public Pane handleMedia(MediaEntity.Variant[] mediaSource) {
+        final var best = Arrays.stream(mediaSource).max(Comparator.comparingInt(MediaEntity.Variant::getBitrate));
+        final MediaEntity.Variant bestVersion = best.orElseThrow();
+        return handleMediaSource(bestVersion.getUrl());
     }
 
 }

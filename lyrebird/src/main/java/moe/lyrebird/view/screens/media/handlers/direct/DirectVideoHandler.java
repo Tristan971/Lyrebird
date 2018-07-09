@@ -16,12 +16,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media.handlers;
+package moe.lyrebird.view.screens.media.handlers.direct;
+
+import org.springframework.stereotype.Component;
+import moe.lyrebird.view.screens.media.display.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
 
 import javafx.scene.layout.Pane;
 
-public interface MediaHandler<T> {
+@Component
+public class DirectVideoHandler extends VideoHandler<String> {
 
-    Pane handleMedia(final T mediaSource);
+    public DirectVideoHandler(final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
+        super(embeddedMediaViewHelper);
+    }
+
+    @Override
+    public Pane handleMedia(String mediaSource) {
+        return handleMediaSource(mediaSource);
+    }
 
 }

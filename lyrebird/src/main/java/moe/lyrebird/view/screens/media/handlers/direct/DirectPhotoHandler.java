@@ -16,12 +16,27 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media.handlers;
+package moe.lyrebird.view.screens.media.handlers.direct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.view.screens.media.display.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.base.PhotoHandler;
 
 import javafx.scene.layout.Pane;
 
-public interface MediaHandler<T> {
+@Component
+public class DirectPhotoHandler extends PhotoHandler<String> {
 
-    Pane handleMedia(final T mediaSource);
+    @Autowired
+    public DirectPhotoHandler(final AsyncIO asyncIO, final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
+        super(asyncIO, embeddedMediaViewHelper);
+    }
+
+    @Override
+    public Pane handleMedia(String mediaSource) {
+        return handleMediaSource(mediaSource);
+    }
 
 }

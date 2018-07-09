@@ -16,47 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media.handlers;
+package moe.lyrebird.view.screens.media.handlers.base;
 
-import org.springframework.stereotype.Component;
-import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.media.display.EmbeddedMediaViewHelper;
 import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
+import moe.lyrebird.view.screens.media.handlers.MediaHandler;
 
-import javafx.application.Platform;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MEDIA_RECTANGLE_SIDE;
+public abstract class VideoHandler<T> implements MediaHandler<T> {
 
-@Component
-public class PhotoHandler implements MediaHandler {
-
-    private final AsyncIO asyncIO;
     private final EmbeddedMediaViewHelper embeddedMediaViewHelper;
 
-    public PhotoHandler(
-            final AsyncIO asyncIO,
-            final EmbeddedMediaViewHelper embeddedMediaViewHelper
-    ) {
-        this.asyncIO = asyncIO;
+    public VideoHandler(final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
         this.embeddedMediaViewHelper = embeddedMediaViewHelper;
     }
 
-    @Override
-    public Pane handleMedia(final String imageUrl) {
+    protected Pane handleMediaSource(final String mediaUrl) {
         return embeddedMediaViewHelper.makeWrapperWithIcon(
-                MediaDisplaySceen.PHOTO,
-                ImageResources.LOADING_REMOTE,
-                imageUrl,
-                imageView -> loadMiniatureAsync(imageView, imageUrl)
+                MediaDisplaySceen.VIDEO,
+                ImageResources.VIDEO_PLAYER,
+                mediaUrl
         );
-    }
-
-    private void loadMiniatureAsync(final ImageView imageView, final String actualImageUrl) {
-        asyncIO.loadImageMiniature(actualImageUrl, EMBEDDED_MEDIA_RECTANGLE_SIDE, EMBEDDED_MEDIA_RECTANGLE_SIDE)
-               .thenAcceptAsync(imageView::setImage, Platform::runLater);
     }
 
 }

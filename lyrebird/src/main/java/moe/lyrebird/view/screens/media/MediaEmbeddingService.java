@@ -18,11 +18,10 @@
 
 package moe.lyrebird.view.screens.media;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import moe.lyrebird.view.screens.media.handlers.PhotoHandler;
-import moe.lyrebird.view.screens.media.handlers.VideoHandler;
+import moe.lyrebird.view.screens.media.handlers.direct.DirectPhotoHandler;
+import moe.lyrebird.view.screens.media.handlers.twitter.TwitterVideoHandler;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 
@@ -38,16 +37,15 @@ public class MediaEmbeddingService {
     public static final double EMBEDDED_MEDIA_RECTANGLE_SIDE = 64.0;
     public static final double EMBEDDED_MEDIA_RECTANGLE_CORNER_RADIUS = 10.0;
 
-    private final PhotoHandler photoHandler;
-    private final VideoHandler videoHandler;
+    private final DirectPhotoHandler directPhotoHandler;
+    private final TwitterVideoHandler twitterVideoHandler;
 
-    @Autowired
     public MediaEmbeddingService(
-            final PhotoHandler photoHandler,
-            final VideoHandler videoHandler
+            DirectPhotoHandler directPhotoHandler,
+            TwitterVideoHandler twitterVideoHandler
     ) {
-        this.photoHandler = photoHandler;
-        this.videoHandler = videoHandler;
+        this.directPhotoHandler = directPhotoHandler;
+        this.twitterVideoHandler = twitterVideoHandler;
     }
 
     @Cacheable("embeddedNodes")
@@ -61,9 +59,9 @@ public class MediaEmbeddingService {
     private Node embedOne(final MediaEntity entity) {
         switch (MediaEntityType.fromTwitterType(entity.getType())) {
             case PHOTO:
-                return photoHandler.handleMedia(entity.getMediaURLHttps());
+                return directPhotoHandler.handleMedia(entity.getMediaURLHttps());
             case VIDEO:
-                return videoHandler.handleMedia(entity.getMediaURLHttps());
+                return twitterVideoHandler.handleMedia(entity.getVideoVariants());
             case UNMANAGED:
             default:
                 throw new IllegalArgumentException("Twitter type "+entity.getType()+" is not supported!");
