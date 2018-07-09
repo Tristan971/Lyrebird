@@ -18,13 +18,18 @@
 
 package moe.lyrebird.view.screens.media;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.MediaEntity;
 
 import java.util.Arrays;
 
 public enum MediaEntityType {
     PHOTO("photo"),
+    VIDEO("video"),
     UNMANAGED("<UNMANAGED_TYPE>");
+
+    private static final Logger LOG = LoggerFactory.getLogger(MediaEntityType.class);
 
     private final String codeName;
 
@@ -44,7 +49,11 @@ public enum MediaEntityType {
     }
 
     public static boolean isSupported(final MediaEntity entity) {
-        return fromTwitterType(entity.getType()) != UNMANAGED;
+        final boolean supported = fromTwitterType(entity.getType()) != UNMANAGED;
+        if (!supported) {
+            LOG.warn("Unsupported twitter media entity, skipping. Twitter type was : [{}]", entity.getType());
+        }
+        return supported;
     }
 
 }
