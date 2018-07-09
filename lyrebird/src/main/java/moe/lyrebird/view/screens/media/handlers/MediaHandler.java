@@ -18,10 +18,10 @@
 
 package moe.lyrebird.view.screens.media.handlers;
 
-import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
-public interface MediaHandler<N extends Node> {
+public interface MediaHandler {
 
-    N handleMedia(final String mediaUrl);
+    Pane handleMedia(final String mediaUrl);
 
 }

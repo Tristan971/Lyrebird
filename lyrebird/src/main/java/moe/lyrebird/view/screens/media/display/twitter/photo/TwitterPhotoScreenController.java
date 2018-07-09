@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.model.io.CachedIO;
 import moe.lyrebird.view.components.ImageResources;
 import moe.lyrebird.view.screens.media.MediaScreenController;
 import org.slf4j.Logger;
@@ -47,13 +47,14 @@ public class TwitterPhotoScreenController extends MediaScreenController {
     @FXML
     private ImageView photoImageView;
 
-    private final AsyncIO asyncIO;
+    private final CachedIO cachedIO;
 
     private final Property<Image> imageProp = new SimpleObjectProperty<>(ImageResources.LOADING_REMOTE.getImage());
 
     @Autowired
-    public TwitterPhotoScreenController(final AsyncIO asyncIO) {
-        this.asyncIO = asyncIO;
+    public TwitterPhotoScreenController(final CachedIO cachedIO) {
+        this.cachedIO = cachedIO;
+        imageProp.addListener((observable, oldValue, newValue) -> autosizeStage(newValue));
     }
 
     @Override
@@ -63,10 +64,8 @@ public class TwitterPhotoScreenController extends MediaScreenController {
 
     @Override
     public void handleMedia(String mediaUrl) {
-        asyncIO.loadImageAndThen(mediaUrl, image -> {
-            imageProp.setValue(image);
-            autosizeStage(image);
-        });
+        final Image originalImage = cachedIO.loadImage(mediaUrl);
+        imageProp.setValue(originalImage);
     }
 
     private void autosizeStage(final Image image) {

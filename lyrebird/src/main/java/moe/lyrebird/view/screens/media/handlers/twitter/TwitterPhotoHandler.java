@@ -29,6 +29,7 @@ import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
 import moe.lyrebird.view.screens.media.handlers.MediaHandler;
 import moe.lyrebird.view.util.Clipping;
 
+import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -37,7 +38,7 @@ import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MED
 import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MEDIA_RECTANGLE_SIDE;
 
 @Component
-public class TwitterPhotoHandler implements MediaHandler<ImageView> {
+public class TwitterPhotoHandler implements MediaHandler {
 
     private final AsyncIO asyncIO;
     private final EasyFxml easyFxml;
@@ -51,22 +52,28 @@ public class TwitterPhotoHandler implements MediaHandler<ImageView> {
     }
 
     @Override
-    public ImageView handleMedia(final String imageUrl) {
-        final ImageView container = new ImageView();
-        container.setFitWidth(EMBEDDED_MEDIA_RECTANGLE_SIDE);
-        container.setFitHeight(EMBEDDED_MEDIA_RECTANGLE_SIDE);
+    public Pane handleMedia(final String imageUrl) {
+        final Pane containerPane = new Pane();
+        containerPane.setPrefWidth(EMBEDDED_MEDIA_RECTANGLE_SIDE);
+        containerPane.setPrefHeight(EMBEDDED_MEDIA_RECTANGLE_SIDE);
+
+        final ImageView imageView = new ImageView();
+        imageView.setFitWidth(EMBEDDED_MEDIA_RECTANGLE_SIDE);
+        imageView.setFitHeight(EMBEDDED_MEDIA_RECTANGLE_SIDE);
 
         final Rectangle clipRectangle = Clipping.getSquareClip(
                 EMBEDDED_MEDIA_RECTANGLE_SIDE,
                 EMBEDDED_MEDIA_RECTANGLE_CORNER_RADIUS
         );
-        clipRectangle.layoutXProperty().bind(container.layoutXProperty());
-        clipRectangle.layoutYProperty().bind(container.layoutYProperty());
-        container.setClip(clipRectangle);
+        clipRectangle.layoutXProperty().bind(imageView.layoutXProperty());
+        clipRectangle.layoutYProperty().bind(imageView.layoutYProperty());
+        imageView.setClip(clipRectangle);
+        containerPane.getChildren().setAll(imageView);
 
-        asyncIO.loadImageInImageView(imageUrl, container);
+        asyncIO.loadImageMiniature(imageUrl, EMBEDDED_MEDIA_RECTANGLE_SIDE, EMBEDDED_MEDIA_RECTANGLE_SIDE)
+               .thenAcceptAsync(imageView::setImage, Platform::runLater);
 
-        container.setOnMouseClicked(e -> {
+        imageView.setOnMouseClicked(e -> {
             final FxmlLoadResult<Pane, MediaScreenController> loadResult = easyFxml.loadNode(
                     MediaDisplaySceen.PHOTO,
                     Pane.class,
@@ -78,7 +85,7 @@ public class TwitterPhotoHandler implements MediaHandler<ImageView> {
             Stages.stageOf("", photoViewPane)
                   .thenAcceptAsync(Stages::scheduleDisplaying);
         });
-        return container;
+        return containerPane;
     }
 
 }
