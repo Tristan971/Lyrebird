@@ -18,9 +18,11 @@
 
 package moe.lyrebird.view.screens.media;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import moe.lyrebird.view.screens.media.handlers.twitter.TwitterPhotoHandler;
+import moe.lyrebird.view.screens.media.handlers.PhotoHandler;
+import moe.lyrebird.view.screens.media.handlers.VideoHandler;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 
@@ -36,10 +38,16 @@ public class MediaEmbeddingService {
     public static final double EMBEDDED_MEDIA_RECTANGLE_SIDE = 64.0;
     public static final double EMBEDDED_MEDIA_RECTANGLE_CORNER_RADIUS = 10.0;
 
-    private final TwitterPhotoHandler twitterPhotoHandler;
+    private final PhotoHandler photoHandler;
+    private final VideoHandler videoHandler;
 
-    public MediaEmbeddingService(TwitterPhotoHandler twitterPhotoHandler) {
-        this.twitterPhotoHandler = twitterPhotoHandler;
+    @Autowired
+    public MediaEmbeddingService(
+            final PhotoHandler photoHandler,
+            final VideoHandler videoHandler
+    ) {
+        this.photoHandler = photoHandler;
+        this.videoHandler = videoHandler;
     }
 
     @Cacheable("embeddedNodes")
@@ -53,7 +61,9 @@ public class MediaEmbeddingService {
     private Node embedOne(final MediaEntity entity) {
         switch (MediaEntityType.fromTwitterType(entity.getType())) {
             case PHOTO:
-                return twitterPhotoHandler.handleMedia(entity.getMediaURLHttps());
+                return photoHandler.handleMedia(entity.getMediaURLHttps());
+            case VIDEO:
+                return videoHandler.handleMedia(entity.getMediaURLHttps());
             case UNMANAGED:
             default:
                 throw new IllegalArgumentException("Twitter type "+entity.getType()+" is not supported!");
