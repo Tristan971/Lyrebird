@@ -50,7 +50,7 @@ public class PhotoScreenController extends MediaScreenController {
     @Autowired
     public PhotoScreenController(final CachedIO cachedIO) {
         this.cachedIO = cachedIO;
-        imageProp.addListener((observable, oldValue, newValue) -> autosizeStage(newValue));
+        imageProp.addListener((observable, oldValue, newValue) -> bindViewSizeToParent());
     }
 
     @Override
@@ -63,9 +63,10 @@ public class PhotoScreenController extends MediaScreenController {
         imageProp.setValue(cachedIO.loadImage(mediaUrl));
     }
 
-    private void autosizeStage(final Image image) {
-        container.setPrefWidth(image.getWidth());
-        container.setPrefHeight(image.getHeight());
+    @Override
+    protected void bindViewSizeToParent() {
+        container.setPrefWidth(imageProp.getValue().getWidth());
+        container.setPrefHeight(imageProp.getValue().getHeight());
         photoImageView.fitHeightProperty().bind(container.heightProperty());
         photoImageView.fitWidthProperty().bind(container.widthProperty());
     }

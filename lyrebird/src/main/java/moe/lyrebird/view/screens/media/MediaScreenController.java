@@ -24,4 +24,6 @@ public abstract class MediaScreenController implements FxmlController {
 
     public abstract void handleMedia(final String mediaUrl);
 
+    protected abstract void bindViewSizeToParent();
+
 }
