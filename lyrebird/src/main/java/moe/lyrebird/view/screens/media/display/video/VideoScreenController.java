@@ -25,11 +25,14 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.view.assets.MediaResources;
 import moe.lyrebird.view.screens.media.MediaScreenController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -38,7 +41,12 @@ import javafx.scene.media.MediaView;
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class VideoScreenController extends MediaScreenController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(VideoScreenController.class);
+
     private static final Media TEMPORARY_MEDIA_LOAD = MediaResources.LOADING_REMOTE_GTARD.getMedia();
+
+    @FXML
+    private AnchorPane container;
 
     @FXML
     private MediaView mediaView;
@@ -55,6 +63,7 @@ public class VideoScreenController extends MediaScreenController {
 
     @Override
     public void initialize() {
+        bindViewSizeToParent();
         mediaView.setSmooth(true);
         mediaView.setMediaPlayer(openMediaPlayer());
         mediaProperty.addListener((o, temp, actual) -> mediaView.setMediaPlayer(openMediaPlayer()));
@@ -65,8 +74,43 @@ public class VideoScreenController extends MediaScreenController {
         asyncIO.loadMedia(mediaUrl).thenAcceptAsync(mediaProperty::setValue, Platform::runLater);
     }
 
+    @Override
+    protected void bindViewSizeToParent() {
+        mediaView.fitHeightProperty().bind(container.heightProperty());
+        mediaView.fitWidthProperty().bind(container.widthProperty());
+    }
+
     private MediaPlayer openMediaPlayer() {
-        return new MediaPlayer(mediaProperty.getValue());
+        final MediaPlayer mediaPlayer = new MediaPlayer(mediaProperty.getValue());
+        mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setOnEndOfMedia(mediaPlayer::stop);
+        mediaView.setOnMouseClicked(e -> onClickHandler(mediaPlayer));
+        return mediaPlayer;
+    }
+
+    private void onClickHandler(final MediaPlayer mediaPlayer) {
+        final MediaPlayer.Status playerStatus = mediaPlayer.statusProperty().get();
+        switch (playerStatus) {
+            case READY:
+                mediaPlayer.play();
+                break;
+            case PAUSED:
+                mediaPlayer.play();
+                break;
+            case PLAYING:
+                mediaPlayer.pause();
+                break;
+            case STOPPED:
+                mediaPlayer.play();
+                break;
+            case HALTED:
+            case UNKNOWN:
+            case STALLED:
+            case DISPOSED:
+                LOG.warn("Media player issue ! [status = {}]", playerStatus);
+            default:
+                LOG.error("UNKNOWN MEDIA PLAYER STATUS ! [status = {}]", playerStatus);
+        }
     }
 
 }

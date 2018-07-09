@@ -18,11 +18,10 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.media.MediaView?>
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.media.display.video.VideoScreenController">
+<AnchorPane fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="360" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.media.display.video.VideoScreenController">
    <children>
-      <MediaView fx:id="mediaView" fitHeight="480.0" fitWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <MediaView fx:id="mediaView" fitHeight="360" fitWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
