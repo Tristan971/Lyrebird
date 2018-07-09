@@ -20,15 +20,26 @@ package moe.lyrebird.model.io;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.scene.image.Image;
 
 @Component
 public class CachedIO {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CachedIO.class);
+
     @Cacheable("image")
     public Image loadImage(final String imageUrl) {
+        LOG.trace("First load of image {}", imageUrl);
         return new Image(imageUrl);
+    }
+
+    @Cacheable("imageMiniature")
+    public Image loadImageMiniature(final String imageUrl, final double width, final double heigth) {
+        LOG.trace("First load of miniature image {} [width = {}, heigth = {}]", imageUrl, width, heigth);
+        return new Image(imageUrl, width, heigth, false, true);
     }
 
 }

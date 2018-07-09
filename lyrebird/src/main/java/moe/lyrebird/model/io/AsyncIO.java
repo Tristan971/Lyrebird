@@ -22,13 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import javafx.application.Platform;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 
 @Component
 public class AsyncIO {
@@ -49,12 +46,11 @@ public class AsyncIO {
         return CompletableFuture.supplyAsync(() -> cachedIO.loadImage(imageUrl), asyncIoExecutor);
     }
 
-    public void loadImageInImageView(final String imageUrl, final ImageView imageView) {
-        loadImageAndThen(imageUrl, imageView::setImage);
-    }
-
-    public void loadImageAndThen(final String imageUrl, final Consumer<Image> andThen) {
-        loadImage(imageUrl).thenAcceptAsync(andThen::accept, Platform::runLater);
+    public CompletableFuture<Image> loadImageMiniature(final String imageUrl, final double width, final double heigth) {
+        return CompletableFuture.supplyAsync(
+                () -> cachedIO.loadImageMiniature(imageUrl, width, heigth),
+                asyncIoExecutor
+        );
     }
 
 }
