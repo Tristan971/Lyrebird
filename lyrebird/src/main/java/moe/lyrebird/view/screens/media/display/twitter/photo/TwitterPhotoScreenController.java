@@ -25,8 +25,6 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.model.io.CachedIO;
 import moe.lyrebird.view.components.ImageResources;
 import moe.lyrebird.view.screens.media.MediaScreenController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -38,8 +36,6 @@ import javafx.scene.layout.AnchorPane;
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TwitterPhotoScreenController extends MediaScreenController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TwitterPhotoScreenController.class);
 
     @FXML
     private AnchorPane container;
