@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -49,6 +50,13 @@ public class AsyncIO {
     public CompletableFuture<Image> loadImageMiniature(final String imageUrl, final double width, final double heigth) {
         return CompletableFuture.supplyAsync(
                 () -> cachedIO.loadImageMiniature(imageUrl, width, heigth),
+                asyncIoExecutor
+        );
+    }
+
+    public CompletableFuture<Media> loadMedia(final String mediaUrl) {
+        return CompletableFuture.supplyAsync(
+                () -> cachedIO.loadMediaFile(mediaUrl),
                 asyncIoExecutor
         );
     }

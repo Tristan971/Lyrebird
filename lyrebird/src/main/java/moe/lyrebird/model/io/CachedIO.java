@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
 
 @Component
 public class CachedIO {
@@ -40,6 +41,11 @@ public class CachedIO {
     public Image loadImageMiniature(final String imageUrl, final double width, final double heigth) {
         LOG.trace("First load of miniature image {} [width = {}, heigth = {}]", imageUrl, width, heigth);
         return new Image(imageUrl, width, heigth, false, true);
+    }
+
+    public Media loadMediaFile(final String mediaUrl) {
+        LOG.trace("First load of media {}", mediaUrl);
+        return new Media(mediaUrl);
     }
 
 }
