@@ -10,8 +10,8 @@ Last `master` branch's (version 1.0.4) statistics :
 [![Quality gate status](https://sonar.tristan.moe/api/project_badges/quality_gate?project=moe.lyrebird%3Alyrebird-parent)](https://sonar.tristan.moe/dashboard?id=moe.lyrebird%3Alyrebird-parent)
 
 ## Reasoning :
-Currently there are no good Twitter clients on Windows and Linux.
-The aim is to fix this, but also support macOS, and do all of that while being fully open-source.
+There are currently no effective Twitter clients on Windows and Linux.
+The goal of Lyrebird is to fix this, support macOS, and remain fully open-source.
 
 Hopefully this works out.
 
