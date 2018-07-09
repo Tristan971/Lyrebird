@@ -112,7 +112,7 @@ public class CurrentAccountController implements FxmlController {
 
     private void loadAndSetUserAvatar(final Try<User> user) {
         user.map(User::getOriginalProfileImageURLHttps)
-            .map(imageUrl -> asyncIO.loadImageMiniature(imageUrl, 64.0, 64.0))
+            .map(imageUrl -> asyncIO.loadImageMiniature(imageUrl, 128.0, 128.0))
             .onSuccess(loadRequest -> loadRequest.thenAcceptAsync(userProfilePicture::setImage, Platform::runLater));
     }
 
