@@ -161,7 +161,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         time.setText(time(statusToDisplay));
         loadTextIntoTextFlow(statusToDisplay.getText());
         final String ppUrl = statusToDisplay.getUser().getOriginalProfileImageURLHttps();
-        asyncIO.loadImageInImageView(ppUrl, authorProfilePicture);
+        asyncIO.loadImageMiniature(ppUrl, 96.0, 96.0)
+               .thenAcceptAsync(authorProfilePicture::setImage, Platform::runLater);
         readMedias(status);
     }
 

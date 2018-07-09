@@ -88,8 +88,8 @@
                         </HBox>
                      </left>
                   </BorderPane>
-                  <TextFlow fx:id="content" />
-                  <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" />
+                  <TextFlow fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                  <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS" />
                   <HBox alignment="CENTER_LEFT" spacing="10.0">
                      <children>
                         <Button fx:id="likeButton" mnemonicParsing="false" text="Like">

@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.User;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -111,7 +112,8 @@ public class CurrentAccountController implements FxmlController {
 
     private void loadAndSetUserAvatar(final Try<User> user) {
         user.map(User::getOriginalProfileImageURLHttps)
-            .onSuccess(imageUrl -> asyncIO.loadImageInImageView(imageUrl, userProfilePicture));
+            .map(imageUrl -> asyncIO.loadImageMiniature(imageUrl, 64.0, 64.0))
+            .onSuccess(loadRequest -> loadRequest.thenAcceptAsync(userProfilePicture::setImage, Platform::runLater));
     }
 
     private Circle makePpClip() {
