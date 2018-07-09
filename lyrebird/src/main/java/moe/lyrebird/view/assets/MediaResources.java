@@ -20,7 +20,9 @@ package moe.lyrebird.view.assets;
 
 import javafx.scene.media.Media;
 
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public enum MediaResources {
     LOADING_REMOTE_GTARD("loading-gtard.mp4");
@@ -37,7 +39,9 @@ public enum MediaResources {
 
     private static Media loadMediaFile(final String mediaFile) throws URISyntaxException {
         final String root = "assets/video/";
-        return new Media(MediaResources.class.getResource(root + mediaFile).toURI().toString());
+        final ClassLoader classLoader = MediaResources.class.getClassLoader();
+        final URI mediaUri = Objects.requireNonNull(classLoader.getResource(root + mediaFile)).toURI();
+        return new Media(mediaUri.toString());
     }
 
     public Media getMedia() {
