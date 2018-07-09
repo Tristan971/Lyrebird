@@ -24,6 +24,7 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.media.MediaScreenController;
 import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
 import moe.lyrebird.view.screens.media.handlers.MediaHandler;
@@ -58,6 +59,7 @@ public class TwitterPhotoHandler implements MediaHandler {
         containerPane.setPrefHeight(EMBEDDED_MEDIA_RECTANGLE_SIDE);
 
         final ImageView imageView = new ImageView();
+        imageView.setImage(ImageResources.LOADING_REMOTE.getImage());
         imageView.setFitWidth(EMBEDDED_MEDIA_RECTANGLE_SIDE);
         imageView.setFitHeight(EMBEDDED_MEDIA_RECTANGLE_SIDE);
 
