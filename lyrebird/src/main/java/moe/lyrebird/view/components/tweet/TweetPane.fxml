@@ -35,7 +35,7 @@
                <children>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/assets/img/retweet-arrows-symbol.png" />
+                        <Image url="@/assets/img/retweet_arrows_symbol.png" />
                      </image></ImageView>
                </children></HBox>
             <HBox alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0">
