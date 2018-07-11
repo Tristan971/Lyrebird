@@ -23,7 +23,7 @@ import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.screens.credits.CreditsScreenController;
 import moe.lyrebird.view.screens.login.LoginScreenController;
-import moe.lyrebird.view.screens.newtweet.NewScreenController;
+import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.screens.root.RootScreenController;
 
 /**
@@ -34,7 +34,7 @@ public enum Screens implements FxmlNode {
 
     ROOT_VIEW("root/RootView.fxml", RootScreenController.class),
     LOGIN_VIEW("login/Login.fxml", LoginScreenController.class),
-    NEW_TWEET_VIEW("newtweet/NewTweet.fxml", NewScreenController.class),
+    NEW_TWEET_VIEW("newtweet/NewTweet.fxml", NewTweetController.class),
     CREDITS_VIEW("credits/Credits.fxml", CreditsScreenController.class);
 
     private static final String SCREENS_BASE_PATH = "moe/lyrebird/view/screens/";
