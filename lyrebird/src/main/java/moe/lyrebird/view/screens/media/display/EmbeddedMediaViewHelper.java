@@ -27,6 +27,7 @@ import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.media.MediaScreenController;
 import moe.lyrebird.view.util.Clipping;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -81,23 +82,27 @@ public class EmbeddedMediaViewHelper {
 
     private void setOnOpen(final MediaDisplaySceen screenToLoad, final Node clickable, String mediaUrl) {
         clickable.setOnMouseClicked(e -> {
-            final Pane videoPane = loadMediaScreen(screenToLoad, mediaUrl);
-            Stages.stageOf(mediaUrl, videoPane).thenAcceptAsync(Stages::scheduleDisplaying);
+            final FxmlLoadResult<Pane, MediaScreenController> mediaScreenLoad = loadMediaScreen(screenToLoad, mediaUrl);
+            final Pane mediaScreenPane = mediaScreenLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
+            final MediaScreenController mediaScreenController = mediaScreenLoad.getController().get();
+            Stages.stageOf(mediaUrl, mediaScreenPane).thenAcceptAsync(stage -> {
+                mediaScreenController.setStage(stage);
+                stage.show();
+            }, Platform::runLater);
         });
     }
 
-    private Pane loadMediaScreen(final MediaDisplaySceen mediaDisplaySceen, final String mediaUrl) {
+    private FxmlLoadResult<Pane, MediaScreenController> loadMediaScreen(final MediaDisplaySceen mediaDisplaySceen, final String mediaUrl) {
         final FxmlLoadResult<Pane, MediaScreenController> loadResult = easyFxml.loadNode(
                 mediaDisplaySceen,
                 Pane.class,
                 MediaScreenController.class
         );
-        final Pane mediaDisplayScreen = loadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
         final MediaScreenController mediaDisplayScreenController = loadResult.getController().getOrElseThrow(
                 err -> new IllegalStateException("Could not load the media screen controller !", err)
         );
         mediaDisplayScreenController.handleMedia(mediaUrl);
-        return mediaDisplayScreen;
+        return loadResult;
     }
 
 }

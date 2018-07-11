@@ -19,8 +19,9 @@
 package moe.lyrebird.view.screens.media;
 
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.lyrebird.view.util.StageAware;
 
-public abstract class MediaScreenController implements FxmlController {
+public abstract class MediaScreenController implements FxmlController, StageAware {
 
     public abstract void handleMedia(final String mediaUrl);
 
