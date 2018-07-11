@@ -22,6 +22,8 @@ import javafx.stage.Stage;
 
 public interface StageAware {
 
-    void setStage(final Stage embeddingStage);
+    default void setStage(final Stage embeddingStage) {
+        // do nothing by default
+    }
 
 }
