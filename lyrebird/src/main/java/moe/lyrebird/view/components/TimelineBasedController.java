@@ -28,16 +28,10 @@ import twitter4j.Status;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
 
 public abstract class TimelineBasedController extends ComponentListViewFxmlController<Status> {
-
-    @FXML
-    private Button loadMoreButton;
 
     private final TwitterTimelineBaseModel timelineBase;
     private final ListProperty<Status> tweetsProperty;
@@ -57,7 +51,6 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
     public void initialize() {
         super.initialize();
         timelineBase.loadLastTweets();
-        loadMoreButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> loadMoreTweets());
         listView.itemsProperty().bind(new ReadOnlyListWrapper<>(timelineBase.loadedTweets()));
     }
 
@@ -65,6 +58,7 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
         getOldestTweetLoaded().ifPresent(oldestStatus -> {
             LOG().debug("Loading tweets before {}", oldestStatus.getId());
             timelineBase.loadMoreTweets(oldestStatus.getId());
+            listView.scrollTo(oldestStatus);
         });
     }
 
@@ -76,6 +70,11 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
         final Status oldest = tweetsProperty.getValue().get(tweetsProperty.size() - 1);
         LOG().debug("Loading tweets before {}", oldest.getId());
         return Optional.of(oldest);
+    }
+
+    @Override
+    protected void onScrolledToEndOfListView() {
+        loadMoreTweets();
     }
 
     protected abstract Logger LOG();
