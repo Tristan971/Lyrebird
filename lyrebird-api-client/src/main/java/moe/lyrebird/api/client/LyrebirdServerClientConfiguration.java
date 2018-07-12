@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @ComponentScan(basePackages = "moe.lyrebird.api.client")
-public class ClientConfiguration {
+public class LyrebirdServerClientConfiguration {
 
     @Bean
     public RestTemplate restTemplate() {
