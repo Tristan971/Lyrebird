@@ -58,7 +58,7 @@ public class UpdateScreenController implements FxmlController {
         final LyrebirdVersion latestVersion = client.getLatestVersion();
         this.currentVersionLabel.setText(environment.getRequiredProperty("app.version"));
         this.latestVersionLabel.setText(latestVersion.getVersion());
-        this.changeNotesWebView.getEngine().load(latestVersion.getChangenotesUrl().toString());
+        this.changeNotesWebView.getEngine().loadContent(latestVersion.getChangenotes());
     }
 
 }

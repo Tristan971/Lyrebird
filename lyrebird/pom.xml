@@ -195,6 +195,11 @@
             <artifactId>awaitility</artifactId>
             <version>3.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.34.6</version>
+        </dependency>
 
         <dependency>
             <groupId>moe.lyrebird</groupId>
