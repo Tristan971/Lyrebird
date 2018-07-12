@@ -26,6 +26,7 @@ import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CHANGENOTES;
 import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CONTROLLER;
 import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_LATEST;
 
@@ -49,6 +50,15 @@ public class LyrebirdServerClient {
                 buildUrl(VERSIONS_CONTROLLER, VERSIONS_LATEST),
                 LyrebirdVersion.class
         ).getBody();
+    }
+
+    public String getChangeNotes(final String buildVersion) {
+        LOG.info("Loading changenotes for buildVersion {}", buildVersion);
+        return restTemplate.getForObject(
+                buildUrl(VERSIONS_CONTROLLER, VERSIONS_CHANGENOTES),
+                String.class,
+                buildVersion
+        );
     }
 
     private String buildUrl(final String controller, final String method) {

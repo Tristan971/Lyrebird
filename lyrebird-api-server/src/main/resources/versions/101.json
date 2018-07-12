@@ -1,7 +1,6 @@
 {
   "version": "1.0.1",
   "buildVersion": "101",
-  "changenotesFile": "101.md",
   "packages": [
     {
       "targetPlatform": "win",

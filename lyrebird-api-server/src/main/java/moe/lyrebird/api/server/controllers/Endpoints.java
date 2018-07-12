@@ -22,6 +22,7 @@ public final class Endpoints {
 
     public static final String VERSIONS_CONTROLLER = "versions";
     public static final String VERSIONS_LATEST = "latest";
+    public static final String VERSIONS_CHANGENOTES = "changenotes/{buildVersion}";
 
     private Endpoints() {
     }

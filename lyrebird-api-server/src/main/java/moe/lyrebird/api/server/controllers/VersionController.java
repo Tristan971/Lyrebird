@@ -20,18 +20,29 @@ package moe.lyrebird.api.server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import moe.lyrebird.api.server.model.VersionService;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CHANGENOTES;
 import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CONTROLLER;
 import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_LATEST;
 
 @RestController
 @RequestMapping(VERSIONS_CONTROLLER)
 public class VersionController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(VersionController.class);
 
     private final VersionService versionService;
 
@@ -43,6 +54,16 @@ public class VersionController {
     @GetMapping(value = VERSIONS_LATEST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public LyrebirdVersion getLatestVersion() {
         return versionService.getLatestVersion();
+    }
+
+    @GetMapping(value = VERSIONS_CHANGENOTES, produces = MediaType.TEXT_MARKDOWN_VALUE)
+    public String getChangeNotes(@PathVariable final int buildVersion) {
+        try (InputStream fis = getClass().getClassLoader().getResourceAsStream("versions/"+buildVersion+".md")) {
+            return StreamUtils.copyToString(fis, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            LOG.error("Could not load changenotes for buildversion "+buildVersion, e);
+            return "Could not load changenotes.";
+        }
     }
 
 }
