@@ -42,6 +42,7 @@ public class UpdateService {
     private final MarkdownRenderingService markdownRenderingService;
     private final LyrebirdServerClient client;
 
+    private final String currentVersion;
     private final int currentBuildVersion;
     private final Property<LyrebirdVersion> latestVersion = new SimpleObjectProperty<>(null);
 
@@ -54,7 +55,8 @@ public class UpdateService {
         this.updateExecutor = updateExecutor;
         this.markdownRenderingService = markdownRenderingService;
         this.client = client;
-        this.currentBuildVersion = getCurrentBuildVersion(environment);
+        this.currentVersion = environment.getRequiredProperty("app.version");
+        this.currentBuildVersion = getCurrentBuildVersion();
         startPolling();
     }
 
@@ -67,9 +69,18 @@ public class UpdateService {
         }, updateExecutor);
     }
 
-    public CompletableFuture<Boolean> updateAvailable() {
+    public CompletableFuture<Boolean> isUpdateAvailable() {
         return getLatestVersion().thenApplyAsync(
-                latestVersion -> latestVersion.getBuildVersion() > currentBuildVersion,
+                latestVersion -> {
+                    final boolean updateAvailable = latestVersion.getBuildVersion() > currentBuildVersion;
+                    LOG.info(updateAvailable ?
+                             "An update is available! [current : {}, latest : {}]" :
+                             "Already using latest version!",
+
+                             latestVersion.getVersion()
+                    );
+                    return updateAvailable;
+                },
                 updateExecutor
         );
     }
@@ -99,9 +110,8 @@ public class UpdateService {
         }
     }
 
-    private static int getCurrentBuildVersion(final Environment environment) {
-        final String buildVersionStr = environment.getRequiredProperty("app.version");
-        final String formatted = buildVersionStr.replaceAll("\\.", "");
+    private int getCurrentBuildVersion() {
+        final String formatted = currentVersion.replaceAll("\\.", "");
         return Integer.parseInt(formatted);
     }
 

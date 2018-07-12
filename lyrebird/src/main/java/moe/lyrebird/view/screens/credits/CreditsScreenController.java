@@ -33,6 +33,7 @@ import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.credits.CreditsService;
 import moe.lyrebird.model.credits.objects.CredittedWork;
+import moe.lyrebird.model.update.UpdateService;
 import moe.lyrebird.view.components.cells.CreditsCell;
 import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
@@ -67,6 +68,7 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
     private final CreditsService creditsService;
     private final BrowserSupport browserSupport;
     private final Environment environment;
+    private final UpdateService updateService;
 
     @Autowired
     public CreditsScreenController(
@@ -74,13 +76,15 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
             final EasyFxml easyFxml,
             final CreditsService creditsService,
             final BrowserSupport browserSupport,
-            final Environment environment
+            final Environment environment,
+            final UpdateService updateService
     ) {
         super(context, CreditsCell.class);
         this.easyFxml = easyFxml;
         this.creditsService = creditsService;
         this.browserSupport = browserSupport;
         this.environment = environment;
+        this.updateService = updateService;
     }
 
     @Override
@@ -92,7 +96,11 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
         bindButtonToOpenHrefEnvProperty(licenseButton, "credits.license");
         bindButtonToOpenHrefEnvProperty(sourceCodeButton, "credits.sourceCode");
         bindButtonToOpenHrefEnvProperty(knownIssuesButton, "credits.knownIssues");
-        updatesButton.setOnAction(e -> openUpdatesScreen());
+        updatesButton.setOnAction(e -> updateService.isUpdateAvailable().thenAcceptAsync(updateAvailable -> {
+            if (updateAvailable) {
+                openUpdatesScreen();
+            }
+        }));
     }
 
     private void bindButtonToOpenHrefEnvProperty(final Button button, final String prop) {
