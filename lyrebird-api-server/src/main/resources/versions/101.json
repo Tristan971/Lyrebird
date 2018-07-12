@@ -1,6 +1,7 @@
 {
   "version": "1.0.1",
   "buildVersion": "101",
+  "releaseUrl": "https://github.com/Tristan971/Lyrebird/releases/tag/1.0.1",
   "packages": [
     {
       "targetPlatform": "win",

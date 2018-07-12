@@ -27,16 +27,19 @@ public final class LyrebirdVersion {
 
     private final String version;
     private final String buildVersion;
+    private final String releaseUrl;
     private final List<LyrebirdPackage> packages;
 
     @JsonCreator
     public LyrebirdVersion(
             @JsonProperty("version") final String version,
             @JsonProperty("buildVersion") final String buildVersion,
+            @JsonProperty("releaseUrl") String releaseUrl,
             @JsonProperty("packages") final List<LyrebirdPackage> packages
     ) {
         this.version = version;
         this.buildVersion = buildVersion;
+        this.releaseUrl = releaseUrl;
         this.packages = packages;
     }
 
@@ -48,6 +51,10 @@ public final class LyrebirdVersion {
         return buildVersion;
     }
 
+    public String getReleaseUrl() {
+        return releaseUrl;
+    }
+
     public List<LyrebirdPackage> getPackages() {
         return packages;
     }
@@ -57,7 +64,9 @@ public final class LyrebirdVersion {
         return "LyrebirdVersion{" +
                "version='" + version + '\'' +
                ", buildVersion='" + buildVersion + '\'' +
+               ", releaseUrl='" + releaseUrl + '\'' +
                ", packages=" + packages +
                '}';
     }
+
 }
