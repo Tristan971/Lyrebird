@@ -84,8 +84,8 @@
                   <Separator prefWidth="200.0" />
                   <HBox spacing="5.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Update" />
-                        <Button mnemonicParsing="false" text="Open in browser" />
+                        <Button fx:id="updateButton" mnemonicParsing="false" text="Update" />
+                        <Button fx:id="openInBrowserUrl" mnemonicParsing="false" text="Open in browser" />
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
