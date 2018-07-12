@@ -22,6 +22,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.lang.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,12 @@ public class LyrebirdServerClientInterceptor implements ClientHttpRequestInterce
 
     private static final Logger LOG = LoggerFactory.getLogger(LyrebirdServerClientInterceptor.class);
 
+    @NonNull
     @Override
     public ClientHttpResponse intercept(
-            final HttpRequest request,
-            final byte[] body,
-            final ClientHttpRequestExecution execution
+            @NonNull final HttpRequest request,
+            @NonNull final byte[] body,
+            @NonNull final ClientHttpRequestExecution execution
     ) throws IOException {
         LOG.debug("{} => {}", request.getMethod(), request.getURI());
         return execution.execute(request, body);
