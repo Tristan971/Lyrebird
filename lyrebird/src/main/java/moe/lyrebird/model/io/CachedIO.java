@@ -31,18 +31,19 @@ public class CachedIO {
 
     private static final Logger LOG = LoggerFactory.getLogger(CachedIO.class);
 
-    @Cacheable("image")
+    @Cacheable(value = "image", sync = true)
     public Image loadImage(final String imageUrl) {
         LOG.trace("First load of image {}", imageUrl);
         return new Image(imageUrl);
     }
 
-    @Cacheable("imageMiniature")
+    @Cacheable(value = "imageMiniature", sync = true)
     public Image loadImageMiniature(final String imageUrl, final double width, final double heigth) {
         LOG.trace("First load of miniature image {} [width = {}, heigth = {}]", imageUrl, width, heigth);
         return new Image(imageUrl, width, heigth, false, true);
     }
 
+    @Cacheable(value = "mediaFile", sync = true)
     public Media loadMediaFile(final String mediaUrl) {
         LOG.trace("First load of media {}", mediaUrl);
         return new Media(mediaUrl);

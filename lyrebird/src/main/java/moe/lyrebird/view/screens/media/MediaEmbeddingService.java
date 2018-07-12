@@ -48,7 +48,7 @@ public class MediaEmbeddingService {
         this.twitterVideoHandler = twitterVideoHandler;
     }
 
-    @Cacheable("embeddedNodes")
+    @Cacheable(value = "embeddedNodes", sync = true)
     public List<Node> embed(Status status) {
         return Arrays.stream(status.getMediaEntities())
                 .filter(MediaEntityType::isSupported)

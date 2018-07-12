@@ -19,6 +19,7 @@
 package moe.lyrebird.api.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -52,6 +53,7 @@ public class LyrebirdServerClient {
         ).getBody();
     }
 
+    @Cacheable(value = "buildVersionChaneNotes", sync = true)
     public String getChangeNotes(final int buildVersion) {
         LOG.info("Loading changenotes for buildVersion {}", buildVersion);
         return restTemplate.getForObject(

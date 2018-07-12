@@ -41,7 +41,7 @@ public class MarkdownRenderingService {
         this.htmlRenderer = htmlRenderer;
     }
 
-    @Cacheable("markdownRenderingResult")
+    @Cacheable(value = "markdownRenderingResult", sync = true)
     public String render(final String input) {
         LOG.trace("Input : {}", input);
         final Node hierarchy = markdownParser.parse(input);
