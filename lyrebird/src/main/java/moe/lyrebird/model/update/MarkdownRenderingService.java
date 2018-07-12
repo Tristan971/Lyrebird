@@ -18,6 +18,7 @@
 
 package moe.lyrebird.model.update;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import com.vladsch.flexmark.ast.Node;
@@ -40,12 +41,13 @@ public class MarkdownRenderingService {
         this.htmlRenderer = htmlRenderer;
     }
 
+    @Cacheable("markdownRenderingResult")
     public String render(final String input) {
-        LOG.debug("Input : {}", input);
+        LOG.trace("Input : {}", input);
         final Node hierarchy = markdownParser.parse(input);
-        LOG.debug("Parsed AST : {}", hierarchy);
+        LOG.trace("Parsed AST : {}", hierarchy);
         final String html = htmlRenderer.render(hierarchy);
-        LOG.debug("Output : {}", html);
+        LOG.trace("Output : {}", html);
         return html;
     }
 
