@@ -23,6 +23,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 import moe.tristan.easyfxml.spring.application.FxSpringApplication;
 import moe.tristan.easyfxml.spring.application.FxSpringContext;
+import moe.lyrebird.api.client.LyrebirdServerClientConfiguration;
 import moe.lyrebird.model.interrupts.CleanupService;
 
 /**
@@ -30,7 +31,7 @@ import moe.lyrebird.model.interrupts.CleanupService;
  */
 @SpringBootApplication
 @EnableCaching
-@Import(FxSpringContext.class)
+@Import({FxSpringContext.class, LyrebirdServerClientConfiguration.class})
 public class Lyrebird extends FxSpringApplication {
 
     public static void main(final String[] args) {
