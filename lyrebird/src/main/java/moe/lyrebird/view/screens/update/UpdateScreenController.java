@@ -19,23 +19,46 @@
 package moe.lyrebird.view.screens.update;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.lyrebird.api.client.LyrebirdServerClient;
+import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.web.WebView;
 
 @Component
 public class UpdateScreenController implements FxmlController {
 
+    @FXML
+    private Label currentVersionLabel;
+
+    @FXML
+    private Label latestVersionLabel;
+
+    @FXML
+    private WebView changeNotesWebView;
+
     private final LyrebirdServerClient client;
+    private final Environment environment;
 
     @Autowired
-    public UpdateScreenController(LyrebirdServerClient client) {
+    public UpdateScreenController(
+            final LyrebirdServerClient client,
+            final Environment environment
+    ) {
         this.client = client;
+        this.environment = environment;
     }
 
     @Override
     public void initialize() {
-
+        final LyrebirdVersion latestVersion = client.getLatestVersion();
+        this.currentVersionLabel.setText(environment.getRequiredProperty("app.version"));
+        this.latestVersionLabel.setText(latestVersion.getVersion());
+        this.changeNotesWebView.getEngine().load(latestVersion.getChangenotesUrl().toString());
     }
 
 }

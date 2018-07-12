@@ -35,7 +35,7 @@
                <children>
                   <HBox alignment="CENTER">
                      <children>
-                        <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="An update is available for Lyrebird" textFill="WHITE">
+                        <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="An update is available for Lyrebird" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="36.0" />
                            </font>
@@ -52,7 +52,7 @@
                                     <Font name="System Italic" size="18.0" />
                                  </font>
                               </Label>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="CURRENT_VERSION">
+                              <Label fx:id="currentVersionLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="CURRENT_VERSION">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -66,7 +66,7 @@
                                     <Font name="System Italic" size="18.0" />
                                  </font>
                               </Label>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="LATEST_VERSION">
+                              <Label fx:id="latestVersionLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="LATEST_VERSION">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
@@ -78,8 +78,8 @@
                   <Separator />
                </children>
             </VBox>
-            <WebView prefHeight="200.0" prefWidth="200.0" />
-            <VBox alignment="CENTER">
+            <WebView fx:id="changeNotesWebView" prefHeight="200.0" prefWidth="200.0" />
+            <VBox alignment="CENTER" styleClass="dark">
                <children>
                   <Separator prefWidth="200.0" />
                   <HBox spacing="5.0">
