@@ -18,24 +18,27 @@
 
 package moe.lyrebird.api.client;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
+import java.io.IOException;
 
-@Configuration
-@ComponentScan(basePackages = "moe.lyrebird.api.client")
-@PropertySource("classpath:api.properties")
-public class LyrebirdServerClientConfiguration {
+public class LyrebirdServerClientInterceptor implements ClientHttpRequestInterceptor {
 
-    @Bean
-    public RestTemplate restTemplate() {
-        final RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Collections.singletonList(new LyrebirdServerClientInterceptor()));
-        return restTemplate;
+    private static final Logger LOG = LoggerFactory.getLogger(LyrebirdServerClientInterceptor.class);
+
+    @Override
+    public ClientHttpResponse intercept(
+            final HttpRequest request,
+            final byte[] body,
+            final ClientHttpRequestExecution execution
+    ) throws IOException {
+        LOG.debug("{} => {}", request.getMethod(), request.getURI());
+        return execution.execute(request, body);
     }
 
 }

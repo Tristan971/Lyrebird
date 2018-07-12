@@ -19,27 +19,34 @@
 package moe.lyrebird.api.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import moe.lyrebird.api.server.controllers.Endpoints;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CONTROLLER;
+import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_LATEST;
 
 @Component
 public class LyrebirdServerClient {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LyrebirdServerClient.class);
 
     private final RestTemplate restTemplate;
     private final String apiUrl;
 
     @Autowired
-    public LyrebirdServerClient(final RestTemplate restTemplate, @Value("${api.url}") final String apiUrl) {
+    public LyrebirdServerClient(final RestTemplate restTemplate, final Environment environment) {
         this.restTemplate = restTemplate;
-        this.apiUrl = apiUrl;
+        this.apiUrl = environment.getRequiredProperty("api.url");
     }
 
     public LyrebirdVersion getLatestVersion() {
+        LOG.info("Loading latest version from server");
         return restTemplate.getForEntity(
-                buildUrl(Endpoints.VERSIONS_CONTROLLER, Endpoints.VERSIONS_LATEST),
+                buildUrl(VERSIONS_CONTROLLER, VERSIONS_LATEST),
                 LyrebirdVersion.class
         ).getBody();
     }
