@@ -21,9 +21,11 @@ package moe.lyrebird.view.screens.update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MimeTypeUtils;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
+import moe.lyrebird.model.update.MarkdownRenderingService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -41,14 +43,17 @@ public class UpdateScreenController implements FxmlController {
     @FXML
     private WebView changeNotesWebView;
 
+    private final MarkdownRenderingService markdownRenderingService;
     private final LyrebirdServerClient client;
     private final Environment environment;
 
     @Autowired
     public UpdateScreenController(
+            final MarkdownRenderingService markdownRenderingService,
             final LyrebirdServerClient client,
             final Environment environment
     ) {
+        this.markdownRenderingService = markdownRenderingService;
         this.client = client;
         this.environment = environment;
     }
@@ -58,7 +63,10 @@ public class UpdateScreenController implements FxmlController {
         final LyrebirdVersion latestVersion = client.getLatestVersion();
         this.currentVersionLabel.setText(environment.getRequiredProperty("app.version"));
         this.latestVersionLabel.setText(latestVersion.getVersion());
-        this.changeNotesWebView.getEngine().loadContent(latestVersion.getChangenotes());
+
+        final String changeNotesMarkdown = client.getChangeNotes(latestVersion.getBuildVersion());
+        final String changeNotesHtml = markdownRenderingService.render(changeNotesMarkdown);
+        this.changeNotesWebView.getEngine().loadContent(changeNotesHtml, MimeTypeUtils.TEXT_HTML_VALUE);
     }
 
 }
