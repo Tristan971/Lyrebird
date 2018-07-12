@@ -75,4 +75,19 @@ public class ConcurrenceConfiguration {
         return Executors.newSingleThreadExecutor(asyncTwitterThreadFactory);
     }
 
+    @Bean
+    public Executor updateExecutor() {
+        final ThreadFactory updateThreadFactory =
+                new ThreadFactoryBuilder()
+                        .setUncaughtExceptionHandler((t, e) -> ExceptionHandler.displayExceptionPane(
+                                "Asynchronous update data download issue",
+                                "Could not execute query in the background.",
+                                e
+                        ))
+                        .setNameFormat("Update-%d")
+                        .build();
+
+        return Executors.newSingleThreadExecutor(updateThreadFactory);
+    }
+
 }
