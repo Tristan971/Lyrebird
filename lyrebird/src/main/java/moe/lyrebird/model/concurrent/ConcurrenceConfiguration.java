@@ -25,6 +25,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
 @Configuration
@@ -76,7 +77,7 @@ public class ConcurrenceConfiguration {
     }
 
     @Bean
-    public Executor updateExecutor() {
+    public ScheduledExecutorService updateExecutor() {
         final ThreadFactory updateThreadFactory =
                 new ThreadFactoryBuilder()
                         .setUncaughtExceptionHandler((t, e) -> ExceptionHandler.displayExceptionPane(
@@ -87,7 +88,7 @@ public class ConcurrenceConfiguration {
                         .setNameFormat("Update-%d")
                         .build();
 
-        return Executors.newSingleThreadExecutor(updateThreadFactory);
+        return Executors.newScheduledThreadPool(2, updateThreadFactory);
     }
 
 }

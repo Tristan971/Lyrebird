@@ -18,23 +18,18 @@
 
 package moe.lyrebird.view.screens.update;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
-import moe.lyrebird.model.update.MarkdownRenderingService;
+import moe.lyrebird.model.update.UpdateService;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebView;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 @Component
 public class UpdateScreenController implements FxmlController {
@@ -54,31 +49,24 @@ public class UpdateScreenController implements FxmlController {
     @FXML
     private Button openInBrowserUrl;
 
-    private final Executor updateExecutor;
-    private final MarkdownRenderingService markdownRenderingService;
-    private final LyrebirdServerClient client;
     private final Environment environment;
+    private final UpdateService updateService;
     private final BrowserSupport browserSupport;
 
-    @Autowired
     public UpdateScreenController(
-            final Executor updateExecutor,
-            final MarkdownRenderingService markdownRenderingService,
-            final LyrebirdServerClient client,
             final Environment environment,
+            final UpdateService updateService,
             final BrowserSupport browserSupport
     ) {
-        this.updateExecutor = updateExecutor;
-        this.markdownRenderingService = markdownRenderingService;
-        this.client = client;
         this.environment = environment;
+        this.updateService = updateService;
         this.browserSupport = browserSupport;
     }
 
     @Override
     public void initialize() {
-        CompletableFuture.supplyAsync(client::getLatestVersion, updateExecutor)
-                         .thenAcceptAsync(this::displayVersion, Platform::runLater);
+        updateService.getLatestVersion()
+                     .thenAcceptAsync(this::displayVersion, Platform::runLater);
     }
 
     private void displayVersion(final LyrebirdVersion latestVersion) {
@@ -87,9 +75,8 @@ public class UpdateScreenController implements FxmlController {
 
         this.openInBrowserUrl.setOnAction(e -> browserSupport.openUrl(latestVersion.getReleaseUrl()));
 
-        CompletableFuture.supplyAsync(() -> client.getChangeNotes(latestVersion.getBuildVersion()), updateExecutor)
-                         .thenApplyAsync(markdownRenderingService::render, updateExecutor)
-                         .thenAcceptAsync(this.changeNotesWebView.getEngine()::loadContent, Platform::runLater);
+        updateService.getLatestChangeNotes()
+                     .thenAcceptAsync(this.changeNotesWebView.getEngine()::loadContent, Platform::runLater);
     }
 
 }
