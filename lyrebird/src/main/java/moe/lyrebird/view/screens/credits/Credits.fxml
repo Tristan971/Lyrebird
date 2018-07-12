@@ -90,7 +90,7 @@
                   </HBox>
                </children>
             </VBox>
-            <ListView fx:id="listView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="640.0" />
+            <ListView fx:id="listView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="640.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
    </children>
