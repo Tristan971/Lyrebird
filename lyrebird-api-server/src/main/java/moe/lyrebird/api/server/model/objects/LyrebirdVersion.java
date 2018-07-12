@@ -18,30 +18,33 @@
 
 package moe.lyrebird.api.server.model.objects;
 
+import org.springframework.util.StreamUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public final class LyrebirdVersion {
 
     private final String version;
     private final String buildVersion;
-    private final URL changenotesUrl;
+    private final String changenotesFile;
     private final List<LyrebirdPackage> packages;
 
     @JsonCreator
     public LyrebirdVersion(
             @JsonProperty("version") final String version,
             @JsonProperty("buildVersion") final String buildVersion,
-            @JsonProperty("changenotesUrl") final URL changenotesUrl,
+            @JsonProperty("changenotesFile") final String changenotesFile,
             @JsonProperty("packages") final List<LyrebirdPackage> packages
     ) {
         this.version = version;
         this.buildVersion = buildVersion;
-        this.changenotesUrl = changenotesUrl;
         this.packages = packages;
+        this.changenotesFile = changenotesFile;
     }
 
     public String getVersion() {
@@ -52,8 +55,12 @@ public final class LyrebirdVersion {
         return buildVersion;
     }
 
-    public URL getChangenotesUrl() {
-        return changenotesUrl;
+    public String getChangenotes() {
+        try (InputStream fis = getClass().getClassLoader().getResourceAsStream("versions/" + changenotesFile)) {
+            return StreamUtils.copyToString(fis, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            return "An error happened while loading changenotes.";
+        }
     }
 
     public List<LyrebirdPackage> getPackages() {
@@ -65,9 +72,8 @@ public final class LyrebirdVersion {
         return "LyrebirdVersion{" +
                "version='" + version + '\'' +
                ", buildVersion='" + buildVersion + '\'' +
-               ", changenotesUrl=" + changenotesUrl +
+               ", changenotesFile='" + changenotesFile + '\'' +
                ", packages=" + packages +
                '}';
     }
-
 }
