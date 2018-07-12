@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
 <!--
   ~     Lyrebird, a free open-source cross-platform twitter client.
   ~     Copyright (C) 2017-2018, Tristan Deloche
@@ -25,7 +18,13 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="dark" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.controlbar.ControlBarController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="dark" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.controlbar.ControlBarController">
     <children>
       <BorderPane fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <bottom>
@@ -53,7 +52,7 @@
                   <Button fx:id="timelineViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Timeline" />
                   <Button fx:id="mentionsViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mentions" />
                   <Button fx:id="directMessagesViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="DM" />
-                  <Button fx:id="creditsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Credits" />
+                  <Button fx:id="creditsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="About" />
                </children>
             </VBox>
          </center>
