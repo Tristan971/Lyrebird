@@ -52,7 +52,7 @@ public class LyrebirdServerClient {
         ).getBody();
     }
 
-    public String getChangeNotes(final String buildVersion) {
+    public String getChangeNotes(final int buildVersion) {
         LOG.info("Loading changenotes for buildVersion {}", buildVersion);
         return restTemplate.getForObject(
                 buildUrl(VERSIONS_CONTROLLER, VERSIONS_CHANGENOTES),

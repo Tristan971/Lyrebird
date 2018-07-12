@@ -26,14 +26,14 @@ import java.util.List;
 public final class LyrebirdVersion {
 
     private final String version;
-    private final String buildVersion;
+    private final int buildVersion;
     private final String releaseUrl;
     private final List<LyrebirdPackage> packages;
 
     @JsonCreator
     public LyrebirdVersion(
             @JsonProperty("version") final String version,
-            @JsonProperty("buildVersion") final String buildVersion,
+            @JsonProperty("buildVersion") final int buildVersion,
             @JsonProperty("releaseUrl") String releaseUrl,
             @JsonProperty("packages") final List<LyrebirdPackage> packages
     ) {
@@ -47,7 +47,7 @@ public final class LyrebirdVersion {
         return version;
     }
 
-    public String getBuildVersion() {
+    public int getBuildVersion() {
         return buildVersion;
     }
 
