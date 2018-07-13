@@ -191,7 +191,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
         content.getChildren().add(new Text(strippedText));
         urlsInText.stream()
-                  .map(url -> new BrowserOpeningHyperlink(browserSupport::openUrl).withTarget(url))
+                  .map(this::buildHyperlink)
                   .forEach(content.getChildren()::add);
     }
 
@@ -208,4 +208,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         return ppClip;
     }
 
+    private BrowserOpeningHyperlink buildHyperlink(String url) {
+        return new BrowserOpeningHyperlink(browserSupport::openUrl).withTarget(url);
+    }
 }

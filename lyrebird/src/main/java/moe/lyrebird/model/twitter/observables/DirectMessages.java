@@ -45,16 +45,16 @@ public class DirectMessages {
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
     private final SessionManager sessionManager;
-    private final ObservableMap<User, List<DirectMessage>> directMessages;
+    private final ObservableMap<User, List<DirectMessage>> directMessagesMap;
 
     public DirectMessages(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
-        this.directMessages = FXCollections.observableMap(toMultiValueMap(new ConcurrentHashMap<>()));
+        this.directMessagesMap = FXCollections.observableMap(toMultiValueMap(new ConcurrentHashMap<>()));
     }
 
     public ObservableMap<User, List<DirectMessage>> loadedConversations() {
-        return FXCollections.unmodifiableObservableMap(directMessages);
+        return FXCollections.unmodifiableObservableMap(directMessagesMap);
     }
 
     public void loadMoreDirectMessages(final long loadUntilThisStatus) {
@@ -78,23 +78,23 @@ public class DirectMessages {
 
     public void addDirectMessage(final DirectMessage directMessage) {
         final User sender = directMessage.getSender();
-        if (!directMessages.keySet().contains(sender)) {
-            directMessages.put(sender, new ArrayList<>());
+        if (!directMessagesMap.keySet().contains(sender)) {
+            directMessagesMap.put(sender, new ArrayList<>());
         }
 
-        final List<DirectMessage> messagesFromSender = directMessages.get(sender);
+        final List<DirectMessage> messagesFromSender = directMessagesMap.get(sender);
         messagesFromSender.add(directMessage);
         messagesFromSender.sort(Comparator.comparingLong(DirectMessage::getId).reversed());
     }
 
     public void removeDirectMessage(final long senderId, final long directMessageId) {
-        directMessages.keySet()
-                      .stream()
-                      .filter(user -> user.getId() == senderId)
-                      .findAny()
-                      .map(directMessages::get)
-                      .filter(Predicates.noneOf(Objects::isNull, List::isEmpty))
-                      .ifPresent(dmList ->
+        directMessagesMap.keySet()
+                         .stream()
+                         .filter(user -> user.getId() == senderId)
+                         .findAny()
+                         .map(directMessagesMap::get)
+                         .filter(Predicates.noneOf(Objects::isNull, List::isEmpty))
+                         .ifPresent(dmList ->
                                          dmList.stream()
                                                .filter(dm -> dm.getId() == directMessageId)
                                                .findAny()

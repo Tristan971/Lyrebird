@@ -56,7 +56,7 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
 
     private void loadMoreTweets() {
         getOldestTweetLoaded().ifPresent(oldestStatus -> {
-            LOG().debug("Loading tweets before {}", oldestStatus.getId());
+            getLogger().debug("Loading tweets before {}", oldestStatus.getId());
             timelineBase.loadMoreTweets(oldestStatus.getId());
             listView.scrollTo(oldestStatus);
         });
@@ -64,11 +64,11 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
 
     private Optional<Status> getOldestTweetLoaded() {
         if (tweetsProperty.isEmpty()) {
-            LOG().debug("No older tweets to load.");
+            getLogger().debug("No older tweets to load.");
             return Optional.empty();
         }
         final Status oldest = tweetsProperty.getValue().get(tweetsProperty.size() - 1);
-        LOG().debug("Loading tweets before {}", oldest.getId());
+        getLogger().debug("Loading tweets before {}", oldest.getId());
         return Optional.of(oldest);
     }
 
@@ -77,6 +77,6 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
         loadMoreTweets();
     }
 
-    protected abstract Logger LOG();
+    protected abstract Logger getLogger();
 
 }

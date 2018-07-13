@@ -40,7 +40,7 @@ public class MentionsController extends TimelineBasedController {
     }
 
     @Override
-    protected Logger LOG() {
+    protected Logger getLogger() {
         return LOG;
     }
 

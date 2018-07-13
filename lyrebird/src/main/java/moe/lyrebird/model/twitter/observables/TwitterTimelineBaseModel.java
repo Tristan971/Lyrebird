@@ -38,7 +38,7 @@ import java.util.concurrent.Executor;
 
 public abstract class TwitterTimelineBaseModel {
 
-    private final SessionManager sessionManager;
+    protected final SessionManager sessionManager;
     private final Executor twitterExecutor;
     
     private final CheckedFunction1<Twitter, ResponseList<Status>> initialLoadCall;

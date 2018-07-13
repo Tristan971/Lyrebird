@@ -18,8 +18,6 @@
 
 package moe.lyrebird.model.notifications;
 
-import io.vavr.control.Option;
-
 import java.util.Objects;
 
 public final class Notification {
@@ -27,7 +25,7 @@ public final class Notification {
     private final String title;
     private final String text;
 
-    public Notification(String title, String text, Option<Runnable> onInterraction) {
+    public Notification(String title, String text) {
         this.title = title;
         this.text = text;
     }

@@ -55,14 +55,14 @@ public class RootScreenController implements FxmlController {
     }
 
     public void setContent(final Components component) {
-        LOG.info("Switching content of root pane to {}", component.name());
+        LOG.info("Switching content of root pane to {}", component);
         final Pane contentNode = this.easyFxml
                 .loadNode(component)
                 .getNode()
                 .getOrElseGet(ExceptionHandler::fromThrowable);
 
         this.contentPane.setCenter(contentNode);
-        LOG.info("Set content of root pane to {}", component.name());
+        LOG.info("Set content of root pane to {}", component);
     }
 
     private void loadControlBar() {
