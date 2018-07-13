@@ -5,23 +5,23 @@
   "packages": [
     {
       "targetPlatform": "win",
-      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/Lyrebird-1.0.1-Windows.exe"
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/Lyrebird-1.0.5-Windows.exe"
     },
     {
       "targetPlatform": "mac",
-      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/Lyrebird-1.0.1-macOS.dmg"
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/Lyrebird-1.0.5-macOS.dmg"
     },
     {
       "targetPlatform": "deb",
-      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/lyrebird-1.0.1-DEB.deb"
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/lyrebird-1.0.5-DEB.deb"
     },
     {
       "targetPlatform": "rpm",
-      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/lyrebird-1.0.1-1.x86_64-RPM.rpm"
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/lyrebird-1.0.5-1.x86_64-RPM.rpm"
     },
     {
       "targetPlatform": "java",
-      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/lyrebird-1.0.1-JAVA.jar"
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.0.5/lyrebird-1.0.5-JAVA.jar"
     }
   ]
 }
