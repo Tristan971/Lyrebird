@@ -111,7 +111,8 @@ public class VideoScreenController extends MediaScreenController {
             case UNKNOWN:
             case STALLED:
             case DISPOSED:
-                LOG.warn("Media player issue ! [status = {}]", playerStatus);
+                LOG.warn("Media player was already disposed! [status = {}]", playerStatus);
+                break;
             default:
                 LOG.error("UNKNOWN MEDIA PLAYER STATUS ! [status = {}]", playerStatus);
         }
