@@ -21,7 +21,6 @@ package moe.lyrebird.model.update;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import io.vavr.control.Option;
 import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.model.notifications.Notification;
@@ -66,17 +65,8 @@ public class UpdateService {
         this.notificationService = notificationService;
         this.currentVersion = environment.getRequiredProperty("app.version");
         this.currentBuildVersion = getCurrentBuildVersion();
+        this.isUpdateAvailable.addListener((o, prev, cur) -> handleUpdateStatus(prev, cur));
         startPolling();
-        isUpdateAvailable.addListener((o, prev, cur) -> {
-            LOG.debug("An update was detected. Notifying the user.");
-            if (cur && !prev) {
-                notificationService.sendNotification(new Notification(
-                        "Update available!",
-                        "An update is available for Lyrebird, grab it :-)",
-                        Option.none()
-                ));
-            }
-        });
     }
 
     public CompletableFuture<LyrebirdVersion> getLatestVersion() {
@@ -123,6 +113,18 @@ public class UpdateService {
     private int getCurrentBuildVersion() {
         final String formatted = currentVersion.replaceAll("\\.", "");
         return Integer.parseInt(formatted);
+    }
+
+    private void handleUpdateStatus(final boolean prev, final boolean cur) {
+        if (cur && !prev) {
+            LOG.debug("An update was detected. Notifying the user.");
+            notificationService.sendNotification(new Notification(
+                    "Update available!",
+                    "An update is available for Lyrebird, grab it :-)"
+            ));
+        } else if (!cur) {
+            LOG.debug("No update available.");
+        }
     }
 
 }
