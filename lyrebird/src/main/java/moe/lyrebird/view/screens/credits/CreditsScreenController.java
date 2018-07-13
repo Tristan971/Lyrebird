@@ -23,7 +23,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
 import moe.tristan.easyfxml.util.Buttons;
@@ -54,7 +53,6 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
     @FXML
     private Button knownIssuesButton;
 
-    private final EasyFxml easyFxml;
     private final CreditsService creditsService;
     private final BrowserSupport browserSupport;
     private final Environment environment;
@@ -62,13 +60,11 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
     @Autowired
     public CreditsScreenController(
             final ApplicationContext context,
-            final EasyFxml easyFxml,
             final CreditsService creditsService,
             final BrowserSupport browserSupport,
             final Environment environment
     ) {
         super(context, CreditsCell.class);
-        this.easyFxml = easyFxml;
         this.creditsService = creditsService;
         this.browserSupport = browserSupport;
         this.environment = environment;
