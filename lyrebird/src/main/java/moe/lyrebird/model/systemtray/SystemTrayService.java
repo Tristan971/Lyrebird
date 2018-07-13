@@ -67,7 +67,7 @@ public class SystemTrayService {
     }
 
     private void registerTrayIcon(final TrayIcon trayIcon) {
-        trayIcon.addActionListener(e -> openMainScreen());
+        trayIcon.addMouseListener(new OnMouseClickListener(this::openMainScreen));
         trayIcon.setImageAutoSize(true);
         try {
             SystemTray.getSystemTray().add(trayIcon);
