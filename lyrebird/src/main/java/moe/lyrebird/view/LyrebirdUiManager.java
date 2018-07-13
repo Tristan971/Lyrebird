@@ -41,7 +41,7 @@ public class LyrebirdUiManager extends FxUiManager {
     @Autowired
     public LyrebirdUiManager(
             final EasyFxml easyFxml,
-            StageManager stageManager,
+            final StageManager stageManager,
             final Environment environment
     ) {
         super(easyFxml);

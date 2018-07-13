@@ -112,6 +112,7 @@ public class UpdateService {
         try {
             LOG.debug("Checking for updates...");
             final LyrebirdVersion latestVersion = apiClient.getLatestVersion();
+            LOG.debug("Latest version : {}", latestVersion.getVersion());
             this.latestVersion.setValue(latestVersion);
             isUpdateAvailable.setValue(latestVersion.getBuildVersion() > currentBuildVersion);
         } catch (Exception e) {
