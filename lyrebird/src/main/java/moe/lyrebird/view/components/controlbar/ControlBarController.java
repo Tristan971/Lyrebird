@@ -26,6 +26,7 @@ import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.update.UpdateService;
 import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
@@ -68,20 +69,26 @@ public class ControlBarController implements FxmlController {
     @FXML
     private Button creditsButton;
 
+    @FXML
+    private Button updateButton;
+
     private final EasyFxml easyFxml;
     private final RootScreenController rootScreenController;
     private final SessionManager sessionManager;
+    private final UpdateService updateService;
 
     private final Property<Button> currentViewButton;
 
     public ControlBarController(
             final EasyFxml easyFxml,
             final RootScreenController rootScreenController,
-            final SessionManager sessionManager
+            final SessionManager sessionManager,
+            UpdateService updateService
     ) {
         this.easyFxml = easyFxml;
         this.rootScreenController = rootScreenController;
         this.sessionManager = sessionManager;
+        this.updateService = updateService;
         this.currentViewButton = new SimpleObjectProperty<>(null);
     }
 
@@ -111,6 +118,10 @@ public class ControlBarController implements FxmlController {
         sessionManager.isLoggedInProperty().addListener((o, prev, cur) -> handleLogStatusChange(prev, cur));
         handleLogStatusChange(false, sessionManager.isLoggedInProperty().getValue());
         loadCurrentAccountPanel();
+
+        updateButton.managedProperty().bind(updateService.isUpdateAvailableProperty());
+        updateButton.visibleProperty().bind(updateService.isUpdateAvailableProperty());
+        updateButton.setOnAction(e -> openUpdatesScreen());
     }
 
     private void loadCurrentAccountPanel() {
@@ -158,5 +169,11 @@ public class ControlBarController implements FxmlController {
             currentViewButton.setValue(button);
             rootScreenController.setContent(component);
         });
+    }
+
+    private void openUpdatesScreen() {
+        final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.loadNode(Screens.UPDATE_VIEW);
+        final Pane updatePane = updateScreenLoadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
+        Stages.stageOf("Updates", updatePane).thenAcceptAsync(Stages::scheduleDisplaying);
     }
 }

@@ -26,7 +26,9 @@ import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.concurrent.CompletableFuture;
@@ -44,6 +46,8 @@ public class UpdateService {
 
     private final String currentVersion;
     private final int currentBuildVersion;
+
+    private final BooleanProperty isUpdateAvailable = new SimpleBooleanProperty(false);
     private final Property<LyrebirdVersion> latestVersion = new SimpleObjectProperty<>(null);
 
     public UpdateService(
@@ -69,20 +73,8 @@ public class UpdateService {
         }, updateExecutor);
     }
 
-    public CompletableFuture<Boolean> isUpdateAvailable() {
-        return getLatestVersion().thenApplyAsync(
-                latestVersion -> {
-                    final boolean updateAvailable = latestVersion.getBuildVersion() > currentBuildVersion;
-                    LOG.info(updateAvailable ?
-                             "An update is available! [current : {}, latest : {}]" :
-                             "Already using latest version!",
-
-                             latestVersion.getVersion()
-                    );
-                    return updateAvailable;
-                },
-                updateExecutor
-        );
+    public BooleanProperty isUpdateAvailableProperty() {
+        return isUpdateAvailable;
     }
 
     public CompletableFuture<String> getLatestChangeNotes() {
@@ -104,7 +96,9 @@ public class UpdateService {
     private void poll() {
         try {
             LOG.debug("Checking for updates...");
-            latestVersion.setValue(client.getLatestVersion());
+            final LyrebirdVersion latestVersion = client.getLatestVersion();
+            this.latestVersion.setValue(latestVersion);
+            isUpdateAvailable.setValue(latestVersion.getBuildVersion() > currentBuildVersion);
         } catch (Exception e) {
             LOG.error("Could not check for updates !", e);
         }

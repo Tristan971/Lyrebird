@@ -74,6 +74,15 @@
                      </children>
                   </VBox>
                   <Separator />
+                  <HBox alignment="CENTER">
+                     <children>
+                        <Label text="Changenotes from latest version">
+                           <font>
+                              <Font name="System Italic" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
             <WebView fx:id="changeNotesWebView" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />

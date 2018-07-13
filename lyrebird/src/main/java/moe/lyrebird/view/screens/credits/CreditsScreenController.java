@@ -24,25 +24,18 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Buttons;
-import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.credits.CreditsService;
 import moe.lyrebird.model.credits.objects.CredittedWork;
-import moe.lyrebird.model.update.UpdateService;
 import moe.lyrebird.view.components.cells.CreditsCell;
-import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 
 import java.net.URL;
 
@@ -61,14 +54,10 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
     @FXML
     private Button knownIssuesButton;
 
-    @FXML
-    private Button updatesButton;
-
     private final EasyFxml easyFxml;
     private final CreditsService creditsService;
     private final BrowserSupport browserSupport;
     private final Environment environment;
-    private final UpdateService updateService;
 
     @Autowired
     public CreditsScreenController(
@@ -76,15 +65,13 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
             final EasyFxml easyFxml,
             final CreditsService creditsService,
             final BrowserSupport browserSupport,
-            final Environment environment,
-            final UpdateService updateService
+            final Environment environment
     ) {
         super(context, CreditsCell.class);
         this.easyFxml = easyFxml;
         this.creditsService = creditsService;
         this.browserSupport = browserSupport;
         this.environment = environment;
-        this.updateService = updateService;
     }
 
     @Override
@@ -96,22 +83,11 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
         bindButtonToOpenHrefEnvProperty(licenseButton, "credits.license");
         bindButtonToOpenHrefEnvProperty(sourceCodeButton, "credits.sourceCode");
         bindButtonToOpenHrefEnvProperty(knownIssuesButton, "credits.knownIssues");
-        updatesButton.setOnAction(e -> updateService.isUpdateAvailable().thenAcceptAsync(updateAvailable -> {
-            if (updateAvailable) {
-                openUpdatesScreen();
-            }
-        }));
     }
 
     private void bindButtonToOpenHrefEnvProperty(final Button button, final String prop) {
         final URL actualUrl = environment.getRequiredProperty(prop, URL.class);
         Buttons.setOnClick(button, () -> browserSupport.openUrl(actualUrl));
-    }
-
-    private void openUpdatesScreen() {
-        final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.loadNode(Screens.UPDATE_VIEW);
-        final Pane updatePane = updateScreenLoadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
-        Stages.stageOf("Updates", updatePane).thenAcceptAsync(Stages::scheduleDisplaying);
     }
 
 }

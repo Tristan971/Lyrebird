@@ -49,7 +49,6 @@
                       <Button fx:id="licenseButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="License (GPL v3)" HBox.hgrow="ALWAYS" />
                         <Button fx:id="sourceCodeButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Source code" HBox.hgrow="ALWAYS" />
                         <Button fx:id="knownIssuesButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Known issues" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="updatesButton" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Check for updates" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                   <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="25.0">
