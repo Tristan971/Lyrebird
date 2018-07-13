@@ -62,6 +62,9 @@ public class TwitterUserListener implements UserStreamListener {
     public void onStatus(final Status status) {
         LOG.debug("New tweet streamed : [@{} : {}]", status.getUser().getScreenName(), status.getText());
         timeline.addTweet(status);
+        if (mentions.isMentionToCurrentUser(status)) {
+            mentions.addTweet(status);
+        }
     }
 
     @Override
@@ -108,27 +111,27 @@ public class TwitterUserListener implements UserStreamListener {
 
     @Override
     public void onFriendList(final long[] friendIds) {
-
+        // ignored
     }
 
     @Override
     public void onFavorite(final User source, final User target, final Status favoritedStatus) {
-
+        // ignored
     }
 
     @Override
     public void onUnfavorite(final User source, final User target, final Status unfavoritedStatus) {
-
+        // ignored
     }
 
     @Override
     public void onFollow(final User source, final User followedUser) {
-
+        // ignored
     }
 
     @Override
     public void onUnfollow(final User source, final User unfollowedUser) {
-
+        // ignored
     }
 
     @Override
@@ -139,76 +142,77 @@ public class TwitterUserListener implements UserStreamListener {
 
     @Override
     public void onUserListMemberAddition(final User addedMember, final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListMemberDeletion(final User deletedMember, final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListSubscription(final User subscriber, final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListUnsubscription(final User subscriber, final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListCreation(final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListUpdate(final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListDeletion(final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserProfileUpdate(final User updatedUser) {
-
+        // ignored
     }
 
     @Override
     public void onUserSuspension(final long suspendedUser) {
-
+        // ignored
     }
 
     @Override
     public void onUserDeletion(final long deletedUser) {
-
+        // ignored
     }
 
     @Override
     public void onBlock(final User source, final User blockedUser) {
-
+        // ignored
     }
 
     @Override
     public void onUnblock(final User source, final User unblockedUser) {
-
+        // ignored
     }
 
     @Override
     public void onRetweetedRetweet(final User source, final User target, final Status retweetedStatus) {
-
+        // ignored
     }
 
     @Override
     public void onFavoritedRetweet(final User source, final User target, final Status favoritedRetweeet) {
-
+        // ignored
     }
 
     @Override
     public void onQuotedTweet(final User source, final User target, final Status quotingTweet) {
-
+        // ignored
     }
+
 }
