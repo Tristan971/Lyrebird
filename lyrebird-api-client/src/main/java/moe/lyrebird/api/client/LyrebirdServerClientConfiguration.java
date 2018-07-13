@@ -16,14 +16,26 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.util;
+package moe.lyrebird.api.client;
 
-import javafx.stage.Stage;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.client.RestTemplate;
 
-public interface StageAware {
+import java.util.Collections;
 
-    default void setStage(final Stage embeddingStage) {
-        // do nothing by default
+@Configuration
+@ComponentScan(basePackages = "moe.lyrebird.api.client")
+@PropertySource("classpath:api.properties")
+public class LyrebirdServerClientConfiguration {
+
+    @Bean
+    public RestTemplate restTemplate() {
+        final RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setInterceptors(Collections.singletonList(new LyrebirdServerClientInterceptor()));
+        return restTemplate;
     }
 
 }

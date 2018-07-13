@@ -23,6 +23,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlNode;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import moe.lyrebird.view.screens.Screens;
 
@@ -34,11 +35,17 @@ import javafx.stage.Stage;
 @Component
 public class LyrebirdUiManager extends FxUiManager {
 
+    private final StageManager stageManager;
     private final Environment environment;
 
     @Autowired
-    public LyrebirdUiManager(final EasyFxml easyFxml, final Environment environment) {
+    public LyrebirdUiManager(
+            final EasyFxml easyFxml,
+            final StageManager stageManager,
+            final Environment environment
+    ) {
         super(easyFxml);
+        this.stageManager = stageManager;
         this.environment = environment;
     }
 
@@ -55,6 +62,7 @@ public class LyrebirdUiManager extends FxUiManager {
     protected void onStageCreated(final Stage mainStage) {
         mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeigth", Integer.class));
         mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
+        stageManager.registerSingle(Screens.ROOT_VIEW, mainStage);
     }
 
     @Override

@@ -36,6 +36,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Stage;
+
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -65,8 +68,7 @@ public class VideoScreenController extends MediaScreenController {
     public void initialize() {
         bindViewSizeToParent();
         mediaView.setSmooth(true);
-        mediaView.setMediaPlayer(openMediaPlayer());
-        mediaProperty.addListener((o, temp, actual) -> mediaView.setMediaPlayer(openMediaPlayer()));
+        mediaProperty.addListener((o, temp, actual) -> openMediaPlayer());
     }
 
     @Override
@@ -80,12 +82,14 @@ public class VideoScreenController extends MediaScreenController {
         mediaView.fitWidthProperty().bind(container.widthProperty());
     }
 
-    private MediaPlayer openMediaPlayer() {
-        final MediaPlayer mediaPlayer = new MediaPlayer(mediaProperty.getValue());
-        mediaPlayer.setAutoPlay(true);
-        mediaPlayer.setOnEndOfMedia(mediaPlayer::stop);
-        mediaView.setOnMouseClicked(e -> onClickHandler(mediaPlayer));
-        return mediaPlayer;
+    private void openMediaPlayer() {
+        CompletableFuture.supplyAsync(() -> new MediaPlayer(mediaProperty.getValue()))
+                         .thenAcceptAsync(mediaPlayer -> {
+                             mediaPlayer.setAutoPlay(true);
+                             mediaPlayer.setOnEndOfMedia(mediaPlayer::stop);
+                             mediaView.setOnMouseClicked(e -> onClickHandler(mediaPlayer));
+                             mediaView.setMediaPlayer(mediaPlayer);
+                         }, Platform::runLater);
     }
 
     private void onClickHandler(final MediaPlayer mediaPlayer) {
@@ -113,4 +117,14 @@ public class VideoScreenController extends MediaScreenController {
         }
     }
 
+    @Override
+    public void setStage(Stage embeddingStage) {
+        embeddingStage.setOnCloseRequest(e -> {
+            final MediaPlayer mediaPlayer = mediaView.getMediaPlayer();
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                mediaPlayer.dispose();
+            }
+        });
+    }
 }

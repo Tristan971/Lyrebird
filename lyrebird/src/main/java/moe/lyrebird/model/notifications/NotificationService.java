@@ -16,14 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.util;
+package moe.lyrebird.model.notifications;
 
-import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public interface StageAware {
+@Component
+public class NotificationService {
 
-    default void setStage(final Stage embeddingStage) {
-        // do nothing by default
+    private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
+
+    private final AwtNotificationService awtNotificationService;
+
+    @Autowired
+    public NotificationService(AwtNotificationService awtNotificationService) {
+        this.awtNotificationService = awtNotificationService;
+    }
+
+    public void sendNotification(final Notification notification) {
+        LOG.debug("Notifying user : {}", notification);
+        awtNotificationService.displayNotification(notification);
     }
 
 }

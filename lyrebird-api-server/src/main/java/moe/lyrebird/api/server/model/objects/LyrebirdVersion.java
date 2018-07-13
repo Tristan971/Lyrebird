@@ -21,26 +21,25 @@ package moe.lyrebird.api.server.model.objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.net.URL;
 import java.util.List;
 
 public final class LyrebirdVersion {
 
     private final String version;
-    private final String buildVersion;
-    private final URL changenotesUrl;
+    private final int buildVersion;
+    private final String releaseUrl;
     private final List<LyrebirdPackage> packages;
 
     @JsonCreator
     public LyrebirdVersion(
             @JsonProperty("version") final String version,
-            @JsonProperty("buildVersion") final String buildVersion,
-            @JsonProperty("changenotesUrl") final URL changenotesUrl,
+            @JsonProperty("buildVersion") final int buildVersion,
+            @JsonProperty("releaseUrl") String releaseUrl,
             @JsonProperty("packages") final List<LyrebirdPackage> packages
     ) {
         this.version = version;
         this.buildVersion = buildVersion;
-        this.changenotesUrl = changenotesUrl;
+        this.releaseUrl = releaseUrl;
         this.packages = packages;
     }
 
@@ -48,12 +47,12 @@ public final class LyrebirdVersion {
         return version;
     }
 
-    public String getBuildVersion() {
+    public int getBuildVersion() {
         return buildVersion;
     }
 
-    public URL getChangenotesUrl() {
-        return changenotesUrl;
+    public String getReleaseUrl() {
+        return releaseUrl;
     }
 
     public List<LyrebirdPackage> getPackages() {
@@ -65,7 +64,7 @@ public final class LyrebirdVersion {
         return "LyrebirdVersion{" +
                "version='" + version + '\'' +
                ", buildVersion='" + buildVersion + '\'' +
-               ", changenotesUrl=" + changenotesUrl +
+               ", releaseUrl='" + releaseUrl + '\'' +
                ", packages=" + packages +
                '}';
     }

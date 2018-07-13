@@ -23,22 +23,23 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.beanmanagement.Selector;
-import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.util.Buttons;
-import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
+import moe.lyrebird.view.util.StageAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,14 +57,13 @@ import static javafx.scene.paint.Color.BLUE;
 import static javafx.scene.paint.Color.GREEN;
 import static javafx.scene.paint.Color.ORANGE;
 import static javafx.scene.paint.Color.RED;
-import static moe.lyrebird.view.screens.Screens.NEW_TWEET_VIEW;
 
 @Lazy
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class NewScreenController implements FxmlController {
+public class NewTweetController implements FxmlController, StageAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NewScreenController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NewTweetController.class);
 
     @FXML
     private Button sendButton;
@@ -77,21 +77,20 @@ public class NewScreenController implements FxmlController {
     @FXML
     private Label charactersLeft;
 
-    private final StageManager stageManager;
     private final NewTweetService newTweetService;
     private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
 
     private final Set<File> mediasToUpload;
+    private final Property<Stage> embeddingStage;
 
-    public NewScreenController(
-            final StageManager stageManager,
+    public NewTweetController(
             final NewTweetService newTweetService,
             final TwitterMediaExtensionFilter extensionFilter
     ) {
-        this.stageManager = stageManager;
         this.newTweetService = newTweetService;
         this.twitterMediaExtensionFilter = extensionFilter;
         this.mediasToUpload = new HashSet<>();
+        this.embeddingStage = new SimpleObjectProperty<>(null);
     }
 
     @Override
@@ -99,6 +98,11 @@ public class NewScreenController implements FxmlController {
         enableTweetLengthCheck();
         Buttons.setOnClick(sendButton, this::sendTweet);
         Buttons.setOnClick(pickMediaButton, this::openMediaAttachmentsFilePicker);
+    }
+
+    @Override
+    public void setStage(Stage embeddingStage) {
+        this.embeddingStage.setValue(embeddingStage);
     }
 
     private void enableTweetLengthCheck() {
@@ -118,19 +122,11 @@ public class NewScreenController implements FxmlController {
 
     private void sendTweet() {
         Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
-        newTweetService.sendNewTweet(
-                tweetTextArea.getText(),
-                new ArrayList<>(mediasToUpload)
-        ).whenCompleteAsync((postedStatus, err) -> {
-            if (err != null) {
-                tweetTextArea.setDisable(false);
-                sendButton.setDisable(false);
-                pickMediaButton.setDisable(false);
-                mediasToUpload.clear();
-            } else {
-                stageManager.getMultiple(NEW_TWEET_VIEW, new Selector(this.hashCode())).peek(Stages::scheduleHiding);
-            }
-        });
+        newTweetService.sendNewTweet(tweetTextArea.getText(), new ArrayList<>(mediasToUpload))
+                       .thenAcceptAsync(status -> {
+                           LOG.info("Tweeted status : {} [{}]", status.getId(), status.getText());
+                           this.embeddingStage.getValue().hide();
+                       }, Platform::runLater);
     }
 
     private void openMediaAttachmentsFilePicker() {
@@ -151,17 +147,10 @@ public class NewScreenController implements FxmlController {
         fileChooser.setSelectedExtensionFilter(extensionFilter);
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
-        final CompletableFuture<List<File>> pickedFiles = new CompletableFuture<>();
-        stageManager.getMultiple(NEW_TWEET_VIEW, new Selector(this.hashCode()))
-                    .peek(newTweetStage -> Platform.runLater(
-                            () -> pickedFiles.complete(
-                                    fileChooser.showOpenMultipleDialog(newTweetStage)
-                            )
-                    ))
-                    .onEmpty(() -> pickedFiles.completeExceptionally(
-                            new IllegalStateException("Cannot find NewTweet window."))
-                    );
-        return pickedFiles;
+        return CompletableFuture.supplyAsync(() -> {
+            final Stage stage = this.embeddingStage.getValue();
+            return fileChooser.showOpenMultipleDialog(stage);
+        }, Platform::runLater);
     }
 
 }

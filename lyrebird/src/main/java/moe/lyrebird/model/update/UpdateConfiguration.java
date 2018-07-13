@@ -16,32 +16,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.api.client;
+package moe.lyrebird.model.update;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.client.RestTemplate;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.options.MutableDataSet;
 
 @Configuration
-@ComponentScan(basePackages = "moe.lyrebird.api.client")
-public class ClientConfiguration {
+public class UpdateConfiguration {
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public MutableDataSet flexmarkConfiguration() {
+        return new MutableDataSet();
     }
 
-    @Profile("dev")
-    @Configuration
-    @PropertySource("classpath:api-dev.properties")
-    public static class DevConfiguration {}
+    @Bean
+    public Parser markdownParser(final MutableDataSet flexmarkConfiguration) {
+        return Parser.builder(flexmarkConfiguration).build();
+    }
 
-    @Profile("!dev")
-    @Configuration
-    @PropertySource("classpath:api.properties")
-    public static class ProdConfiguration {}
+    @Bean
+    public HtmlRenderer markdownRenderer(final MutableDataSet flexmarkConfiguration) {
+        return HtmlRenderer.builder(flexmarkConfiguration).build();
+    }
 
 }

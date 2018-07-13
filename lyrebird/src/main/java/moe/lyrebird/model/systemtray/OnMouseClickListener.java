@@ -16,14 +16,42 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.util;
+package moe.lyrebird.model.systemtray;
 
-import javafx.stage.Stage;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public interface StageAware {
+final class OnMouseClickListener implements MouseListener {
 
-    default void setStage(final Stage embeddingStage) {
-        // do nothing by default
+    private final Runnable onClick;
+
+    OnMouseClickListener(final Runnable onClick) {
+        this.onClick = onClick;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        onClick.run();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 
 }

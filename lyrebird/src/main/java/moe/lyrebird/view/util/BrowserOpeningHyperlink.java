@@ -18,6 +18,7 @@
 
 package moe.lyrebird.view.util;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
 
 import java.util.function.Consumer;
@@ -29,6 +30,7 @@ public class BrowserOpeningHyperlink extends Hyperlink {
     public BrowserOpeningHyperlink(final Consumer<String> onClicked) {
         super();
         setOnAction(e -> onClicked.accept(currentURL));
+        this.setPadding(Insets.EMPTY);
     }
 
     public BrowserOpeningHyperlink withTarget(final String url) {

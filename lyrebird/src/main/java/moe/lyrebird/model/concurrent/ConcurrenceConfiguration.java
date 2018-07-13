@@ -25,6 +25,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
 @Configuration
@@ -73,6 +74,21 @@ public class ConcurrenceConfiguration {
                         .build();
 
         return Executors.newSingleThreadExecutor(asyncTwitterThreadFactory);
+    }
+
+    @Bean
+    public ScheduledExecutorService updateExecutor() {
+        final ThreadFactory updateThreadFactory =
+                new ThreadFactoryBuilder()
+                        .setUncaughtExceptionHandler((t, e) -> ExceptionHandler.displayExceptionPane(
+                                "Asynchronous update data download issue",
+                                "Could not execute query in the background.",
+                                e
+                        ))
+                        .setNameFormat("Update-%d")
+                        .build();
+
+        return Executors.newScheduledThreadPool(2, updateThreadFactory);
     }
 
 }

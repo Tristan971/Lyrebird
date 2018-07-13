@@ -35,6 +35,7 @@ import static io.vavr.API.unchecked;
 @Component
 public class VersionService {
 
+    private static final String VERSIONS_PATTERN = "classpath:versions/*.json";
     private static final List<LyrebirdVersion> VERSIONS = findAllVersions();
 
     public LyrebirdVersion getLatestVersion() {
@@ -44,12 +45,12 @@ public class VersionService {
     private static List<LyrebirdVersion> findAllVersions() {
         final PathMatchingResourcePatternResolver versionsResourcesResolver = new PathMatchingResourcePatternResolver();
         try {
-            final Resource[] versionResources = versionsResourcesResolver.getResources("classpath:versions/*");
+            final Resource[] versionResources = versionsResourcesResolver.getResources(VERSIONS_PATTERN);
             final ObjectMapper mapper = new ObjectMapper();
             return Arrays.stream(versionResources)
                          .map(unchecked(Resource::getInputStream))
                          .map(unchecked(is -> mapper.readValue(is, LyrebirdVersion.class)))
-                         .sorted(Comparator.comparing(LyrebirdVersion::getBuildVersion))
+                         .sorted(Comparator.comparing(LyrebirdVersion::getBuildVersion).reversed())
                          .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
