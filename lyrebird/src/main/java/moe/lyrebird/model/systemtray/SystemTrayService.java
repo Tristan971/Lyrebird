@@ -78,15 +78,16 @@ public class SystemTrayService {
     }
 
     private void openMainScreen() {
-        CompletableFuture.runAsync(() -> {
-            stageManager.getSingle(Screens.ROOT_VIEW)
-                        .toTry(IllegalStateException::new)
-                        .onSuccess(stage -> {
-                            stage.show();
-                            stage.setIconified(false);
-                            stage.toFront();
-                        }).onFailure(err -> LOG.error("Could not show main stage!", err));
-        }, Platform::runLater);
+        CompletableFuture.runAsync(
+                () -> stageManager.getSingle(Screens.ROOT_VIEW)
+                                  .toTry(IllegalStateException::new)
+                                  .onSuccess(stage -> {
+                                      stage.show();
+                                      stage.setIconified(false);
+                                      stage.toFront();
+                                  }).onFailure(err -> LOG.error("Could not show main stage!", err)),
+                Platform::runLater
+        );
     }
 
 }
