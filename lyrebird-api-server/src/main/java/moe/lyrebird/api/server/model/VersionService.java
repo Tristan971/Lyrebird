@@ -53,7 +53,7 @@ public class VersionService {
                          .sorted(Comparator.comparing(LyrebirdVersion::getBuildVersion).reversed())
                          .collect(Collectors.toList());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Can not load releases!", e);
         }
     }
 
