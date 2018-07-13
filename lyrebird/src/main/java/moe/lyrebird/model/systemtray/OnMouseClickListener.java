@@ -36,22 +36,22 @@ final class OnMouseClickListener implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        // ignore
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        // ignore
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
+        // ignore
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        // ignore
     }
 
 }
