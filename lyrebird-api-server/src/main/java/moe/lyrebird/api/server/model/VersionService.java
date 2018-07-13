@@ -50,7 +50,7 @@ public class VersionService {
             return Arrays.stream(versionResources)
                          .map(unchecked(Resource::getInputStream))
                          .map(unchecked(is -> mapper.readValue(is, LyrebirdVersion.class)))
-                         .sorted(Comparator.comparing(LyrebirdVersion::getBuildVersion))
+                         .sorted(Comparator.comparing(LyrebirdVersion::getBuildVersion).reversed())
                          .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
