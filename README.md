@@ -85,6 +85,13 @@ Any of the following (execute command in this README's directory):
 
 - [ ] Searches
 
+- [ ] Miscellanelous
+    - [x] System notifications
+    - [ ] Internal notifications
+    - [ ] Update system
+        - [x] Basic update system
+        - [ ] Auto-update
+
 ## Can I contribute?
 Please do!
 
