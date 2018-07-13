@@ -92,8 +92,8 @@ public class UpdateService {
     private void startPolling() {
         updateExecutor.scheduleAtFixedRate(
                 this::poll,
-                10,
-                5 * 60,
+                10L,
+                5L * 60L,
                 TimeUnit.SECONDS
         );
     }
