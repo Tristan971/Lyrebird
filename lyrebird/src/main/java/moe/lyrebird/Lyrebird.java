@@ -26,6 +26,8 @@ import moe.tristan.easyfxml.spring.application.FxSpringContext;
 import moe.lyrebird.api.client.LyrebirdServerClientConfiguration;
 import moe.lyrebird.model.interrupts.CleanupService;
 
+import java.awt.Toolkit;
+
 /**
  * Main application entry point.
  */
@@ -35,6 +37,7 @@ import moe.lyrebird.model.interrupts.CleanupService;
 public class Lyrebird extends FxSpringApplication {
 
     public static void main(final String[] args) {
+        Toolkit.getDefaultToolkit();
         launch(args);
     }
 
