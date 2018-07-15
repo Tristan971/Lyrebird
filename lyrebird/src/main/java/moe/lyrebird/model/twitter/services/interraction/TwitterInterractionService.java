@@ -22,30 +22,29 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.Relationship;
 import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.User;
 
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 @Component
-public class TweetInterractionService {
+public class TwitterInterractionService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TweetInterractionService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterInterractionService.class);
 
     private final SessionManager sessionManager;
 
-    public TweetInterractionService(final SessionManager sessionManager) {
+    public TwitterInterractionService(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
-    public Status interract(
-            final Status target,
-            final TweetInterraction tweetInterraction
-    ) {
-        if (tweetInterraction.shouldDo().apply(this, target)) {
-            return tweetInterraction.onTrue().apply(this, target);
+    public <T> T interract(final T target, final TwitterBinaryInterraction<T> twitterBinaryInterraction) {
+        if (twitterBinaryInterraction.shouldDo().apply(this, target)) {
+            return twitterBinaryInterraction.onTrue().apply(this, target);
         } else {
-            return tweetInterraction.onFalse().apply(this, target);
+            return twitterBinaryInterraction.onFalse().apply(this, target);
         }
     }
 
@@ -71,7 +70,7 @@ public class TweetInterractionService {
                              .get();
     }
 
-    boolean shouldLike(final Status tweet) {
+    public boolean notYetLiked(final Status tweet) {
         return !sessionManager.doWithCurrentTwitter(twitter -> twitter.showStatus(tweet.getId()).isFavorited())
                               .get();
     }
@@ -102,9 +101,38 @@ public class TweetInterractionService {
         )).get();
     }
 
-    boolean shouldRetweet(final Status tweet) {
+    public boolean notYetRetweeted(final Status tweet) {
         return !sessionManager.doWithCurrentTwitter(twitter -> twitter.showStatus(tweet.getId()).isRetweetedByMe())
                               .get();
+    }
+
+    User follow(final User user) {
+        return sessionManager.doWithCurrentTwitter(twitter -> twitter.createFriendship(user.getId()))
+                             .onSuccess(userFollowed -> LOG.debug(
+                                     "User {} followed user {}",
+                                     getCurrentScreenName(),
+                                     userFollowed.getScreenName()
+                             ))
+                             .onFailure(err -> displayExceptionPane("Could not follow user!", err.getMessage(), err))
+                             .get();
+    }
+
+    User unfollow(final User user) {
+        return sessionManager.doWithCurrentTwitter(twitter -> twitter.destroyFriendship(user.getId()))
+                             .onSuccess(userUnfollowed -> LOG.debug(
+                                     "User {} unfollowed user {}",
+                                     getCurrentScreenName(),
+                                     userUnfollowed.getScreenName()
+                             ))
+                             .onFailure(err -> displayExceptionPane("Could not unfollow user!", err.getMessage(), err))
+                             .get();
+    }
+
+    public boolean notYetFollowed(final User user) {
+        return !sessionManager.doWithCurrentTwitter(twitter -> twitter.showFriendship(
+                getCurrentScreenName(),
+                user.getScreenName()
+        )).map(Relationship::isSourceFollowingTarget).get();
     }
 
     private String getCurrentScreenName() {

@@ -16,32 +16,44 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.components.mentions;
+package moe.lyrebird.view.components.usertimeline;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.observables.Mentions;
+import moe.lyrebird.model.twitter.observables.UserTimeline;
 import moe.lyrebird.view.components.TimelineBasedController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.User;
+
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Component
-public class MentionsController extends TimelineBasedController {
+@Scope(SCOPE_PROTOTYPE)
+public class UserTimelineController extends TimelineBasedController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MentionsController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserTimelineController.class);
+    private final UserTimeline userTimeline;
 
-    public MentionsController(
-            final Mentions mentions,
+    @Autowired
+    public UserTimelineController(
+            final UserTimeline userTimeline,
             final SessionManager sessionManager,
             final ConfigurableApplicationContext context
     ) {
-        super(mentions, sessionManager, context, true);
+        super(userTimeline, sessionManager, context, false);
+        this.userTimeline = userTimeline;
+    }
+
+    public void setTargetUser(final User user) {
+        userTimeline.targetUserProperty().setValue(user);
     }
 
     @Override
     protected Logger getLogger() {
         return LOG;
     }
-
 }

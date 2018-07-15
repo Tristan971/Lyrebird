@@ -27,6 +27,7 @@ import io.vavr.control.Try;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
@@ -54,19 +55,22 @@ public class CurrentAccountController implements FxmlController {
     @FXML
     private Label userScreenName;
 
-    private final SessionManager sessionManager;
     private final AsyncIO asyncIO;
     private final EasyFxml easyFxml;
+    private final SessionManager sessionManager;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
     public CurrentAccountController(
             final SessionManager sessionManager,
             final AsyncIO asyncIO,
-            final EasyFxml easyFxml
+            final EasyFxml easyFxml,
+            final UserDetailsService userDetailsService
     ) {
         this.sessionManager = sessionManager;
         this.asyncIO = asyncIO;
         this.easyFxml = easyFxml;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -100,6 +104,7 @@ public class CurrentAccountController implements FxmlController {
             handleNewSessionRequest();
         } else {
             LOG.debug("Connected. Consider it as a request to see personal profile.");
+            loadDetailsForCurrentUser();
         }
     }
 
@@ -108,6 +113,13 @@ public class CurrentAccountController implements FxmlController {
                 .getNode()
                 .map(loginScreen -> Stages.stageOf("Add new account", loginScreen))
                 .andThen(Stages::scheduleDisplaying);
+    }
+
+    private void loadDetailsForCurrentUser() {
+        sessionManager.currentSessionProperty()
+                      .getValue()
+                      .getTwitterUser()
+                      .onSuccess(userDetailsService::openUserDetails);
     }
 
     private void loadAndSetUserAvatar(final Try<User> user) {

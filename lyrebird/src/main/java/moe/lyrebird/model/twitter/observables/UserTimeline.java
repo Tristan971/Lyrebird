@@ -18,10 +18,9 @@
 
 package moe.lyrebird.model.twitter.observables;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,33 +29,47 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import twitter4j.User;
+
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.concurrent.Executor;
 
-@Lazy
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 @Component
-public class Mentions extends TwitterTimelineBaseModel {
+@Scope(SCOPE_PROTOTYPE)
+public class UserTimeline extends TwitterTimelineBaseModel {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Mentions.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserTimeline.class);
 
-    public Mentions(final SessionManager sessionManager, @Qualifier("twitterExecutor") final Executor twitterExecutor) {
+    private final Property<User> targetUser = new SimpleObjectProperty<>(null);
+
+    @Autowired
+    public UserTimeline(
+            final SessionManager sessionManager,
+            final Executor twitterExecutor
+    ) {
         super(sessionManager, twitterExecutor);
+        this.targetUser.addListener((o, prev, cur) -> {
+            this.clearLoadedTweets();
+            loadLastTweets();
+        });
+    }
+
+    public Property<User> targetUserProperty() {
+        return targetUser;
     }
 
     @Override
     protected ResponseList<Status> initialLoad(Twitter twitter) throws TwitterException {
-        return twitter.getMentionsTimeline();
+        return twitter.getUserTimeline(targetUser.getValue().getId());
     }
 
     @Override
     protected ResponseList<Status> backfillLoad(Twitter twitter, Paging paging) throws TwitterException {
-        return twitter.getMentionsTimeline(paging);
-    }
-
-    public boolean isMentionToCurrentUser(final Status status) {
-        final Session currentSession = sessionManager.currentSessionProperty().getValue();
-        if (currentSession == null) return false;
-        return status.getText().contains('@' + currentSession.getUserScreenName());
+        return twitter.getUserTimeline(targetUser.getValue().getId(), paging);
     }
 
     @Override

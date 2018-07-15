@@ -83,7 +83,7 @@ public class ControlBarController implements FxmlController {
             final EasyFxml easyFxml,
             final RootScreenController rootScreenController,
             final SessionManager sessionManager,
-            UpdateService updateService
+            final UpdateService updateService
     ) {
         this.easyFxml = easyFxml;
         this.rootScreenController = rootScreenController;

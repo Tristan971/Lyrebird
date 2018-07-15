@@ -18,14 +18,13 @@
 
 package moe.lyrebird.model.twitter.observables;
 
-import io.vavr.CheckedFunction1;
-import io.vavr.CheckedFunction2;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,27 +39,19 @@ public abstract class TwitterTimelineBaseModel {
 
     protected final SessionManager sessionManager;
     private final Executor twitterExecutor;
-    
-    private final CheckedFunction1<Twitter, ResponseList<Status>> initialLoadCall;
-    private final CheckedFunction2<Twitter, Paging, ResponseList<Status>> backFillCall;
 
-    private final ObservableList<Status> loaded = FXCollections.observableList(new LinkedList<>());
+    private final ObservableList<Status> loadedTweets = FXCollections.observableList(new LinkedList<>());
 
     public TwitterTimelineBaseModel(
             final SessionManager sessionManager,
-            final Executor twitterExecutor,
-            final CheckedFunction1<Twitter, ResponseList<Status>> initialLoadCall,
-            final CheckedFunction2<Twitter, Paging, ResponseList<Status>> backFillCall
+            final Executor twitterExecutor
     ) {
         this.twitterExecutor = twitterExecutor;
-        getLocalLogger().info("Initializing tweet timeline model for type : {}", initialLoadCall);
         this.sessionManager = sessionManager;
-        this.initialLoadCall = initialLoadCall;
-        this.backFillCall = backFillCall;
     }
 
     public ObservableList<Status> loadedTweets() {
-        return FXCollections.unmodifiableObservableList(loaded);
+        return FXCollections.unmodifiableObservableList(loadedTweets);
     }
 
     public void loadMoreTweets(final long loadUntilThisStatus) {
@@ -70,7 +61,7 @@ public abstract class TwitterTimelineBaseModel {
             requestPaging.setMaxId(loadUntilThisStatus);
 
             sessionManager.getCurrentTwitter()
-                          .mapTry(twitter -> backFillCall.apply(twitter, requestPaging))
+                          .mapTry(twitter -> backfillLoad(twitter, requestPaging))
                           .onSuccess(this::addTweets);
             getLocalLogger().debug("Finished loading more tweets.");
         }, twitterExecutor);
@@ -80,7 +71,7 @@ public abstract class TwitterTimelineBaseModel {
         CompletableFuture.runAsync(() -> {
             getLocalLogger().debug("Requesting last tweets in timeline.");
             sessionManager.getCurrentTwitter()
-                          .mapTry(initialLoadCall)
+                          .mapTry(this::initialLoad)
                           .onSuccess(this::addTweets);
         }, twitterExecutor);
     }
@@ -91,19 +82,29 @@ public abstract class TwitterTimelineBaseModel {
     }
 
     public void addTweet(final Status newTweet) {
-        if (!this.loaded.contains(newTweet)) {
-            this.loaded.add(newTweet);
-            this.loaded.sort(Comparator.comparingLong(Status::getId).reversed());
+        if (!this.loadedTweets.contains(newTweet)) {
+            this.loadedTweets.add(newTweet);
+            this.loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
         }
     }
 
     public void removeTweet(final long removedId) {
-        this.loaded.stream()
+        this.loadedTweets.stream()
                          .filter(status -> status.getId() == removedId)
                          .findFirst()
-                         .ifPresent(this.loaded::remove);
+                         .ifPresent(this.loadedTweets::remove);
     }
-    
+
+    void clearLoadedTweets() {
+        loadedTweets.clear();
+    }
+
+    protected abstract ResponseList<Status> initialLoad(final Twitter twitter)
+    throws TwitterException;
+
+    protected abstract ResponseList<Status> backfillLoad(final Twitter twitter, final Paging paging)
+    throws TwitterException;
+
     protected abstract Logger getLocalLogger();
     
 }
