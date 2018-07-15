@@ -68,7 +68,7 @@
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="TWEET_COUNT" />
+                                                <Label fx:id="userTweetCount" text="TWEET_COUNT" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -78,7 +78,7 @@
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="FOLLOWING_COUNT" />
+                                                <Label fx:id="userFollowingCount" text="FOLLOWING_COUNT" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -88,7 +88,7 @@
                                                       <Font name="System Bold" size="12.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="FOLLOWERS_COUNT" />
+                                                <Label fx:id="userFollowerCount" text="FOLLOWERS_COUNT" />
                                              </children>
                                           </HBox>
                                        </children>

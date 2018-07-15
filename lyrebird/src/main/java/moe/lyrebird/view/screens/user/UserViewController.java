@@ -80,6 +80,15 @@ public class UserViewController implements FxmlController {
     private Label userIdLabel;
 
     @FXML
+    private Label userTweetCount;
+
+    @FXML
+    private Label userFollowingCount;
+
+    @FXML
+    private Label userFollowerCount;
+
+    @FXML
     private Label userDescription;
 
     @FXML
@@ -139,6 +148,10 @@ public class UserViewController implements FxmlController {
             setFollowButtonTextAccordingly();
         });
         userDescription.setText(user.getDescription());
+
+        userTweetCount.setText(Integer.toString(user.getStatusesCount()));
+        userFollowingCount.setText(Integer.toString(user.getFriendsCount()));
+        userFollowerCount.setText(Integer.toString(user.getFollowersCount()));
 
         asyncIO.loadImage(user.getOriginalProfileImageURLHttps())
                .thenAcceptAsync(userProfilePictureImageView::setImage, Platform::runLater);
