@@ -70,7 +70,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" VBox.vgrow="NEVER">
                                        <children>
-                                          <Button fx:id="followSwitchButton" mnemonicParsing="false" prefWidth="120.0" text="Follow" />
+                                          <Button fx:id="followButton" mnemonicParsing="false" prefWidth="120.0" text=" " />
                                        </children>
                                     </VBox>
                                  </children>

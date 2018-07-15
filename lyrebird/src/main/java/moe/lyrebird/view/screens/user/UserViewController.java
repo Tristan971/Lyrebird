@@ -26,6 +26,7 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.components.Components;
@@ -56,6 +57,10 @@ public class UserViewController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserViewController.class);
 
+    private static final String FOLLOW_BTN_TEXT = "Follow";
+    private static final String UNFOLLOW_BTN_TEXT = "Unfollow";
+    private static final String YOURSELF_BTN_TEXT = "It's you !";
+
     @FXML
     private VBox container;
 
@@ -78,11 +83,12 @@ public class UserViewController implements FxmlController {
     private Label userDescription;
 
     @FXML
-    private Button followSwitchButton;
+    private Button followButton;
 
 
     private final EasyFxml easyFxml;
     private final AsyncIO asyncIO;
+    private final SessionManager sessionManager;
     private final TwitterInterractionService interractionService;
 
     private final Property<User> targetUser;
@@ -91,10 +97,12 @@ public class UserViewController implements FxmlController {
     public UserViewController(
             final EasyFxml easyFxml,
             final AsyncIO asyncIO,
+            final SessionManager sessionManager,
             final TwitterInterractionService interractionService
     ) {
         this.easyFxml = easyFxml;
         this.asyncIO = asyncIO;
+        this.sessionManager = sessionManager;
         this.interractionService = interractionService;
         this.targetUser = new SimpleObjectProperty<>(null);
     }
@@ -105,6 +113,7 @@ public class UserViewController implements FxmlController {
 
     @Override
     public void initialize() {
+        followButton.setDisable(true);
         userBanner.fitWidthProperty().bind(userDetailsVBox.widthProperty());
         userBanner.fitHeightProperty().bind(userDetailsVBox.heightProperty());
         userBanner.setPreserveRatio(false);
@@ -125,7 +134,10 @@ public class UserViewController implements FxmlController {
         final User user = targetUser.getValue();
         userNameLabel.setText(user.getName());
         userIdLabel.setText("@" + user.getScreenName());
-        followSwitchButton.setOnAction(e -> interractionService.interract(user, FOLLOW));
+        followButton.setOnAction(e -> {
+            interractionService.interract(user, FOLLOW);
+            setFollowButtonTextAccordingly();
+        });
         userDescription.setText(user.getDescription());
 
         asyncIO.loadImage(user.getOriginalProfileImageURLHttps())
@@ -155,6 +167,21 @@ public class UserViewController implements FxmlController {
                             VBox.setVgrow(userDetailsPane, Priority.ALWAYS);
                             container.getChildren().add(userDetailsPane);
                         });
+
+        Platform.runLater(this::setFollowButtonTextAccordingly);
+    }
+
+    private void setFollowButtonTextAccordingly() {
+        final User user = targetUser.getValue();
+        followButton.setText(interractionService.notYetFollowed(user) ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT);
+        sessionManager.currentSessionProperty().getValue().getTwitterUser().onSuccess(me -> {
+            if (me.getId() == user.getId()) {
+                followButton.setText(YOURSELF_BTN_TEXT);
+                followButton.setDisable(true);
+            } else {
+                followButton.setDisable(false);
+            }
+        });
     }
 
 }
