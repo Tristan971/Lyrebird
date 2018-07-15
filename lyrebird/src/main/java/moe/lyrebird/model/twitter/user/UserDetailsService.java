@@ -49,6 +49,7 @@ public class UserDetailsService {
     }
 
     public void openUserDetails(final User targetUser) {
+        this.targetUser.setValue(targetUser);
         final FxmlLoadResult<Pane, FxmlController> userDetailsLoad = easyFxml.loadNode(Screens.USER_VIEW);
         final Pane userDetailsPane = userDetailsLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
         Stages.stageOf(targetUser.getName() + " (@" + targetUser.getScreenName() + ")", userDetailsPane)
