@@ -25,8 +25,11 @@ import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.Paging;
+import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
 import java.util.concurrent.Executor;
 
@@ -37,7 +40,17 @@ public class Mentions extends TwitterTimelineBaseModel {
     private static final Logger LOG = LoggerFactory.getLogger(Mentions.class);
 
     public Mentions(final SessionManager sessionManager, @Qualifier("twitterExecutor") final Executor twitterExecutor) {
-        super(sessionManager, twitterExecutor, Twitter::getMentionsTimeline, Twitter::getMentionsTimeline);
+        super(sessionManager, twitterExecutor);
+    }
+
+    @Override
+    protected ResponseList<Status> initialLoad(Twitter twitter) throws TwitterException {
+        return twitter.getMentionsTimeline();
+    }
+
+    @Override
+    protected ResponseList<Status> backfillLoad(Twitter twitter, Paging paging) throws TwitterException {
+        return twitter.getMentionsTimeline(paging);
     }
 
     public boolean isMentionToCurrentUser(final Status status) {

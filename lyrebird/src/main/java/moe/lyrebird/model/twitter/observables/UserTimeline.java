@@ -18,30 +18,48 @@
 
 package moe.lyrebird.model.twitter.observables;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.Paging;
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.User;
 
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.concurrent.Executor;
 
+@Component
 public class UserTimeline extends TwitterTimelineBaseModel {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserTimeline.class);
 
-    public UserTimeline(
-            final SessionManager sessionManager,
-            final Executor twitterExecutor,
-            final Property<User> targetUser
-    ) {
-        super(
-                sessionManager,
-                twitterExecutor,
-                twitter -> twitter.getUserTimeline(targetUser.getValue().getId()),
-                (twitter, paging) -> twitter.getUserTimeline(targetUser.getValue().getId(), paging)
-        );
+    private final Property<User> targetUser;
+
+    @Autowired
+    public UserTimeline(final SessionManager sessionManager, final Executor twitterExecutor) {
+        super(sessionManager, twitterExecutor);
+        targetUser = new SimpleObjectProperty<>(null);
+    }
+
+    public void setTargetUser(User targetUser) {
+        this.targetUser.setValue(targetUser);
+    }
+
+    @Override
+    protected ResponseList<Status> initialLoad(Twitter twitter) throws TwitterException {
+        return twitter.getUserTimeline(targetUser.getValue().getId());
+    }
+
+    @Override
+    protected ResponseList<Status> backfillLoad(Twitter twitter, Paging paging) throws TwitterException {
+        return twitter.getUserTimeline(targetUser.getValue().getId(), paging);
     }
 
     @Override
