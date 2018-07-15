@@ -48,8 +48,8 @@ public class UserTimeline extends TwitterTimelineBaseModel {
         targetUser = new SimpleObjectProperty<>(null);
     }
 
-    public void setTargetUser(User targetUser) {
-        this.targetUser.setValue(targetUser);
+    public Property<User> targetUserProperty() {
+        return targetUser;
     }
 
     @Override
