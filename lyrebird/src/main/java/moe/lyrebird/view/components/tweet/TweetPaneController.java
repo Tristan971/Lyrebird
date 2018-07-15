@@ -25,7 +25,7 @@ import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlControlle
 import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.model.twitter.services.interraction.TweetInterractionService;
+import moe.lyrebird.model.twitter.services.interraction.TwittertInterractionService;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.util.BrowserOpeningHyperlink;
 import moe.lyrebird.view.util.Clipping;
@@ -51,8 +51,8 @@ import javafx.scene.text.TextFlow;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static moe.lyrebird.model.twitter.services.interraction.Interration.LIKE;
-import static moe.lyrebird.model.twitter.services.interraction.Interration.RETWEET;
+import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.LIKE;
+import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.RETWEET;
 import static moe.lyrebird.view.assets.ImageResources.BLANK_USER_PROFILE_PICTURE;
 import static moe.lyrebird.view.components.tweet.TweetFormatter.time;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -100,7 +100,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private HBox retweetHbox;
 
     private final BrowserSupport browserSupport;
-    private final TweetInterractionService interractionService;
+    private final TwittertInterractionService interractionService;
     private final AsyncIO asyncIO;
     private final MediaEmbeddingService mediaEmbeddingService;
 
@@ -109,7 +109,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     public TweetPaneController(
             final BrowserSupport browserSupport,
-            final TweetInterractionService interractionService,
+            final TwittertInterractionService interractionService,
             final AsyncIO asyncIO,
             final MediaEmbeddingService mediaEmbeddingService
     ) {
