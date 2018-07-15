@@ -1,6 +1,6 @@
 ![Promo logo](docs/img/promo-logo-png.png)
 
-Last `master` branch's (version 1.0.4) statistics :
+Last `develop` branch's (version 1.1.0) statistics :
 
 [![Build Status](https://jenkins.tristan.moe/job/Lyrebird/job/master/badge/icon)](https://jenkins.tristan.moe/job/Lyrebird/job/master)
 [![Sonar bugs](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird-parent&metric=bugs)](https://sonar.tristan.moe/project/issues?id=moe.lyrebird%3Alyrebird-parent&resolved=false&types=BUG)
@@ -28,10 +28,12 @@ Requirements:
 - For native images you need either InnoSetup tools on Windows or ``dpkg-deb``/``rpmutils`` on Linux depending on
 what system you want to target. You can only build native images for the current system type.
 
-Any of the following (execute command in this README's directory):
-- Execute only (no packaging): ``cd lyrebird && mvn clean spring-boot:run``
-- For a native image: ``cd lyrebird && mvn clean jfx:native -DskipTests``
-- For a portable JAR file ``mvn clean package -DskipTests``
+First (in project folder) : ``$> mvn clean install -DskipTests``
+
+Then any of the following (in ``Lyrebird/lyrebird` folder):
+- Execute only (no packaging) : ``$> mvn clean spring-boot:run``
+- For a native image (in ``Lyrebird/lyrebird/target/jfx/native``) : ``$> mvn jfx:native -DskipTests``
+- For a portable JAR file (in ``Lyrebird/lyrebird/target``) : ``$> mvn clean package -DskipTests``
 
 ## What does it look like?
 [![Screenshot of current version](docs/img/screenshot.png)](docs/img/screenshot.png)
