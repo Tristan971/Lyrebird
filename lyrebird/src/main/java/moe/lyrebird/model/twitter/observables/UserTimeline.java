@@ -46,6 +46,7 @@ public class UserTimeline extends TwitterTimelineBaseModel {
     public UserTimeline(final SessionManager sessionManager, final Executor twitterExecutor) {
         super(sessionManager, twitterExecutor);
         targetUser = new SimpleObjectProperty<>(null);
+        targetUser.addListener((o, prev, cur) -> this.clearLoadedTweets());
     }
 
     public Property<User> targetUserProperty() {
