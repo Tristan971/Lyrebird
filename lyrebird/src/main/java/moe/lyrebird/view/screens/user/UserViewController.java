@@ -127,8 +127,15 @@ public class UserViewController implements FxmlController {
 
         asyncIO.loadImage(user.getOriginalProfileImageURLHttps())
                .thenAcceptAsync(userProfilePictureImageView::setImage, Platform::runLater);
-        asyncIO.loadImage(user.getProfileBannerRetinaURL())
-               .thenAcceptAsync(userBanner::setImage, Platform::runLater);
+
+        final String bannerUrl = user.getProfileBannerURL();
+        if (bannerUrl == null) {
+            LOG.debug("No profile banner. Insert background color pixel instead.");
+            userBanner.setImage(ImageResources.BACKGROUND_DARK_1PX.getImage());
+        } else {
+            asyncIO.loadImage(bannerUrl)
+                   .thenAcceptAsync(userBanner::setImage, Platform::runLater);
+        }
 
         final FxmlLoadResult<Pane, UserTimelineController> userTimelineLoad = easyFxml.loadNode(
                 Components.USER_TIMELINE,
