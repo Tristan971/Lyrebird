@@ -70,7 +70,7 @@ public class TwitterInterractionService {
                              .get();
     }
 
-    boolean notYetLiked(final Status tweet) {
+    public boolean notYetLiked(final Status tweet) {
         return !sessionManager.doWithCurrentTwitter(twitter -> twitter.showStatus(tweet.getId()).isFavorited())
                               .get();
     }
@@ -101,7 +101,7 @@ public class TwitterInterractionService {
         )).get();
     }
 
-    boolean notYetRetweeted(final Status tweet) {
+    public boolean notYetRetweeted(final Status tweet) {
         return !sessionManager.doWithCurrentTwitter(twitter -> twitter.showStatus(tweet.getId()).isRetweetedByMe())
                               .get();
     }
@@ -128,7 +128,7 @@ public class TwitterInterractionService {
                              .get();
     }
 
-    boolean notYetFollowed(final User user) {
+    public boolean notYetFollowed(final User user) {
         return !sessionManager.doWithCurrentTwitter(twitter -> twitter.showFriendship(
                 getCurrentScreenName(),
                 user.getScreenName()
