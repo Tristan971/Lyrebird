@@ -104,6 +104,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" VBox.vgrow="NEVER">
                                        <children>
+                                          <Label fx:id="userFriendshipStatus" text="FRIENDSHIP_STATUS" />
                                           <Button fx:id="followButton" maxHeight="1.7976931348623157E308" minWidth="196.0" mnemonicParsing="false" text=" " />
                                        </children>
                                     </VBox>

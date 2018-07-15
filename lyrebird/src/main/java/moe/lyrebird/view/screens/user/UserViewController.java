@@ -34,6 +34,7 @@ import moe.lyrebird.view.components.usertimeline.UserTimelineController;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.Relationship;
 import twitter4j.User;
 
 import javafx.application.Platform;
@@ -47,6 +48,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+
+import java.util.function.Function;
 
 import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.FOLLOW;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -90,6 +93,9 @@ public class UserViewController implements FxmlController {
 
     @FXML
     private Label userDescription;
+
+    @FXML
+    private Label userFriendshipStatus;
 
     @FXML
     private Button followButton;
@@ -140,19 +146,27 @@ public class UserViewController implements FxmlController {
     }
 
     private void displayTargetUser() {
+        this.fillTextData();
+        this.asyncLoadImages();
+        this.setupFollowButton();
+        this.loadTargetUserTimeline();
+    }
+
+    private void fillTextData() {
         final User user = targetUser.getValue();
         userNameLabel.setText(user.getName());
         userIdLabel.setText("@" + user.getScreenName());
-        followButton.setOnAction(e -> {
-            interractionService.interract(user, FOLLOW);
-            setFollowButtonTextAccordingly();
-        });
+
         userDescription.setText(user.getDescription());
 
         userTweetCount.setText(Integer.toString(user.getStatusesCount()));
         userFollowingCount.setText(Integer.toString(user.getFriendsCount()));
         userFollowerCount.setText(Integer.toString(user.getFollowersCount()));
 
+    }
+
+    private void asyncLoadImages() {
+        final User user = targetUser.getValue();
         asyncIO.loadImage(user.getOriginalProfileImageURLHttps())
                .thenAcceptAsync(userProfilePictureImageView::setImage, Platform::runLater);
 
@@ -163,7 +177,67 @@ public class UserViewController implements FxmlController {
             asyncIO.loadImage(bannerUrl)
                    .thenAcceptAsync(userBanner::setImage, Platform::runLater);
         }
+    }
 
+    private void setupFollowButton() {
+        final User user = targetUser.getValue();
+        followButton.setOnAction(e -> {
+            interractionService.interract(user, FOLLOW);
+            updateFollowButtonText();
+        });
+        updateFollowButtonText();
+    }
+
+    private void updateFollowButtonText() {
+        final User user = targetUser.getValue();
+        followButton.setText(interractionService.notYetFollowed(user) ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT);
+        sessionManager.currentSessionProperty().getValue().getTwitterUser().onSuccess(me -> {
+            if (me.getId() == user.getId()) {
+                followButton.setText(YOURSELF_BTN_TEXT);
+                followButton.setDisable(true);
+            } else {
+                followButton.setDisable(false);
+            }
+            updateFriendshipStatus();
+        });
+    }
+
+    private void updateFriendshipStatus() {
+        final Relationship relationship = getRelationship();
+
+        String relStatusText = null;
+        if (relationship.isTargetFollowingSource()) {
+            if (relationship.isTargetFollowedBySource()) {
+                relStatusText = "You follow each other!";
+            } else {
+                relStatusText = "Follows you.";
+            }
+        }
+
+        if (relStatusText == null) {
+            userFriendshipStatus.setVisible(false);
+            userFriendshipStatus.setManaged(false);
+        } else {
+            userFriendshipStatus.setText(relStatusText);
+            userFriendshipStatus.setVisible(true);
+            userFriendshipStatus.setManaged(true);
+        }
+    }
+
+    private Relationship getRelationship() {
+        return sessionManager.doWithCurrentTwitter(
+                twitter -> sessionManager.currentSessionProperty()
+                                         .getValue()
+                                         .getTwitterUser()
+                                         .mapTry(us -> twitter.showFriendship(
+                                                 us.getId(),
+                                                 targetUser.getValue().getId()
+                                         )).get()
+        ).getOrElseThrow((Function<? super Throwable, IllegalStateException>) IllegalStateException::new);
+    }
+
+    private void loadTargetUserTimeline() {
+        final User user = targetUser.getValue();
         final FxmlLoadResult<Pane, UserTimelineController> userTimelineLoad = easyFxml.loadNode(
                 Components.USER_TIMELINE,
                 Pane.class,
@@ -180,21 +254,6 @@ public class UserViewController implements FxmlController {
                             VBox.setVgrow(userDetailsPane, Priority.ALWAYS);
                             container.getChildren().add(userDetailsPane);
                         });
-
-        Platform.runLater(this::setFollowButtonTextAccordingly);
-    }
-
-    private void setFollowButtonTextAccordingly() {
-        final User user = targetUser.getValue();
-        followButton.setText(interractionService.notYetFollowed(user) ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT);
-        sessionManager.currentSessionProperty().getValue().getTwitterUser().onSuccess(me -> {
-            if (me.getId() == user.getId()) {
-                followButton.setText(YOURSELF_BTN_TEXT);
-                followButton.setDisable(true);
-            } else {
-                followButton.setDisable(false);
-            }
-        });
     }
 
 }
