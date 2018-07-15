@@ -206,6 +206,12 @@
             <artifactId>lyrebird-api-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>3.6.2</version>
+        </dependency>
     </dependencies>
 
     <pluginRepositories>
