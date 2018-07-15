@@ -30,7 +30,11 @@ public class DistribuableBinaryPlatformService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DistribuableBinaryPlatformService.class);
 
-    public Option<TargetPlatform> detectRunningPlatform() {
+    public boolean currentPlatformSupportsSelfupdate() {
+        return detectRunningPlatform().isDefined();
+    }
+
+    Option<TargetPlatform> detectRunningPlatform() {
         LOG.debug("Detecting platform...");
         switch (SystemInfo.getCurrentPlatformEnum()) {
             case WINDOWS:
