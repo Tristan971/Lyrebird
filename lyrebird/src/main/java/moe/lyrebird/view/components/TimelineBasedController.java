@@ -35,23 +35,28 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
 
     private final TwitterTimelineBaseModel timelineBase;
     private final ListProperty<Status> tweetsProperty;
+    private final boolean shouldAutomaticallyFill;
 
     public TimelineBasedController(
             final TwitterTimelineBaseModel timelineBase,
             final SessionManager sessionManager,
-            final ConfigurableApplicationContext context
+            final ConfigurableApplicationContext context,
+            final boolean shouldAutomaticallyFill
     ) {
         super(context, TweetListCell.class);
         this.timelineBase = timelineBase;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timelineBase.loadedTweets());
+        this.shouldAutomaticallyFill = shouldAutomaticallyFill;
         sessionManager.currentSessionProperty().addListener(change -> timelineBase.loadLastTweets());
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        timelineBase.loadLastTweets();
         listView.itemsProperty().bind(new ReadOnlyListWrapper<>(timelineBase.loadedTweets()));
+        if (shouldAutomaticallyFill) {
+            timelineBase.loadLastTweets();
+        }
     }
 
     private void loadMoreTweets() {

@@ -24,10 +24,13 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
-import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.components.usertimeline.UserTimelineController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.User;
 
 import javafx.application.Platform;
@@ -37,6 +40,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -46,6 +50,8 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Component
 @Scope(SCOPE_PROTOTYPE)
 public class UserViewController implements FxmlController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserViewController.class);
 
     @FXML
     private ImageView userProfilePictureImageView;
@@ -72,22 +78,25 @@ public class UserViewController implements FxmlController {
     public UserViewController(
             final EasyFxml easyFxml,
             final AsyncIO asyncIO,
-            final UserDetailsService userDetailsService,
             final TwitterInterractionService interractionService
     ) {
         this.easyFxml = easyFxml;
         this.asyncIO = asyncIO;
         this.interractionService = interractionService;
         this.targetUser = new SimpleObjectProperty<>(null);
-        this.targetUser.bind(userDetailsService.targetUserProperty());
+    }
+
+    public Property<User> targetUserProperty() {
+        return targetUser;
     }
 
     @Override
     public void initialize() {
         if (targetUser.getValue() == null) {
             this.targetUser.addListener((o, prev, cur) -> displayTargetUser());
+        } else {
+            displayTargetUser();
         }
-        displayTargetUser();
     }
 
     private void displayTargetUser() {
@@ -97,13 +106,22 @@ public class UserViewController implements FxmlController {
         asyncIO.loadImage(targetUser.getValue().getOriginalProfileImageURLHttps())
                .thenAcceptAsync(userProfilePictureImageView::setImage, Platform::runLater);
 
-        easyFxml.loadNode(Components.USER_TIMELINE)
-                .getNode()
-                .recover(ExceptionHandler::fromThrowable)
-                .onSuccess(userDetailsPane -> {
-                    VBox.setVgrow(userDetailsPane, Priority.ALWAYS);
-                    container.getChildren().add(userDetailsPane);
-                });
+        final FxmlLoadResult<Pane, UserTimelineController> userTimelineLoad = easyFxml.loadNode(
+                Components.USER_TIMELINE,
+                Pane.class,
+                UserTimelineController.class
+        );
+
+        userTimelineLoad.getController()
+                        .onFailure(err -> LOG.error("Could not load user timeline!", err))
+                        .onSuccess(utc -> utc.setTargetUser(targetUser.getValue()));
+
+        userTimelineLoad.getNode()
+                        .recover(ExceptionHandler::fromThrowable)
+                        .onSuccess(userDetailsPane -> {
+                            VBox.setVgrow(userDetailsPane, Priority.ALWAYS);
+                            container.getChildren().add(userDetailsPane);
+                        });
     }
 
 }

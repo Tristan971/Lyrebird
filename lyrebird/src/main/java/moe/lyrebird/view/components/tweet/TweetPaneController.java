@@ -26,6 +26,7 @@ import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
+import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.util.BrowserOpeningHyperlink;
 import moe.lyrebird.view.util.Clipping;
@@ -103,6 +104,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private final TwitterInterractionService interractionService;
     private final AsyncIO asyncIO;
     private final MediaEmbeddingService mediaEmbeddingService;
+    private final UserDetailsService userDetailsService;
 
     private Status status;
     private final BooleanProperty isRetweet = new SimpleBooleanProperty(false);
@@ -111,12 +113,14 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
             final BrowserSupport browserSupport,
             final TwitterInterractionService interractionService,
             final AsyncIO asyncIO,
-            final MediaEmbeddingService mediaEmbeddingService
+            final MediaEmbeddingService mediaEmbeddingService,
+            final UserDetailsService userDetailsService
     ) {
         this.browserSupport = browserSupport;
         this.interractionService = interractionService;
         this.asyncIO = asyncIO;
         this.mediaEmbeddingService = mediaEmbeddingService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -124,7 +128,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         authorProfilePicturePane.setClip(makePpClip());
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         Buttons.setOnClick(likeButton, this::onLike);
-        Buttons.setOnClick(retweetButton, this::onRewteet);
+        Buttons.setOnClick(retweetButton, this::onRetweet);
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
     }
 
@@ -163,6 +167,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         final String ppUrl = statusToDisplay.getUser().getOriginalProfileImageURLHttps();
         asyncIO.loadImageMiniature(ppUrl, 96.0, 96.0)
                .thenAcceptAsync(authorProfilePicture::setImage, Platform::runLater);
+        authorProfilePicture.setOnMouseClicked(e -> userDetailsService.openUserDetails(status.getUser()));
         readMedias(status);
     }
 
@@ -175,7 +180,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         likeRequest.whenCompleteAsync((res, err) -> likeButton.setDisable(false), Platform::runLater);
     }
 
-    private void onRewteet() {
+    private void onRetweet() {
         LOG.debug("Retweet interraction on status {}", status.getId());
         final CompletableFuture<Status> retweetRequest = CompletableFuture.supplyAsync(
                 () -> interractionService.interract(status, RETWEET)

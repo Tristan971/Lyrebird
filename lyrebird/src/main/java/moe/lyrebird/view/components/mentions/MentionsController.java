@@ -36,7 +36,7 @@ public class MentionsController extends TimelineBasedController {
             final SessionManager sessionManager,
             final ConfigurableApplicationContext context
     ) {
-        super(mentions, sessionManager, context);
+        super(mentions, sessionManager, context, true);
     }
 
     @Override

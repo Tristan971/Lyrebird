@@ -19,9 +19,9 @@
 package moe.lyrebird.model.twitter.observables;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.user.UserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Paging;
@@ -36,7 +36,10 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.concurrent.Executor;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 @Component
+@Scope(SCOPE_PROTOTYPE)
 public class UserTimeline extends TwitterTimelineBaseModel {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserTimeline.class);
@@ -46,12 +49,17 @@ public class UserTimeline extends TwitterTimelineBaseModel {
     @Autowired
     public UserTimeline(
             final SessionManager sessionManager,
-            final Executor twitterExecutor,
-            final UserDetailsService userDetailsService
+            final Executor twitterExecutor
     ) {
         super(sessionManager, twitterExecutor);
-        this.targetUser.bind(userDetailsService.targetUserProperty());
-        this.targetUser.addListener((o, prev, cur) -> this.clearLoadedTweets());
+        this.targetUser.addListener((o, prev, cur) -> {
+            this.clearLoadedTweets();
+            loadLastTweets();
+        });
+    }
+
+    public Property<User> targetUserProperty() {
+        return targetUser;
     }
 
     @Override

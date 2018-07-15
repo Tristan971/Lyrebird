@@ -95,7 +95,7 @@ public abstract class TwitterTimelineBaseModel {
                          .ifPresent(this.loadedTweets::remove);
     }
 
-    public void clearLoadedTweets() {
+    void clearLoadedTweets() {
         loadedTweets.clear();
     }
 

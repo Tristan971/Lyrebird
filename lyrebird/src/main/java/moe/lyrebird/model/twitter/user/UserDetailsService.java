@@ -21,36 +21,39 @@ package moe.lyrebird.model.twitter.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.user.UserViewController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.User;
 
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.layout.Pane;
 
 @Component
 public class UserDetailsService {
 
-    private final EasyFxml easyFxml;
+    private static final Logger LOG = LoggerFactory.getLogger(UserDetailsService.class);
 
-    private final Property<User> targetUser = new SimpleObjectProperty<>(null);
+    private final EasyFxml easyFxml;
 
     @Autowired
     public UserDetailsService(final EasyFxml easyFxml) {
         this.easyFxml = easyFxml;
     }
 
-    public Property<User> targetUserProperty() {
-        return targetUser;
-    }
-
     public void openUserDetails(final User targetUser) {
-        this.targetUser.setValue(targetUser);
-        final FxmlLoadResult<Pane, FxmlController> userDetailsLoad = easyFxml.loadNode(Screens.USER_VIEW);
+        LOG.info("Opening detailed view of user : {} (@{})", targetUser.getName(), targetUser.getScreenName());
+        final FxmlLoadResult<Pane, UserViewController> userDetailsLoad = easyFxml.loadNode(
+                Screens.USER_VIEW,
+                Pane.class,
+                UserViewController.class
+        );
+        userDetailsLoad.getController()
+                       .onFailure(err -> LOG.error("Could not load user details view", err))
+                       .onSuccess(uvc -> uvc.targetUserProperty().setValue(targetUser));
         final Pane userDetailsPane = userDetailsLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
         Stages.stageOf(targetUser.getName() + " (@" + targetUser.getScreenName() + ")", userDetailsPane)
               .thenAcceptAsync(Stages::scheduleDisplaying);
