@@ -95,9 +95,9 @@
                                     </VBox>
                                     <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" VBox.vgrow="NEVER">
+                                          <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <Label fx:id="userDescription" alignment="TOP_LEFT" minWidth="0.0" prefWidth="0.0" text="USER_DESCRIPTION" textAlignment="JUSTIFY" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <Label fx:id="userDescription" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" text="USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION USER_DESCRIPTION " wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
                                           </AnchorPane>
                                        </children>
