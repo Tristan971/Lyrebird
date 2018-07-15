@@ -30,13 +30,13 @@ import twitter4j.User;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 @Component
-public class TwittertInterractionService {
+public class TwitterInterractionService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TwittertInterractionService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterInterractionService.class);
 
     private final SessionManager sessionManager;
 
-    public TwittertInterractionService(final SessionManager sessionManager) {
+    public TwitterInterractionService(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 

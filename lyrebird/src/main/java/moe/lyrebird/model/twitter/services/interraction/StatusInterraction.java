@@ -24,24 +24,24 @@ import java.util.function.BiFunction;
 
 public enum StatusInterraction implements TwitterBinaryInterraction<Status> {
     LIKE(
-            TwittertInterractionService::like,
-            TwittertInterractionService::unlike,
-            TwittertInterractionService::shouldLike
+            TwitterInterractionService::like,
+            TwitterInterractionService::unlike,
+            TwitterInterractionService::shouldLike
     ),
     RETWEET(
-            TwittertInterractionService::retweet,
-            TwittertInterractionService::unretweet,
-            TwittertInterractionService::shouldRetweet
+            TwitterInterractionService::retweet,
+            TwitterInterractionService::unretweet,
+            TwitterInterractionService::shouldRetweet
     );
 
-    private final BiFunction<TwittertInterractionService, Status, Status> onTrue;
-    private final BiFunction<TwittertInterractionService, Status, Status> onFalse;
-    private final BiFunction<TwittertInterractionService, Status, Boolean> shouldDo;
+    private final BiFunction<TwitterInterractionService, Status, Status> onTrue;
+    private final BiFunction<TwitterInterractionService, Status, Status> onFalse;
+    private final BiFunction<TwitterInterractionService, Status, Boolean> shouldDo;
 
     StatusInterraction(
-            final BiFunction<TwittertInterractionService, Status, Status> onTrue,
-            final BiFunction<TwittertInterractionService, Status, Status> onFalse,
-            final BiFunction<TwittertInterractionService, Status, Boolean> shouldDo
+            final BiFunction<TwitterInterractionService, Status, Status> onTrue,
+            final BiFunction<TwitterInterractionService, Status, Status> onFalse,
+            final BiFunction<TwitterInterractionService, Status, Boolean> shouldDo
     ) {
         this.onTrue = onTrue;
         this.onFalse = onFalse;
@@ -49,17 +49,17 @@ public enum StatusInterraction implements TwitterBinaryInterraction<Status> {
     }
 
     @Override
-    public BiFunction<TwittertInterractionService, Status, Status> onTrue() {
+    public BiFunction<TwitterInterractionService, Status, Status> onTrue() {
         return onTrue;
     }
 
     @Override
-    public BiFunction<TwittertInterractionService, Status, Status> onFalse() {
+    public BiFunction<TwitterInterractionService, Status, Status> onFalse() {
         return onFalse;
     }
 
     @Override
-    public BiFunction<TwittertInterractionService, Status, Boolean> shouldDo() {
+    public BiFunction<TwitterInterractionService, Status, Boolean> shouldDo() {
         return shouldDo;
     }
 }

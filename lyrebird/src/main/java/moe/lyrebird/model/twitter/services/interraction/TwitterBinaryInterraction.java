@@ -21,7 +21,7 @@ package moe.lyrebird.model.twitter.services.interraction;
 import java.util.function.BiFunction;
 
 public interface TwitterBinaryInterraction<T> {
-    BiFunction<TwittertInterractionService, T, T> onTrue();
-    BiFunction<TwittertInterractionService, T, T> onFalse();
-    BiFunction<TwittertInterractionService, T, Boolean> shouldDo();
+    BiFunction<TwitterInterractionService, T, T> onTrue();
+    BiFunction<TwitterInterractionService, T, T> onFalse();
+    BiFunction<TwitterInterractionService, T, Boolean> shouldDo();
 }

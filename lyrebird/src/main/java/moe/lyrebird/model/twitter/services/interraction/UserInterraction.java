@@ -24,19 +24,19 @@ import java.util.function.BiFunction;
 
 public enum UserInterraction implements TwitterBinaryInterraction<User> {
     FOLLOW(
-            TwittertInterractionService::follow,
-            TwittertInterractionService::unfollow,
-            TwittertInterractionService::shouldFollow
+            TwitterInterractionService::follow,
+            TwitterInterractionService::unfollow,
+            TwitterInterractionService::shouldFollow
     );
 
-    private final BiFunction<TwittertInterractionService, User, User> onTrue;
-    private final BiFunction<TwittertInterractionService, User, User> onFalse;
-    private final BiFunction<TwittertInterractionService, User, Boolean> shouldDo;
+    private final BiFunction<TwitterInterractionService, User, User> onTrue;
+    private final BiFunction<TwitterInterractionService, User, User> onFalse;
+    private final BiFunction<TwitterInterractionService, User, Boolean> shouldDo;
 
     UserInterraction(
-            final BiFunction<TwittertInterractionService, User, User> onTrue,
-            final BiFunction<TwittertInterractionService, User, User> onFalse,
-            final BiFunction<TwittertInterractionService, User, Boolean> shouldDo
+            final BiFunction<TwitterInterractionService, User, User> onTrue,
+            final BiFunction<TwitterInterractionService, User, User> onFalse,
+            final BiFunction<TwitterInterractionService, User, Boolean> shouldDo
     ) {
         this.onTrue = onTrue;
         this.onFalse = onFalse;
@@ -44,17 +44,17 @@ public enum UserInterraction implements TwitterBinaryInterraction<User> {
     }
 
     @Override
-    public BiFunction<TwittertInterractionService, User, User> onTrue() {
+    public BiFunction<TwitterInterractionService, User, User> onTrue() {
         return onTrue;
     }
 
     @Override
-    public BiFunction<TwittertInterractionService, User, User> onFalse() {
+    public BiFunction<TwitterInterractionService, User, User> onFalse() {
         return onFalse;
     }
 
     @Override
-    public BiFunction<TwittertInterractionService, User, Boolean> shouldDo() {
+    public BiFunction<TwitterInterractionService, User, Boolean> shouldDo() {
         return shouldDo;
     }
 
