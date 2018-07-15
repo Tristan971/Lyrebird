@@ -43,7 +43,7 @@
                                     <Insets bottom="5.0" left="5.0" top="5.0" />
                                  </HBox.margin>
                               </VBox>
-                              <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" HBox.hgrow="ALWAYS">
+                              <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
                                        <children>
@@ -59,9 +59,9 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox VBox.vgrow="ALWAYS">
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <AnchorPane VBox.vgrow="NEVER">
+                                          <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="0.0" VBox.vgrow="NEVER">
                                              <children>
                                                 <Label fx:id="userDescription" alignment="TOP_LEFT" minWidth="0.0" prefWidth="0.0" text="USER_DESCRIPTION" textAlignment="JUSTIFY" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>

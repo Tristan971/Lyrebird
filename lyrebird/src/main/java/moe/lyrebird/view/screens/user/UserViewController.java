@@ -108,8 +108,11 @@ public class UserViewController implements FxmlController {
         userBanner.fitWidthProperty().bind(userDetailsVBox.widthProperty());
         userBanner.fitHeightProperty().bind(userDetailsVBox.heightProperty());
         userBanner.setPreserveRatio(false);
+        userBanner.setImage(ImageResources.BACKGROUND_DARK_1PX.getImage());
+
         userProfilePictureImageView.setImage(ImageResources.BLANK_USER_PROFILE_PICTURE_LIGHT.getImage());
         final Rectangle profilePictureClip = Clipping.getSquareClip(196.0, 30.0);
+
         userProfilePictureImageView.setClip(profilePictureClip);
         if (targetUser.getValue() == null) {
             this.targetUser.addListener((o, prev, cur) -> displayTargetUser());
@@ -130,8 +133,7 @@ public class UserViewController implements FxmlController {
 
         final String bannerUrl = user.getProfileBannerURL();
         if (bannerUrl == null) {
-            LOG.debug("No profile banner. Insert background color pixel instead.");
-            userBanner.setImage(ImageResources.BACKGROUND_DARK_1PX.getImage());
+            LOG.debug("No profile banner. Keep background color pixel instead.");
         } else {
             asyncIO.loadImage(bannerUrl)
                    .thenAcceptAsync(userBanner::setImage, Platform::runLater);
