@@ -19,26 +19,32 @@
 package moe.lyrebird.view.screens.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.model.twitter.observables.UserTimeline;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
+import moe.lyrebird.model.twitter.user.UserDetailsService;
+import moe.lyrebird.view.components.Components;
 import twitter4j.User;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.FOLLOW;
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Component
+@Scope(SCOPE_PROTOTYPE)
 public class UserViewController implements FxmlController {
 
     @FXML
@@ -54,11 +60,10 @@ public class UserViewController implements FxmlController {
     private Button followSwitchButton;
 
     @FXML
-    private AnchorPane userLastTweetsTimelineContainer;
+    public VBox container;
 
     private final EasyFxml easyFxml;
     private final AsyncIO asyncIO;
-    private final UserTimeline userTimeline;
     private final TwitterInterractionService interractionService;
 
     private final Property<User> targetUser;
@@ -67,28 +72,38 @@ public class UserViewController implements FxmlController {
     public UserViewController(
             final EasyFxml easyFxml,
             final AsyncIO asyncIO,
-            final UserTimeline userTimeline,
+            final UserDetailsService userDetailsService,
             final TwitterInterractionService interractionService
     ) {
         this.easyFxml = easyFxml;
         this.asyncIO = asyncIO;
-        this.userTimeline = userTimeline;
         this.interractionService = interractionService;
-        this.targetUser = new ReadOnlyObjectWrapper<>();
-        this.targetUser.bind(userTimeline.targetUserProperty());
-        this.targetUser.addListener((o, prev, cur) -> handleTargetUserSet());
+        this.targetUser = new SimpleObjectProperty<>(null);
+        this.targetUser.bind(userDetailsService.targetUserProperty());
     }
 
     @Override
     public void initialize() {
+        if (targetUser.getValue() == null) {
+            this.targetUser.addListener((o, prev, cur) -> displayTargetUser());
+        }
+        displayTargetUser();
     }
 
-    private void handleTargetUserSet() {
+    private void displayTargetUser() {
         userNameLabel.setText(targetUser.getValue().getName());
         userIdLabel.setText("@" + targetUser.getValue().getScreenName());
         followSwitchButton.setOnAction(e -> interractionService.interract(targetUser.getValue(), FOLLOW));
         asyncIO.loadImage(targetUser.getValue().getOriginalProfileImageURLHttps())
                .thenAcceptAsync(userProfilePictureImageView::setImage, Platform::runLater);
+
+        easyFxml.loadNode(Components.USER_TIMELINE)
+                .getNode()
+                .recover(ExceptionHandler::fromThrowable)
+                .onSuccess(userDetailsPane -> {
+                    VBox.setVgrow(userDetailsPane, Priority.ALWAYS);
+                    container.getChildren().add(userDetailsPane);
+                });
     }
 
 }
