@@ -57,6 +57,15 @@ public class UserViewController implements FxmlController {
     private static final Logger LOG = LoggerFactory.getLogger(UserViewController.class);
 
     @FXML
+    private VBox container;
+
+    @FXML
+    private VBox userDetailsVBox;
+
+    @FXML
+    private ImageView userBanner;
+
+    @FXML
     private ImageView userProfilePictureImageView;
 
     @FXML
@@ -66,13 +75,11 @@ public class UserViewController implements FxmlController {
     private Label userIdLabel;
 
     @FXML
-    public Label userDescription;
+    private Label userDescription;
 
     @FXML
     private Button followSwitchButton;
 
-    @FXML
-    public VBox container;
 
     private final EasyFxml easyFxml;
     private final AsyncIO asyncIO;
@@ -98,6 +105,9 @@ public class UserViewController implements FxmlController {
 
     @Override
     public void initialize() {
+        userBanner.fitWidthProperty().bind(userDetailsVBox.widthProperty());
+        userBanner.fitHeightProperty().bind(userDetailsVBox.heightProperty());
+        userBanner.setPreserveRatio(false);
         userProfilePictureImageView.setImage(ImageResources.BLANK_USER_PROFILE_PICTURE_LIGHT.getImage());
         final Rectangle profilePictureClip = Clipping.getSquareClip(196.0, 30.0);
         userProfilePictureImageView.setClip(profilePictureClip);
@@ -117,6 +127,8 @@ public class UserViewController implements FxmlController {
 
         asyncIO.loadImage(user.getOriginalProfileImageURLHttps())
                .thenAcceptAsync(userProfilePictureImageView::setImage, Platform::runLater);
+        asyncIO.loadImage(user.getProfileBannerRetinaURL())
+               .thenAcceptAsync(userBanner::setImage, Platform::runLater);
 
         final FxmlLoadResult<Pane, UserTimelineController> userTimelineLoad = easyFxml.loadNode(
                 Components.USER_TIMELINE,

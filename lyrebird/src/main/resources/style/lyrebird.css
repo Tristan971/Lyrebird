@@ -29,6 +29,10 @@
     -fx-background-color: -fx-background-dark;
 }
 
+.transparent-dark-background-opacity {
+    -fx-background-color: rgba(43, 43, 48, 0.85);
+}
+
 .text-area {
     -fx-stroke-width: 1;
     -fx-background-color: snow;
