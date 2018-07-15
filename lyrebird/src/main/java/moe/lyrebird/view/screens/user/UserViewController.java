@@ -27,8 +27,10 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
+import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
+import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.User;
@@ -43,6 +45,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.FOLLOW;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -92,6 +95,9 @@ public class UserViewController implements FxmlController {
 
     @Override
     public void initialize() {
+        userProfilePictureImageView.setImage(ImageResources.BLANK_USER_PROFILE_PICTURE_LIGHT.getImage());
+        final Rectangle profilePictureClip = Clipping.getSquareClip(196.0, 30.0);
+        userProfilePictureImageView.setClip(profilePictureClip);
         if (targetUser.getValue() == null) {
             this.targetUser.addListener((o, prev, cur) -> displayTargetUser());
         } else {
