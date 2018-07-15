@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.components.user;
+package moe.lyrebird.view.screens.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -75,16 +75,12 @@ public class UserViewController implements FxmlController {
         this.userTimeline = userTimeline;
         this.interractionService = interractionService;
         this.targetUser = new ReadOnlyObjectWrapper<>();
-        this.targetUser.bindBidirectional(userTimeline.targetUserProperty());
+        this.targetUser.bind(userTimeline.targetUserProperty());
         this.targetUser.addListener((o, prev, cur) -> handleTargetUserSet());
     }
 
     @Override
     public void initialize() {
-    }
-
-    public void setTargetUser(final User targetUser) {
-        this.targetUser.setValue(targetUser);
     }
 
     private void handleTargetUserSet() {
