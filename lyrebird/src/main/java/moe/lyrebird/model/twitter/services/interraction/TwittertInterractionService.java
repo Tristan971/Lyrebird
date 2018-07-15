@@ -30,7 +30,7 @@ import twitter4j.User;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 @Component
-public class TwittertInterractionService<T> {
+public class TwittertInterractionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TwittertInterractionService.class);
 
@@ -40,7 +40,7 @@ public class TwittertInterractionService<T> {
         this.sessionManager = sessionManager;
     }
 
-    public T interract(final T target, final TwitterBinaryInterraction<T> twitterBinaryInterraction) {
+    public <T> T interract(final T target, final TwitterBinaryInterraction<T> twitterBinaryInterraction) {
         if (twitterBinaryInterraction.shouldDo().apply(this, target)) {
             return twitterBinaryInterraction.onTrue().apply(this, target);
         } else {

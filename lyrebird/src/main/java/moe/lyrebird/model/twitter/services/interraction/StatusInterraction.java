@@ -22,7 +22,7 @@ import twitter4j.Status;
 
 import java.util.function.BiFunction;
 
-public enum StatusInterraction implements TwitterBinaryInterraction {
+public enum StatusInterraction implements TwitterBinaryInterraction<Status> {
     LIKE(
             TwittertInterractionService::like,
             TwittertInterractionService::unlike,
