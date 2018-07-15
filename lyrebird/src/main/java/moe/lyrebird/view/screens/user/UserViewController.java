@@ -66,6 +66,9 @@ public class UserViewController implements FxmlController {
     private Label userIdLabel;
 
     @FXML
+    public Label userDescription;
+
+    @FXML
     private Button followSwitchButton;
 
     @FXML
@@ -106,10 +109,13 @@ public class UserViewController implements FxmlController {
     }
 
     private void displayTargetUser() {
-        userNameLabel.setText(targetUser.getValue().getName());
-        userIdLabel.setText("@" + targetUser.getValue().getScreenName());
-        followSwitchButton.setOnAction(e -> interractionService.interract(targetUser.getValue(), FOLLOW));
-        asyncIO.loadImage(targetUser.getValue().getOriginalProfileImageURLHttps())
+        final User user = targetUser.getValue();
+        userNameLabel.setText(user.getName());
+        userIdLabel.setText("@" + user.getScreenName());
+        followSwitchButton.setOnAction(e -> interractionService.interract(user, FOLLOW));
+        userDescription.setText(user.getDescription());
+
+        asyncIO.loadImage(user.getOriginalProfileImageURLHttps())
                .thenAcceptAsync(userProfilePictureImageView::setImage, Platform::runLater);
 
         final FxmlLoadResult<Pane, UserTimelineController> userTimelineLoad = easyFxml.loadNode(
@@ -120,7 +126,7 @@ public class UserViewController implements FxmlController {
 
         userTimelineLoad.getController()
                         .onFailure(err -> LOG.error("Could not load user timeline!", err))
-                        .onSuccess(utc -> utc.setTargetUser(targetUser.getValue()));
+                        .onSuccess(utc -> utc.setTargetUser(user));
 
         userTimelineLoad.getNode()
                         .recover(ExceptionHandler::fromThrowable)
