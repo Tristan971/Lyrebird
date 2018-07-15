@@ -43,6 +43,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -83,6 +84,9 @@ public class UserViewController implements FxmlController {
     private Label userIdLabel;
 
     @FXML
+    private Button followButton;
+
+    @FXML
     private Label userTweetCount;
 
     @FXML
@@ -98,8 +102,16 @@ public class UserViewController implements FxmlController {
     private Label userFriendshipStatus;
 
     @FXML
-    private Button followButton;
+    private Label userLocation;
 
+    @FXML
+    private Separator userLocationWebsiteSeparator;
+
+    @FXML
+    private Label userWebsite;
+
+    @FXML
+    private Label userCreationDate;
 
     private final EasyFxml easyFxml;
     private final AsyncIO asyncIO;
@@ -135,7 +147,7 @@ public class UserViewController implements FxmlController {
         userBanner.setImage(ImageResources.BACKGROUND_DARK_1PX.getImage());
 
         userProfilePictureImageView.setImage(ImageResources.BLANK_USER_PROFILE_PICTURE_LIGHT.getImage());
-        final Rectangle profilePictureClip = Clipping.getSquareClip(196.0, 30.0);
+        final Rectangle profilePictureClip = Clipping.getSquareClip(290.0, 50.0);
 
         userProfilePictureImageView.setClip(profilePictureClip);
         if (targetUser.getValue() == null) {
@@ -162,6 +174,29 @@ public class UserViewController implements FxmlController {
         userTweetCount.setText(Integer.toString(user.getStatusesCount()));
         userFollowingCount.setText(Integer.toString(user.getFriendsCount()));
         userFollowerCount.setText(Integer.toString(user.getFollowersCount()));
+
+        userCreationDate.setText(user.getCreatedAt().toString());
+
+        final String userLocationText = user.getLocation();
+        if (userLocationText != null) {
+            userLocation.setText(userLocationText);
+        } else {
+            userLocation.setVisible(false);
+            userLocation.setManaged(false);
+        }
+
+        final String userWebsiteText = user.getURL();
+        if (userWebsiteText != null) {
+            userWebsite.setText(userWebsiteText);
+        } else {
+            userWebsite.setVisible(false);
+            userWebsite.setManaged(false);
+        }
+
+        if (userLocationText == null || userWebsiteText == null) {
+            userLocationWebsiteSeparator.setVisible(false);
+            userLocationWebsiteSeparator.setManaged(false);
+        }
 
     }
 
