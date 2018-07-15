@@ -26,12 +26,12 @@ public enum StatusInterraction implements TwitterBinaryInterraction<Status> {
     LIKE(
             TwitterInterractionService::like,
             TwitterInterractionService::unlike,
-            TwitterInterractionService::shouldLike
+            TwitterInterractionService::notYetLiked
     ),
     RETWEET(
             TwitterInterractionService::retweet,
             TwitterInterractionService::unretweet,
-            TwitterInterractionService::shouldRetweet
+            TwitterInterractionService::notYetRetweeted
     );
 
     private final BiFunction<TwitterInterractionService, Status, Status> onTrue;

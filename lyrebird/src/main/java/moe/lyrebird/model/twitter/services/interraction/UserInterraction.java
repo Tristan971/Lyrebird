@@ -26,7 +26,7 @@ public enum UserInterraction implements TwitterBinaryInterraction<User> {
     FOLLOW(
             TwitterInterractionService::follow,
             TwitterInterractionService::unfollow,
-            TwitterInterractionService::shouldFollow
+            TwitterInterractionService::notYetFollowed
     );
 
     private final BiFunction<TwitterInterractionService, User, User> onTrue;
