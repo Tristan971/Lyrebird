@@ -19,12 +19,28 @@
 package moe.lyrebird.model.update.system;
 
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import oshi.SystemInfo;
+import oshi.software.os.OSProcess;
+import oshi.software.os.OperatingSystem;
 
 @Component
 public class DistribuableExecutionService {
 
-    public String[] getExecutionCommandLine() {
-        return new String[0];
+    private static final Logger LOG = LoggerFactory.getLogger(DistribuableExecutionService.class);
+
+    String[] getExecutionCommandLine() {
+        final SystemInfo currentSystem = new SystemInfo();
+        final OperatingSystem currentOs = currentSystem.getOperatingSystem();
+        final OSProcess lyrebirdProcess = currentOs.getProcess(currentOs.getProcessId());
+        LOG.debug(
+                "Current process : [name = {}, id = {}, cmdLine = {}]",
+                lyrebirdProcess.getName(),
+                lyrebirdProcess.getProcessID(),
+                lyrebirdProcess.getCommandLine()
+        );
+        return lyrebirdProcess.getCommandLine().split(" ");
     }
 
 }
