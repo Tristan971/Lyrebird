@@ -31,19 +31,19 @@ import java.util.Arrays;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class DistribuableInstallationServiceTest {
+public class BinaryInstallationServiceTest {
 
     @Autowired
     private LyrebirdServerClient lyrebirdServerClient;
 
     @Autowired
-    private DistribuableInstallationService distribuableInstallationService;
+    private BinaryInstallationService binaryInstallationService;
 
     @Test
     public void getInstallationCommandLine() {
         final LyrebirdVersion latestVersion = lyrebirdServerClient.getLatestVersion();
 
-        final String[] installationCommandLine = distribuableInstallationService.getInstallationCommandLine(
+        final String[] installationCommandLine = binaryInstallationService.getInstallationCommandLine(
                 TargetPlatform.WINDOWS,
                 latestVersion
         );

@@ -35,23 +35,23 @@ public class SelfupdateService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SelfupdateService.class);
 
-    private final DistribuableBinaryPlatformService distribuableBinaryPlatformService;
-    private final DistribuableInstallationService distribuableInstallationService;
+    private final BinaryChoiceService binaryChoiceService;
+    private final BinaryInstallationService binaryInstallationService;
 
     @Autowired
     public SelfupdateService(
-            final DistribuableBinaryPlatformService distribuableBinaryPlatformService,
-            final DistribuableInstallationService distribuableInstallationService
+            final BinaryChoiceService binaryChoiceService,
+            final BinaryInstallationService binaryInstallationService
     ) {
-        this.distribuableBinaryPlatformService = distribuableBinaryPlatformService;
-        this.distribuableInstallationService = distribuableInstallationService;
+        this.binaryChoiceService = binaryChoiceService;
+        this.binaryInstallationService = binaryInstallationService;
     }
 
     public void selfupdate(final LyrebirdVersion newVersion) {
         LOG.info("Requesting selfupdate to version : {}", newVersion);
 
         CompletableFuture.supplyAsync(() -> {
-            final Option<TargetPlatform> executablePlatform = distribuableBinaryPlatformService.detectRunningPlatform();
+            final Option<TargetPlatform> executablePlatform = binaryChoiceService.detectRunningPlatform();
             if (executablePlatform.isEmpty()) {
                 LOG.error("Lyrebird does not currently support selfupdating on this platform!");
                 throw new UnsupportedOperationException("Cannot selfupdate with current binary platform!");
@@ -73,7 +73,7 @@ public class SelfupdateService {
     private CompletableFuture<Process> installNewVersion(final TargetPlatform platform, final LyrebirdVersion version)
     throws IOException {
         LOG.info("Installing new version for platform {}", platform);
-        final String[] executable = distribuableInstallationService.getInstallationCommandLine(platform, version);
+        final String[] executable = binaryInstallationService.getInstallationCommandLine(platform, version);
         LOG.info("Executing : {}", Arrays.toString(executable));
         return new ProcessBuilder(executable).start().onExit();
     }

@@ -29,13 +29,13 @@ import java.nio.file.StandardCopyOption;
 /**
  * Largely based off of <pre>https://github.com/bitgamma/updatefx/blob/master/src/main/java/com/briksoftware/updatefx/core/InstallerService.java</pre>
  */
-public final class InstallationExecutableHelper {
+public final class BinaryInstallationHelper {
 
     private static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir");
     private static final String LYREBIRD_DL_FOLDER = "lyrebird";
     private static final int LYREBIRD_PROCESS_ID = new SystemInfo().getOperatingSystem().getProcessId();
 
-    private InstallationExecutableHelper() {
+    private BinaryInstallationHelper() {
         throw new IllegalStateException("Not instianciable class.");
     }
 

@@ -26,9 +26,9 @@ import org.slf4j.LoggerFactory;
 import oshi.SystemInfo;
 
 @Component
-public class DistribuableBinaryPlatformService {
+public class BinaryChoiceService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DistribuableBinaryPlatformService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BinaryChoiceService.class);
 
     public boolean currentPlatformSupportsSelfupdate() {
         return detectRunningPlatform().isDefined();

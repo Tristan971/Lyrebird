@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.api.server.model.objects.LyrebirdPackage;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.api.server.model.objects.TargetPlatform;
-import moe.lyrebird.model.update.system.installation.InstallationExecutableHelper;
+import moe.lyrebird.model.update.system.installation.BinaryInstallationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,9 +35,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 @Component
-public class DistribuableInstallationService {
+public class BinaryInstallationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DistribuableInstallationService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BinaryInstallationService.class);
 
     private static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir");
     private static final String LYREBIRD_DL_FOLDER = "lyrebird";
@@ -57,7 +57,7 @@ public class DistribuableInstallationService {
         final LyrebirdPackage lyrebirdPackage = acceptablePackage.get();
         final File downloadedBinary = downloadBinary(lyrebirdPackage.getPackageUrl());
 
-        return InstallationExecutableHelper.generateCommandLineForPlatformWithFile(targetPlatform, downloadedBinary);
+        return BinaryInstallationHelper.generateCommandLineForPlatformWithFile(targetPlatform, downloadedBinary);
     }
 
     private Optional<LyrebirdPackage> findPackageForPlatform(
