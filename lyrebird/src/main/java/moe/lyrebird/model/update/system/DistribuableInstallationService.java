@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.api.server.model.objects.LyrebirdPackage;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.api.server.model.objects.TargetPlatform;
+import moe.lyrebird.model.update.system.installation.InstallationExecutableHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +57,7 @@ public class DistribuableInstallationService {
         final LyrebirdPackage lyrebirdPackage = acceptablePackage.get();
         final File downloadedBinary = downloadBinary(lyrebirdPackage.getPackageUrl());
 
-        return new String[] { System.getenv("CMD"), downloadedBinary.toString() };
+        return InstallationExecutableHelper.generateCommandLineForPlatformWithFile(targetPlatform, downloadedBinary);
     }
 
     private Optional<LyrebirdPackage> findPackageForPlatform(
