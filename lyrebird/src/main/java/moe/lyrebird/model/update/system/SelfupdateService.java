@@ -36,17 +36,14 @@ public class SelfupdateService {
     private static final Logger LOG = LoggerFactory.getLogger(SelfupdateService.class);
 
     private final DistribuableBinaryPlatformService distribuableBinaryPlatformService;
-    private final DistribuableExecutionService distribuableExecutionService;
     private final DistribuableInstallationService distribuableInstallationService;
 
     @Autowired
     public SelfupdateService(
             final DistribuableBinaryPlatformService distribuableBinaryPlatformService,
-            final DistribuableExecutionService distribuableExecutionService,
             final DistribuableInstallationService distribuableInstallationService
     ) {
         this.distribuableBinaryPlatformService = distribuableBinaryPlatformService;
-        this.distribuableExecutionService = distribuableExecutionService;
         this.distribuableInstallationService = distribuableInstallationService;
     }
 
@@ -67,14 +64,6 @@ public class SelfupdateService {
                 LOG.error("Cannot install new version!", e);
                 throw new IllegalStateException("Cannot install new version!", e);
             }
-        }).thenComposeAsync(installProcess -> {
-            LOG.info("Installed new version!");
-            try {
-                return restartApplication();
-            } catch (IOException e) {
-                LOG.error("Cannot restart application!");
-                throw new IllegalStateException("Cannot restart application!", e);
-            }
         }).thenAcceptAsync(restartProcess -> {
             LOG.info("Exiting old version of the application.");
             Runtime.getRuntime().halt(0);
@@ -85,13 +74,6 @@ public class SelfupdateService {
     throws IOException {
         LOG.info("Installing new version for platform {}", platform);
         final String[] executable = distribuableInstallationService.getInstallationCommandLine(platform, version);
-        LOG.info("Executing : {}", Arrays.toString(executable));
-        return new ProcessBuilder(executable).start().onExit();
-    }
-
-    private CompletableFuture<Process> restartApplication() throws IOException {
-        LOG.info("Restarting Lyrebird!");
-        final String[] executable = distribuableExecutionService.getExecutionCommandLine();
         LOG.info("Executing : {}", Arrays.toString(executable));
         return new ProcessBuilder(executable).start().onExit();
     }
