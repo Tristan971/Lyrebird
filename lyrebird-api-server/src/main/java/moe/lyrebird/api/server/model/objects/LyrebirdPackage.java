@@ -45,4 +45,12 @@ public final class LyrebirdPackage {
         return packageUrl;
     }
 
+    @Override
+    public String toString() {
+        return "LyrebirdPackage{" +
+               "targetPlatform=" + targetPlatform +
+               ", packageUrl=" + packageUrl +
+               '}';
+    }
+
 }
