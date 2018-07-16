@@ -26,9 +26,13 @@ import moe.lyrebird.api.server.model.objects.TargetPlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Component
 public class SelfupdateService {
@@ -65,8 +69,14 @@ public class SelfupdateService {
                 throw new IllegalStateException("Cannot install new version!", e);
             }
         }).thenAcceptAsync(restartProcess -> {
-            LOG.info("Exiting old version of the application.");
-            Runtime.getRuntime().halt(0);
+            try {
+                restartProcess.onExit().get();
+                displayRestartAlert();
+                LOG.info("Exiting old version of the application.");
+                Runtime.getRuntime().halt(0);
+            } catch (final InterruptedException | ExecutionException e) {
+                LOG.error("Could not finish updating Lyrebird!", e);
+            }
         });
     }
 
@@ -76,6 +86,16 @@ public class SelfupdateService {
         final String[] executable = binaryInstallationService.getInstallationCommandLine(platform, version);
         LOG.info("Executing : {}", Arrays.toString(executable));
         return new ProcessBuilder(executable).start().onExit();
+    }
+
+    private void displayRestartAlert() {
+        final Alert restartAlert = new Alert(
+                Alert.AlertType.INFORMATION,
+                "Lyrebird has successfully been updated! " +
+                "The application will automatically quit, please reopen it afterwards :-)",
+                ButtonType.OK
+        );
+        restartAlert.showAndWait();
     }
 
 }
