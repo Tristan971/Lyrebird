@@ -28,6 +28,7 @@ import moe.lyrebird.api.server.model.objects.TargetPlatform;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -46,10 +47,14 @@ public class DistribuableInstallationServiceTest {
 
         final List<LyrebirdPackage> packages = latestVersion.getPackages();
 
-        distribuableInstallationService.getInstallationCommandLine(
+        final String[] installationCommandLine = distribuableInstallationService.getInstallationCommandLine(
                 TargetPlatform.WINDOWS,
                 latestVersion
         );
+
+        System.out.println(Arrays.toString(installationCommandLine));
+
+        //new ProcessBuilder(installationCommandLine).start().onExit().get();
     }
 
 }
