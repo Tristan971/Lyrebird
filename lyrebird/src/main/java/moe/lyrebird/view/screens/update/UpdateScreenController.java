@@ -27,7 +27,9 @@ import moe.lyrebird.model.update.UpdateService;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebView;
 
@@ -71,7 +73,7 @@ public class UpdateScreenController implements FxmlController {
         final boolean canSelfupdate = updateService.selfupdateCompatible();
         updateButton.setVisible(canSelfupdate);
         updateButton.setManaged(canSelfupdate);
-        updateButton.setOnAction(e -> updateService.selfupdate());
+        updateButton.setOnAction(e -> startSelfupdate());
     }
 
     private void displayVersion(final LyrebirdVersion latestVersion) {
@@ -82,6 +84,17 @@ public class UpdateScreenController implements FxmlController {
 
         updateService.getLatestChangeNotes()
                      .thenAcceptAsync(this.changeNotesWebView.getEngine()::loadContent, Platform::runLater);
+    }
+
+    private void startSelfupdate() {
+        this.updateButton.setDisable(true);
+        final Alert selfupdateStartedAlert = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "Lyrebird will start updating in the background. We will tell you when it is done!",
+                ButtonType.OK
+        );
+        selfupdateStartedAlert.showAndWait();
+        this.updateService.selfupdate();
     }
 
 }
