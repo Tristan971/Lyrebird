@@ -45,7 +45,7 @@ public class CreditsService {
     private final ObservableList<CredittedWork> credittedWorks;
 
     @Autowired
-    public CreditsService(ObjectMapper objectMapper) {
+    public CreditsService(final ObjectMapper objectMapper) {
         this.credittedWorks = unmodifiableObservableList(observableList(loadCreditsFiles(
                 objectMapper,
                 new PathMatchingResourcePatternResolver()

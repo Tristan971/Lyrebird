@@ -33,7 +33,7 @@ public enum MediaEntityType {
 
     private final String codeName;
 
-    MediaEntityType(String codeName) {
+    MediaEntityType(final String codeName) {
         this.codeName = codeName;
     }
 

@@ -87,7 +87,7 @@ public class NewTweetService {
         return statusUpdate;
     }
 
-    private static List<Long> uploadMedias(Twitter twitter, final List<File> attachments) {
+    private static List<Long> uploadMedias(final Twitter twitter, final List<File> attachments) {
         return attachments.stream()
                           .map(unchecked((CheckedFunction1<File, UploadedMedia>) twitter::uploadMedia))
                           .map(UploadedMedia::getMediaId)

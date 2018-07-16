@@ -92,9 +92,9 @@ public class DistribuableInstallationService {
     }
 
     private long downloadFileImpl(final URL binaryUrl, final File targetFile) {
-        try (InputStream binaryInputStream = binaryUrl.openStream()) {
+        try (final InputStream binaryInputStream = binaryUrl.openStream()) {
             return Files.copy(binaryInputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error("Could not download binary!", e);
             throw new IllegalStateException("Could not download binary! [" + binaryUrl.toExternalForm() + "]", e);
         }

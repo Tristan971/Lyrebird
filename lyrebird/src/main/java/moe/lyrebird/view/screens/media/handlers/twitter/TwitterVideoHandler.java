@@ -31,12 +31,12 @@ import java.util.Comparator;
 @Component
 public class TwitterVideoHandler extends VideoHandler<MediaEntity.Variant[]> {
 
-    public TwitterVideoHandler(EmbeddedMediaViewHelper embeddedMediaViewHelper) {
+    public TwitterVideoHandler(final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
         super(embeddedMediaViewHelper);
     }
 
     @Override
-    public Pane handleMedia(MediaEntity.Variant[] mediaSource) {
+    public Pane handleMedia(final MediaEntity.Variant[] mediaSource) {
         final var best = Arrays.stream(mediaSource).max(Comparator.comparingInt(MediaEntity.Variant::getBitrate));
         final MediaEntity.Variant bestVersion = best.orElseThrow();
         return handleMediaSource(bestVersion.getUrl());

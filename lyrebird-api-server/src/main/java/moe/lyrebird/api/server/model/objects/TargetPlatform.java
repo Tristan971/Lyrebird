@@ -33,7 +33,7 @@ public enum TargetPlatform {
     private final String codename;
     private final String readableName;
 
-    TargetPlatform(String codename, String readableName) {
+    TargetPlatform(final String codename, final String readableName) {
         this.codename = codename;
         this.readableName = readableName;
     }

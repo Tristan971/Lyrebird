@@ -101,7 +101,7 @@ public class NewTweetController implements FxmlController, StageAware {
     }
 
     @Override
-    public void setStage(Stage embeddingStage) {
+    public void setStage(final Stage embeddingStage) {
         this.embeddingStage.setValue(embeddingStage);
     }
 

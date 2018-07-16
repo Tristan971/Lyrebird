@@ -55,7 +55,7 @@ public class BackendComponents {
     @Bean
     public SessionManager sessionManager(final ApplicationContext context, final SessionRepository sessionRepository) {
         final SessionManager sessionManager = new SessionManager(context, sessionRepository);
-        long loadedSessions = sessionManager.loadAllSessions();
+        final long loadedSessions = sessionManager.loadAllSessions();
         LOG.info("Loaded {} previously saved sessions.", loadedSessions);
         return sessionManager;
     }

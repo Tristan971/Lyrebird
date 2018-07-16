@@ -59,7 +59,7 @@ public class VideoScreenController extends MediaScreenController {
     private final ObjectProperty<Media> mediaProperty;
 
     @Autowired
-    public VideoScreenController(AsyncIO asyncIO) {
+    public VideoScreenController(final AsyncIO asyncIO) {
         this.asyncIO = asyncIO;
         mediaProperty = new SimpleObjectProperty<>(TEMPORARY_MEDIA_LOAD);
     }
@@ -72,7 +72,7 @@ public class VideoScreenController extends MediaScreenController {
     }
 
     @Override
-    public void handleMedia(String mediaUrl) {
+    public void handleMedia(final String mediaUrl) {
         asyncIO.loadMedia(mediaUrl).thenAcceptAsync(mediaProperty::setValue, Platform::runLater);
     }
 
@@ -119,7 +119,7 @@ public class VideoScreenController extends MediaScreenController {
     }
 
     @Override
-    public void setStage(Stage embeddingStage) {
+    public void setStage(final Stage embeddingStage) {
         embeddingStage.setOnCloseRequest(e -> {
             final MediaPlayer mediaPlayer = mediaView.getMediaPlayer();
             if (mediaPlayer != null) {

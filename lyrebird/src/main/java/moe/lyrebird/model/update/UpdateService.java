@@ -36,11 +36,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 @Component
 public class UpdateService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UpdateService.class);
+    private static final Pattern BUILD_VERSION_PATTERN = Pattern.compile("\\.");
 
     private final ScheduledExecutorService updateExecutor;
     private final MarkdownRenderingService markdownRenderingService;
@@ -57,7 +59,7 @@ public class UpdateService {
             @Qualifier("updateExecutor") final ScheduledExecutorService updateExecutor,
             final MarkdownRenderingService markdownRenderingService,
             final LyrebirdServerClient apiClient,
-            NotificationService notificationService, final Environment environment
+            final NotificationService notificationService, final Environment environment
     ) {
         this.updateExecutor = updateExecutor;
         this.markdownRenderingService = markdownRenderingService;
@@ -105,13 +107,13 @@ public class UpdateService {
             LOG.debug("Latest version : {}", latestVersionServer.getVersion());
             this.latestVersion.setValue(latestVersionServer);
             isUpdateAvailable.setValue(latestVersionServer.getBuildVersion() > currentBuildVersion);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("Could not check for updates !", e);
         }
     }
 
     private int getCurrentBuildVersion() {
-        final String formatted = currentVersion.replaceAll("\\.", "");
+        final String formatted = BUILD_VERSION_PATTERN.matcher(currentVersion).replaceAll("");
         return Integer.parseInt(formatted);
     }
 
