@@ -67,6 +67,11 @@ public class UpdateScreenController implements FxmlController {
     public void initialize() {
         updateService.getLatestVersion()
                      .thenAcceptAsync(this::displayVersion, Platform::runLater);
+
+        final boolean canSelfupdate = updateService.selfupdateCompatible();
+        updateButton.setVisible(canSelfupdate);
+        updateButton.setManaged(canSelfupdate);
+        updateButton.setOnAction(e -> updateService.selfupdate());
     }
 
     private void displayVersion(final LyrebirdVersion latestVersion) {

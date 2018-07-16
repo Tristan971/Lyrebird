@@ -80,6 +80,10 @@ public class SelfupdateService {
         });
     }
 
+    public boolean selfupdateCompatible() {
+        return binaryChoiceService.currentPlatformSupportsSelfupdate();
+    }
+
     private CompletableFuture<Process> installNewVersion(final TargetPlatform platform, final LyrebirdVersion version)
     throws IOException {
         LOG.info("Installing new version for platform {}", platform);

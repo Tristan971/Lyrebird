@@ -25,6 +25,7 @@ import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
+import moe.lyrebird.model.update.system.SelfupdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,7 @@ public class UpdateService {
     private final MarkdownRenderingService markdownRenderingService;
     private final LyrebirdServerClient apiClient;
     private final NotificationService notificationService;
+    private final SelfupdateService selfupdateService;
 
     private final String currentVersion;
     private final int currentBuildVersion;
@@ -59,12 +61,15 @@ public class UpdateService {
             @Qualifier("updateExecutor") final ScheduledExecutorService updateExecutor,
             final MarkdownRenderingService markdownRenderingService,
             final LyrebirdServerClient apiClient,
-            final NotificationService notificationService, final Environment environment
+            final NotificationService notificationService,
+            final SelfupdateService selfupdateService,
+            final Environment environment
     ) {
         this.updateExecutor = updateExecutor;
         this.markdownRenderingService = markdownRenderingService;
         this.apiClient = apiClient;
         this.notificationService = notificationService;
+        this.selfupdateService = selfupdateService;
         this.currentVersion = environment.getRequiredProperty("app.version");
         this.currentBuildVersion = getCurrentBuildVersion();
         this.isUpdateAvailable.addListener((o, prev, cur) -> handleUpdateStatus(prev, cur));
@@ -89,6 +94,14 @@ public class UpdateService {
                 () -> apiClient.getChangeNotes(latestVersion.getValue().getBuildVersion()),
                 updateExecutor
         ).thenApplyAsync(markdownRenderingService::render, updateExecutor);
+    }
+
+    public void selfupdate() {
+        getLatestVersion().thenAccept(selfupdateService::selfupdate);
+    }
+
+    public boolean selfupdateCompatible() {
+        return selfupdateService.selfupdateCompatible();
     }
 
     private void startPolling() {
