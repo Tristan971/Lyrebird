@@ -26,13 +26,13 @@ import moe.lyrebird.api.server.model.objects.TargetPlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @Component
 public class SelfupdateService {
@@ -61,21 +61,19 @@ public class SelfupdateService {
                 throw new UnsupportedOperationException("Cannot selfupdate with current binary platform!");
             }
             return executablePlatform.get();
-        }).thenComposeAsync(platform -> {
+        }).thenAcceptAsync(platform -> {
             try {
-                return installNewVersion(platform, newVersion);
-            } catch (IOException e) {
+                installNewVersion(platform, newVersion).onExit().thenAcceptAsync(installProcess -> {
+                    LOG.info("Installation of new version finished!");
+                    Platform.runLater(() -> {
+                        displayRestartAlert();
+                        LOG.info("Exiting old version of the application.");
+                        Runtime.getRuntime().halt(0);
+                    });
+                });
+            } catch (final IOException e) {
                 LOG.error("Cannot install new version!", e);
                 throw new IllegalStateException("Cannot install new version!", e);
-            }
-        }).thenAcceptAsync(restartProcess -> {
-            try {
-                restartProcess.onExit().get();
-                displayRestartAlert();
-                LOG.info("Exiting old version of the application.");
-                Runtime.getRuntime().halt(0);
-            } catch (final InterruptedException | ExecutionException e) {
-                LOG.error("Could not finish updating Lyrebird!", e);
             }
         });
     }
@@ -84,15 +82,16 @@ public class SelfupdateService {
         return binaryChoiceService.currentPlatformSupportsSelfupdate();
     }
 
-    private CompletableFuture<Process> installNewVersion(final TargetPlatform platform, final LyrebirdVersion version)
+    private Process installNewVersion(final TargetPlatform platform, final LyrebirdVersion version)
     throws IOException {
         LOG.info("Installing new version for platform {}", platform);
         final String[] executable = binaryInstallationService.getInstallationCommandLine(platform, version);
         LOG.info("Executing : {}", Arrays.toString(executable));
-        return new ProcessBuilder(executable).start().onExit();
+        return new ProcessBuilder(executable).start();
     }
 
     private void displayRestartAlert() {
+        LOG.debug("Displaying restart information alert!");
         final Alert restartAlert = new Alert(
                 Alert.AlertType.INFORMATION,
                 "Lyrebird has successfully been updated! " +
