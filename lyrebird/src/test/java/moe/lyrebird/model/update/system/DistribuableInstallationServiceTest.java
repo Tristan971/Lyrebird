@@ -22,14 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import moe.lyrebird.api.client.LyrebirdServerClient;
-import moe.lyrebird.api.server.model.objects.LyrebirdPackage;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.api.server.model.objects.TargetPlatform;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Arrays;
-import java.util.List;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -45,8 +43,6 @@ public class DistribuableInstallationServiceTest {
     public void getInstallationCommandLine() {
         final LyrebirdVersion latestVersion = lyrebirdServerClient.getLatestVersion();
 
-        final List<LyrebirdPackage> packages = latestVersion.getPackages();
-
         final String[] installationCommandLine = distribuableInstallationService.getInstallationCommandLine(
                 TargetPlatform.WINDOWS,
                 latestVersion
@@ -54,7 +50,7 @@ public class DistribuableInstallationServiceTest {
 
         System.out.println(Arrays.toString(installationCommandLine));
 
-        //new ProcessBuilder(installationCommandLine).start().onExit().get();
+        //new ProcessBuilder(installationCommandLine).start();
     }
 
 }
