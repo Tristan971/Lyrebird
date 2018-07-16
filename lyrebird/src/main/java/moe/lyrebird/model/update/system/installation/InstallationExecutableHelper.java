@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * Largely based off of <pre>https://github.com/bitgamma/updatefx/blob/master/src/main/java/com/briksoftware/updatefx/core/InstallerService.java</pre>
+ */
 public final class InstallationExecutableHelper {
 
     private static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir");

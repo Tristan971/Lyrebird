@@ -1,0 +1,15 @@
+{
+  "title": "Selfupdate scripts",
+  "author": {
+    "name": "Michele & Ksenia Balistreri",
+    "url": "https://github.com/briksoftware"
+  },
+  "licensor": {
+    "name": "UpdateFX project",
+    "url": "https://github.com/bitgamma/updatefx"
+  },
+  "license": {
+    "name": "The MIT License (MIT)",
+    "url": "https://github.com/bitgamma/updatefx/blob/master/LICENSE"
+  }
+}
