@@ -25,6 +25,7 @@ import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Twitter;
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 
 import javafx.beans.property.Property;
@@ -34,7 +35,6 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -82,10 +82,12 @@ public class SessionManager {
         return currentSessionUsername;
     }
 
-    public Optional<Session> getSessionForUser(final String userId) {
-        return this.loadedSessions.stream()
-                                  .filter(session -> session.getUserId().equals(userId))
-                                  .findFirst();
+    public boolean isCurrentUser(final User user) {
+        return currentSessionProperty().getValue()
+                                       .getTwitterUser()
+                                       .map(User::getId)
+                                       .map(curUserId -> curUserId == user.getId())
+                                       .getOrElse(false);
     }
 
     public Try<Twitter> getCurrentTwitter() {
@@ -128,11 +130,6 @@ public class SessionManager {
         );
 
         return finalSize - initialSize;
-    }
-
-    public void reloadAllSessions() {
-        this.loadedSessions.clear();
-        this.loadAllSessions();
     }
 
     private void loadSession(final Session session) {
