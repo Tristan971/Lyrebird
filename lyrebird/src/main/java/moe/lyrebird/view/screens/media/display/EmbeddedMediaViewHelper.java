@@ -44,7 +44,7 @@ public class EmbeddedMediaViewHelper {
 
     private final EasyFxml easyFxml;
 
-    public EmbeddedMediaViewHelper(EasyFxml easyFxml) {
+    public EmbeddedMediaViewHelper(final EasyFxml easyFxml) {
         this.easyFxml = easyFxml;
     }
 
@@ -80,7 +80,7 @@ public class EmbeddedMediaViewHelper {
         return containerPane;
     }
 
-    private void setOnOpen(final MediaDisplaySceen screenToLoad, final Node clickable, String mediaUrl) {
+    private void setOnOpen(final MediaDisplaySceen screenToLoad, final Node clickable, final String mediaUrl) {
         clickable.setOnMouseClicked(e -> {
             final FxmlLoadResult<Pane, MediaScreenController> mediaScreenLoad = loadMediaScreen(screenToLoad, mediaUrl);
             final Pane mediaScreenPane = mediaScreenLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);

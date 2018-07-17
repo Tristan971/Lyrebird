@@ -25,7 +25,7 @@ public final class Notification {
     private final String title;
     private final String text;
 
-    public Notification(String title, String text) {
+    public Notification(final String title, final String text) {
         this.title = title;
         this.text = text;
     }
@@ -44,14 +44,14 @@ public final class Notification {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (!(o instanceof Notification)) {
             return false;
         }
-        Notification that = (Notification) o;
+        final Notification that = (Notification) o;
         return Objects.equals(getTitle(), that.getTitle()) &&
                Objects.equals(getText(), that.getText());
     }

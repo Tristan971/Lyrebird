@@ -31,7 +31,7 @@ public class NotificationService {
     private final AwtNotificationService awtNotificationService;
 
     @Autowired
-    public NotificationService(AwtNotificationService awtNotificationService) {
+    public NotificationService(final AwtNotificationService awtNotificationService) {
         this.awtNotificationService = awtNotificationService;
     }
 

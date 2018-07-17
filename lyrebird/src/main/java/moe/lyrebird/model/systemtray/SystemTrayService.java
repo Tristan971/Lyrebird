@@ -46,7 +46,7 @@ public class SystemTrayService {
 
     private final Property<TrayIcon> lyrebirdTrayIcon = new SimpleObjectProperty<>(null);
 
-    public SystemTrayService(StageManager stageManager) {
+    public SystemTrayService(final StageManager stageManager) {
         this.stageManager = stageManager;
         CompletableFuture.supplyAsync(this::loadTrayImage, SwingUtilities::invokeLater)
                          .thenApplyAsync(this::buildTrayIcon, SwingUtilities::invokeLater)
@@ -72,7 +72,7 @@ public class SystemTrayService {
         try {
             SystemTray.getSystemTray().add(trayIcon);
             lyrebirdTrayIcon.setValue(trayIcon);
-        } catch (AWTException e) {
+        } catch (final AWTException e) {
             LOG.error("Could not register tray icon!", e);
         }
     }

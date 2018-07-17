@@ -36,14 +36,14 @@ public class CreditsCell extends ComponentListCell<CredittedWork> {
 
     private final BooleanProperty shouldDisplay;
 
-    public CreditsCell(EasyFxml easyFxml) {
+    public CreditsCell(final EasyFxml easyFxml) {
         super(easyFxml, Components.CREDIT);
         this.shouldDisplay = new SimpleBooleanProperty(false);
         this.cellNode.visibleProperty().bind(shouldDisplay);
     }
 
     @Override
-    protected void updateItem(CredittedWork item, boolean empty) {
+    protected void updateItem(final CredittedWork item, final boolean empty) {
         super.updateItem(item, empty);
         this.shouldDisplay.setValue(item != null && !empty);
     }

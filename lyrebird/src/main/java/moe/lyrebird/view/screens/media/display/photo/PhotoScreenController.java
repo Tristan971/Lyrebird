@@ -59,7 +59,7 @@ public class PhotoScreenController extends MediaScreenController {
     }
 
     @Override
-    public void handleMedia(String mediaUrl) {
+    public void handleMedia(final String mediaUrl) {
         imageProp.setValue(cachedIO.loadImage(mediaUrl));
     }
 

@@ -47,7 +47,7 @@ public class VersionController {
     private final VersionService versionService;
 
     @Autowired
-    public VersionController(VersionService versionService) {
+    public VersionController(final VersionService versionService) {
         this.versionService = versionService;
     }
 
@@ -58,9 +58,9 @@ public class VersionController {
 
     @GetMapping(value = VERSIONS_CHANGENOTES, produces = MediaType.TEXT_MARKDOWN_VALUE)
     public String getChangeNotes(@PathVariable final int buildVersion) {
-        try (InputStream fis = getClass().getClassLoader().getResourceAsStream("versions/"+buildVersion+".md")) {
+        try (final InputStream fis = getClass().getClassLoader().getResourceAsStream("versions/" + buildVersion + ".md")) {
             return StreamUtils.copyToString(fis, StandardCharsets.UTF_8);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error("Could not load changenotes for buildversion "+buildVersion, e);
             return "Could not load changenotes.";
         }

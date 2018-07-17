@@ -32,7 +32,7 @@ public enum MediaDisplaySceen implements FxmlNode {
     private final String file;
     private final Class<? extends MediaScreenController> mediaScreenController;
 
-    MediaDisplaySceen(String file, Class<? extends MediaScreenController> mediaScreenController) {
+    MediaDisplaySceen(final String file, final Class<? extends MediaScreenController> mediaScreenController) {
         this.file = file;
         this.mediaScreenController = mediaScreenController;
     }

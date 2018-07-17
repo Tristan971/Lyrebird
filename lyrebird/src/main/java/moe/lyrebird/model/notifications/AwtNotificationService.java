@@ -34,7 +34,7 @@ public class AwtNotificationService {
 
     private final Property<TrayIcon> lyrebirdTrayIcon;
 
-    public AwtNotificationService(SystemTrayService trayService) {
+    public AwtNotificationService(final SystemTrayService trayService) {
         this.lyrebirdTrayIcon = trayService.lyrebirdTrayIconProperty();
     }
 

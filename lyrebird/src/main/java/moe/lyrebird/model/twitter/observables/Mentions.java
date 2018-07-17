@@ -44,12 +44,12 @@ public class Mentions extends TwitterTimelineBaseModel {
     }
 
     @Override
-    protected ResponseList<Status> initialLoad(Twitter twitter) throws TwitterException {
+    protected ResponseList<Status> initialLoad(final Twitter twitter) throws TwitterException {
         return twitter.getMentionsTimeline();
     }
 
     @Override
-    protected ResponseList<Status> backfillLoad(Twitter twitter, Paging paging) throws TwitterException {
+    protected ResponseList<Status> backfillLoad(final Twitter twitter, final Paging paging) throws TwitterException {
         return twitter.getMentionsTimeline(paging);
     }
 

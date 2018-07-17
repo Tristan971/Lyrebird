@@ -213,7 +213,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         return ppClip;
     }
 
-    private BrowserOpeningHyperlink buildHyperlink(String url) {
+    private BrowserOpeningHyperlink buildHyperlink(final String url) {
         return new BrowserOpeningHyperlink(browserSupport::openUrl).withTarget(url);
     }
 }

@@ -32,7 +32,7 @@ public abstract class SimpleNameUrlBinding {
     @JsonProperty
     protected final URL url;
 
-    SimpleNameUrlBinding(String name, String url) throws MalformedURLException {
+    SimpleNameUrlBinding(final String name, final String url) throws MalformedURLException {
         this.name = name;
         this.url = new URL(url);
     }
@@ -46,14 +46,14 @@ public abstract class SimpleNameUrlBinding {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (!(o instanceof SimpleNameUrlBinding)) {
             return false;
         }
-        SimpleNameUrlBinding that = (SimpleNameUrlBinding) o;
+        final SimpleNameUrlBinding that = (SimpleNameUrlBinding) o;
         return Objects.equals(getName(), that.getName()) &&
                Objects.equals(getUrl(), that.getUrl());
     }

@@ -47,7 +47,7 @@ public class DirectMessages {
     private final SessionManager sessionManager;
     private final ObservableMap<User, List<DirectMessage>> directMessagesMap;
 
-    public DirectMessages(SessionManager sessionManager) {
+    public DirectMessages(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
         this.directMessagesMap = FXCollections.observableMap(toMultiValueMap(new ConcurrentHashMap<>()));

@@ -32,7 +32,7 @@ public class DirectVideoHandler extends VideoHandler<String> {
     }
 
     @Override
-    public Pane handleMedia(String mediaSource) {
+    public Pane handleMedia(final String mediaSource) {
         return handleMediaSource(mediaSource);
     }
 
