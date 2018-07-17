@@ -25,6 +25,7 @@ import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
+import moe.lyrebird.model.notifications.NotificationSystemType;
 import moe.lyrebird.model.update.selfupdate.SelfupdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,10 +134,13 @@ public class UpdateService {
     private void handleUpdateStatus(final boolean prev, final boolean cur) {
         if (cur && !prev) {
             LOG.debug("An update was detected. Notifying the user.");
-            notificationService.sendNotification(new Notification(
-                    "Update available!",
-                    "An update is available for Lyrebird, grab it :-)"
-            ));
+            notificationService.sendNotification(
+                    new Notification(
+                            "Update available!",
+                            "An update is available for Lyrebird, grab it :-)"
+                    ),
+                    NotificationSystemType.SYSTEM
+            );
         } else if (!cur) {
             LOG.debug("No update available.");
         }

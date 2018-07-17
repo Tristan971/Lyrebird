@@ -19,25 +19,52 @@
 package moe.lyrebird.model.notifications;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
+import moe.lyrebird.view.screens.Screens;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javafx.stage.Stage;
+
+import static moe.lyrebird.model.notifications.NotificationSystemType.INTERNAL;
+import static moe.lyrebird.model.notifications.NotificationSystemType.SYSTEM;
 
 @Component
 public class NotificationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NotificationService.class);
 
-    private final AwtNotificationService awtNotificationService;
+    private final ApplicationContext context;
+    private final StageManager stageManager;
 
     @Autowired
-    public NotificationService(final AwtNotificationService awtNotificationService) {
-        this.awtNotificationService = awtNotificationService;
+    public NotificationService(
+            final ApplicationContext context,
+            final StageManager stageManager
+    ) {
+        this.context = context;
+        this.stageManager = stageManager;
     }
 
     public void sendNotification(final Notification notification) {
-        LOG.debug("Notifying user : {}", notification);
-        awtNotificationService.displayNotification(notification);
+        LOG.debug("Requesting display of notification with smart display system type.", notification);
+        final Stage mainStage = stageManager.getSingle(Screens.ROOT_VIEW).getOrElseThrow(
+                () -> new IllegalStateException("Can not find main stage.")
+        );
+
+        final boolean isVisible = mainStage.isShowing() && !mainStage.isIconified();
+
+        final NotificationSystemType appropriateNotificationSystem = isVisible ? INTERNAL : SYSTEM;
+        LOG.debug("Determined that the appropriate notification system is {}", appropriateNotificationSystem);
+        sendNotification(notification, appropriateNotificationSystem);
+    }
+
+    public void sendNotification(final Notification notification, final NotificationSystemType notificationSystemType) {
+        LOG.debug("Requesting display of notification {} with type {}", notification, notificationSystemType);
+        context.getBean(notificationSystemType.getNotificationSystemClass())
+               .displayNotification(notification);
     }
 
 }
