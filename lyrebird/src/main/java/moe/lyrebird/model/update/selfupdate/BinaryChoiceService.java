@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.update.system;
+package moe.lyrebird.model.update.selfupdate;
 
 import org.springframework.stereotype.Component;
 import io.vavr.control.Option;

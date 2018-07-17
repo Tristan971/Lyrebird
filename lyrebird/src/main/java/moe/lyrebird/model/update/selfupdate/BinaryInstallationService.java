@@ -16,13 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.update.system;
+package moe.lyrebird.model.update.selfupdate;
 
 import org.springframework.stereotype.Component;
 import moe.lyrebird.api.server.model.objects.LyrebirdPackage;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.api.server.model.objects.TargetPlatform;
-import moe.lyrebird.model.update.system.installation.BinaryInstallationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

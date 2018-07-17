@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.update.system.installation;
+package moe.lyrebird.model.update.selfupdate;
 
 import moe.lyrebird.api.server.model.objects.TargetPlatform;
 import oshi.SystemInfo;

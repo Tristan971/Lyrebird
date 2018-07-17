@@ -25,7 +25,7 @@ import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
-import moe.lyrebird.model.update.system.SelfupdateService;
+import moe.lyrebird.model.update.selfupdate.SelfupdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
