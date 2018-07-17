@@ -16,35 +16,31 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.notifications;
+package moe.lyrebird.model.notifications.system;
 
 import org.springframework.stereotype.Component;
-import moe.lyrebird.model.systemtray.SystemTrayService;
+import moe.lyrebird.model.notifications.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.Property;
-
-import java.awt.TrayIcon;
+import javafx.beans.property.SimpleObjectProperty;
 
 @Component
-public class AwtNotificationService {
+public class InternalNotificationSystem implements NotificationSystem {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AwtNotificationService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(InternalNotificationSystem.class);
 
-    private final Property<TrayIcon> lyrebirdTrayIcon;
+    private final Property<Notification> notificationProperty = new SimpleObjectProperty<>(null);
 
-    public AwtNotificationService(final SystemTrayService trayService) {
-        this.lyrebirdTrayIcon = trayService.lyrebirdTrayIconProperty();
+    @Override
+    public void displayNotification(final Notification notification) {
+        LOG.debug("Queuing notification {} for display", notification);
+        notificationProperty.setValue(notification);
     }
 
-    void displayNotification(final Notification notification) {
-        LOG.debug("Sending AWT native notification : {}", notification);
-        lyrebirdTrayIcon.getValue().displayMessage(
-                notification.getTitle(),
-                notification.getText(),
-                TrayIcon.MessageType.NONE
-        );
+    public Property<Notification> notificationProperty() {
+        return notificationProperty;
     }
 
 }
