@@ -18,28 +18,30 @@
 
 package moe.lyrebird.model.update.selfupdate;
 
+import org.springframework.util.StreamUtils;
+import moe.lyrebird.Lyrebird;
 import moe.lyrebird.api.server.model.objects.TargetPlatform;
-import oshi.SystemInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 
 /**
  * Largely based off of <pre>https://github.com/bitgamma/updatefx/blob/master/src/main/java/com/briksoftware/updatefx/core/InstallerService.java</pre>
  */
-public final class BinaryInstallationHelper {
+final class BinaryInstallationHelper {
 
     private static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir");
     private static final String LYREBIRD_DL_FOLDER = "lyrebird";
-    private static final int LYREBIRD_PROCESS_ID = new SystemInfo().getOperatingSystem().getProcessId();
 
     private BinaryInstallationHelper() {
         throw new IllegalStateException("Not instianciable class.");
     }
 
-    public static String[] generateCommandLineForPlatformWithFile(
+    static String[] generateCommandLineForPlatformWithFile(
             final TargetPlatform targetPlatform,
             final File file
     ) {
@@ -59,16 +61,19 @@ public final class BinaryInstallationHelper {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private static String[] generateForMacOS(final File file) {
         final File tmpFolder = new File(TEMP_FOLDER, LYREBIRD_DL_FOLDER);
-        final File installFile = new File(tmpFolder, "install.sh");
+        final File installScriptTarget = new File(tmpFolder, "install_macos.sh");
         try {
-            Files.copy(file.toPath(), installFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            installFile.setExecutable(true);
-            installFile.setReadable(true);
+            final String installFileData = StreamUtils.copyToString(
+                    Lyrebird.class.getClassLoader().getResourceAsStream("scripts/install_macos.sh"),
+                    StandardCharsets.UTF_8
+            );
+            Files.write(installScriptTarget.toPath(), installFileData.getBytes(), TRUNCATE_EXISTING);
+            installScriptTarget.setExecutable(true);
+            installScriptTarget.setReadable(true);
             return new String[]{
                     "/bin/sh",
-                    installFile.toPath().toAbsolutePath().toString(),
-                    file.toPath().toAbsolutePath().toString(),
-                    String.format("%d", LYREBIRD_PROCESS_ID)
+                    installScriptTarget.toPath().toAbsolutePath().toString(),
+                    file.toPath().toAbsolutePath().toString()
             };
         } catch (final IOException e) {
             throw new IllegalStateException("Could not copy install script to temporary folder!", e);

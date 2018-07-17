@@ -8,8 +8,6 @@ import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
-
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class SelfupdateServiceTest {
