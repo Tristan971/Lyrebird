@@ -27,7 +27,7 @@ public final class Notification {
 
     public Notification(final String title, final String text) {
         this.title = title;
-        this.text = text;
+        this.text = text != null ? text : "";
     }
 
     @Override
