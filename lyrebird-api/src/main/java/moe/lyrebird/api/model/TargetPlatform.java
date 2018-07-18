@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.api.server.model.objects;
+package moe.lyrebird.api.model;
 
 public enum TargetPlatform {
 

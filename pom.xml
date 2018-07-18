@@ -68,8 +68,8 @@
 
     <modules>
         <module>lyrebird</module>
+        <module>lyrebird-api</module>
         <module>lyrebird-api-server</module>
-        <module>lyrebird-api-client</module>
     </modules>
 
     <build>

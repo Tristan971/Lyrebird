@@ -203,7 +203,7 @@
 
         <dependency>
             <groupId>moe.lyrebird</groupId>
-            <artifactId>lyrebird-api-client</artifactId>
+            <artifactId>lyrebird-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 

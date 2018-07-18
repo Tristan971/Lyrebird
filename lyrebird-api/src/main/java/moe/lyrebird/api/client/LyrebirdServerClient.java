@@ -23,13 +23,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
+import moe.lyrebird.api.model.LyrebirdVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CHANGENOTES;
-import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_CONTROLLER;
-import static moe.lyrebird.api.server.controllers.Endpoints.VERSIONS_LATEST;
+import static moe.lyrebird.api.conf.Endpoints.VERSIONS_CHANGENOTES;
+import static moe.lyrebird.api.conf.Endpoints.VERSIONS_CONTROLLER;
+import static moe.lyrebird.api.conf.Endpoints.VERSIONS_LATEST;
 
 @Component
 public class LyrebirdServerClient {

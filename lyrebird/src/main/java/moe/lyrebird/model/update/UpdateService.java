@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.api.client.LyrebirdServerClient;
-import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
+import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
 import moe.lyrebird.model.notifications.NotificationSystemType;

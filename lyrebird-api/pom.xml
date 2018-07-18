@@ -27,29 +27,26 @@
         <version>1.1.0</version>
     </parent>
 
-    <artifactId>lyrebird-api-client</artifactId>
+    <artifactId>lyrebird-api</artifactId>
     <version>1.1.0</version>
     <packaging>jar</packaging>
 
-    <name>lyrebird-api-client</name>
-    <description>Client for Lyrebird API</description>
+    <name>lyrebird-api</name>
+    <description>Lyrebird API model</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>moe.lyrebird</groupId>
-            <artifactId>lyrebird-api-server</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
