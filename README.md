@@ -32,8 +32,8 @@ First (in project folder) : ``$> mvn clean install -DskipTests``
 
 Then any of the following (in `Lyrebird/lyrebird` folder):
 - Execute only (no packaging) : ``$> mvn clean spring-boot:run``
-- For a native image (in ``Lyrebird/lyrebird/target/jfx/native``) : ``$> mvn jfx:native -DskipTests``
-- For a portable JAR file (in ``Lyrebird/lyrebird/target``) : ``$> mvn clean package -DskipTests``
+- For a native installer (will be in ``Lyrebird/lyrebird/target/jfx/native``) : ``$> mvn jfx:native -DskipTests``
+- For a portable JAR file (will be in ``Lyrebird/lyrebird/target``) : ``$> mvn clean package -DskipTests``
 
 ## What does it look like?
 [![Screenshot of current version](docs/img/screenshot.png)](docs/img/screenshot.png)
