@@ -23,14 +23,17 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="180.0" prefWidth="320.0" styleClass="dark" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.newtweet.NewTweetController">
+<AnchorPane prefHeight="180.0" prefWidth="320.0" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.newtweet.NewTweetController">
     <children>
-        <BorderPane fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <BorderPane fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
-                <TextArea fx:id="tweetTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" BorderPane.alignment="CENTER" />
+                <TextArea fx:id="tweetTextArea" prefHeight="200.0" prefWidth="200.0" styleClass="dark" wrapText="true" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin></TextArea>
             </center>
          <bottom>
-            <VBox spacing="10.0" BorderPane.alignment="CENTER">
+            <VBox spacing="10.0" styleClass="dark" BorderPane.alignment="CENTER">
                <children>
                   <HBox fx:id="mediaPreviewBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER" />
                       <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
@@ -48,6 +51,9 @@
                                   </children>
                               </HBox>
                           </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
                       </HBox>
                </children>
                <padding>

@@ -142,6 +142,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
         setUpInterractionButtons();
+        mediaBox.setManaged(false);
+        mediaBox.setVisible(false);
     }
 
     public BooleanProperty embeddedPropertyProperty() {
@@ -244,6 +246,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private void readMedias(final Status status) {
         final List<Node> embeddingNodes = mediaEmbeddingService.embed(status);
+        mediaBox.setManaged(!embeddingNodes.isEmpty());
+        mediaBox.setVisible(!embeddingNodes.isEmpty());
         mediaBox.getChildren().setAll(embeddingNodes);
     }
 
