@@ -30,7 +30,7 @@ what system you want to target. You can only build native images for the current
 
 First (in project folder) : ``$> mvn clean install -DskipTests``
 
-Then any of the following (in ``Lyrebird/lyrebird` folder):
+Then any of the following (in `Lyrebird/lyrebird` folder):
 - Execute only (no packaging) : ``$> mvn clean spring-boot:run``
 - For a native image (in ``Lyrebird/lyrebird/target/jfx/native``) : ``$> mvn jfx:native -DskipTests``
 - For a portable JAR file (in ``Lyrebird/lyrebird/target``) : ``$> mvn clean package -DskipTests``
