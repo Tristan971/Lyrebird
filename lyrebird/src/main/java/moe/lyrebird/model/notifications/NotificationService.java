@@ -49,7 +49,7 @@ public class NotificationService {
     }
 
     public void sendNotification(final Notification notification) {
-        LOG.debug("Requesting display of notification with smart display system type.", notification);
+        LOG.debug("Requesting display of notification with smart display system type.");
         final Stage mainStage = stageManager.getSingle(Screens.ROOT_VIEW).getOrElseThrow(
                 () -> new IllegalStateException("Can not find main stage.")
         );

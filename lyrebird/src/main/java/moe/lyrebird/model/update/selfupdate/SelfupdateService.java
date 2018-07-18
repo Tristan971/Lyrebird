@@ -31,7 +31,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -86,7 +85,7 @@ public class SelfupdateService {
     throws IOException {
         LOG.info("Installing new version for platform {}", platform);
         final String[] executable = binaryInstallationService.getInstallationCommandLine(platform, version);
-        LOG.info("Executing : {}", Arrays.toString(executable));
+        LOG.info("Executing : {}", executable);
         final ProcessBuilder installProcess = new ProcessBuilder(executable);
         installProcess.redirectError(ProcessBuilder.Redirect.INHERIT);
         installProcess.redirectOutput(ProcessBuilder.Redirect.INHERIT);
