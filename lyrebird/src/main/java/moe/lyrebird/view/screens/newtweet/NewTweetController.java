@@ -26,6 +26,7 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Buttons;
+import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
 import moe.lyrebird.view.components.Components;
@@ -35,6 +36,8 @@ import moe.lyrebird.view.util.StageAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
+import twitter4j.User;
+import twitter4j.UserMentionEntity;
 
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -61,6 +64,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -107,24 +111,29 @@ public class NewTweetController implements FxmlController, StageAware {
     private final NewTweetService newTweetService;
     private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
     private final EasyFxml easyFxml;
+    private final SessionManager sessionManager;
 
     private final ListProperty<File> mediasToUpload;
     private final Property<Stage> embeddingStage;
+    private final Property<Status> inReplyStatus = new SimpleObjectProperty<>(null);
 
     public NewTweetController(
             final NewTweetService newTweetService,
             final TwitterMediaExtensionFilter extensionFilter,
-            final EasyFxml easyFxml
+            final EasyFxml easyFxml,
+            final SessionManager sessionManager
     ) {
         this.newTweetService = newTweetService;
         this.twitterMediaExtensionFilter = extensionFilter;
         this.easyFxml = easyFxml;
+        this.sessionManager = sessionManager;
         this.mediasToUpload = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<>()));
         this.embeddingStage = new SimpleObjectProperty<>(null);
     }
 
     @Override
     public void initialize() {
+        LOG.debug("New tweet stage ready.");
         enableTweetLengthCheck();
         Buttons.setOnClick(sendButton, this::sendTweet);
         Buttons.setOnClick(pickMediaButton, this::openMediaAttachmentsFilePicker);
@@ -132,22 +141,42 @@ public class NewTweetController implements FxmlController, StageAware {
         final BooleanBinding mediasNotEmpty = mediasToUpload.emptyProperty().not();
         mediaPreviewBox.visibleProperty().bind(mediasNotEmpty);
         mediaPreviewBox.managedProperty().bind(mediasNotEmpty);
+
+        inReplyStatus.addListener((o, prev, cur) -> prefillMentionsForReply());
     }
 
-    public void setInReplyToTweet(final Status repliedTweetPane) {
+    @Override
+    public void setStage(final Stage embeddingStage) {
+        this.embeddingStage.setValue(embeddingStage);
+    }
+
+    public void setInReplyToTweet(final Status repliedTweet) {
+        LOG.debug("Set new tweet stage to embed status : {}", repliedTweet.getId());
+        inReplyStatus.setValue(repliedTweet);
         easyFxml.loadNode(Components.TWEET, Pane.class, TweetPaneController.class)
                 .afterControllerLoaded(tpc -> {
                     tpc.embeddedPropertyProperty().setValue(true);
-                    tpc.updateWithValue(repliedTweetPane);
+                    tpc.updateWithValue(repliedTweet);
                 })
                 .getNode()
                 .recover(ExceptionHandler::fromThrowable)
                 .onSuccess(this.container::setTop);
     }
 
-    @Override
-    public void setStage(final Stage embeddingStage) {
-        this.embeddingStage.setValue(embeddingStage);
+    private void prefillMentionsForReply() {
+        final User currentUser = sessionManager.currentSessionProperty().getValue().getTwitterUser().get();
+
+        final Status replied = inReplyStatus.getValue();
+        final StringBuilder prefillText = new StringBuilder();
+        prefillText.append('@').append(replied.getUser().getScreenName());
+        Arrays.stream(replied.getUserMentionEntities())
+              .map(UserMentionEntity::getScreenName)
+              .filter(username -> !username.equals(currentUser.getScreenName()))
+              .forEach(username -> prefillText.append(' ').append('@').append(username));
+        prefillText.append(' ');
+        final String prefill = prefillText.toString();
+        tweetTextArea.setText(prefill);
+        tweetTextArea.positionCaret(prefill.length());
     }
 
     private void enableTweetLengthCheck() {
