@@ -88,9 +88,18 @@
                      </left>
                   </BorderPane>
                   <TextFlow fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-                  <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="200.0" spacing="5.0" VBox.vgrow="ALWAYS" />
-                  <HBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
+                  <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="20.0" minWidth="138.0" spacing="5.0" VBox.vgrow="ALWAYS" />
+                  <HBox fx:id="interractionBox" alignment="CENTER_LEFT" spacing="6.0" VBox.vgrow="NEVER">
                      <children>
+                        <HBox fx:id="replyButton" alignment="CENTER" minHeight="28.0" minWidth="28.0">
+                           <children>
+                              <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@/assets/img/reply.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
                         <HBox fx:id="likeButton" alignment="CENTER" minHeight="28.0" minWidth="28.0" HBox.hgrow="NEVER">
                            <children>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
