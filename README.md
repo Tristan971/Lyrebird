@@ -80,19 +80,25 @@ Then any of the following (in ``Lyrebird/lyrebird` folder):
     - [ ] Support geolocation
     
 - [ ] Interraction with tweet
-    - [ ] Reply
+    - [x] Reply
     - [ ] Quote
     - [x] Like (formerly _favourite_)
     - [x] Retweet
+
+- [x] Interraction with users
+    - [x] Follow/unfollow
+    - [ ] Block/mute
+    - [ ] List management
+    - [ ] Report
 
 - [ ] Searches
 
 - [ ] Miscellanelous
     - [x] System notifications
-    - [ ] Internal notifications
-    - [ ] Update system
+    - [x] Internal notifications
+    - [x] Update system
         - [x] Basic update system
-        - [ ] Auto-update
+        - [x] Auto-update
 
 ## Can I contribute?
 Please do!
