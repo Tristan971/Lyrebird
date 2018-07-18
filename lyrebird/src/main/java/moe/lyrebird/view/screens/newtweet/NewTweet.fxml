@@ -22,64 +22,39 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<AnchorPane prefHeight="180.0"
-            prefWidth="320.0"
-            xmlns="http://javafx.com/javafx/8.0.141"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="moe.lyrebird.view.screens.newtweet.NewTweetController"
-            stylesheets="@/style/lyrebird.css"
-            styleClass="dark">
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="180.0" prefWidth="320.0" styleClass="dark" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.newtweet.NewTweetController">
     <children>
-        <BorderPane maxHeight="1.7976931348623157E308"
-                    maxWidth="1.7976931348623157E308"
-                    minWidth="100.0"
-                    AnchorPane.bottomAnchor="5.0"
-                    AnchorPane.leftAnchor="5.0"
-                    AnchorPane.rightAnchor="5.0"
-                    AnchorPane.topAnchor="5.0">
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
             <center>
-                <TextArea fx:id="tweetTextArea"
-                          prefHeight="200.0"
-                          prefWidth="200.0"
-                          wrapText="true"
-                          BorderPane.alignment="CENTER"/>
+                <TextArea fx:id="tweetTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" BorderPane.alignment="CENTER" />
             </center>
-            <bottom>
-                <HBox alignment="CENTER"
-                      maxHeight="1.7976931348623157E308"
-                      maxWidth="1.7976931348623157E308"
-                      spacing="10.0"
-                      BorderPane.alignment="CENTER">
-                    <children>
-                        <HBox alignment="CENTER_LEFT"
-                              maxHeight="1.7976931348623157E308"
-                              maxWidth="1.7976931348623157E308"
-                              prefWidth="1000.0"
-                              spacing="5.0">
-                            <children>
-                                <Button mnemonicParsing="false" text="Add media" fx:id="pickMediaButton"/>
-                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT"
-                              maxHeight="1.7976931348623157E308"
-                              maxWidth="1.7976931348623157E308"
-                              prefWidth="1000.0"
-                              spacing="5.0">
-                            <children>
-                                <Label fx:id="charactersLeft" text="0"/>
-                                <Label text="/ 280"/>
-                                <Button fx:id="sendButton" mnemonicParsing="false" text="Tweet"/>
-                            </children>
-                        </HBox>
-                    </children>
-                    <BorderPane.margin>
-                        <Insets top="5.0"/>
-                    </BorderPane.margin>
-                </HBox>
-            </bottom>
+         <bottom>
+            <VBox spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox fx:id="mediaPreviewBox" VBox.vgrow="NEVER" />
+                      <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
+                          <children>
+                              <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="1000.0" spacing="5.0">
+                                  <children>
+                                      <Button fx:id="pickMediaButton" mnemonicParsing="false" text="Add media" />
+                                  </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="1000.0" spacing="5.0">
+                                  <children>
+                                      <Label fx:id="charactersLeft" text="0" />
+                                      <Label text="/ 280" />
+                                      <Button fx:id="sendButton" mnemonicParsing="false" text="Tweet" />
+                                  </children>
+                              </HBox>
+                          </children>
+                      </HBox>
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </VBox>
+         </bottom>
         </BorderPane>
     </children>
 </AnchorPane>

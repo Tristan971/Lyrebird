@@ -37,15 +37,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Stream;
@@ -72,6 +72,9 @@ public class NewTweetController implements FxmlController, StageAware {
     private Button pickMediaButton;
 
     @FXML
+    private HBox mediaPreviewBox;
+
+    @FXML
     private TextArea tweetTextArea;
 
     @FXML
@@ -80,7 +83,7 @@ public class NewTweetController implements FxmlController, StageAware {
     private final NewTweetService newTweetService;
     private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
 
-    private final Set<File> mediasToUpload;
+    private final List<File> mediasToUpload;
     private final Property<Stage> embeddingStage;
 
     public NewTweetController(
@@ -89,7 +92,7 @@ public class NewTweetController implements FxmlController, StageAware {
     ) {
         this.newTweetService = newTweetService;
         this.twitterMediaExtensionFilter = extensionFilter;
-        this.mediasToUpload = new HashSet<>();
+        this.mediasToUpload = new ArrayList<>();
         this.embeddingStage = new SimpleObjectProperty<>(null);
     }
 
@@ -122,7 +125,7 @@ public class NewTweetController implements FxmlController, StageAware {
 
     private void sendTweet() {
         Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
-        newTweetService.sendNewTweet(tweetTextArea.getText(), new ArrayList<>(mediasToUpload))
+        newTweetService.sendNewTweet(tweetTextArea.getText(), mediasToUpload)
                        .thenAcceptAsync(status -> {
                            LOG.info("Tweeted status : {} [{}]", status.getId(), status.getText());
                            this.embeddingStage.getValue().hide();
@@ -131,8 +134,8 @@ public class NewTweetController implements FxmlController, StageAware {
 
     private void openMediaAttachmentsFilePicker() {
         pickMediaButton.setDisable(true);
-        final CompletionStage<List<File>> pickedMedia = openFileChooserForMedia();
-        pickedMedia.thenAcceptAsync(files -> {
+        this.openFileChooserForMedia()
+            .thenAcceptAsync(files -> {
             mediasToUpload.addAll(files);
             LOG.debug("Added media files for upload with next tweet : {}", files);
             pickMediaButton.setDisable(false);
@@ -149,7 +152,8 @@ public class NewTweetController implements FxmlController, StageAware {
 
         return CompletableFuture.supplyAsync(() -> {
             final Stage stage = this.embeddingStage.getValue();
-            return fileChooser.showOpenMultipleDialog(stage);
+            final List<File> chosenFiles = fileChooser.showOpenMultipleDialog(stage);
+            return chosenFiles != null ? chosenFiles : Collections.emptyList();
         }, Platform::runLater);
     }
 
