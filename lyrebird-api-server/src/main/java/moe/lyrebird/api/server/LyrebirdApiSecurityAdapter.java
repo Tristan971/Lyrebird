@@ -13,10 +13,12 @@ public class LyrebirdApiSecurityAdapter extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/" + Endpoints.VERSIONS_CONTROLLER + "/**").anonymous()
+            .antMatchers("/" + Endpoints.VERSIONS_CONTROLLER + "/**").permitAll()
             .antMatchers("/actuator/**").hasRole("admin")
             .and()
-            .httpBasic();
+            .httpBasic()
+            .and()
+            .headers().httpStrictTransportSecurity();
     }
 
 }
