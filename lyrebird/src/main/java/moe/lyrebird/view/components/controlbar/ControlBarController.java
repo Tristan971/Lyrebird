@@ -30,6 +30,7 @@ import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.screens.root.RootScreenController;
+import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 
 import java.util.List;
 
@@ -102,7 +104,7 @@ public class ControlBarController implements FxmlController {
             current.setOpacity(0.5);
         });
 
-        tweet.setOnMouseClicked(e -> this.openTweetWindow());
+        setUpTweetButton();
 
         bindActionImageToLoadingView(timeline, Components.TIMELINE);
         bindActionImageToLoadingView(mentions, Components.MENTIONS);
@@ -122,6 +124,14 @@ public class ControlBarController implements FxmlController {
         update.managedProperty().bind(updateService.isUpdateAvailableProperty());
         update.visibleProperty().bind(updateService.isUpdateAvailableProperty());
         update.setOnMouseClicked(e -> openUpdatesScreen());
+    }
+
+    private void setUpTweetButton() {
+        tweet.setOnMouseClicked(e -> this.openTweetWindow());
+        final Circle tweetClip = Clipping.getCircleClip(28.0);
+        tweetClip.setCenterX(28.0);
+        tweetClip.setCenterY(28.0);
+        tweet.setClip(tweetClip);
     }
 
     private void loadCurrentAccountPanel() {

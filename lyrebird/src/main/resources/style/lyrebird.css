@@ -64,6 +64,10 @@
     -fx-background-color: #ebebeb;
 }
 
+#tweet {
+    -fx-background-color: #1da1f2;
+}
+
 #tweetButton {
     -fx-background-color: -fx-focus-color;
 }
