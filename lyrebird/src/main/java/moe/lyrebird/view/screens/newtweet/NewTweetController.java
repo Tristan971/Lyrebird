@@ -26,28 +26,40 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
+import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.StageAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vavr.API.$;
@@ -64,6 +76,8 @@ import static javafx.scene.paint.Color.RED;
 public class NewTweetController implements FxmlController, StageAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewTweetController.class);
+
+    private static final double MEDIA_PREVIEW_IMAGE_SIZE = 32.0;
 
     @FXML
     private Button sendButton;
@@ -83,7 +97,7 @@ public class NewTweetController implements FxmlController, StageAware {
     private final NewTweetService newTweetService;
     private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
 
-    private final List<File> mediasToUpload;
+    private final ListProperty<File> mediasToUpload;
     private final Property<Stage> embeddingStage;
 
     public NewTweetController(
@@ -92,7 +106,7 @@ public class NewTweetController implements FxmlController, StageAware {
     ) {
         this.newTweetService = newTweetService;
         this.twitterMediaExtensionFilter = extensionFilter;
-        this.mediasToUpload = new ArrayList<>();
+        this.mediasToUpload = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<>()));
         this.embeddingStage = new SimpleObjectProperty<>(null);
     }
 
@@ -101,6 +115,10 @@ public class NewTweetController implements FxmlController, StageAware {
         enableTweetLengthCheck();
         Buttons.setOnClick(sendButton, this::sendTweet);
         Buttons.setOnClick(pickMediaButton, this::openMediaAttachmentsFilePicker);
+
+        final BooleanBinding mediasNotEmpty = mediasToUpload.emptyProperty().not();
+        mediaPreviewBox.visibleProperty().bind(mediasNotEmpty);
+        mediaPreviewBox.managedProperty().bind(mediasNotEmpty);
     }
 
     @Override
@@ -135,11 +153,10 @@ public class NewTweetController implements FxmlController, StageAware {
     private void openMediaAttachmentsFilePicker() {
         pickMediaButton.setDisable(true);
         this.openFileChooserForMedia()
-            .thenAcceptAsync(files -> {
-            mediasToUpload.addAll(files);
-            LOG.debug("Added media files for upload with next tweet : {}", files);
-            pickMediaButton.setDisable(false);
-        }, Platform::runLater);
+            .thenAcceptAsync(
+                    this::mediaFilesChosen,
+                    Platform::runLater
+            );
     }
 
     private CompletionStage<List<File>> openFileChooserForMedia() {
@@ -155,6 +172,45 @@ public class NewTweetController implements FxmlController, StageAware {
             final List<File> chosenFiles = fileChooser.showOpenMultipleDialog(stage);
             return chosenFiles != null ? chosenFiles : Collections.emptyList();
         }, Platform::runLater);
+    }
+
+    private void mediaFilesChosen(final List<File> selectedFiles) {
+        pickMediaButton.setDisable(false);
+        mediasToUpload.addAll(selectedFiles);
+        LOG.debug("Added media files for upload with next tweet : {}", selectedFiles);
+        final List<ImageView> mediaImagePreviews = selectedFiles.stream()
+                                                                .map(this::buildMediaPreviewImageView)
+                                                                .filter(Objects::nonNull)
+                                                                .collect(Collectors.toList());
+        if (!mediaImagePreviews.isEmpty()) {
+            mediaPreviewBox.getChildren().addAll(mediaImagePreviews);
+        }
+    }
+
+    private ImageView buildMediaPreviewImageView(final File previewedFile) {
+        try {
+            final ImageView imageView = new ImageView();
+            imageView.setFitHeight(MEDIA_PREVIEW_IMAGE_SIZE);
+            imageView.setFitWidth(MEDIA_PREVIEW_IMAGE_SIZE);
+            final URL imageUrl = previewedFile.toURI().toURL();
+            final Image image = new Image(
+                    imageUrl.toExternalForm(),
+                    MEDIA_PREVIEW_IMAGE_SIZE,
+                    MEDIA_PREVIEW_IMAGE_SIZE,
+                    false,
+                    true
+            );
+            imageView.setImage(image);
+            final Rectangle previewClip = Clipping.getSquareClip(
+                    MEDIA_PREVIEW_IMAGE_SIZE,
+                    MEDIA_PREVIEW_IMAGE_SIZE * 0.25
+            );
+            imageView.setClip(previewClip);
+            return imageView;
+        } catch (final MalformedURLException e) {
+            LOG.error("Can not preview media" + previewedFile.toString(), e);
+            return null;
+        }
     }
 
 }

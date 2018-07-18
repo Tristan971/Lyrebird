@@ -32,7 +32,7 @@
          <bottom>
             <VBox spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox fx:id="mediaPreviewBox" VBox.vgrow="NEVER" />
+                  <HBox fx:id="mediaPreviewBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER" />
                       <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
                           <children>
                               <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="1000.0" spacing="5.0">
