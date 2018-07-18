@@ -22,14 +22,19 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
+import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.components.tweet.TweetPaneController;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.StageAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.Status;
 
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -44,7 +49,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -80,6 +87,9 @@ public class NewTweetController implements FxmlController, StageAware {
     private static final double MEDIA_PREVIEW_IMAGE_SIZE = 32.0;
 
     @FXML
+    private BorderPane container;
+
+    @FXML
     private Button sendButton;
 
     @FXML
@@ -96,16 +106,19 @@ public class NewTweetController implements FxmlController, StageAware {
 
     private final NewTweetService newTweetService;
     private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
+    private final EasyFxml easyFxml;
 
     private final ListProperty<File> mediasToUpload;
     private final Property<Stage> embeddingStage;
 
     public NewTweetController(
             final NewTweetService newTweetService,
-            final TwitterMediaExtensionFilter extensionFilter
+            final TwitterMediaExtensionFilter extensionFilter,
+            final EasyFxml easyFxml
     ) {
         this.newTweetService = newTweetService;
         this.twitterMediaExtensionFilter = extensionFilter;
+        this.easyFxml = easyFxml;
         this.mediasToUpload = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<>()));
         this.embeddingStage = new SimpleObjectProperty<>(null);
     }
@@ -119,6 +132,17 @@ public class NewTweetController implements FxmlController, StageAware {
         final BooleanBinding mediasNotEmpty = mediasToUpload.emptyProperty().not();
         mediaPreviewBox.visibleProperty().bind(mediasNotEmpty);
         mediaPreviewBox.managedProperty().bind(mediasNotEmpty);
+    }
+
+    public void setInReplyToTweet(final Status repliedTweetPane) {
+        easyFxml.loadNode(Components.TWEET, Pane.class, TweetPaneController.class)
+                .afterControllerLoaded(tpc -> {
+                    tpc.embeddedPropertyProperty().setValue(true);
+                    tpc.updateWithValue(repliedTweetPane);
+                })
+                .getNode()
+                .recover(ExceptionHandler::fromThrowable)
+                .onSuccess(this.container::setTop);
     }
 
     @Override

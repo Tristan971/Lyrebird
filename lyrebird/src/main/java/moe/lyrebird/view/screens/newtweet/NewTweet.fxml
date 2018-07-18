@@ -25,7 +25,7 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="180.0" prefWidth="320.0" styleClass="dark" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.newtweet.NewTweetController">
     <children>
-        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <BorderPane fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
             <center>
                 <TextArea fx:id="tweetTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" BorderPane.alignment="CENTER" />
             </center>
