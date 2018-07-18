@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
-import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
@@ -40,7 +39,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -86,10 +84,10 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private HBox mediaBox;
 
     @FXML
-    private Button likeButton;
+    private HBox likeButton;
 
     @FXML
-    private Button retweetButton;
+    private HBox retweetButton;
 
     @FXML
     private Label retweeterLabel;
@@ -127,9 +125,22 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     public void initialize() {
         authorProfilePicturePane.setClip(makePpClip());
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
-        Buttons.setOnClick(likeButton, this::onLike);
-        Buttons.setOnClick(retweetButton, this::onRetweet);
+        setUpInterractionButtons();
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
+    }
+
+    private void setUpInterractionButtons() {
+        likeButton.setOnMouseClicked(e -> this.onLike());
+        final Circle likeClip = Clipping.getCircleClip(14.0);
+        likeClip.setCenterX(14.0);
+        likeClip.setCenterY(14.0);
+        likeButton.setClip(likeClip);
+
+        retweetButton.setOnMouseClicked(e -> this.onRetweet());
+        final Circle retweetClip = Clipping.getCircleClip(14.0);
+        retweetClip.setCenterX(14.0);
+        retweetClip.setCenterY(14.0);
+        retweetButton.setClip(retweetClip);
     }
 
     @Override
