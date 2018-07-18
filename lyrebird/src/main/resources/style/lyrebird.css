@@ -60,7 +60,7 @@
     -fx-background-color: -fx-background;
 }
 
-#retweetButton:hover, #likeButton:hover {
+#retweetButton:hover, #likeButton:hover, #replyButton:hover {
     -fx-background-color: #ebebeb;
 }
 
