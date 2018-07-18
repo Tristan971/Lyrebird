@@ -18,10 +18,6 @@
 
 package moe.lyrebird.api.server.model.objects;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
-import java.util.Arrays;
-
 public enum TargetPlatform {
 
     WINDOWS("win", "Windows"),
@@ -33,17 +29,9 @@ public enum TargetPlatform {
     private final String codename;
     private final String readableName;
 
-    TargetPlatform(String codename, String readableName) {
+    TargetPlatform(final String codename, final String readableName) {
         this.codename = codename;
         this.readableName = readableName;
-    }
-
-    @JsonCreator
-    public static TargetPlatform fromCodename(final String codename) {
-        return Arrays.stream(values())
-                     .filter(v -> v.codename.equals(codename))
-                     .findAny()
-                     .orElse(UNIVERSAL_JAVA);
     }
 
 }

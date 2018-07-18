@@ -41,15 +41,15 @@ public class MediaEmbeddingService {
     private final TwitterVideoHandler twitterVideoHandler;
 
     public MediaEmbeddingService(
-            DirectPhotoHandler directPhotoHandler,
-            TwitterVideoHandler twitterVideoHandler
+            final DirectPhotoHandler directPhotoHandler,
+            final TwitterVideoHandler twitterVideoHandler
     ) {
         this.directPhotoHandler = directPhotoHandler;
         this.twitterVideoHandler = twitterVideoHandler;
     }
 
     @Cacheable(value = "embeddedNodes", sync = true)
-    public List<Node> embed(Status status) {
+    public List<Node> embed(final Status status) {
         return Arrays.stream(status.getMediaEntities())
                 .filter(MediaEntityType::isSupported)
                 .map(this::embedOne)

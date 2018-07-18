@@ -32,7 +32,7 @@ public enum MediaResources {
     MediaResources(final String backingMediaFile) {
         try {
             this.media = loadMediaFile(backingMediaFile);
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             throw new IllegalStateException("Could not load required temporary media resource!", e);
         }
     }

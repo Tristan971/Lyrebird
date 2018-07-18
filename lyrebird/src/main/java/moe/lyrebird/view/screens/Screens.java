@@ -26,6 +26,7 @@ import moe.lyrebird.view.screens.login.LoginScreenController;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.screens.root.RootScreenController;
 import moe.lyrebird.view.screens.update.UpdateScreenController;
+import moe.lyrebird.view.screens.user.UserViewController;
 
 /**
  * The screens as an enum for easier autocompletion etc.
@@ -37,7 +38,8 @@ public enum Screens implements FxmlNode {
     LOGIN_VIEW("login/Login.fxml", LoginScreenController.class),
     NEW_TWEET_VIEW("newtweet/NewTweet.fxml", NewTweetController.class),
     CREDITS_VIEW("credits/Credits.fxml", CreditsScreenController.class),
-    UPDATE_VIEW("update/Update.fxml", UpdateScreenController.class);
+    UPDATE_VIEW("update/Update.fxml", UpdateScreenController.class),
+    USER_VIEW("user/UserView.fxml", UserViewController.class);
 
     private static final String SCREENS_BASE_PATH = "moe/lyrebird/view/screens/";
 

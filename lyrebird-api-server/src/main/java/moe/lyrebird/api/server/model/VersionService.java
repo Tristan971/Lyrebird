@@ -52,8 +52,8 @@ public class VersionService {
                          .map(unchecked(is -> mapper.readValue(is, LyrebirdVersion.class)))
                          .sorted(Comparator.comparing(LyrebirdVersion::getBuildVersion).reversed())
                          .collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (final IOException e) {
+            throw new IllegalStateException("Can not load releases!", e);
         }
     }
 

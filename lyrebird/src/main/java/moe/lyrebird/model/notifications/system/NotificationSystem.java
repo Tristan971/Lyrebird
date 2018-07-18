@@ -16,14 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.twitter.services.interraction;
+package moe.lyrebird.model.notifications.system;
 
-import twitter4j.Status;
+import moe.lyrebird.model.notifications.Notification;
 
-import java.util.function.BiFunction;
+public interface NotificationSystem {
 
-public interface TweetInterraction {
-    BiFunction<TweetInterractionService, Status, Status> onTrue();
-    BiFunction<TweetInterractionService, Status, Status> onFalse();
-    BiFunction<TweetInterractionService, Status, Boolean> shouldDo();
+    void displayNotification(final Notification notification);
+
 }

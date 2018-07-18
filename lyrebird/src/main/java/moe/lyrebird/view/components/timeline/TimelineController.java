@@ -36,11 +36,11 @@ public class TimelineController extends TimelineBasedController {
             final SessionManager sessionManager,
             final ConfigurableApplicationContext context
     ) {
-        super(timeline, sessionManager, context);
+        super(timeline, sessionManager, context, true);
     }
 
     @Override
-    protected Logger LOG() {
+    protected Logger getLogger() {
         return LOG;
     }
 

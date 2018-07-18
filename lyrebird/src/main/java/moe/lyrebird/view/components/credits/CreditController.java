@@ -53,13 +53,13 @@ public class CreditController implements ComponentCellFxmlController<CredittedWo
     private final BrowserSupport browserSupport;
 
     @Autowired
-    public CreditController(BrowserSupport browserSupport) {
+    public CreditController(final BrowserSupport browserSupport) {
         this.browserSupport = browserSupport;
         this.credittedWork = new SimpleObjectProperty<>(null);
     }
 
     @Override
-    public void updateWithValue(CredittedWork newValue) {
+    public void updateWithValue(final CredittedWork newValue) {
         credittedWork.setValue(newValue);
     }
 

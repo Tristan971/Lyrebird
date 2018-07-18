@@ -24,10 +24,14 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class HyperlinkUtils {
+public final class HyperlinkUtils {
 
     private static final String URL_REGEX = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
+
+    private HyperlinkUtils() {
+        throw new UnsupportedOperationException("Should not be instanciated.");
+    }
 
     public static String transformUrls(final String input, final Function<String, String> replacer) {
         return URL_PATTERN.matcher(input).replaceAll(match -> replacer.apply(match.group()));

@@ -62,12 +62,12 @@ public class CleanupService {
         try {
             CompletableFuture.runAsync(cleanupOperation.getOperation(), cleanupExecutor)
                              .get(1, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             LOG.error("Could not actually call the following hook [{}] !", cleanupOperation.getName(), e);
             Thread.currentThread().interrupt();
-        } catch (ExecutionException e) {
+        } catch (final ExecutionException e) {
             LOG.error("The hook [{}] encountered an exception while executing!", cleanupOperation.getName(), e);
-        } catch (TimeoutException e) {
+        } catch (final TimeoutException e) {
             LOG.error("The hook [{}] could not finish in the given time!", cleanupOperation.getName(), e);
         }
     }

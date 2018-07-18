@@ -27,8 +27,10 @@ import moe.lyrebird.view.components.currentaccount.CurrentAccountController;
 import moe.lyrebird.view.components.directmessages.DMConversationController;
 import moe.lyrebird.view.components.directmessages.DirectMessagesController;
 import moe.lyrebird.view.components.mentions.MentionsController;
+import moe.lyrebird.view.components.notifications.NotificationsController;
 import moe.lyrebird.view.components.timeline.TimelineController;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
+import moe.lyrebird.view.components.usertimeline.UserTimelineController;
 
 public enum Components implements FxmlNode {
     CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class),
@@ -42,7 +44,11 @@ public enum Components implements FxmlNode {
     DIRECT_MESSAGE_CONVERSATION("directmessages/DMConversation.fxml", DMConversationController.class),
 
     TWEET("tweet/TweetPane.fxml", TweetPaneController.class),
-    CREDIT("credits/CreditPane.fxml", CreditController.class);
+    CREDIT("credits/CreditPane.fxml", CreditController.class),
+
+    USER_TIMELINE("usertimeline/UserTimeline.fxml", UserTimelineController.class),
+
+    NOTIFICATIONS_PANE("notifications/NotificationPane.fxml", NotificationsController.class);
 
     private static final String COMPONENTS_BASE_PATH = "moe/lyrebird/view/components/";
 

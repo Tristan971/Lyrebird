@@ -22,32 +22,55 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Buttons;
+import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
+import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.components.tweet.TweetPaneController;
+import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.StageAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.Status;
+import twitter4j.User;
+import twitter4j.UserMentionEntity;
 
 import javafx.application.Platform;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.vavr.API.$;
@@ -65,11 +88,19 @@ public class NewTweetController implements FxmlController, StageAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewTweetController.class);
 
+    private static final double MEDIA_PREVIEW_IMAGE_SIZE = 32.0;
+
+    @FXML
+    private BorderPane container;
+
     @FXML
     private Button sendButton;
 
     @FXML
     private Button pickMediaButton;
+
+    @FXML
+    private HBox mediaPreviewBox;
 
     @FXML
     private TextArea tweetTextArea;
@@ -79,30 +110,73 @@ public class NewTweetController implements FxmlController, StageAware {
 
     private final NewTweetService newTweetService;
     private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
+    private final EasyFxml easyFxml;
+    private final SessionManager sessionManager;
 
-    private final Set<File> mediasToUpload;
+    private final ListProperty<File> mediasToUpload;
     private final Property<Stage> embeddingStage;
+    private final Property<Status> inReplyStatus = new SimpleObjectProperty<>(null);
 
     public NewTweetController(
             final NewTweetService newTweetService,
-            final TwitterMediaExtensionFilter extensionFilter
+            final TwitterMediaExtensionFilter extensionFilter,
+            final EasyFxml easyFxml,
+            final SessionManager sessionManager
     ) {
         this.newTweetService = newTweetService;
         this.twitterMediaExtensionFilter = extensionFilter;
-        this.mediasToUpload = new HashSet<>();
+        this.easyFxml = easyFxml;
+        this.sessionManager = sessionManager;
+        this.mediasToUpload = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<>()));
         this.embeddingStage = new SimpleObjectProperty<>(null);
     }
 
     @Override
     public void initialize() {
+        LOG.debug("New tweet stage ready.");
         enableTweetLengthCheck();
         Buttons.setOnClick(sendButton, this::sendTweet);
         Buttons.setOnClick(pickMediaButton, this::openMediaAttachmentsFilePicker);
+
+        final BooleanBinding mediasNotEmpty = mediasToUpload.emptyProperty().not();
+        mediaPreviewBox.visibleProperty().bind(mediasNotEmpty);
+        mediaPreviewBox.managedProperty().bind(mediasNotEmpty);
+
+        inReplyStatus.addListener((o, prev, cur) -> prefillMentionsForReply());
     }
 
     @Override
-    public void setStage(Stage embeddingStage) {
+    public void setStage(final Stage embeddingStage) {
         this.embeddingStage.setValue(embeddingStage);
+    }
+
+    public void setInReplyToTweet(final Status repliedTweet) {
+        LOG.debug("Set new tweet stage to embed status : {}", repliedTweet.getId());
+        inReplyStatus.setValue(repliedTweet);
+        easyFxml.loadNode(Components.TWEET, Pane.class, TweetPaneController.class)
+                .afterControllerLoaded(tpc -> {
+                    tpc.embeddedPropertyProperty().setValue(true);
+                    tpc.updateWithValue(repliedTweet);
+                })
+                .getNode()
+                .recover(ExceptionHandler::fromThrowable)
+                .onSuccess(this.container::setTop);
+    }
+
+    private void prefillMentionsForReply() {
+        final User currentUser = sessionManager.currentSessionProperty().getValue().getTwitterUser().get();
+
+        final Status replied = inReplyStatus.getValue();
+        final StringBuilder prefillText = new StringBuilder();
+        prefillText.append('@').append(replied.getUser().getScreenName());
+        Arrays.stream(replied.getUserMentionEntities())
+              .map(UserMentionEntity::getScreenName)
+              .filter(username -> !username.equals(currentUser.getScreenName()))
+              .forEach(username -> prefillText.append(' ').append('@').append(username));
+        prefillText.append(' ');
+        final String prefill = prefillText.toString();
+        tweetTextArea.setText(prefill);
+        tweetTextArea.positionCaret(prefill.length());
     }
 
     private void enableTweetLengthCheck() {
@@ -122,7 +196,7 @@ public class NewTweetController implements FxmlController, StageAware {
 
     private void sendTweet() {
         Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
-        newTweetService.sendNewTweet(tweetTextArea.getText(), new ArrayList<>(mediasToUpload))
+        newTweetService.sendNewTweet(tweetTextArea.getText(), mediasToUpload)
                        .thenAcceptAsync(status -> {
                            LOG.info("Tweeted status : {} [{}]", status.getId(), status.getText());
                            this.embeddingStage.getValue().hide();
@@ -131,12 +205,11 @@ public class NewTweetController implements FxmlController, StageAware {
 
     private void openMediaAttachmentsFilePicker() {
         pickMediaButton.setDisable(true);
-        final CompletionStage<List<File>> pickedMedia = openFileChooserForMedia();
-        pickedMedia.thenAcceptAsync(files -> {
-            mediasToUpload.addAll(files);
-            LOG.debug("Added media files for upload with next tweet : {}", files);
-            pickMediaButton.setDisable(false);
-        }, Platform::runLater);
+        this.openFileChooserForMedia()
+            .thenAcceptAsync(
+                    this::mediaFilesChosen,
+                    Platform::runLater
+            );
     }
 
     private CompletionStage<List<File>> openFileChooserForMedia() {
@@ -149,8 +222,48 @@ public class NewTweetController implements FxmlController, StageAware {
 
         return CompletableFuture.supplyAsync(() -> {
             final Stage stage = this.embeddingStage.getValue();
-            return fileChooser.showOpenMultipleDialog(stage);
+            final List<File> chosenFiles = fileChooser.showOpenMultipleDialog(stage);
+            return chosenFiles != null ? chosenFiles : Collections.emptyList();
         }, Platform::runLater);
+    }
+
+    private void mediaFilesChosen(final List<File> selectedFiles) {
+        pickMediaButton.setDisable(false);
+        mediasToUpload.addAll(selectedFiles);
+        LOG.debug("Added media files for upload with next tweet : {}", selectedFiles);
+        final List<ImageView> mediaImagePreviews = selectedFiles.stream()
+                                                                .map(this::buildMediaPreviewImageView)
+                                                                .filter(Objects::nonNull)
+                                                                .collect(Collectors.toList());
+        if (!mediaImagePreviews.isEmpty()) {
+            mediaPreviewBox.getChildren().addAll(mediaImagePreviews);
+        }
+    }
+
+    private ImageView buildMediaPreviewImageView(final File previewedFile) {
+        try {
+            final ImageView imageView = new ImageView();
+            imageView.setFitHeight(MEDIA_PREVIEW_IMAGE_SIZE);
+            imageView.setFitWidth(MEDIA_PREVIEW_IMAGE_SIZE);
+            final URL imageUrl = previewedFile.toURI().toURL();
+            final Image image = new Image(
+                    imageUrl.toExternalForm(),
+                    MEDIA_PREVIEW_IMAGE_SIZE,
+                    MEDIA_PREVIEW_IMAGE_SIZE,
+                    false,
+                    true
+            );
+            imageView.setImage(image);
+            final Rectangle previewClip = Clipping.getSquareClip(
+                    MEDIA_PREVIEW_IMAGE_SIZE,
+                    MEDIA_PREVIEW_IMAGE_SIZE * 0.25
+            );
+            imageView.setClip(previewClip);
+            return imageView;
+        } catch (final MalformedURLException e) {
+            LOG.error("Can not preview media" + previewedFile.toString(), e);
+            return null;
+        }
     }
 
 }

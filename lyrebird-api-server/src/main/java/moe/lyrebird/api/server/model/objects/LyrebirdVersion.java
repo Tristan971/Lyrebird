@@ -34,7 +34,7 @@ public final class LyrebirdVersion {
     public LyrebirdVersion(
             @JsonProperty("version") final String version,
             @JsonProperty("buildVersion") final int buildVersion,
-            @JsonProperty("releaseUrl") String releaseUrl,
+            @JsonProperty("releaseUrl") final String releaseUrl,
             @JsonProperty("packages") final List<LyrebirdPackage> packages
     ) {
         this.version = version;

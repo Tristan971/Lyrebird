@@ -20,6 +20,9 @@ package moe.lyrebird.model.twitter.twitter4j;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.lyrebird.model.notifications.Notification;
+import moe.lyrebird.model.notifications.NotificationService;
+import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
 import moe.lyrebird.model.twitter.observables.Mentions;
 import moe.lyrebird.model.twitter.observables.Timeline;
@@ -35,6 +38,13 @@ import twitter4j.UserStreamListener;
 
 import java.net.SocketException;
 
+import static moe.lyrebird.model.notifications.format.TweetNotifications.fromFavorite;
+import static moe.lyrebird.model.notifications.format.TweetNotifications.fromFollow;
+import static moe.lyrebird.model.notifications.format.TweetNotifications.fromMention;
+import static moe.lyrebird.model.notifications.format.TweetNotifications.fromQuotedTweet;
+import static moe.lyrebird.model.notifications.format.TweetNotifications.fromRetweet;
+import static moe.lyrebird.model.notifications.format.TweetNotifications.fromUnfollow;
+
 @Component
 public class TwitterUserListener implements UserStreamListener {
 
@@ -43,12 +53,18 @@ public class TwitterUserListener implements UserStreamListener {
     private final Timeline timeline;
     private final Mentions mentions;
     private final DirectMessages directMessages;
+    private final SessionManager sessionManager;
+    private final NotificationService notificationService;
 
     public TwitterUserListener(
             final Timeline timeline,
             final Mentions mentions,
-            final DirectMessages directMessages
+            final DirectMessages directMessages,
+            final SessionManager sessionManager,
+            final NotificationService notificationService
     ) {
+        this.sessionManager = sessionManager;
+        this.notificationService = notificationService;
         LOG.debug("Initializing twitter data listener.");
         LOG.debug("\t-> Timeline... OK");
         this.timeline = timeline;
@@ -62,6 +78,18 @@ public class TwitterUserListener implements UserStreamListener {
     public void onStatus(final Status status) {
         LOG.debug("New tweet streamed : [@{} : {}]", status.getUser().getScreenName(), status.getText());
         timeline.addTweet(status);
+        if (mentions.isMentionToCurrentUser(status)) {
+            LOG.debug("User {} mentionned current user in tweet {}", status.getUser().getScreenName(), status.getId());
+            notificationService.sendNotification(fromMention(status));
+            mentions.addTweet(status);
+        } else if (isRetweetOfMe(status)) {
+            LOG.debug(
+                    "User {} retweeted current user's tweet {}",
+                    status.getUser().getScreenName(),
+                    status.getRetweetedStatus().getId()
+            );
+            notificationService.sendNotification(fromRetweet(status));
+        }
     }
 
     @Override
@@ -73,11 +101,15 @@ public class TwitterUserListener implements UserStreamListener {
     @Override
     public void onTrackLimitationNotice(final int numberOfLimitedStatuses) {
         LOG.debug("Current streamed track is too fast for following. Dropping tweets.");
+        notificationService.sendNotification(new Notification(
+                "Your account is flooded!",
+                "Sorry, Lyrebird just can not keep up with the amount of activity you have :( リア充爆発しろ!"
+        ));
     }
 
     @Override
     public void onScrubGeo(final long userId, final long upToStatusId) {
-        LOG.debug("Location info removad request for tweets by {} until tweet {}.", userId, upToStatusId);
+        LOG.debug("Location info removal request for tweets by {} until tweet {}.", userId, upToStatusId);
     }
 
     @Override
@@ -108,27 +140,36 @@ public class TwitterUserListener implements UserStreamListener {
 
     @Override
     public void onFriendList(final long[] friendIds) {
-
+        // ignored
     }
 
     @Override
     public void onFavorite(final User source, final User target, final Status favoritedStatus) {
-
+        if (sessionManager.isCurrentUser(target)) {
+            LOG.debug("User @{} favorited current user's tweet {}", source.getScreenName(), favoritedStatus.getId());
+            notificationService.sendNotification(fromFavorite(source, favoritedStatus));
+        }
     }
 
     @Override
     public void onUnfavorite(final User source, final User target, final Status unfavoritedStatus) {
-
+        // ignored
     }
 
     @Override
     public void onFollow(final User source, final User followedUser) {
-
+        if (sessionManager.isCurrentUser(followedUser)) {
+            LOG.debug("User @{} followed current user", source.getScreenName());
+            notificationService.sendNotification(fromFollow(source));
+        }
     }
 
     @Override
     public void onUnfollow(final User source, final User unfollowedUser) {
-
+        if (sessionManager.isCurrentUser(unfollowedUser)) {
+            LOG.debug("User @{} unfollowed current user", source.getScreenName());
+            notificationService.sendNotification(fromUnfollow(source));
+        }
     }
 
     @Override
@@ -139,76 +180,91 @@ public class TwitterUserListener implements UserStreamListener {
 
     @Override
     public void onUserListMemberAddition(final User addedMember, final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListMemberDeletion(final User deletedMember, final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListSubscription(final User subscriber, final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListUnsubscription(final User subscriber, final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListCreation(final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListUpdate(final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserListDeletion(final User listOwner, final UserList list) {
-
+        // ignored
     }
 
     @Override
     public void onUserProfileUpdate(final User updatedUser) {
-
+        // ignored
     }
 
     @Override
     public void onUserSuspension(final long suspendedUser) {
-
+        // ignored
     }
 
     @Override
     public void onUserDeletion(final long deletedUser) {
-
+        // ignored
     }
 
     @Override
     public void onBlock(final User source, final User blockedUser) {
-
+        // ignored
     }
 
     @Override
     public void onUnblock(final User source, final User unblockedUser) {
-
+        // ignored
     }
 
     @Override
     public void onRetweetedRetweet(final User source, final User target, final Status retweetedStatus) {
-
+        // ignored
     }
 
     @Override
     public void onFavoritedRetweet(final User source, final User target, final Status favoritedRetweeet) {
-
+        // ignored
     }
 
     @Override
     public void onQuotedTweet(final User source, final User target, final Status quotingTweet) {
-
+        if (sessionManager.isCurrentUser(target)) {
+            LOG.debug(
+                    "User @{} quoted current user's tweet {}",
+                    source.getScreenName(),
+                    quotingTweet.getQuotedStatus().getId()
+            );
+            notificationService.sendNotification(fromQuotedTweet(quotingTweet));
+        }
     }
+
+    private boolean isRetweetOfMe(final Status status) {
+        if (status.isRetweet()) {
+            return sessionManager.isCurrentUser(status.getRetweetedStatus().getUser());
+        }
+        return false;
+    }
+
 }

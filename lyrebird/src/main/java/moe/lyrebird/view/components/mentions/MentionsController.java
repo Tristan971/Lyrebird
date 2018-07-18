@@ -36,11 +36,11 @@ public class MentionsController extends TimelineBasedController {
             final SessionManager sessionManager,
             final ConfigurableApplicationContext context
     ) {
-        super(mentions, sessionManager, context);
+        super(mentions, sessionManager, context, true);
     }
 
     @Override
-    protected Logger LOG() {
+    protected Logger getLogger() {
         return LOG;
     }
 

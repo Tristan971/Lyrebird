@@ -36,7 +36,7 @@ public class TwitterMediaExtensionFilter {
 
     public final ExtensionFilter extensionFilter;
 
-    public TwitterMediaExtensionFilter(Environment environment) {
+    public TwitterMediaExtensionFilter(final Environment environment) {
         this.extensionFilter = buildExtensionFilter(environment);
     }
 

@@ -70,12 +70,10 @@ public class DirectMessagesController implements FxmlController {
     }
 
     private void handleConversationsChange(final Change<? extends User, ? extends List<DirectMessage>> change) {
+        if (change.getValueRemoved() != null) return;
         if (change.wasAdded()) {
-            if (change.getValueRemoved() == null) {
-                addConversation(change.getKey());
-            }
+            addConversation(change.getKey());
         } else if (change.wasRemoved()) {
-            if (change.getValueAdded() == null)
             removeConversation(change.getKey());
         }
     }

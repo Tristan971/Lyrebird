@@ -25,7 +25,11 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4j.Paging;
+import twitter4j.ResponseList;
+import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
 import java.util.concurrent.Executor;
 
@@ -37,7 +41,17 @@ public class Timeline extends TwitterTimelineBaseModel {
 
     @Autowired
     public Timeline(final SessionManager sessionManager, @Qualifier("twitterExecutor") final Executor twitterExecutor) {
-        super(sessionManager, twitterExecutor, Twitter::getHomeTimeline, Twitter::getHomeTimeline);
+        super(sessionManager, twitterExecutor);
+    }
+
+    @Override
+    protected ResponseList<Status> initialLoad(final Twitter twitter) throws TwitterException {
+        return twitter.getHomeTimeline();
+    }
+
+    @Override
+    protected ResponseList<Status> backfillLoad(final Twitter twitter, final Paging paging) throws TwitterException {
+        return twitter.getHomeTimeline(paging);
     }
 
     @Override

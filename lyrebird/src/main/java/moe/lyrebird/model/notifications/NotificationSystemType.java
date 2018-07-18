@@ -16,15 +16,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.interrupts;
+package moe.lyrebird.model.notifications;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import moe.lyrebird.model.notifications.system.AwtNotificationSystem;
+import moe.lyrebird.model.notifications.system.InternalNotificationSystem;
+import moe.lyrebird.model.notifications.system.NotificationSystem;
 
-public final class BackgroundOps {
+public enum NotificationSystemType {
+    INTERNAL(InternalNotificationSystem.class),
+    SYSTEM(AwtNotificationSystem.class);
 
-    public static final ScheduledExecutorService EXECUTOR = Executors.newScheduledThreadPool(
-            Runtime.getRuntime().availableProcessors()
-    );
+    private final Class<? extends NotificationSystem> notificationSystemClass;
+
+    NotificationSystemType(final Class<? extends NotificationSystem> notificationSystemClass) {
+        this.notificationSystemClass = notificationSystemClass;
+    }
+
+    public Class<? extends NotificationSystem> getNotificationSystemClass() {
+        return notificationSystemClass;
+    }
 
 }

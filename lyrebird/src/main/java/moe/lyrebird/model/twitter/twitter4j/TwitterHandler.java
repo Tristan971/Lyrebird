@@ -74,12 +74,9 @@ public class TwitterHandler {
     public Optional<AccessToken> registerAccessToken(final RequestToken requestToken, final String pinCode) {
         LOG.info("Registering token {} with pincode {}", requestToken, pinCode);
 
-        final Try<AccessToken> tryAccessToken = Try.of(() -> {
-            // Don't refactor expression lambda into statement lambda. It's too
-            // long to be treated that way.
-            //noinspection CodeBlock2Expr
-            return this.twitter.getOAuthAccessToken(requestToken, pinCode);
-        });
+        final Try<AccessToken> tryAccessToken = Try.of(
+                () -> this.twitter.getOAuthAccessToken(requestToken, pinCode)
+        );
 
         if (tryAccessToken.isFailure()) {
             LOG.info("Could not get access token! An error was thrown!");
@@ -92,7 +89,7 @@ public class TwitterHandler {
         LOG.info(
                 "Successfully got access token for user @{}! {}",
                 successAccessToken.getScreenName(),
-                successAccessToken.toString()
+                successAccessToken
         );
         this.accessToken = successAccessToken;
         return Optional.of(successAccessToken);

@@ -78,7 +78,7 @@ public class DMConversationController implements FxmlController {
         });
     }
 
-    public void setPal(User pal) {
+    public void setPal(final User pal) {
         LOG.debug("Created conversation view for conversing with user!");
         LOG.debug("Mapping DM conversation view {} with senderId {}", this, pal.getScreenName());
         this.palProperty.setValue(pal);

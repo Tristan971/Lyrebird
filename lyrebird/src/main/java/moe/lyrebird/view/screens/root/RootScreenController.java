@@ -52,17 +52,7 @@ public class RootScreenController implements FxmlController {
     @Override
     public void initialize() {
         loadControlBar();
-    }
-
-    public void setContent(final Components component) {
-        LOG.info("Switching content of root pane to {}", component.name());
-        final Pane contentNode = this.easyFxml
-                .loadNode(component)
-                .getNode()
-                .getOrElseGet(ExceptionHandler::fromThrowable);
-
-        this.contentPane.setCenter(contentNode);
-        LOG.info("Set content of root pane to {}", component.name());
+        loadNotificationPane();
     }
 
     private void loadControlBar() {
@@ -73,6 +63,27 @@ public class RootScreenController implements FxmlController {
                 .getOrElseGet(ExceptionHandler::fromThrowable);
         LOG.debug("Initialized control bar !");
         contentPane.setLeft(controlBarPane);
+    }
+
+    private void loadNotificationPane() {
+        LOG.debug("Initializing notification pane...");
+        final Pane notificationPane = this.easyFxml
+                .loadNode(Components.NOTIFICATIONS_PANE)
+                .getNode()
+                .getOrElseGet(ExceptionHandler::fromThrowable);
+
+        this.contentPane.setTop(notificationPane);
+    }
+
+    public void setContent(final Components component) {
+        LOG.info("Switching content of root pane to {}", component);
+        final Pane contentNode = this.easyFxml
+                .loadNode(component)
+                .getNode()
+                .getOrElseGet(ExceptionHandler::fromThrowable);
+
+        this.contentPane.setCenter(contentNode);
+        LOG.info("Set content of root pane to {}", component);
     }
 
 }

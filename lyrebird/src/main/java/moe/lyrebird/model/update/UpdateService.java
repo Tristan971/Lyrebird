@@ -21,11 +21,12 @@ package moe.lyrebird.model.update;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import io.vavr.control.Option;
 import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
+import moe.lyrebird.model.notifications.NotificationSystemType;
+import moe.lyrebird.model.update.selfupdate.SelfupdateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,16 +38,19 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 @Component
 public class UpdateService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UpdateService.class);
+    private static final Pattern BUILD_VERSION_PATTERN = Pattern.compile("\\.");
 
     private final ScheduledExecutorService updateExecutor;
     private final MarkdownRenderingService markdownRenderingService;
     private final LyrebirdServerClient apiClient;
     private final NotificationService notificationService;
+    private final SelfupdateService selfupdateService;
 
     private final String currentVersion;
     private final int currentBuildVersion;
@@ -58,25 +62,19 @@ public class UpdateService {
             @Qualifier("updateExecutor") final ScheduledExecutorService updateExecutor,
             final MarkdownRenderingService markdownRenderingService,
             final LyrebirdServerClient apiClient,
-            NotificationService notificationService, final Environment environment
+            final NotificationService notificationService,
+            final SelfupdateService selfupdateService,
+            final Environment environment
     ) {
         this.updateExecutor = updateExecutor;
         this.markdownRenderingService = markdownRenderingService;
         this.apiClient = apiClient;
         this.notificationService = notificationService;
+        this.selfupdateService = selfupdateService;
         this.currentVersion = environment.getRequiredProperty("app.version");
         this.currentBuildVersion = getCurrentBuildVersion();
+        this.isUpdateAvailable.addListener((o, prev, cur) -> handleUpdateStatus(prev, cur));
         startPolling();
-        isUpdateAvailable.addListener((o, prev, cur) -> {
-            LOG.debug("An update was detected. Notifying the user.");
-            if (cur && !prev) {
-                notificationService.sendNotification(new Notification(
-                        "Update available!",
-                        "An update is available for Lyrebird, grab it :-)",
-                        Option.none()
-                ));
-            }
-        });
     }
 
     public CompletableFuture<LyrebirdVersion> getLatestVersion() {
@@ -99,11 +97,19 @@ public class UpdateService {
         ).thenApplyAsync(markdownRenderingService::render, updateExecutor);
     }
 
+    public void selfupdate() {
+        getLatestVersion().thenAccept(selfupdateService::selfupdate);
+    }
+
+    public boolean selfupdateCompatible() {
+        return selfupdateService.selfupdateCompatible();
+    }
+
     private void startPolling() {
         updateExecutor.scheduleAtFixedRate(
                 this::poll,
-                10,
-                5 * 60,
+                10L,
+                5L * 60L,
                 TimeUnit.SECONDS
         );
     }
@@ -111,18 +117,33 @@ public class UpdateService {
     private void poll() {
         try {
             LOG.debug("Checking for updates...");
-            final LyrebirdVersion latestVersion = apiClient.getLatestVersion();
-            LOG.debug("Latest version : {}", latestVersion.getVersion());
-            this.latestVersion.setValue(latestVersion);
-            isUpdateAvailable.setValue(latestVersion.getBuildVersion() > currentBuildVersion);
-        } catch (Exception e) {
+            final LyrebirdVersion latestVersionServer = apiClient.getLatestVersion();
+            LOG.debug("Latest version : {}", latestVersionServer.getVersion());
+            this.latestVersion.setValue(latestVersionServer);
+            isUpdateAvailable.setValue(latestVersionServer.getBuildVersion() > currentBuildVersion);
+        } catch (final Exception e) {
             LOG.error("Could not check for updates !", e);
         }
     }
 
     private int getCurrentBuildVersion() {
-        final String formatted = currentVersion.replaceAll("\\.", "");
+        final String formatted = BUILD_VERSION_PATTERN.matcher(currentVersion).replaceAll("");
         return Integer.parseInt(formatted);
+    }
+
+    private void handleUpdateStatus(final boolean prev, final boolean cur) {
+        if (cur && !prev) {
+            LOG.debug("An update was detected. Notifying the user.");
+            notificationService.sendNotification(
+                    new Notification(
+                            "Update available!",
+                            "An update is available for Lyrebird, grab it :-)"
+                    ),
+                    NotificationSystemType.SYSTEM
+            );
+        } else if (!cur) {
+            LOG.debug("No update available.");
+        }
     }
 
 }

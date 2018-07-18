@@ -35,28 +35,33 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
 
     private final TwitterTimelineBaseModel timelineBase;
     private final ListProperty<Status> tweetsProperty;
+    private final boolean shouldAutomaticallyFill;
 
     public TimelineBasedController(
             final TwitterTimelineBaseModel timelineBase,
             final SessionManager sessionManager,
-            final ConfigurableApplicationContext context
+            final ConfigurableApplicationContext context,
+            final boolean shouldAutomaticallyFill
     ) {
         super(context, TweetListCell.class);
         this.timelineBase = timelineBase;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timelineBase.loadedTweets());
+        this.shouldAutomaticallyFill = shouldAutomaticallyFill;
         sessionManager.currentSessionProperty().addListener(change -> timelineBase.loadLastTweets());
     }
 
     @Override
     public void initialize() {
         super.initialize();
-        timelineBase.loadLastTweets();
         listView.itemsProperty().bind(new ReadOnlyListWrapper<>(timelineBase.loadedTweets()));
+        if (shouldAutomaticallyFill) {
+            timelineBase.loadLastTweets();
+        }
     }
 
     private void loadMoreTweets() {
         getOldestTweetLoaded().ifPresent(oldestStatus -> {
-            LOG().debug("Loading tweets before {}", oldestStatus.getId());
+            getLogger().debug("Loading tweets before {}", oldestStatus.getId());
             timelineBase.loadMoreTweets(oldestStatus.getId());
             listView.scrollTo(oldestStatus);
         });
@@ -64,11 +69,11 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
 
     private Optional<Status> getOldestTweetLoaded() {
         if (tweetsProperty.isEmpty()) {
-            LOG().debug("No older tweets to load.");
+            getLogger().debug("No older tweets to load.");
             return Optional.empty();
         }
         final Status oldest = tweetsProperty.getValue().get(tweetsProperty.size() - 1);
-        LOG().debug("Loading tweets before {}", oldest.getId());
+        getLogger().debug("Loading tweets before {}", oldest.getId());
         return Optional.of(oldest);
     }
 
@@ -77,6 +82,6 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
         loadMoreTweets();
     }
 
-    protected abstract Logger LOG();
+    protected abstract Logger getLogger();
 
 }

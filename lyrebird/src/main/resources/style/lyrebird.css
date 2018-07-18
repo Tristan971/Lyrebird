@@ -29,6 +29,10 @@
     -fx-background-color: -fx-background-dark;
 }
 
+.transparent-dark-background-opacity {
+    -fx-background-color: rgba(43, 43, 48, 0.85);
+}
+
 .text-area {
     -fx-stroke-width: 1;
     -fx-background-color: snow;
@@ -56,30 +60,12 @@
     -fx-background-color: -fx-background;
 }
 
-#retweetButton {
-    -fx-text-fill: #3faa4d;
-    -fx-background-color: rgba(0, 0, 0, 0);
-    -fx-padding: 3px;
-    -fx-font-weight: bold;
+#retweetButton:hover, #likeButton:hover, #replyButton:hover {
+    -fx-background-color: #ebebeb;
 }
 
-#retweetButton:hover {
-    -fx-text-fill: white;
-    -fx-background-color: #3faa4d;
-    -fx-border-radius: 10px;
-}
-
-#likeButton {
-    -fx-text-fill: #ff6162;
-    -fx-background-color: rgba(0, 0, 0, 0);
-    -fx-padding: 3px;
-    -fx-font-weight: bold;
-}
-
-#likeButton:hover {
-    -fx-text-fill: white;
-    -fx-background-color: #ff6162;
-    -fx-border-radius: 10px;
+#tweet {
+    -fx-background-color: #1da1f2;
 }
 
 #tweetButton {

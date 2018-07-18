@@ -18,30 +18,25 @@
 
 package moe.lyrebird.model.twitter.services.interraction;
 
-import twitter4j.Status;
+import twitter4j.User;
 
 import java.util.function.BiFunction;
 
-public enum Interration implements TweetInterraction {
-    LIKE(
-            TweetInterractionService::like,
-            TweetInterractionService::unlike,
-            TweetInterractionService::shouldLike
-    ),
-    RETWEET(
-            TweetInterractionService::retweet,
-            TweetInterractionService::unretweet,
-            TweetInterractionService::shouldRetweet
+public enum UserInterraction implements TwitterBinaryInterraction<User> {
+    FOLLOW(
+            TwitterInterractionService::follow,
+            TwitterInterractionService::unfollow,
+            TwitterInterractionService::notYetFollowed
     );
 
-    private final BiFunction<TweetInterractionService, Status, Status> onTrue;
-    private final BiFunction<TweetInterractionService, Status, Status> onFalse;
-    private final BiFunction<TweetInterractionService, Status, Boolean> shouldDo;
+    private final BiFunction<TwitterInterractionService, User, User> onTrue;
+    private final BiFunction<TwitterInterractionService, User, User> onFalse;
+    private final BiFunction<TwitterInterractionService, User, Boolean> shouldDo;
 
-    Interration(
-            final BiFunction<TweetInterractionService, Status, Status> onTrue,
-            final BiFunction<TweetInterractionService, Status, Status> onFalse,
-            final BiFunction<TweetInterractionService, Status, Boolean> shouldDo
+    UserInterraction(
+            final BiFunction<TwitterInterractionService, User, User> onTrue,
+            final BiFunction<TwitterInterractionService, User, User> onFalse,
+            final BiFunction<TwitterInterractionService, User, Boolean> shouldDo
     ) {
         this.onTrue = onTrue;
         this.onFalse = onFalse;
@@ -49,17 +44,18 @@ public enum Interration implements TweetInterraction {
     }
 
     @Override
-    public BiFunction<TweetInterractionService, Status, Status> onTrue() {
+    public BiFunction<TwitterInterractionService, User, User> onTrue() {
         return onTrue;
     }
 
     @Override
-    public BiFunction<TweetInterractionService, Status, Status> onFalse() {
+    public BiFunction<TwitterInterractionService, User, User> onFalse() {
         return onFalse;
     }
 
     @Override
-    public BiFunction<TweetInterractionService, Status, Boolean> shouldDo() {
+    public BiFunction<TwitterInterractionService, User, Boolean> shouldDo() {
         return shouldDo;
     }
+
 }

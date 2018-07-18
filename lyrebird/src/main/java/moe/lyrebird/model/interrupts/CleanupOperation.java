@@ -23,7 +23,7 @@ public final class CleanupOperation {
     private final String name;
     private final Runnable operation;
 
-    public CleanupOperation(String name, Runnable operation) {
+    public CleanupOperation(final String name, final Runnable operation) {
         this.name = name;
         this.operation = operation;
     }

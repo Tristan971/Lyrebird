@@ -1,0 +1,27 @@
+{
+  "version": "1.1.0",
+  "buildVersion": "110",
+  "releaseUrl": "https://github.com/Tristan971/Lyrebird/releases/tag/1.1.0",
+  "packages": [
+    {
+      "targetPlatform": "WINDOWS",
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.1.0/Lyrebird-1.1.0-Windows.exe"
+    },
+    {
+      "targetPlatform": "MACOS",
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.1.0/Lyrebird-1.1.0-macOS.dmg"
+    },
+    {
+      "targetPlatform": "LINUX_DEB",
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.1.0/lyrebird-1.1.0-DEB.deb"
+    },
+    {
+      "targetPlatform": "LINUX_RPM",
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.1.0/lyrebird-1.1.0-1.x86_64-RPM.rpm"
+    },
+    {
+      "targetPlatform": "UNIVERSAL_JAVA",
+      "packageUrl": "https://github.com/Tristan971/Lyrebird/releases/download/1.1.0/lyrebird-1.1.0-JAVA.jar"
+    }
+  ]
+}

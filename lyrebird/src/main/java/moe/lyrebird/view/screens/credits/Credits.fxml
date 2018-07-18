@@ -28,7 +28,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="480.0" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="720.0" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.credits.CreditsScreenController">
+<AnchorPane maxHeight="480.0" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="780.0" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.credits.CreditsScreenController">
    <children>
       <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
