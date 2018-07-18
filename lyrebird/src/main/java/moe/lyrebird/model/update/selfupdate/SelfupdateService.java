@@ -85,7 +85,7 @@ public class SelfupdateService {
     throws IOException {
         LOG.info("Installing new version for platform {}", platform);
         final String[] executable = binaryInstallationService.getInstallationCommandLine(platform, version);
-        LOG.info("Executing : {}", executable);
+        LOG.info("Executing : {}", (Object) executable);
         final ProcessBuilder installProcess = new ProcessBuilder(executable);
         installProcess.redirectError(ProcessBuilder.Redirect.INHERIT);
         installProcess.redirectOutput(ProcessBuilder.Redirect.INHERIT);
