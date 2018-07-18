@@ -19,9 +19,9 @@
 package moe.lyrebird.model.update.selfupdate;
 
 import org.springframework.stereotype.Component;
-import moe.lyrebird.api.server.model.objects.LyrebirdPackage;
-import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
-import moe.lyrebird.api.server.model.objects.TargetPlatform;
+import moe.lyrebird.api.model.LyrebirdPackage;
+import moe.lyrebird.api.model.LyrebirdVersion;
+import moe.lyrebird.api.model.TargetPlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

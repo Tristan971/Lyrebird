@@ -20,7 +20,7 @@ package moe.lyrebird.model.update.selfupdate;
 
 import org.springframework.stereotype.Component;
 import io.vavr.control.Option;
-import moe.lyrebird.api.server.model.objects.TargetPlatform;
+import moe.lyrebird.api.model.TargetPlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import oshi.SystemInfo;
@@ -30,7 +30,7 @@ public class BinaryChoiceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(BinaryChoiceService.class);
 
-    public boolean currentPlatformSupportsSelfupdate() {
+    boolean currentPlatformSupportsSelfupdate() {
         return detectRunningPlatform().isDefined();
     }
 

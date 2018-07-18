@@ -20,7 +20,7 @@ package moe.lyrebird.model.update.selfupdate;
 
 import org.springframework.util.StreamUtils;
 import moe.lyrebird.Lyrebird;
-import moe.lyrebird.api.server.model.objects.TargetPlatform;
+import moe.lyrebird.api.model.TargetPlatform;
 
 import java.io.File;
 import java.io.IOException;

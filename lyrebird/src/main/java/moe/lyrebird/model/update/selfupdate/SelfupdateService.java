@@ -21,8 +21,8 @@ package moe.lyrebird.model.update.selfupdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import io.vavr.control.Option;
-import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
-import moe.lyrebird.api.server.model.objects.TargetPlatform;
+import moe.lyrebird.api.model.LyrebirdVersion;
+import moe.lyrebird.api.model.TargetPlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

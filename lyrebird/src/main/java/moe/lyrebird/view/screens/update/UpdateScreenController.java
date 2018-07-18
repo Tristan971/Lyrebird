@@ -22,7 +22,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.lyrebird.api.server.model.objects.LyrebirdVersion;
+import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.model.update.UpdateService;
 
 import javafx.application.Platform;
