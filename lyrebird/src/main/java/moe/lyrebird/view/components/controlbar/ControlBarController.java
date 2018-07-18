@@ -23,7 +23,6 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
-import moe.tristan.easyfxml.util.Buttons;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.update.UpdateService;
@@ -31,15 +30,17 @@ import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.screens.root.RootScreenController;
+import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 
 import java.util.List;
 
@@ -55,29 +56,29 @@ public class ControlBarController implements FxmlController {
     private BorderPane container;
 
     @FXML
-    private Button tweetButton;
+    private HBox tweet;
 
     @FXML
-    private Button timelineViewButton;
+    private HBox timeline;
 
     @FXML
-    private Button mentionsViewButton;
+    private HBox mentions;
 
     @FXML
-    private Button directMessagesViewButton;
+    private HBox directMessages;
 
     @FXML
-    private Button creditsButton;
+    private HBox credits;
 
     @FXML
-    private Button updateButton;
+    private HBox update;
 
     private final EasyFxml easyFxml;
     private final RootScreenController rootScreenController;
     private final SessionManager sessionManager;
     private final UpdateService updateService;
 
-    private final Property<Button> currentViewButton;
+    private final Property<HBox> currentViewButton;
 
     public ControlBarController(
             final EasyFxml easyFxml,
@@ -97,17 +98,19 @@ public class ControlBarController implements FxmlController {
         currentViewButton.addListener((o, prev, current) -> {
             if (prev != null) {
                 prev.setDisable(false);
+                prev.setOpacity(1.0);
             }
             current.setDisable(true);
+            current.setOpacity(0.5);
         });
 
-        Buttons.setOnClick(tweetButton, this::openTweetWindow);
+        setUpTweetButton();
 
-        bindButtonToLoadingView(timelineViewButton, Components.TIMELINE);
-        bindButtonToLoadingView(mentionsViewButton, Components.MENTIONS);
-        bindButtonToLoadingView(directMessagesViewButton, Components.DIRECT_MESSAGES);
+        bindActionImageToLoadingView(timeline, Components.TIMELINE);
+        bindActionImageToLoadingView(mentions, Components.MENTIONS);
+        bindActionImageToLoadingView(directMessages, Components.DIRECT_MESSAGES);
 
-        Buttons.setOnClick(creditsButton, () ->
+        credits.setOnMouseClicked(e ->
                 easyFxml.loadNode(Screens.CREDITS_VIEW)
                         .orExceptionPane()
                         .map(pane -> Stages.stageOf("Credits", pane))
@@ -118,9 +121,17 @@ public class ControlBarController implements FxmlController {
         handleLogStatusChange(false, sessionManager.isLoggedInProperty().getValue());
         loadCurrentAccountPanel();
 
-        updateButton.managedProperty().bind(updateService.isUpdateAvailableProperty());
-        updateButton.visibleProperty().bind(updateService.isUpdateAvailableProperty());
-        updateButton.setOnAction(e -> openUpdatesScreen());
+        update.managedProperty().bind(updateService.isUpdateAvailableProperty());
+        update.visibleProperty().bind(updateService.isUpdateAvailableProperty());
+        update.setOnMouseClicked(e -> openUpdatesScreen());
+    }
+
+    private void setUpTweetButton() {
+        tweet.setOnMouseClicked(e -> this.openTweetWindow());
+        final Circle tweetClip = Clipping.getCircleClip(28.0);
+        tweetClip.setCenterX(28.0);
+        tweetClip.setCenterY(28.0);
+        tweet.setClip(tweetClip);
     }
 
     private void loadCurrentAccountPanel() {
@@ -150,22 +161,22 @@ public class ControlBarController implements FxmlController {
     }
 
     private void handleLogStatusChange(final boolean previous, final boolean current) {
-        final List<Button> loggedOnlyButtons = List.of(
-                timelineViewButton,
-                tweetButton,
-                mentionsViewButton,
-                directMessagesViewButton,
-                tweetButton
-        );
-        loggedOnlyButtons.forEach(btn -> btn.setVisible(current));
+        List.of(
+                timeline,
+                tweet,
+                mentions,
+                directMessages,
+                tweet
+        ).forEach(btn -> btn.setVisible(current));
+
         if (!previous && current) {
-            timelineViewButton.fire();
+            timeline.onMouseClickedProperty().get().handle(null);
         }
     }
 
-    private void bindButtonToLoadingView(final Button button, final Components component) {
-        Buttons.setOnClick(button, () -> {
-            currentViewButton.setValue(button);
+    private void bindActionImageToLoadingView(final HBox imageBox, final Components component) {
+        imageBox.setOnMouseClicked(e -> {
+            currentViewButton.setValue(imageBox);
             rootScreenController.setContent(component);
         });
     }
