@@ -19,21 +19,24 @@
   -->
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="dark" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.controlbar.ControlBarController">
     <children>
       <BorderPane fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <bottom>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                      <Button fx:id="tweetButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="New Tweet" textAlignment="CENTER" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font></Button>
+                  <HBox fx:id="tweet" alignment="CENTER" maxHeight="0.0" maxWidth="0.0">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/assets/img/feather-pen.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
                </children>
                <BorderPane.margin>
                   <Insets top="10.0" />
@@ -46,14 +49,54 @@
          <center>
             <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" BorderPane.alignment="CENTER">
                <BorderPane.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets bottom="10.0" top="20.0" />
                </BorderPane.margin>
                <children>
-                  <Button fx:id="timelineViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Timeline" />
-                  <Button fx:id="mentionsViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mentions" />
-                  <Button fx:id="directMessagesViewButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="DM" />
-                  <Button fx:id="creditsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="About" />
-                  <Button fx:id="updateButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Update" managed="false" visible="false" />
+                  <HBox fx:id="timeline" alignment="CENTER" maxHeight="0.0" maxWidth="0.0" VBox.vgrow="NEVER">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/assets/img/timeline.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="mentions" alignment="CENTER" maxHeight="0.0" maxWidth="0.0">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/assets/img/at_sign.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="directMessages" alignment="CENTER" maxHeight="0.0" maxWidth="0.0">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/assets/img/direct_message.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="credits" alignment="CENTER" maxHeight="0.0" maxWidth="0.0">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/assets/img/about.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="update" alignment="CENTER" maxHeight="0.0" maxWidth="0.0">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/assets/img/update.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </center>
