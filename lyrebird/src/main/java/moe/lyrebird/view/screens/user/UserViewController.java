@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
@@ -273,22 +272,12 @@ public class UserViewController implements FxmlController {
 
     private void loadTargetUserTimeline() {
         final User user = targetUser.getValue();
-        final FxmlLoadResult<Pane, UserTimelineController> userTimelineLoad = easyFxml.loadNode(
-                Components.USER_TIMELINE,
-                Pane.class,
-                UserTimelineController.class
-        );
-
-        userTimelineLoad.getController()
-                        .onFailure(err -> LOG.error("Could not load user timeline!", err))
-                        .onSuccess(utc -> utc.setTargetUser(user));
-
-        userTimelineLoad.getNode()
-                        .recover(ExceptionHandler::fromThrowable)
-                        .onSuccess(userDetailsPane -> {
-                            VBox.setVgrow(userDetailsPane, Priority.ALWAYS);
-                            container.getChildren().add(userDetailsPane);
-                        });
+        easyFxml.loadNode(Components.USER_TIMELINE, Pane.class, UserTimelineController.class)
+                .afterControllerLoaded(utc -> utc.setTargetUser(user))
+                .afterNodeLoaded(userDetailsTimeline -> VBox.setVgrow(userDetailsTimeline, Priority.ALWAYS))
+                .getNode()
+                .recover(ExceptionHandler::fromThrowable)
+                .onSuccess(container.getChildren()::add);
     }
 
 }

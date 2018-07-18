@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.user.UserViewController;
@@ -46,17 +45,14 @@ public class UserDetailsService {
 
     public void openUserDetails(final User targetUser) {
         LOG.info("Opening detailed view of user : {} (@{})", targetUser.getName(), targetUser.getScreenName());
-        final FxmlLoadResult<Pane, UserViewController> userDetailsLoad = easyFxml.loadNode(
-                Screens.USER_VIEW,
-                Pane.class,
-                UserViewController.class
-        );
-        userDetailsLoad.getController()
-                       .onFailure(err -> LOG.error("Could not load user details view", err))
-                       .onSuccess(uvc -> uvc.targetUserProperty().setValue(targetUser));
-        final Pane userDetailsPane = userDetailsLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
-        Stages.stageOf(targetUser.getName() + " (@" + targetUser.getScreenName() + ")", userDetailsPane)
-              .thenAcceptAsync(Stages::scheduleDisplaying);
+        easyFxml.loadNode(Screens.USER_VIEW, Pane.class, UserViewController.class)
+                .afterControllerLoaded(uvc -> uvc.targetUserProperty().setValue(targetUser))
+                .getNode()
+                .recover(ExceptionHandler::fromThrowable)
+                .onSuccess(userDetailsPane -> {
+                    final String stageTitle = targetUser.getName() + " (@" + targetUser.getScreenName() + ")";
+                    Stages.stageOf(stageTitle, userDetailsPane).thenAcceptAsync(Stages::scheduleDisplaying);
+                });
     }
 
 }
