@@ -63,8 +63,8 @@ public class LyrebirdUiManager extends FxUiManager {
     protected String title() {
         return String.format(
                 "%s [%s]",
-                environment.getProperty("app.name"),
-                environment.getProperty("app.version")
+                environment.getRequiredProperty("app.promo.name"),
+                environment.getRequiredProperty("app.version")
         );
     }
 

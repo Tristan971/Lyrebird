@@ -1,9 +1,9 @@
 {
   "properties": [
     {
-      "name": "app.name",
+      "name": "app.promo.name",
       "type": "java.lang.String",
-      "description": "The application's name."
+      "description": "The application's name in places where \"promo\" style might be used."
     },
     {
       "name": "app.version",

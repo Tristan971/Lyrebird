@@ -39,7 +39,7 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
 
     @Override
     public String getLabel() {
-        return environment.getProperty("app.name");
+        return environment.getRequiredProperty("app.promo.name");
     }
 
     @Override
@@ -51,8 +51,8 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
     @Override
     public Map<MenuItem, ActionListener> getMenuItems() {
         final Map<MenuItem, ActionListener> menuItems = new LinkedHashMap<>();
-        menuItems.put(new MenuItem("Open", null), e -> showMainStage());
-        menuItems.put(new MenuItem("Quit", null), e -> exitApplication());
+        menuItems.put(new MenuItem("Open Lyrebird", null), e -> showMainStage());
+        menuItems.put(new MenuItem("Quit Lyrebird", null), e -> exitApplication());
         return menuItems;
     }
 
