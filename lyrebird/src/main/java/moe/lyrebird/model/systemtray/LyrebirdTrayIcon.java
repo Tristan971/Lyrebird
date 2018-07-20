@@ -17,7 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -50,7 +50,7 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
 
     @Override
     public Map<MenuItem, ActionListener> getMenuItems() {
-        final Map<MenuItem, ActionListener> menuItems = new HashMap<>();
+        final Map<MenuItem, ActionListener> menuItems = new LinkedHashMap<>();
         menuItems.put(new MenuItem("Open", null), e -> showMainStage());
         return menuItems;
     }
