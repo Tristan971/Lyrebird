@@ -1,6 +1,11 @@
 {
   "properties": [
     {
+      "name": "app.name",
+      "type": "java.lang.String",
+      "description": "The application's name."
+    },
+    {
       "name": "app.version",
       "type": "java.lang.String",
       "description": "Application version, extracted from Maven's project.version key."
