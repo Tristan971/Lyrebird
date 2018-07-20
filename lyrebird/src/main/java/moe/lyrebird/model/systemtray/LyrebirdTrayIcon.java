@@ -52,6 +52,7 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
     public Map<MenuItem, ActionListener> getMenuItems() {
         final Map<MenuItem, ActionListener> menuItems = new LinkedHashMap<>();
         menuItems.put(new MenuItem("Open", null), e -> showMainStage());
+        menuItems.put(new MenuItem("Quit", null), e -> exitApplication());
         return menuItems;
     }
 
@@ -77,6 +78,11 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
                                   }).onFailure(err -> LOG.error("Could not show main stage!", err)),
                 Platform::runLater
         );
+    }
+
+    private void exitApplication() {
+        LOG.info("Requesting application closure from tray icon.");
+        Platform.exit();
     }
 
 }
