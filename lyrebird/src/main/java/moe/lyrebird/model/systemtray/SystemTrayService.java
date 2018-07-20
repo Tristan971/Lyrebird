@@ -20,6 +20,8 @@ package moe.lyrebird.model.systemtray;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.awt.integrations.SystemTraySupport;
+import moe.lyrebird.model.interrupts.CleanupOperation;
+import moe.lyrebird.model.interrupts.CleanupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,12 +37,18 @@ public class SystemTrayService {
 
     private final LyrebirdTrayIcon lyrebirdTrayIcon;
     private final SystemTraySupport traySupport;
+    private final CleanupService cleanupService;
 
     private final Property<TrayIcon> trayIcon = new SimpleObjectProperty<>(null);
 
-    public SystemTrayService(final LyrebirdTrayIcon lyrebirdTrayIcon, final SystemTraySupport traySupport) {
+    public SystemTrayService(
+            final LyrebirdTrayIcon lyrebirdTrayIcon,
+            final SystemTraySupport traySupport,
+            final CleanupService cleanupService
+    ) {
         this.lyrebirdTrayIcon = lyrebirdTrayIcon;
         this.traySupport = traySupport;
+        this.cleanupService = cleanupService;
         loadTrayIcon();
     }
 
@@ -55,7 +63,16 @@ public class SystemTrayService {
                        LOG.error("Could not load the tray icon!", trayIconRes.getCause());
                        return null;
                    }))
-                   .thenAccept(trayIcon::setValue);
+                   .thenAcceptAsync(trayIcon::setValue)
+                   .thenRunAsync(() -> {
+                       if (trayIcon.getValue() == null) {
+                           return;
+                       }
+                       cleanupService.registerCleanupOperation(new CleanupOperation(
+                               "Remove system tray icon.",
+                               () -> traySupport.removeTrayIcon(trayIcon.getValue())
+                       ));
+                   });
     }
 
 }

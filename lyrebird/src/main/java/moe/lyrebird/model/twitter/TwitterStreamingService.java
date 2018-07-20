@@ -99,6 +99,7 @@ public class TwitterStreamingService {
     private void closeSession() {
         LOG.info("Stopping streaming for current session.");
         twitterStream.clearListeners();
+        twitterStream.shutdown();
     }
 
 }

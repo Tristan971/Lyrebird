@@ -22,6 +22,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -30,6 +32,8 @@ import java.util.concurrent.ThreadFactory;
 
 @Configuration
 public class ConcurrenceConfiguration {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ConcurrenceConfiguration.class);
 
     @Bean
     public Executor asyncIoExecutor() {
@@ -50,9 +54,8 @@ public class ConcurrenceConfiguration {
     public Executor cleanupExecutor() {
         final ThreadFactory cleanupThreadFactory =
                 new ThreadFactoryBuilder()
-                        .setUncaughtExceptionHandler((t, e) -> ExceptionHandler.displayExceptionPane(
-                                "Cleanup issue",
-                                "Could not execute cleanup in the background.",
+                        .setUncaughtExceptionHandler((t, e) -> LOG.error(
+                                "Exception on cleanup thread" + t.toString(),
                                 e
                         ))
                         .setNameFormat("Cleanup-%d")

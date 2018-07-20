@@ -25,11 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @Component
 public class CleanupService {
@@ -41,7 +37,7 @@ public class CleanupService {
 
     public CleanupService(@Qualifier("cleanupExecutor") final Executor cleanupExecutor) {
         this.cleanupExecutor = cleanupExecutor;
-        onShutdownHooks = new LinkedList<>();
+        this.onShutdownHooks = new LinkedList<>();
     }
 
     public void registerCleanupOperation(final CleanupOperation cleanupOperation) {
@@ -60,15 +56,12 @@ public class CleanupService {
     private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
         LOG.debug("\t-> {}", cleanupOperation.getName());
         try {
-            CompletableFuture.runAsync(cleanupOperation.getOperation(), cleanupExecutor)
-                             .get(1, TimeUnit.SECONDS);
-        } catch (final InterruptedException e) {
-            LOG.error("Could not actually call the following hook [{}] !", cleanupOperation.getName(), e);
-            Thread.currentThread().interrupt();
-        } catch (final ExecutionException e) {
-            LOG.error("The hook [{}] encountered an exception while executing!", cleanupOperation.getName(), e);
-        } catch (final TimeoutException e) {
-            LOG.error("The hook [{}] could not finish in the given time!", cleanupOperation.getName(), e);
+            new Thread(cleanupOperation.getOperation()).join(5000);
+        } catch (InterruptedException e) {
+            LOG.error("The cleanup operation thread for {} was interrupted! Skipping!", e);
+        } catch (final RuntimeException e) {
+            LOG.error("An uncaught exception was thrown in a cleanup task!", e);
+            e.printStackTrace();
         }
     }
 
