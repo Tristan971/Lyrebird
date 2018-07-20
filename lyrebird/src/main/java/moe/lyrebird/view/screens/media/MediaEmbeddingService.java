@@ -61,6 +61,7 @@ public class MediaEmbeddingService {
             case PHOTO:
                 return directPhotoHandler.handleMedia(entity.getMediaURLHttps());
             case VIDEO:
+            case ANIMATED_GIF:
                 return twitterVideoHandler.handleMedia(entity.getVideoVariants());
             case UNMANAGED:
             default:

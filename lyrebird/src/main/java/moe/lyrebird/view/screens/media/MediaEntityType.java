@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 public enum MediaEntityType {
     PHOTO("photo"),
+    ANIMATED_GIF("animated_gif"),
     VIDEO("video"),
     UNMANAGED("<UNMANAGED_TYPE>");
 
