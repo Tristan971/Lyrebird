@@ -25,9 +25,14 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
+import moe.lyrebird.model.notifications.Notification;
+import moe.lyrebird.model.notifications.NotificationService;
 import moe.lyrebird.view.screens.Screens;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The {@link LyrebirdUiManager} is responsible for bootstraping the GUI of the application correctly.
@@ -37,29 +42,36 @@ public class LyrebirdUiManager extends FxUiManager {
 
     private final StageManager stageManager;
     private final Environment environment;
+    private final NotificationService notificationService;
+
+    private final AtomicBoolean informedUserOfCloseBehavior = new AtomicBoolean(false);
 
     @Autowired
     public LyrebirdUiManager(
             final EasyFxml easyFxml,
             final StageManager stageManager,
-            final Environment environment
+            final Environment environment,
+            final NotificationService notificationService
     ) {
         super(easyFxml);
         this.stageManager = stageManager;
         this.environment = environment;
+        this.notificationService = notificationService;
     }
 
     @Override
     protected String title() {
         return String.format(
                 "%s [%s]",
-                "Lyrebird",
-                environment.getProperty("app.version")
+                environment.getRequiredProperty("app.promo.name"),
+                environment.getRequiredProperty("app.version")
         );
     }
 
     @Override
     protected void onStageCreated(final Stage mainStage) {
+        Platform.setImplicitExit(false);
+        mainStage.setOnCloseRequest(e -> handleMainStageClosure(mainStage));
         mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeigth", Integer.class));
         mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
         stageManager.registerSingle(Screens.ROOT_VIEW, mainStage);
@@ -68,6 +80,17 @@ public class LyrebirdUiManager extends FxUiManager {
     @Override
     protected FxmlNode mainComponent() {
         return Screens.ROOT_VIEW;
+    }
+
+    private void handleMainStageClosure(final Stage mainStage) {
+        mainStage.hide();
+        if (!informedUserOfCloseBehavior.getAcquire()) {
+            notificationService.sendNotification(new Notification(
+                    "Lyrebird's main window closed",
+                    "Exiting the main window does not close Lyrebird, use the icon in the system tray."
+            ));
+            informedUserOfCloseBehavior.setRelease(true);
+        }
     }
 
 }

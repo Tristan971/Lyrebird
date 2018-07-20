@@ -36,7 +36,7 @@ public class AwtNotificationSystem implements NotificationSystem {
     private final Property<TrayIcon> lyrebirdTrayIcon;
 
     public AwtNotificationSystem(final SystemTrayService trayService) {
-        this.lyrebirdTrayIcon = trayService.lyrebirdTrayIconProperty();
+        this.lyrebirdTrayIcon = trayService.trayIconProperty();
     }
 
     @Override
