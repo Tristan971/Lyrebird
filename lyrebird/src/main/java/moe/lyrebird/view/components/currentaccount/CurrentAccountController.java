@@ -28,6 +28,7 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
+import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
@@ -44,6 +45,12 @@ import java.util.concurrent.CompletableFuture;
 
 import static moe.lyrebird.view.assets.ImageResources.ADD_USER_PROFILE_PICTURE;
 
+/**
+ * This component is laoded at the top of the {@link Components#CONTROL_BAR} and serves as a very basic preview for who
+ * is the current user that will be used to perform all the actions requested.
+ *
+ * @see SessionManager
+ */
 @Component
 public class CurrentAccountController implements FxmlController {
 
@@ -82,10 +89,17 @@ public class CurrentAccountController implements FxmlController {
         bindProfilePicture();
     }
 
+    /**
+     * Binds the displayed username to the one resolved by the {@link SessionManager}.
+     */
     private void bindUsername() {
         this.userScreenName.textProperty().bind(sessionManager.currentSessionUsernameProperty());
     }
 
+    /**
+     * Asynchronously binds the displayed profile picture to the one resolved for the user in the current session via
+     * calling {@link SessionManager}.
+     */
     private void bindProfilePicture() {
         sessionManager.currentSessionProperty().addListener(
                 (observable, oldValue, newValue) -> this.userChanged(newValue)
@@ -93,10 +107,20 @@ public class CurrentAccountController implements FxmlController {
         this.userChanged(sessionManager.currentSessionProperty().getValue());
     }
 
+    /**
+     * Handles the change of a user either from none (unlogged) or to another one if the user has multiple accounts set
+     * up.
+     *
+     * @param newValue The newly selected user for usage.
+     */
     private void userChanged(final Session newValue) {
         CompletableFuture.runAsync(() -> loadAndSetUserAvatar(newValue.getTwitterUser()));
     }
 
+    /**
+     * Handles clicks on the user profile picture. It either relates to adding an account (in unlogged state) or to
+     * displaying the current user's detailed view.
+     */
     private void handleClickOnProfile() {
         LOG.debug("Clicked on current session profile picture");
         if (sessionManager.currentSessionProperty().getValue() == null) {
@@ -108,6 +132,9 @@ public class CurrentAccountController implements FxmlController {
         }
     }
 
+    /**
+     * Called when the user requests the adding of a new account.
+     */
     private void handleNewSessionRequest() {
         easyFxml.loadNode(Screens.LOGIN_VIEW)
                 .getNode()
@@ -115,6 +142,11 @@ public class CurrentAccountController implements FxmlController {
                 .andThen(Stages::scheduleDisplaying);
     }
 
+    /**
+     * Called when the user requests the displaying of the current user's detailed view.
+     *
+     * @see Screens#USER_VIEW
+     */
     private void loadDetailsForCurrentUser() {
         sessionManager.currentSessionProperty()
                       .getValue()
@@ -122,6 +154,11 @@ public class CurrentAccountController implements FxmlController {
                       .onSuccess(userDetailsService::openUserDetails);
     }
 
+    /**
+     * Asynchronous load and set of the user profile picture.
+     *
+     * @param user The user with which to work, mostly because we do not keep a reference to it inside this class.
+     */
     private void loadAndSetUserAvatar(final Try<User> user) {
         user.map(User::getOriginalProfileImageURLHttps)
             .map(imageUrl -> asyncIO.loadImageMiniature(imageUrl, 128.0, 128.0))
