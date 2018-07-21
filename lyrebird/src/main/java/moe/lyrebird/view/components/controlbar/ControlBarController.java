@@ -47,6 +47,9 @@ import java.util.List;
 import static moe.lyrebird.view.screens.Screens.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
+/**
+ * The ControlBar is the left-side view selector for Lyrebird's main UI window.
+ */
 @Component
 public class ControlBarController implements FxmlController {
 
@@ -111,10 +114,10 @@ public class ControlBarController implements FxmlController {
         bindActionImageToLoadingView(directMessages, Components.DIRECT_MESSAGES);
 
         credits.setOnMouseClicked(e ->
-                easyFxml.loadNode(Screens.CREDITS_VIEW)
-                        .orExceptionPane()
-                        .map(pane -> Stages.stageOf("Credits", pane))
-                        .andThen(Stages::scheduleDisplaying)
+                                          easyFxml.loadNode(Screens.CREDITS_VIEW)
+                                                  .orExceptionPane()
+                                                  .map(pane -> Stages.stageOf("Credits", pane))
+                                                  .andThen(Stages::scheduleDisplaying)
         );
 
         sessionManager.isLoggedInProperty().addListener((o, prev, cur) -> handleLogStatusChange(prev, cur));
@@ -126,6 +129,9 @@ public class ControlBarController implements FxmlController {
         update.setOnMouseClicked(e -> openUpdatesScreen());
     }
 
+    /**
+     * Makes sure the tweet button appears as a nice circle through CSS and clipping work.
+     */
     private void setUpTweetButton() {
         tweet.setOnMouseClicked(e -> this.openTweetWindow());
         final Circle tweetClip = Clipping.getCircleClip(28.0);
@@ -134,6 +140,11 @@ public class ControlBarController implements FxmlController {
         tweet.setClip(tweetClip);
     }
 
+    /**
+     * Loads the current user's account view on the top of the bar.
+     *
+     * @see Components#CURRENT_ACCOUNT
+     */
     private void loadCurrentAccountPanel() {
         easyFxml.loadNode(Components.CURRENT_ACCOUNT)
                 .getNode()
@@ -145,6 +156,11 @@ public class ControlBarController implements FxmlController {
                 ));
     }
 
+    /**
+     * Called on click on the {@link #tweet} box. Opens a new tweet window.
+     *
+     * @see Screens#NEW_TWEET_VIEW
+     */
     private void openTweetWindow() {
         LOG.info("Opening new tweet stage...");
         final FxmlLoadResult<Pane, NewTweetController> newTweetViewLoadResult = this.easyFxml.loadNode(
@@ -160,6 +176,13 @@ public class ControlBarController implements FxmlController {
               .thenAcceptAsync(newTweetController::setStage);
     }
 
+    /**
+     * This method managed switching from an unlogged to a logged state. It is tied to {@link
+     * SessionManager#isLoggedInProperty()}'s value.
+     *
+     * @param previous Whether the user was previously logged-in
+     * @param current  Whether the user is not logged-in
+     */
     private void handleLogStatusChange(final boolean previous, final boolean current) {
         List.of(
                 timeline,
@@ -169,6 +192,8 @@ public class ControlBarController implements FxmlController {
                 tweet
         ).forEach(btn -> btn.setVisible(current));
 
+        // was not connected and now is, mostly to distinguish with the future feature of
+        // multiple accounts management
         if (!previous && current) {
             timeline.onMouseClickedProperty().get().handle(null);
         }
@@ -181,6 +206,12 @@ public class ControlBarController implements FxmlController {
         });
     }
 
+    /**
+     * The {@link #update} box only show up when an update is detected as available. Then if it is the case,
+     * this method is called on click to open the update information screen.
+     *
+     * @see Screens#UPDATE_VIEW
+     */
     private void openUpdatesScreen() {
         final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.loadNode(Screens.UPDATE_VIEW);
         final Pane updatePane = updateScreenLoadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
