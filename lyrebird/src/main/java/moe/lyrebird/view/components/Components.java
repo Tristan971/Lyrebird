@@ -31,7 +31,14 @@ import moe.lyrebird.view.components.notifications.NotificationsController;
 import moe.lyrebird.view.components.timeline.TimelineController;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
+import moe.lyrebird.view.screens.Screens;
 
+/**
+ * Components are {@link FxmlNode} that do not have their own stage but are embedded inside a {@link Screens} member.
+ *
+ * @see FxmlNode
+ * @see Screens
+ */
 public enum Components implements FxmlNode {
     CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class),
 
