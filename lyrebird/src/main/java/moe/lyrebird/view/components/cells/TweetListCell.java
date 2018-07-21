@@ -25,8 +25,15 @@ import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
 import moe.lyrebird.view.components.Components;
 import twitter4j.Status;
 
+import javafx.scene.control.ListView;
+
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+/**
+ * This is the class managing the cell of a tweet from the point of view of its embedding {@link ListView}.
+ *
+ * @see ComponentListCell
+ */
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class TweetListCell extends ComponentListCell<Status> {

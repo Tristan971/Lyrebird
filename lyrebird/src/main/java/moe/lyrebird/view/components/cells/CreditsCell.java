@@ -27,9 +27,15 @@ import moe.lyrebird.view.components.Components;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.control.ListView;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+/**
+ * This is the class managing the cell of a credit disclaimer from the point of view of its embedding {@link ListView}.
+ *
+ * @see ComponentListCell
+ */
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class CreditsCell extends ComponentListCell<CredittedWork> {
