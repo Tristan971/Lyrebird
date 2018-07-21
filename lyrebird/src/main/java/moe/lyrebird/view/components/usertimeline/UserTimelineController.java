@@ -31,6 +31,11 @@ import twitter4j.User;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+/**
+ * Mostly setup for the self timeline view of a given user.
+ *
+ * @see TimelineBasedController
+ */
 @Component
 @Scope(SCOPE_PROTOTYPE)
 public class UserTimelineController extends TimelineBasedController {
@@ -48,6 +53,9 @@ public class UserTimelineController extends TimelineBasedController {
         this.userTimeline = userTimeline;
     }
 
+    /**
+     * @param user The user whose self timeline we want to display
+     */
     public void setTargetUser(final User user) {
         userTimeline.targetUserProperty().setValue(user);
     }

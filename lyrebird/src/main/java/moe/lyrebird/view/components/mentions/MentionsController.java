@@ -26,6 +26,11 @@ import moe.lyrebird.view.components.TimelineBasedController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Mostly setup for Mentions timeline view.
+ *
+ * @see TimelineBasedController
+ */
 @Component
 public class MentionsController extends TimelineBasedController {
 
