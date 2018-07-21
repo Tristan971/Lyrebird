@@ -33,6 +33,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * This controller is responsible for in-app notifications (as opposed to system-side ones). This component can only
+ * display one single notification at a time because there is not realistic need for more.
+ *
+ * @see InternalNotificationSystem
+ */
 @Component
 public class NotificationsController implements FxmlController {
 
@@ -69,6 +75,11 @@ public class NotificationsController implements FxmlController {
         internalNotificationSystem.notificationProperty().addListener((o, prev, cur) -> this.handleChange(cur));
     }
 
+    /**
+     * Called when the notification to display exposed by the backend is changed.
+     *
+     * @param notification The new notification to display.
+     */
     private void handleChange(final Notification notification) {
         LOG.debug("New notification to display!");
         shouldDisplay.setValue(true);
