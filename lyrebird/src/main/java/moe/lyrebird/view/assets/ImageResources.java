@@ -20,6 +20,9 @@ package moe.lyrebird.view.assets;
 
 import javafx.scene.image.Image;
 
+/**
+ * This enumetation contains some static images used either as placeholders or fallbacks.
+ */
 public enum ImageResources {
 
     ADD_USER_PROFILE_PICTURE("add_user.png"),
@@ -31,10 +34,20 @@ public enum ImageResources {
 
     private final Image backingImage;
 
+    /**
+     * @param path The path of the resource relative to src/main/resources/assets/img
+     */
     ImageResources(final String path) {
         this.backingImage = loadImage(path);
     }
 
+    /**
+     * This method is the load call executed on constructor call to preload the images on startup.
+     *
+     * @param path The path from the enum member declaration.
+     *
+     * @return The underlying image that will actually get used.
+     */
     private static Image loadImage(final String path) {
         final ClassLoader cl = ImageResources.class.getClassLoader();
         final String finalPath = "assets/img/" + path;
