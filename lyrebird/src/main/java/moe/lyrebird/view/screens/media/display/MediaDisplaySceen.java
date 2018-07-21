@@ -21,12 +21,11 @@ package moe.lyrebird.view.screens.media.display;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
-import moe.lyrebird.view.screens.media.MediaScreenController;
-import moe.lyrebird.view.screens.media.display.photo.PhotoScreenController;
+import moe.lyrebird.view.screens.media.display.photo.ImageScreenController;
 import moe.lyrebird.view.screens.media.display.video.VideoScreenController;
 
 public enum MediaDisplaySceen implements FxmlNode {
-    PHOTO("photo/PhotoScreen.fxml", PhotoScreenController.class),
+    PHOTO("photo/ImageScreen.fxml", ImageScreenController.class),
     VIDEO("video/VideoScreen.fxml", VideoScreenController.class);
 
     private final String file;

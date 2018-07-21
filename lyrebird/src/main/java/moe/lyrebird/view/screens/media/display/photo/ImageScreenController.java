@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.io.CachedIO;
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.media.MediaScreenController;
+import moe.lyrebird.view.screens.media.display.MediaScreenController;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -33,9 +33,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * This controller if managing detailed views of images.
+ */
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class PhotoScreenController extends MediaScreenController {
+public class ImageScreenController implements MediaScreenController {
 
     @FXML
     private AnchorPane container;
@@ -48,7 +51,7 @@ public class PhotoScreenController extends MediaScreenController {
     private final Property<Image> imageProp = new SimpleObjectProperty<>(ImageResources.LOADING_REMOTE.getImage());
 
     @Autowired
-    public PhotoScreenController(final CachedIO cachedIO) {
+    public ImageScreenController(final CachedIO cachedIO) {
         this.cachedIO = cachedIO;
         imageProp.addListener((observable, oldValue, newValue) -> bindViewSizeToParent());
     }
@@ -64,7 +67,7 @@ public class PhotoScreenController extends MediaScreenController {
     }
 
     @Override
-    protected void bindViewSizeToParent() {
+    public void bindViewSizeToParent() {
         container.setPrefWidth(imageProp.getValue().getWidth());
         container.setPrefHeight(imageProp.getValue().getHeight());
         photoImageView.fitHeightProperty().bind(container.heightProperty());
