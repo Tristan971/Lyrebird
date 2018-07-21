@@ -24,6 +24,7 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.io.AsyncIO;
@@ -264,14 +265,20 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     private void openReplyScreen() {
-        easyFxml.loadNode(Screens.NEW_TWEET_VIEW, Pane.class, NewTweetController.class)
-                .afterControllerLoaded(ntc -> ntc.setInReplyToTweet(status))
-                .getNode()
-                .recover(ExceptionHandler::fromThrowable)
-                .onSuccess(newTweetViewPane ->
-                                   Stages.stageOf("Reply to tweet", newTweetViewPane)
-                                         .thenAcceptAsync(Stages::scheduleDisplaying)
-                );
+        final FxmlLoadResult<Pane, NewTweetController> replyStageLoad = easyFxml.loadNode(
+                Screens.NEW_TWEET_VIEW,
+                Pane.class,
+                NewTweetController.class
+        ).afterControllerLoaded(ntc -> ntc.setInReplyToTweet(status));
+
+        final NewTweetController newTweetController = replyStageLoad.getController().get();
+        final Pane newTweetPane = replyStageLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
+
+        Stages.stageOf("Reply to tweet", newTweetPane)
+              .thenAcceptAsync(stage -> {
+                  newTweetController.setStage(stage);
+                  Stages.scheduleDisplaying(stage);
+              });
     }
 
 }
