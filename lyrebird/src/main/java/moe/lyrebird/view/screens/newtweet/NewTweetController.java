@@ -58,6 +58,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -81,6 +82,14 @@ import static javafx.scene.paint.Color.GREEN;
 import static javafx.scene.paint.Color.ORANGE;
 import static javafx.scene.paint.Color.RED;
 
+/**
+ * This controller manages the new tweet view.
+ * <p>
+ * It is made {@link Lazy} in case the user never uses it.
+ * <p>
+ * It is also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} in case multiple new tweet screens are open at the
+ * same time.
+ */
 @Lazy
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -145,11 +154,19 @@ public class NewTweetController implements FxmlController, StageAware {
         inReplyStatus.addListener((o, prev, cur) -> prefillMentionsForReply());
     }
 
+    /**
+     * @param embeddingStage The stage that will be closed on successful publication of the tweet
+     */
     @Override
     public void setStage(final Stage embeddingStage) {
         this.embeddingStage.setValue(embeddingStage);
     }
 
+    /**
+     * If this tweet is in reply to another, we set proper display of the previous one because it looks good.
+     *
+     * @param repliedTweet the tweet ({@link Status} to which this is in reply to
+     */
     public void setInReplyToTweet(final Status repliedTweet) {
         LOG.debug("Set new tweet stage to embed status : {}", repliedTweet.getId());
         inReplyStatus.setValue(repliedTweet);
@@ -163,6 +180,9 @@ public class NewTweetController implements FxmlController, StageAware {
                 .onSuccess(this.container::setTop);
     }
 
+    /**
+     * In case this is a reply we prefill the content field with the appropiate mentions.
+     */
     private void prefillMentionsForReply() {
         final User currentUser = sessionManager.currentSessionProperty().getValue().getTwitterUser().get();
 
@@ -179,6 +199,10 @@ public class NewTweetController implements FxmlController, StageAware {
         tweetTextArea.positionCaret(prefill.length());
     }
 
+    /**
+     * Makes the character counter colorful depending on the current amount typed relative to the maximum Twitter
+     * allows.
+     */
     private void enableTweetLengthCheck() {
         tweetTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
             final Color color = Match(newValue.length()).of(
@@ -194,6 +218,9 @@ public class NewTweetController implements FxmlController, StageAware {
         });
     }
 
+    /**
+     * Sends a tweet using the {@link NewTweetService}.
+     */
     private void sendTweet() {
         Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
         newTweetService.sendNewTweet(tweetTextArea.getText(), mediasToUpload)
@@ -203,6 +230,10 @@ public class NewTweetController implements FxmlController, StageAware {
                        }, Platform::runLater);
     }
 
+    /**
+     * Opens a file picker for choosing attachments for the currently made tweet and registers the asynchronous choice
+     * result in {@link #mediasToUpload}.
+     */
     private void openMediaAttachmentsFilePicker() {
         pickMediaButton.setDisable(true);
         this.openFileChooserForMedia()
@@ -212,10 +243,16 @@ public class NewTweetController implements FxmlController, StageAware {
             );
     }
 
+    /**
+     * Opens a {@link FileChooser} to pick attachments from with a premade {@link ExtensionFilter} for the allowed media
+     * types.
+     *
+     * @return an asynchronous result containing the list of selected files once user is done with choosing them.
+     */
     private CompletionStage<List<File>> openFileChooserForMedia() {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Pick a media for your tweet");
-        final FileChooser.ExtensionFilter extensionFilter = twitterMediaExtensionFilter.extensionFilter;
+        final ExtensionFilter extensionFilter = twitterMediaExtensionFilter.extensionFilter;
         fileChooser.getExtensionFilters().add(extensionFilter);
         fileChooser.setSelectedExtensionFilter(extensionFilter);
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -227,6 +264,11 @@ public class NewTweetController implements FxmlController, StageAware {
         }, Platform::runLater);
     }
 
+    /**
+     * Creates previews for every media selected for upload.
+     *
+     * @param selectedFiles the selected files
+     */
     private void mediaFilesChosen(final List<File> selectedFiles) {
         pickMediaButton.setDisable(false);
         mediasToUpload.addAll(selectedFiles);
@@ -240,6 +282,13 @@ public class NewTweetController implements FxmlController, StageAware {
         }
     }
 
+    /**
+     * Builds an {@link ImageView} preview for a given file.
+     *
+     * @param previewedFile The file in question
+     *
+     * @return The miniature {@link ImageView} previewing it
+     */
     private ImageView buildMediaPreviewImageView(final File previewedFile) {
         try {
             final ImageView imageView = new ImageView();
