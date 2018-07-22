@@ -36,6 +36,11 @@ import static io.vavr.API.unchecked;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.unmodifiableObservableList;
 
+/**
+ * This service aims at exposing creditted works disclaimers in src/main/resources/assets/credits/third-parties
+ *
+ * @see CredittedWork
+ */
 @Lazy
 @Component
 public class CreditsService {
@@ -52,6 +57,14 @@ public class CreditsService {
         )));
     }
 
+    /**
+     * Deserializes the creditted works matching the {@link #CREDITS_RESOURCES_PATH} location pattern.
+     *
+     * @param objectMapper The object mapper used for deserialization
+     * @param pmpr         The {@link PathMatchingResourcePatternResolver} used for location pattern matching
+     *
+     * @return The list of deserialized credits files
+     */
     private List<CredittedWork> loadCreditsFiles(
             final ObjectMapper objectMapper,
             final PathMatchingResourcePatternResolver pmpr
@@ -64,6 +77,9 @@ public class CreditsService {
                   .toJavaList();
     }
 
+    /**
+     * @return the observable list of loaded {@link CredittedWork}s.
+     */
     public ObservableList<CredittedWork> creditedWorks() {
         return credittedWorks;
     }
