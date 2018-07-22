@@ -52,7 +52,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -76,6 +75,8 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 public class TweetPaneController implements ComponentCellFxmlController<Status> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
+
+    private static final double INTERRACTION_BUTTON_CLIP_RADIUS = 14.0;
 
     @FXML
     private Label author;
@@ -148,7 +149,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @Override
     public void initialize() {
-        authorProfilePicturePane.setClip(makePpClip());
+        authorProfilePicturePane.setClip(Clipping.getCircleClip(24.0));
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
         setUpInterractionButtons();
@@ -170,23 +171,14 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
             return;
         }
 
-        final Circle replyClip = Clipping.getCircleClip(14.0);
-        replyClip.setCenterX(14.0);
-        replyClip.setCenterY(14.0);
         replyButton.setOnMouseClicked(e -> this.openReplyScreen());
-        replyButton.setClip(replyClip);
+        replyButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
 
-        final Circle likeClip = Clipping.getCircleClip(14.0);
-        likeClip.setCenterX(14.0);
-        likeClip.setCenterY(14.0);
         likeButton.setOnMouseClicked(e -> this.onLike());
-        likeButton.setClip(likeClip);
+        likeButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
 
-        final Circle retweetClip = Clipping.getCircleClip(14.0);
-        retweetClip.setCenterX(14.0);
-        retweetClip.setCenterY(14.0);
         retweetButton.setOnMouseClicked(e -> this.onRetweet());
-        retweetButton.setClip(retweetClip);
+        retweetButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
     }
 
     /**
@@ -293,14 +285,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         mediaBox.setManaged(!embeddingNodes.isEmpty());
         mediaBox.setVisible(!embeddingNodes.isEmpty());
         mediaBox.getChildren().setAll(embeddingNodes);
-    }
-
-    private Circle makePpClip() {
-        final double clippingRadius = 24.0;
-        final Circle ppClip = Clipping.getCircleClip(clippingRadius);
-        ppClip.setCenterX(clippingRadius);
-        ppClip.setCenterY(clippingRadius);
-        return ppClip;
     }
 
     /**

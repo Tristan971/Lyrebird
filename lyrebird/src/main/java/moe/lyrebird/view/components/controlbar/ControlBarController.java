@@ -39,7 +39,6 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 
 import java.util.List;
 
@@ -133,10 +132,7 @@ public class ControlBarController implements FxmlController {
      */
     private void setUpTweetButton() {
         tweet.setOnMouseClicked(e -> this.openTweetWindow());
-        final Circle tweetClip = Clipping.getCircleClip(28.0);
-        tweetClip.setCenterX(28.0);
-        tweetClip.setCenterY(28.0);
-        tweet.setClip(tweetClip);
+        tweet.setClip(Clipping.getCircleClip(28.0));
     }
 
     /**

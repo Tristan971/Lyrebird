@@ -38,7 +38,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Circle;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -81,7 +80,7 @@ public class CurrentAccountController implements FxmlController {
 
     @Override
     public void initialize() {
-        userProfilePicture.setClip(makePpClip());
+        userProfilePicture.setClip(Clipping.getCircleClip(32.0));
         userProfilePicture.setImage(ADD_USER_PROFILE_PICTURE.getImage());
         userProfilePicture.setOnMouseClicked(e -> handleClickOnProfile());
         bindUsername();
@@ -162,14 +161,6 @@ public class CurrentAccountController implements FxmlController {
         user.map(User::getOriginalProfileImageURLHttps)
             .map(imageUrl -> asyncIO.loadImageMiniature(imageUrl, 128.0, 128.0))
             .onSuccess(loadRequest -> loadRequest.thenAcceptAsync(userProfilePicture::setImage, Platform::runLater));
-    }
-
-    private Circle makePpClip() {
-        final double clippingRadius = 32.0;
-        final Circle circle = Clipping.getCircleClip(clippingRadius);
-        circle.setCenterX(clippingRadius);
-        circle.setCenterY(clippingRadius);
-        return circle;
     }
 
 }
