@@ -24,6 +24,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
+/**
+ * Simple helper base for fields of {@link CredittedWork} since they all have in common a name and a related URL.
+ *
+ * @see CredittedWork
+ */
 public abstract class SimpleNameUrlBinding {
 
     @JsonProperty
