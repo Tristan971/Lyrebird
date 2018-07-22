@@ -55,6 +55,10 @@ public class RootScreenController implements FxmlController {
         loadNotificationPane();
     }
 
+    /**
+     * Loads up the {@link Components#CONTROL_BAR} on the left side of the {@link BorderPane} which is the main
+     * container for the main view.
+     */
     private void loadControlBar() {
         LOG.debug("Initializing control bar...");
         final Pane controlBarPane = this.easyFxml
@@ -65,6 +69,10 @@ public class RootScreenController implements FxmlController {
         contentPane.setLeft(controlBarPane);
     }
 
+    /**
+     * Loads up the {@link Components#NOTIFICATIONS_PANE} on the top side of the {@link BorderPane} which is the main
+     * container for the main view.
+     */
     private void loadNotificationPane() {
         LOG.debug("Initializing notification pane...");
         final Pane notificationPane = this.easyFxml
@@ -75,6 +83,12 @@ public class RootScreenController implements FxmlController {
         this.contentPane.setTop(notificationPane);
     }
 
+    /**
+     * Helper function to load a given component as center node for the {@link BorderPane} which is the main container
+     * for the main view.
+     *
+     * @param component The component to load.
+     */
     public void setContent(final Components component) {
         LOG.info("Switching content of root pane to {}", component);
         final Pane contentNode = this.easyFxml
