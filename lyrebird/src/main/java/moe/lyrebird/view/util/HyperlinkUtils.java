@@ -24,6 +24,9 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * This class provides helper methods for filtering out URLs in text and extracting them out.
+ */
 public final class HyperlinkUtils {
 
     private static final String URL_REGEX = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
@@ -33,16 +36,38 @@ public final class HyperlinkUtils {
         throw new UnsupportedOperationException("Should not be instanciated.");
     }
 
-    public static String transformUrls(final String input, final Function<String, String> replacer) {
+    /**
+     * Transforms all the URLs in an input String.
+     *
+     * @param input    The input string
+     * @param replacer The transformation function
+     *
+     * @return The resulting string
+     */
+    private static String transformUrls(final String input, final Function<String, String> replacer) {
         return URL_PATTERN.matcher(input).replaceAll(match -> replacer.apply(match.group()));
     }
 
+    /**
+     * Extracts all the URLs from the given input String.
+     *
+     * @param input The input string
+     *
+     * @return The list of all URLs matching {@link #URL_REGEX} in the input
+     */
     public static List<String> findAllUrls(final String input) {
         return URL_PATTERN.matcher(input).results().map(MatchResult::group).collect(Collectors.toList());
     }
 
+    /**
+     * Strips/trims all the URLs in the input String
+     *
+     * @param input The input string
+     *
+     * @return The resulting string
+     */
     public static String stripAllUrls(final String input) {
-        return URL_PATTERN.matcher(input).replaceAll("");
+        return transformUrls(input, url -> "");
     }
 
 }
