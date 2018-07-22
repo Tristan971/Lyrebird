@@ -22,7 +22,11 @@ import twitter4j.User;
 
 import java.util.function.BiFunction;
 
+/**
+ * Convenience enumeration for {@link TwitterBinaryInterraction}s which apply to {@link User}s.
+ */
 public enum UserInterraction implements TwitterBinaryInterraction<User> {
+
     FOLLOW(
             TwitterInterractionService::follow,
             TwitterInterractionService::unfollow,
