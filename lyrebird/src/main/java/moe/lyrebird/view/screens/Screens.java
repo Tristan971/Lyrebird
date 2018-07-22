@@ -21,6 +21,7 @@ package moe.lyrebird.view.screens;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.api.FxmlFile;
 import moe.tristan.easyfxml.api.FxmlNode;
+import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.screens.credits.CreditsScreenController;
 import moe.lyrebird.view.screens.login.LoginScreenController;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
@@ -29,9 +30,8 @@ import moe.lyrebird.view.screens.update.UpdateScreenController;
 import moe.lyrebird.view.screens.user.UserViewController;
 
 /**
- * The screens as an enum for easier autocompletion etc.
+ * This enumeration's members are {@link FxmlNode}s which have their own window and embed {@link Components} nodes.
  */
-@SuppressWarnings("unused")
 public enum Screens implements FxmlNode {
 
     ROOT_VIEW("root/RootView.fxml", RootScreenController.class),
