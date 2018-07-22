@@ -19,6 +19,7 @@
 package moe.lyrebird.model.twitter.observables;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
@@ -38,6 +39,10 @@ import java.util.concurrent.Executor;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+/**
+ * This class exposes a user's self timeline in an observable way
+ */
+@Lazy
 @Component
 @Scope(SCOPE_PROTOTYPE)
 public class UserTimeline extends TwitterTimelineBaseModel {
@@ -47,10 +52,7 @@ public class UserTimeline extends TwitterTimelineBaseModel {
     private final Property<User> targetUser = new SimpleObjectProperty<>(null);
 
     @Autowired
-    public UserTimeline(
-            final SessionManager sessionManager,
-            final Executor twitterExecutor
-    ) {
+    public UserTimeline(final SessionManager sessionManager, final Executor twitterExecutor) {
         super(sessionManager, twitterExecutor);
         this.targetUser.addListener((o, prev, cur) -> {
             this.clearLoadedTweets();
@@ -58,6 +60,9 @@ public class UserTimeline extends TwitterTimelineBaseModel {
         });
     }
 
+    /**
+     * @return the {@link Property} for the user whose self timeline we are interested in
+     */
     public Property<User> targetUserProperty() {
         return targetUser;
     }
