@@ -36,7 +36,7 @@ import moe.lyrebird.view.components.cells.TweetListCell;
 import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.util.BrowserOpeningHyperlink;
+import moe.lyrebird.view.util.ClickableHyperlink;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.slf4j.Logger;
@@ -308,8 +308,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
      *
      * @return a clickable link targetting the URL
      */
-    private BrowserOpeningHyperlink buildHyperlink(final String url) {
-        return new BrowserOpeningHyperlink(browserSupport::openUrl).withTarget(url);
+    private ClickableHyperlink buildHyperlink(final String url) {
+        return new ClickableHyperlink(url, browserSupport::openUrl);
     }
 
     /**

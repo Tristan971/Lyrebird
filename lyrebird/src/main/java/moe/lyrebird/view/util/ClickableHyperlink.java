@@ -23,20 +23,13 @@ import javafx.scene.control.Hyperlink;
 
 import java.util.function.Consumer;
 
-public class BrowserOpeningHyperlink extends Hyperlink {
+public final class ClickableHyperlink extends Hyperlink {
 
-    private String currentURL;
-
-    public BrowserOpeningHyperlink(final Consumer<String> onClicked) {
+    public <T> ClickableHyperlink(final T element, final Consumer<T> onClicked) {
         super();
-        setOnAction(e -> onClicked.accept(currentURL));
+        setText(String.valueOf(element));
+        setOnAction(e -> onClicked.accept(element));
         this.setPadding(Insets.EMPTY);
-    }
-
-    public BrowserOpeningHyperlink withTarget(final String url) {
-        setText(url);
-        this.currentURL = url;
-        return this;
     }
 
 }
