@@ -18,13 +18,12 @@
 
 package moe.lyrebird.view.components.directmessages;
 
-import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
-import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.components.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.DirectMessage;
@@ -42,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-@Component
+@org.springframework.stereotype.Component
 public class DirectMessagesController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessagesController.class);
@@ -82,7 +81,7 @@ public class DirectMessagesController implements FxmlController {
         LOG.debug("New conversation detected with {}", user.getScreenName());
 
         final FxmlLoadResult<Pane, DMConversationController> conversationLoad = easyFxml.loadNode(
-                Components.DIRECT_MESSAGE_CONVERSATION,
+                Component.DIRECT_MESSAGE_CONVERSATION,
                 Pane.class,
                 DMConversationController.class
         );

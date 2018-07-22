@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -30,7 +29,7 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.components.Component;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.util.Clipping;
@@ -66,7 +65,7 @@ import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.
  * same time.
  */
 @Lazy
-@Component
+@org.springframework.stereotype.Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserViewController implements FxmlController {
 
@@ -312,7 +311,7 @@ public class UserViewController implements FxmlController {
      */
     private void loadTargetUserTimeline() {
         final User user = targetUser.getValue();
-        easyFxml.loadNode(Components.USER_TIMELINE, Pane.class, UserTimelineController.class)
+        easyFxml.loadNode(Component.USER_TIMELINE, Pane.class, UserTimelineController.class)
                 .afterControllerLoaded(utc -> utc.setTargetUser(user))
                 .afterNodeLoaded(userDetailsTimeline -> VBox.setVgrow(userDetailsTimeline, Priority.ALWAYS))
                 .getNode()

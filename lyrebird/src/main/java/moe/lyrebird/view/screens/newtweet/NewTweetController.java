@@ -21,7 +21,6 @@ package moe.lyrebird.view.screens.newtweet;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -29,7 +28,7 @@ import moe.tristan.easyfxml.util.Buttons;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
-import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.components.Component;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.StageAware;
@@ -91,7 +90,7 @@ import static javafx.scene.paint.Color.RED;
  * same time.
  */
 @Lazy
-@Component
+@org.springframework.stereotype.Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NewTweetController implements FxmlController, StageAware {
 
@@ -170,7 +169,7 @@ public class NewTweetController implements FxmlController, StageAware {
     public void setInReplyToTweet(final Status repliedTweet) {
         LOG.debug("Set new tweet stage to embed status : {}", repliedTweet.getId());
         inReplyStatus.setValue(repliedTweet);
-        easyFxml.loadNode(Components.TWEET, Pane.class, TweetPaneController.class)
+        easyFxml.loadNode(Component.TWEET, Pane.class, TweetPaneController.class)
                 .afterControllerLoaded(tpc -> {
                     tpc.embeddedPropertyProperty().setValue(true);
                     tpc.updateWithValue(repliedTweet);

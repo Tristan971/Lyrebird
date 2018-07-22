@@ -39,7 +39,7 @@ import moe.lyrebird.view.screens.Screens;
  * @see FxmlNode
  * @see Screens
  */
-public enum Components implements FxmlNode {
+public enum Component implements FxmlNode {
     CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class),
 
     CURRENT_ACCOUNT("currentaccount/CurrentAccount.fxml", CurrentAccountController.class),
@@ -62,7 +62,7 @@ public enum Components implements FxmlNode {
     private final String filePath;
     private final Class<? extends FxmlController> controllerClass;
 
-    Components(final String filePath, final Class<? extends FxmlController> controllerClass) {
+    Component(final String filePath, final Class<? extends FxmlController> controllerClass) {
         this.filePath = filePath;
         this.controllerClass = controllerClass;
     }

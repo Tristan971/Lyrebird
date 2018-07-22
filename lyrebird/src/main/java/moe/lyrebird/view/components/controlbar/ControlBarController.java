@@ -18,7 +18,6 @@
 
 package moe.lyrebird.view.components.controlbar;
 
-import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -26,7 +25,7 @@ import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.update.UpdateService;
-import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.components.Component;
 import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.screens.root.RootScreenController;
@@ -50,7 +49,7 @@ import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExcep
 /**
  * The ControlBar is the left-side view selector for Lyrebird's main UI window.
  */
-@Component
+@org.springframework.stereotype.Component
 public class ControlBarController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ControlBarController.class);
@@ -109,9 +108,9 @@ public class ControlBarController implements FxmlController {
 
         setUpTweetButton();
 
-        bindActionImageToLoadingView(timeline, Components.TIMELINE);
-        bindActionImageToLoadingView(mentions, Components.MENTIONS);
-        bindActionImageToLoadingView(directMessages, Components.DIRECT_MESSAGES);
+        bindActionImageToLoadingView(timeline, Component.TIMELINE);
+        bindActionImageToLoadingView(mentions, Component.MENTIONS);
+        bindActionImageToLoadingView(directMessages, Component.DIRECT_MESSAGES);
 
         credits.setOnMouseClicked(e ->
                                           easyFxml.loadNode(Screens.CREDITS_VIEW)
@@ -143,10 +142,10 @@ public class ControlBarController implements FxmlController {
     /**
      * Loads the current user's account view on the top of the bar.
      *
-     * @see Components#CURRENT_ACCOUNT
+     * @see Component#CURRENT_ACCOUNT
      */
     private void loadCurrentAccountPanel() {
-        easyFxml.loadNode(Components.CURRENT_ACCOUNT)
+        easyFxml.loadNode(Component.CURRENT_ACCOUNT)
                 .getNode()
                 .onSuccess(container::setTop)
                 .onFailure(err -> displayExceptionPane(
@@ -199,7 +198,7 @@ public class ControlBarController implements FxmlController {
         }
     }
 
-    private void bindActionImageToLoadingView(final HBox imageBox, final Components component) {
+    private void bindActionImageToLoadingView(final HBox imageBox, final Component component) {
         imageBox.setOnMouseClicked(e -> {
             currentViewButton.setValue(imageBox);
             rootScreenController.setContent(component);
