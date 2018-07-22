@@ -81,7 +81,6 @@ public class CleanupService {
             Thread.currentThread().interrupt();
         } catch (final RuntimeException e) {
             LOG.error("An uncaught exception was thrown in a cleanup task!", e);
-            e.printStackTrace();
         }
     }
 
