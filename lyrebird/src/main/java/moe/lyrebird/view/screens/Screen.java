@@ -32,7 +32,7 @@ import moe.lyrebird.view.screens.user.UserViewController;
 /**
  * This enumeration's members are {@link FxmlNode}s which have their own window and embed {@link Component} nodes.
  */
-public enum Screens implements FxmlNode {
+public enum Screen implements FxmlNode {
 
     ROOT_VIEW("root/RootView.fxml", RootScreenController.class),
     LOGIN_VIEW("login/Login.fxml", LoginScreenController.class),
@@ -46,7 +46,7 @@ public enum Screens implements FxmlNode {
     private final String fxmlFile;
     private final Class<? extends FxmlController> controllerClass;
 
-    Screens(final String fxmlFile, final Class<? extends FxmlController> controllerClass) {
+    Screen(final String fxmlFile, final Class<? extends FxmlController> controllerClass) {
         this.fxmlFile = fxmlFile;
         this.controllerClass = controllerClass;
     }

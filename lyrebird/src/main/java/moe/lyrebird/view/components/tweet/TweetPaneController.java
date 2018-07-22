@@ -33,7 +33,7 @@ import moe.lyrebird.model.twitter.services.interraction.TwitterBinaryInterractio
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.components.cells.TweetListCell;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.util.BrowserOpeningHyperlink;
@@ -313,11 +313,11 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     /**
-     * Opens a {@link Screens#NEW_TWEET_VIEW} with the current status embedded for reply features.
+     * Opens a {@link Screen#NEW_TWEET_VIEW} with the current status embedded for reply features.
      */
     private void openReplyScreen() {
         final FxmlLoadResult<Pane, NewTweetController> replyStageLoad = easyFxml.loadNode(
-                Screens.NEW_TWEET_VIEW,
+                Screen.NEW_TWEET_VIEW,
                 Pane.class,
                 NewTweetController.class
         ).afterControllerLoaded(ntc -> ntc.setInReplyToTweet(currentStatus));

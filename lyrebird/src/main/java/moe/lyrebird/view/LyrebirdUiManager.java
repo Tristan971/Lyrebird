@@ -27,7 +27,7 @@ import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -104,7 +104,7 @@ public class LyrebirdUiManager extends FxUiManager {
         mainStage.setOnCloseRequest(e -> handleMainStageClosure(mainStage));
         mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeigth", Integer.class));
         mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
-        stageManager.registerSingle(Screens.ROOT_VIEW, mainStage);
+        stageManager.registerSingle(Screen.ROOT_VIEW, mainStage);
     }
 
     /**
@@ -112,7 +112,7 @@ public class LyrebirdUiManager extends FxUiManager {
      */
     @Override
     protected FxmlNode mainComponent() {
-        return Screens.ROOT_VIEW;
+        return Screen.ROOT_VIEW;
     }
 
     /**

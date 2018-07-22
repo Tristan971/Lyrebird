@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class NotificationService {
 
     public void sendNotification(final Notification notification) {
         LOG.debug("Requesting display of notification with smart display system type.");
-        final Stage mainStage = stageManager.getSingle(Screens.ROOT_VIEW).getOrElseThrow(
+        final Stage mainStage = stageManager.getSingle(Screen.ROOT_VIEW).getOrElseThrow(
                 () -> new IllegalStateException("Can not find main stage.")
         );
 

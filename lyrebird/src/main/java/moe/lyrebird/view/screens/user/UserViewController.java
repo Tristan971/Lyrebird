@@ -31,7 +31,7 @@ import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionServi
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.components.Component;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ import java.util.function.Function;
 import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.FOLLOW;
 
 /**
- * This controller is responsible for managing the {@link Screens#USER_VIEW} screen, which is used to display details
+ * This controller is responsible for managing the {@link Screen#USER_VIEW} screen, which is used to display details
  * about a specific user.
  * <p>
  * Made {@link Lazy} in case the user never uses it.

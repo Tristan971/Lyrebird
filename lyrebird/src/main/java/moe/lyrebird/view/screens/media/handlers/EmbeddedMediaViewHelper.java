@@ -24,7 +24,7 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
 import moe.lyrebird.view.screens.media.display.MediaScreenController;
@@ -101,7 +101,7 @@ public class EmbeddedMediaViewHelper {
     /**
      * Binds the click on the preview to opening of the detailed view.
      *
-     * @param screenToLoad The {@link MediaDisplaySceen} (subset of {@link Screens}) to open on click
+     * @param screenToLoad The {@link MediaDisplaySceen} (subset of {@link Screen}) to open on click
      * @param clickable    The preview node
      * @param mediaUrl     The URL of the media that will be displayed
      */

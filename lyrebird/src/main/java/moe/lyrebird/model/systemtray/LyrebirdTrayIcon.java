@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.awt.integrations.SystemTrayIcon;
 import moe.tristan.easyfxml.model.awt.objects.OnMouseClickListener;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +69,7 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
 
     private void showMainStage() {
         CompletableFuture.runAsync(
-                () -> stageManager.getSingle(Screens.ROOT_VIEW)
+                () -> stageManager.getSingle(Screen.ROOT_VIEW)
                                   .toTry(IllegalStateException::new)
                                   .onSuccess(stage -> {
                                       stage.show();

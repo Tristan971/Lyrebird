@@ -26,7 +26,7 @@ import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.update.UpdateService;
 import moe.lyrebird.view.components.Component;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.screens.root.RootScreenController;
 import moe.lyrebird.view.util.Clipping;
@@ -43,7 +43,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.List;
 
-import static moe.lyrebird.view.screens.Screens.NEW_TWEET_VIEW;
+import static moe.lyrebird.view.screens.Screen.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 /**
@@ -113,7 +113,7 @@ public class ControlBarController implements FxmlController {
         bindActionImageToLoadingView(directMessages, Component.DIRECT_MESSAGES);
 
         credits.setOnMouseClicked(e ->
-                                          easyFxml.loadNode(Screens.CREDITS_VIEW)
+                                          easyFxml.loadNode(Screen.CREDITS_VIEW)
                                                   .orExceptionPane()
                                                   .map(pane -> Stages.stageOf("Credits", pane))
                                                   .andThen(Stages::scheduleDisplaying)
@@ -158,7 +158,7 @@ public class ControlBarController implements FxmlController {
     /**
      * Called on click on the {@link #tweet} box. Opens a new tweet window.
      *
-     * @see Screens#NEW_TWEET_VIEW
+     * @see Screen#NEW_TWEET_VIEW
      */
     private void openTweetWindow() {
         LOG.info("Opening new tweet stage...");
@@ -209,10 +209,10 @@ public class ControlBarController implements FxmlController {
      * The {@link #update} box only show up when an update is detected as available. Then if it is the case,
      * this method is called on click to open the update information screen.
      *
-     * @see Screens#UPDATE_VIEW
+     * @see Screen#UPDATE_VIEW
      */
     private void openUpdatesScreen() {
-        final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.loadNode(Screens.UPDATE_VIEW);
+        final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.loadNode(Screen.UPDATE_VIEW);
         final Pane updatePane = updateScreenLoadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
         Stages.stageOf("Updates", updatePane).thenAcceptAsync(Stages::scheduleDisplaying);
     }

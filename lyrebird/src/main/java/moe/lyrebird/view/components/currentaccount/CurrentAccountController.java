@@ -28,7 +28,7 @@ import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.components.Component;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,7 +135,7 @@ public class CurrentAccountController implements FxmlController {
      * Called when the user requests the adding of a new account.
      */
     private void handleNewSessionRequest() {
-        easyFxml.loadNode(Screens.LOGIN_VIEW)
+        easyFxml.loadNode(Screen.LOGIN_VIEW)
                 .getNode()
                 .map(loginScreen -> Stages.stageOf("Add new account", loginScreen))
                 .andThen(Stages::scheduleDisplaying);
@@ -144,7 +144,7 @@ public class CurrentAccountController implements FxmlController {
     /**
      * Called when the user requests the displaying of the current user's detailed view.
      *
-     * @see Screens#USER_VIEW
+     * @see Screen#USER_VIEW
      */
     private void loadDetailsForCurrentUser() {
         sessionManager.currentSessionProperty()
