@@ -19,6 +19,8 @@
 package moe.lyrebird.view.screens.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
@@ -30,6 +32,7 @@ import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionServi
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.components.Components;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
+import moe.lyrebird.view.screens.Screens;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,10 +55,19 @@ import javafx.scene.shape.Rectangle;
 import java.util.function.Function;
 
 import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.FOLLOW;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+/**
+ * This controller is responsible for managing the {@link Screens#USER_VIEW} screen, which is used to display details
+ * about a specific user.
+ * <p>
+ * Made {@link Lazy} in case the user never uses it.
+ * <p>
+ * Also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} because the user might want to display multile users at the
+ * same time.
+ */
+@Lazy
 @Component
-@Scope(SCOPE_PROTOTYPE)
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserViewController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserViewController.class);
@@ -133,6 +145,9 @@ public class UserViewController implements FxmlController {
         this.targetUser = new SimpleObjectProperty<>(null);
     }
 
+    /**
+     * @return The user this detailed user view is displaying.
+     */
     public Property<User> targetUserProperty() {
         return targetUser;
     }
@@ -156,13 +171,19 @@ public class UserViewController implements FxmlController {
         }
     }
 
+    /**
+     * Basic orchestrator method call for visual setup.
+     */
     private void displayTargetUser() {
         this.fillTextData();
         this.asyncLoadImages();
-        this.setupFollowButton();
+        this.setupFollowData();
         this.loadTargetUserTimeline();
     }
 
+    /**
+     * Method responsible for loading all the non-network-dependent textual data.
+     */
     private void fillTextData() {
         final User user = targetUser.getValue();
         userNameLabel.setText(user.getName());
@@ -199,6 +220,9 @@ public class UserViewController implements FxmlController {
 
     }
 
+    /**
+     * This method asynchronously loads the user's profile picture and banner in the view.
+     */
     private void asyncLoadImages() {
         final User user = targetUser.getValue();
         asyncIO.loadImage(user.getOriginalProfileImageURLHttps())
@@ -213,16 +237,22 @@ public class UserViewController implements FxmlController {
         }
     }
 
-    private void setupFollowButton() {
+    /**
+     * Sets up follow/unfollow related network-dependent data in the view.
+     */
+    private void setupFollowData() {
         final User user = targetUser.getValue();
         followButton.setOnAction(e -> {
             interractionService.interract(user, FOLLOW);
-            updateFollowButtonText();
+            updateFollowStatusText();
         });
-        updateFollowButtonText();
+        updateFollowStatusText();
     }
 
-    private void updateFollowButtonText() {
+    /**
+     * Updates the follow button's text to match the current status of the two user's relationship.
+     */
+    private void updateFollowStatusText() {
         final User user = targetUser.getValue();
         followButton.setText(interractionService.notYetFollowed(user) ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT);
         sessionManager.currentSessionProperty().getValue().getTwitterUser().onSuccess(me -> {
@@ -236,6 +266,10 @@ public class UserViewController implements FxmlController {
         });
     }
 
+    /**
+     * Called by {@link #updateFollowStatusText()} ()} to give, if pertinent, a simple text displaying if the target user is
+     * already following the current user.
+     */
     private void updateFriendshipStatus() {
         final Relationship relationship = getRelationship();
 
@@ -258,6 +292,9 @@ public class UserViewController implements FxmlController {
         }
     }
 
+    /**
+     * @return The {@link Relationship} between the current user in the direction of the {@link #targetUser}.
+     */
     private Relationship getRelationship() {
         return sessionManager.doWithCurrentTwitter(
                 twitter -> sessionManager.currentSessionProperty()
@@ -270,6 +307,9 @@ public class UserViewController implements FxmlController {
         ).getOrElseThrow((Function<? super Throwable, IllegalStateException>) IllegalStateException::new);
     }
 
+    /**
+     * Loads the target user's timeline into the view.
+     */
     private void loadTargetUserTimeline() {
         final User user = targetUser.getValue();
         easyFxml.loadNode(Components.USER_TIMELINE, Pane.class, UserTimelineController.class)
