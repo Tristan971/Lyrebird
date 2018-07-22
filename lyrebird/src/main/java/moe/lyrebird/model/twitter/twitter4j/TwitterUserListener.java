@@ -38,12 +38,12 @@ import twitter4j.UserStreamListener;
 
 import java.net.SocketException;
 
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromFavorite;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromFollow;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromMention;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromQuotedTweet;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromRetweet;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromUnfollow;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromFavorite;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromFollow;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromMention;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromQuotedTweet;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromRetweet;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromUnfollow;
 
 @Component
 public class TwitterUserListener implements UserStreamListener {
