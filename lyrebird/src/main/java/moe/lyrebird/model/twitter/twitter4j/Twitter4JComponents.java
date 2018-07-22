@@ -31,10 +31,15 @@ import twitter4j.conf.ConfigurationBuilder;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
- * Created by Tristan on 22/02/2017.
+ * Configuration class for Twitter4J related components.
  */
 @Configuration
 public class Twitter4JComponents {
+
+    /**
+     * @param environment The Spring environment to fetch authentication keys
+     * @return this application's configuration for connecting to the Twitter API
+     */
     @Bean
     public twitter4j.conf.Configuration configuration(final Environment environment) {
         final ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -46,22 +51,38 @@ public class Twitter4JComponents {
         return cb.build();
     }
 
+    /**
+     * @param configuration this application's configuration
+     * @return a configured TwitterFactory to generate twitter instances
+     */
     @Bean
     public TwitterFactory twitterFactory(final twitter4j.conf.Configuration configuration) {
         return new TwitterFactory(configuration);
     }
 
+    /**
+     * @param factory the TwitterFactory to use for configuration
+     * @return an instance of the {@link Twitter} class that is configured with Lyrebird's credentials.
+     */
     @Bean
     @Scope(value = SCOPE_PROTOTYPE)
     public Twitter twitter(final TwitterFactory factory) {
         return factory.getInstance();
     }
 
+    /**
+     * @param configuration the configuration of this application regarding Twitter API authentication
+     * @return a configured TwitterStreamFactory
+     */
     @Bean
     public TwitterStreamFactory twitterStreamFactory(final twitter4j.conf.Configuration configuration) {
         return new TwitterStreamFactory(configuration);
     }
 
+    /**
+     * @param streamFactory a configured TwitterStreamFactory
+     * @return a configured TwitterStream
+     */
     @Bean
     public TwitterStream twitterStream(final TwitterStreamFactory streamFactory) {
         return streamFactory.getInstance();
