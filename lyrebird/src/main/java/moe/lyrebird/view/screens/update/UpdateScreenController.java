@@ -24,6 +24,7 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.model.update.UpdateService;
+import moe.lyrebird.view.screens.Screens;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -33,6 +34,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebView;
 
+/**
+ * This controller is responsible for managing the {@link Screens#UPDATE_VIEW} screen.
+ */
 @Component
 public class UpdateScreenController implements FxmlController {
 
@@ -76,6 +80,11 @@ public class UpdateScreenController implements FxmlController {
         updateButton.setOnAction(e -> startSelfupdate());
     }
 
+    /**
+     * Displays the current version and the one detected as latest from the API.
+     *
+     * @param latestVersion The latest version fetched from the API.
+     */
     private void displayVersion(final LyrebirdVersion latestVersion) {
         this.currentVersionLabel.setText(environment.getRequiredProperty("app.version"));
         this.latestVersionLabel.setText(latestVersion.getVersion());
@@ -86,6 +95,11 @@ public class UpdateScreenController implements FxmlController {
                      .thenAcceptAsync(this.changeNotesWebView.getEngine()::loadContent, Platform::runLater);
     }
 
+    /**
+     * Bootstraps the selfupdate process.
+     *
+     * @see UpdateService
+     */
     private void startSelfupdate() {
         this.updateButton.setDisable(true);
         final Alert selfupdateStartedAlert = new Alert(
