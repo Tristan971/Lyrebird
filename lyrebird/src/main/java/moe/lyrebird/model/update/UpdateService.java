@@ -40,10 +40,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+/**
+ * The update service takes care of all things related to update check and installation
+ */
 @Component
 public class UpdateService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UpdateService.class);
+
     private static final Pattern BUILD_VERSION_PATTERN = Pattern.compile("\\.");
 
     private final ScheduledExecutorService updateExecutor;
@@ -77,6 +81,9 @@ public class UpdateService {
         startPolling();
     }
 
+    /**
+     * @return the asynchronously fetched last version according to the API
+     */
     public CompletableFuture<LyrebirdVersion> getLatestVersion() {
         return CompletableFuture.supplyAsync(() -> {
             if (latestVersion.getValue() == null) {
@@ -90,6 +97,9 @@ public class UpdateService {
         return isUpdateAvailable;
     }
 
+    /**
+     * @return the asynchronously fetched changenotes for the latest version
+     */
     public CompletableFuture<String> getLatestChangeNotes() {
         return CompletableFuture.supplyAsync(
                 () -> apiClient.getChangeNotes(latestVersion.getValue().getBuildVersion()),
@@ -97,14 +107,23 @@ public class UpdateService {
         ).thenApplyAsync(markdownRenderingService::render, updateExecutor);
     }
 
+    /**
+     * Starts selfupdating to the latest version available
+     */
     public void selfupdate() {
         getLatestVersion().thenAccept(selfupdateService::selfupdate);
     }
 
+    /**
+     * @return whether the current platform supports selfupdating
+     */
     public boolean selfupdateCompatible() {
         return selfupdateService.selfupdateCompatible();
     }
 
+    /**
+     * Starts the scheduled check for updates
+     */
     private void startPolling() {
         updateExecutor.scheduleAtFixedRate(
                 this::poll,
@@ -114,6 +133,10 @@ public class UpdateService {
         );
     }
 
+    /**
+     * Fetches the latest version and sets it in {@link #latestVersion}. If this version has a newer {@link
+     * LyrebirdVersion#buildVersion} than the current one, set {@link #isUpdateAvailable} to true
+     */
     private void poll() {
         try {
             LOG.debug("Checking for updates...");
@@ -126,11 +149,21 @@ public class UpdateService {
         }
     }
 
+    /**
+     * @return the buildVersion of the currently running application
+     */
     private int getCurrentBuildVersion() {
         final String formatted = BUILD_VERSION_PATTERN.matcher(currentVersion).replaceAll("");
         return Integer.parseInt(formatted);
     }
 
+    /**
+     * Handles changes to {@link #isUpdateAvailable}.
+     * If it becomes true, we notify the user via the OS of the availability of the update.
+     *
+     * @param prev previous status
+     * @param cur new status
+     */
     private void handleUpdateStatus(final boolean prev, final boolean cur) {
         if (cur && !prev) {
             LOG.debug("An update was detected. Notifying the user.");

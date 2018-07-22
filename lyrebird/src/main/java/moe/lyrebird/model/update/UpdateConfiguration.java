@@ -24,19 +24,33 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 
+/**
+ * Configuration relative to the update process
+ */
 @Configuration
 public class UpdateConfiguration {
 
+    /**
+     * @return the configuration for the markdown to html renderer
+     */
     @Bean
     public MutableDataSet flexmarkConfiguration() {
         return new MutableDataSet();
     }
 
+    /**
+     * @param flexmarkConfiguration The configuration to use (from {@link #flexmarkConfiguration()})
+     * @return The configured markdown parser
+     */
     @Bean
     public Parser markdownParser(final MutableDataSet flexmarkConfiguration) {
         return Parser.builder(flexmarkConfiguration).build();
     }
 
+    /**
+     * @param flexmarkConfiguration The configuration to use (from {@link #flexmarkConfiguration()})
+     * @return The HTML renderer for markdown processing
+     */
     @Bean
     public HtmlRenderer markdownRenderer(final MutableDataSet flexmarkConfiguration) {
         return HtmlRenderer.builder(flexmarkConfiguration).build();

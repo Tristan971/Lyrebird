@@ -27,6 +27,9 @@ import com.vladsch.flexmark.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Service used to render markdown-formatted changelogs to HTML
+ */
 @Lazy
 @Component
 public class MarkdownRenderingService {
@@ -41,6 +44,13 @@ public class MarkdownRenderingService {
         this.htmlRenderer = htmlRenderer;
     }
 
+    /**
+     * Renders an input string containing markdown to HTML
+     *
+     * @param input The input markdown
+     *
+     * @return HTML rendered from the input
+     */
     @Cacheable(value = "markdownRenderingResult", sync = true)
     public String render(final String input) {
         LOG.trace("Input : {}", input);
