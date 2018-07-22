@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media.display;
+package moe.lyrebird.view.screens.media.handlers;
 
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
@@ -24,7 +24,10 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.media.MediaScreenController;
+import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.media.MediaEmbeddingService;
+import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
+import moe.lyrebird.view.screens.media.display.MediaScreenController;
 import moe.lyrebird.view.util.Clipping;
 
 import javafx.application.Platform;
@@ -39,6 +42,13 @@ import java.util.function.Consumer;
 import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MEDIA_RECTANGLE_CORNER_RADIUS;
 import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MEDIA_RECTANGLE_SIDE;
 
+/**
+ * This helper class offers basic common setup for creation and management of the previews. (i.e. creation of the
+ * miniature, opening of the detailed view etc.)
+ *
+ * @see MediaEmbeddingService
+ * @see moe.lyrebird.view.screens.media.handlers
+ */
 @Component
 public class EmbeddedMediaViewHelper {
 
@@ -48,6 +58,14 @@ public class EmbeddedMediaViewHelper {
         this.easyFxml = easyFxml;
     }
 
+    /**
+     * @param displayScreen The screen to open on click on the miniature
+     * @param imageResource The image to display as miniature
+     * @param mediaUrl      The media that will be displayed in the detailed screen on click
+     * @param andThen       Possible post-processing on the view (for async load purposes)
+     *
+     * @return A media preview {@link ImageView} with given parameters.
+     */
     @SafeVarargs
     public final Pane makeWrapperWithIcon(
             final MediaDisplaySceen displayScreen,
@@ -80,6 +98,13 @@ public class EmbeddedMediaViewHelper {
         return containerPane;
     }
 
+    /**
+     * Binds the click on the preview to opening of the detailed view.
+     *
+     * @param screenToLoad The {@link MediaDisplaySceen} (subset of {@link Screen}) to open on click
+     * @param clickable    The preview node
+     * @param mediaUrl     The URL of the media that will be displayed
+     */
     private void setOnOpen(final MediaDisplaySceen screenToLoad, final Node clickable, final String mediaUrl) {
         clickable.setOnMouseClicked(e -> {
             final FxmlLoadResult<Pane, MediaScreenController> mediaScreenLoad = loadMediaScreen(screenToLoad, mediaUrl);
@@ -92,17 +117,23 @@ public class EmbeddedMediaViewHelper {
         });
     }
 
-    private FxmlLoadResult<Pane, MediaScreenController> loadMediaScreen(final MediaDisplaySceen mediaDisplaySceen, final String mediaUrl) {
-        final FxmlLoadResult<Pane, MediaScreenController> loadResult = easyFxml.loadNode(
+    /**
+     * Opens the given media screen type for a given media.
+     *
+     * @param mediaDisplaySceen The screen to open this media with
+     * @param mediaUrl          The media to display
+     *
+     * @return The {@link FxmlLoadResult} with preconfigured controller.
+     */
+    private FxmlLoadResult<Pane, MediaScreenController> loadMediaScreen(
+            final MediaDisplaySceen mediaDisplaySceen,
+            final String mediaUrl
+    ) {
+        return easyFxml.loadNode(
                 mediaDisplaySceen,
                 Pane.class,
                 MediaScreenController.class
-        );
-        final MediaScreenController mediaDisplayScreenController = loadResult.getController().getOrElseThrow(
-                err -> new IllegalStateException("Could not load the media screen controller !", err)
-        );
-        mediaDisplayScreenController.handleMedia(mediaUrl);
-        return loadResult;
+        ).afterControllerLoaded(msc -> msc.handleMedia(mediaUrl));
     }
 
 }

@@ -27,6 +27,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Executor;
 
+/**
+ * This service is called at shutdown to execute a certain amout of cleanup operations.
+ */
 @Component
 public class CleanupService {
 
@@ -40,11 +43,20 @@ public class CleanupService {
         this.onShutdownHooks = new LinkedList<>();
     }
 
+    /**
+     * Registers a cleanup operation for execution at shutdown.
+     *
+     * @param cleanupOperation The operation to execute at shutdown
+     */
     public void registerCleanupOperation(final CleanupOperation cleanupOperation) {
         LOG.debug("Registering cleanup operation : {}", cleanupOperation.getName());
         onShutdownHooks.add(cleanupOperation);
     }
 
+    /**
+     * Executes the cleanup operations that were previously registered via
+     * {@link #registerCleanupOperation(CleanupOperation)}.
+     */
     public void executeCleanupOperations() {
         cleanupExecutor.execute(() -> {
             LOG.debug("Executing cleanup hooks !");
@@ -53,6 +65,12 @@ public class CleanupService {
         });
     }
 
+    /**
+     * This method executes a single cleanup operation with a timeout. We are not systemd that gives 1m30s for a cleanup
+     * operation so you get 5 seconds to do whatever it is you need.
+     *
+     * @param cleanupOperation The operation to execute
+     */
     private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
         LOG.debug("\t-> {}", cleanupOperation.getName());
         try {

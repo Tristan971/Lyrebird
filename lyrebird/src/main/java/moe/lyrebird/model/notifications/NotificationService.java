@@ -22,7 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.model.notifications.system.NotificationSystem;
+import moe.lyrebird.view.screens.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,9 @@ import javafx.stage.Stage;
 import static moe.lyrebird.model.notifications.NotificationSystemType.INTERNAL;
 import static moe.lyrebird.model.notifications.NotificationSystemType.SYSTEM;
 
+/**
+ * This service is in charge of dispatching notification requests to the appropriate {@link NotificationSystem}.
+ */
 @Component
 public class NotificationService {
 
@@ -48,9 +52,18 @@ public class NotificationService {
         this.stageManager = stageManager;
     }
 
+    /**
+     * Sends a notification to the user, automatically choosing the appropriate {@link NotificationSystem} depending on
+     * the current focus state of the main window.
+     * <p>
+     * Will use the system-level system if the application's main window is not visible (that is, if it is minimized or
+     * hidden).
+     *
+     * @param notification The notification to display.
+     */
     public void sendNotification(final Notification notification) {
         LOG.debug("Requesting display of notification with smart display system type.");
-        final Stage mainStage = stageManager.getSingle(Screens.ROOT_VIEW).getOrElseThrow(
+        final Stage mainStage = stageManager.getSingle(Screen.ROOT_VIEW).getOrElseThrow(
                 () -> new IllegalStateException("Can not find main stage.")
         );
 
@@ -61,6 +74,12 @@ public class NotificationService {
         sendNotification(notification, appropriateNotificationSystem);
     }
 
+    /**
+     * Sends a notification to the user with a given {@link NotificationSystem}.
+     *
+     * @param notification           The notification to send
+     * @param notificationSystemType The notification system to use for that
+     */
     public void sendNotification(final Notification notification, final NotificationSystemType notificationSystemType) {
         LOG.debug("Requesting display of notification {} with type {}", notification, notificationSystemType);
         context.getBean(notificationSystemType.getNotificationSystemClass())

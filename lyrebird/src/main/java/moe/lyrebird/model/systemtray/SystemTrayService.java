@@ -30,6 +30,9 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import java.awt.TrayIcon;
 
+/**
+ * This class is responsible for management and exposure of the {@link LyrebirdTrayIcon}.
+ */
 @Component
 public class SystemTrayService {
 
@@ -56,6 +59,9 @@ public class SystemTrayService {
         return trayIcon;
     }
 
+    /**
+     * Loads the {@link LyrebirdTrayIcon} in the current OS's system tray.
+     */
     private void loadTrayIcon() {
         LOG.debug("Registering tray icon for Lyrebird...");
         traySupport.registerTrayIcon(lyrebirdTrayIcon)

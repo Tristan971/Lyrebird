@@ -19,7 +19,7 @@
 package moe.lyrebird.view.screens.media.handlers.twitter;
 
 import org.springframework.stereotype.Component;
-import moe.lyrebird.view.screens.media.display.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
 import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
 import twitter4j.MediaEntity;
 
@@ -28,6 +28,9 @@ import javafx.scene.layout.Pane;
 import java.util.Arrays;
 import java.util.Comparator;
 
+/**
+ * Twitter-specific implementation of the {@link VideoHandler}.
+ */
 @Component
 public class TwitterVideoHandler extends VideoHandler<MediaEntity.Variant[]> {
 
@@ -35,6 +38,13 @@ public class TwitterVideoHandler extends VideoHandler<MediaEntity.Variant[]> {
         super(embeddedMediaViewHelper);
     }
 
+    /**
+     * Takes a media entity's variants array and returns the best quality available.
+     *
+     * @param mediaSource The source media variants
+     *
+     * @return The best quality one's URL among those
+     */
     @Override
     public Pane handleMedia(final MediaEntity.Variant[] mediaSource) {
         final var best = Arrays.stream(mediaSource).max(Comparator.comparingInt(MediaEntity.Variant::getBitrate));

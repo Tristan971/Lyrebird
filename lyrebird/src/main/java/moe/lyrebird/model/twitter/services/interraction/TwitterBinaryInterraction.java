@@ -20,8 +20,25 @@ package moe.lyrebird.model.twitter.services.interraction;
 
 import java.util.function.BiFunction;
 
+/**
+ * A binary interraction is a twitter operation that can be executed in two ways depending on a third information.
+ * @param <T> The type over which to execute these operations
+ */
 public interface TwitterBinaryInterraction<T> {
+
+    /**
+     * @return the operation to execute if {@link #shouldDo()} returns true.
+     */
     BiFunction<TwitterInterractionService, T, T> onTrue();
+
+    /**
+     * @return the operation to execute if {@link #shouldDo()} returns false.
+     */
     BiFunction<TwitterInterractionService, T, T> onFalse();
+
+    /**
+     * @return whether the {@link #onTrue()} is the relevant one.
+     */
     BiFunction<TwitterInterractionService, T, Boolean> shouldDo();
+
 }

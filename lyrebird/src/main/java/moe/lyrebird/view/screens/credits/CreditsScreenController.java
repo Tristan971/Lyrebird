@@ -29,6 +29,7 @@ import moe.tristan.easyfxml.util.Buttons;
 import moe.lyrebird.model.credits.CreditsService;
 import moe.lyrebird.model.credits.objects.CredittedWork;
 import moe.lyrebird.view.components.cells.CreditsCell;
+import moe.lyrebird.view.components.credits.CreditController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,17 @@ import javafx.scene.control.Button;
 
 import java.net.URL;
 
+/**
+ * This class manages with Credits/About window.
+ * <p>
+ * It is configured as {@link Lazy} mostly because we do not want to initialize it if the user doesn't ever load the
+ * about window.
+ *
+ * @see CreditsService
+ * @see ComponentListViewFxmlController
+ * @see CreditsCell
+ * @see CreditController
+ */
 @Lazy
 @Component
 public class CreditsScreenController extends ComponentListViewFxmlController<CredittedWork> {
@@ -81,6 +93,12 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
         bindButtonToOpenHrefEnvProperty(knownIssuesButton, "credits.knownIssues");
     }
 
+    /**
+     * Small setup to make repository-related resources clickable.
+     *
+     * @param button The button to make open an URL
+     * @param prop   The name of the URL in application.properties
+     */
     private void bindButtonToOpenHrefEnvProperty(final Button button, final String prop) {
         final URL actualUrl = environment.getRequiredProperty(prop, URL.class);
         Buttons.setOnClick(button, () -> browserSupport.openUrl(actualUrl));

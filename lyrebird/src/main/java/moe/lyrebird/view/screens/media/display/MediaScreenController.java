@@ -16,15 +16,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media;
+package moe.lyrebird.view.screens.media.display;
 
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.lyrebird.view.util.StageAware;
 
-public abstract class MediaScreenController implements FxmlController, StageAware {
+import java.net.URL;
 
-    public abstract void handleMedia(final String mediaUrl);
+/**
+ * Simple interface for controllers for individual media display.
+ */
+public interface MediaScreenController extends FxmlController, StageAware {
 
-    protected abstract void bindViewSizeToParent();
+    /**
+     * Loads the given media and displays it appropriately given the implementation and media type.
+     *
+     * @param mediaUrl The URL of the media type as a String. Always use {@link URL#toExternalForm()} for it if you have
+     *                 a URL-type object to begin with.
+     */
+    void handleMedia(final String mediaUrl);
+
+    /**
+     * Enforces media controllers to think about properly siszing their stage to fit as well as possible the embedded
+     * media.
+     */
+    void bindViewSizeToParent();
 
 }

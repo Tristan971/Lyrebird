@@ -18,7 +18,6 @@
 
 package moe.lyrebird.view.components.controlbar;
 
-import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -26,8 +25,8 @@ import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.update.UpdateService;
-import moe.lyrebird.view.components.Components;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.components.Component;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.screens.root.RootScreenController;
 import moe.lyrebird.view.util.Clipping;
@@ -40,14 +39,16 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 
 import java.util.List;
 
-import static moe.lyrebird.view.screens.Screens.NEW_TWEET_VIEW;
+import static moe.lyrebird.view.screens.Screen.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
-@Component
+/**
+ * The ControlBar is the left-side view selector for Lyrebird's main UI window.
+ */
+@org.springframework.stereotype.Component
 public class ControlBarController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ControlBarController.class);
@@ -106,15 +107,15 @@ public class ControlBarController implements FxmlController {
 
         setUpTweetButton();
 
-        bindActionImageToLoadingView(timeline, Components.TIMELINE);
-        bindActionImageToLoadingView(mentions, Components.MENTIONS);
-        bindActionImageToLoadingView(directMessages, Components.DIRECT_MESSAGES);
+        bindActionImageToLoadingView(timeline, Component.TIMELINE);
+        bindActionImageToLoadingView(mentions, Component.MENTIONS);
+        bindActionImageToLoadingView(directMessages, Component.DIRECT_MESSAGES);
 
         credits.setOnMouseClicked(e ->
-                easyFxml.loadNode(Screens.CREDITS_VIEW)
-                        .orExceptionPane()
-                        .map(pane -> Stages.stageOf("Credits", pane))
-                        .andThen(Stages::scheduleDisplaying)
+                                          easyFxml.loadNode(Screen.CREDITS_VIEW)
+                                                  .orExceptionPane()
+                                                  .map(pane -> Stages.stageOf("Credits", pane))
+                                                  .andThen(Stages::scheduleDisplaying)
         );
 
         sessionManager.isLoggedInProperty().addListener((o, prev, cur) -> handleLogStatusChange(prev, cur));
@@ -126,16 +127,21 @@ public class ControlBarController implements FxmlController {
         update.setOnMouseClicked(e -> openUpdatesScreen());
     }
 
+    /**
+     * Makes sure the tweet button appears as a nice circle through CSS and clipping work.
+     */
     private void setUpTweetButton() {
         tweet.setOnMouseClicked(e -> this.openTweetWindow());
-        final Circle tweetClip = Clipping.getCircleClip(28.0);
-        tweetClip.setCenterX(28.0);
-        tweetClip.setCenterY(28.0);
-        tweet.setClip(tweetClip);
+        tweet.setClip(Clipping.getCircleClip(28.0));
     }
 
+    /**
+     * Loads the current user's account view on the top of the bar.
+     *
+     * @see Component#CURRENT_ACCOUNT
+     */
     private void loadCurrentAccountPanel() {
-        easyFxml.loadNode(Components.CURRENT_ACCOUNT)
+        easyFxml.loadNode(Component.CURRENT_ACCOUNT)
                 .getNode()
                 .onSuccess(container::setTop)
                 .onFailure(err -> displayExceptionPane(
@@ -145,6 +151,11 @@ public class ControlBarController implements FxmlController {
                 ));
     }
 
+    /**
+     * Called on click on the {@link #tweet} box. Opens a new tweet window.
+     *
+     * @see Screen#NEW_TWEET_VIEW
+     */
     private void openTweetWindow() {
         LOG.info("Opening new tweet stage...");
         final FxmlLoadResult<Pane, NewTweetController> newTweetViewLoadResult = this.easyFxml.loadNode(
@@ -160,6 +171,13 @@ public class ControlBarController implements FxmlController {
               .thenAcceptAsync(newTweetController::setStage);
     }
 
+    /**
+     * This method managed switching from an unlogged to a logged state. It is tied to {@link
+     * SessionManager#isLoggedInProperty()}'s value.
+     *
+     * @param previous Whether the user was previously logged-in
+     * @param current  Whether the user is not logged-in
+     */
     private void handleLogStatusChange(final boolean previous, final boolean current) {
         List.of(
                 timeline,
@@ -169,20 +187,28 @@ public class ControlBarController implements FxmlController {
                 tweet
         ).forEach(btn -> btn.setVisible(current));
 
+        // was not connected and now is, mostly to distinguish with the future feature of
+        // multiple accounts management
         if (!previous && current) {
             timeline.onMouseClickedProperty().get().handle(null);
         }
     }
 
-    private void bindActionImageToLoadingView(final HBox imageBox, final Components component) {
+    private void bindActionImageToLoadingView(final HBox imageBox, final Component component) {
         imageBox.setOnMouseClicked(e -> {
             currentViewButton.setValue(imageBox);
             rootScreenController.setContent(component);
         });
     }
 
+    /**
+     * The {@link #update} box only show up when an update is detected as available. Then if it is the case,
+     * this method is called on click to open the update information screen.
+     *
+     * @see Screen#UPDATE_VIEW
+     */
     private void openUpdatesScreen() {
-        final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.loadNode(Screens.UPDATE_VIEW);
+        final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.loadNode(Screen.UPDATE_VIEW);
         final Pane updatePane = updateScreenLoadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
         Stages.stageOf("Updates", updatePane).thenAcceptAsync(Stages::scheduleDisplaying);
     }

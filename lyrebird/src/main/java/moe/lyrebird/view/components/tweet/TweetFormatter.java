@@ -25,6 +25,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+/**
+ * Small formatting utils for display of tweets (aka {@link Status} on Twitter4J's side).
+ */
 final class TweetFormatter {
 
     private TweetFormatter() {

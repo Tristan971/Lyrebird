@@ -32,19 +32,23 @@ import twitter4j.DirectMessage;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
+import twitter4j.TwitterStream;
 import twitter4j.User;
 import twitter4j.UserList;
 import twitter4j.UserStreamListener;
 
 import java.net.SocketException;
 
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromFavorite;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromFollow;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromMention;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromQuotedTweet;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromRetweet;
-import static moe.lyrebird.model.notifications.format.TweetNotifications.fromUnfollow;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromFavorite;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromFollow;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromMention;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromQuotedTweet;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromRetweet;
+import static moe.lyrebird.model.notifications.format.TwitterNotifications.fromUnfollow;
 
+/**
+ * This class serves as a listener to Twitter-side events dispatched by Twitter4J's {@link TwitterStream}.
+ */
 @Component
 public class TwitterUserListener implements UserStreamListener {
 
@@ -260,6 +264,13 @@ public class TwitterUserListener implements UserStreamListener {
         }
     }
 
+    /**
+     * Checks if a given status is a retweet made by the current user.
+     *
+     * @param status The status to check
+     *
+     * @return true if this status was is a retweet made by the current user
+     */
     private boolean isRetweetOfMe(final Status status) {
         if (status.isRetweet()) {
             return sessionManager.isCurrentUser(status.getRetweetedStatus().getUser());

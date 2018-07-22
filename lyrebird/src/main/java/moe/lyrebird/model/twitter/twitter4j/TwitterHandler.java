@@ -60,6 +60,11 @@ public class TwitterHandler {
         return accessToken;
     }
 
+    /**
+     * Creates a user authentication request on Twitter side
+     *
+     * @return a tuple containing the URL for OTP, and the RequestToken to which this OTP will be bound to
+     */
     public Tuple2<URL, RequestToken> newSession() {
         LOG.info("Requesting new Session!");
         final RequestToken requestToken = unchecked((CheckedFunction0<RequestToken>) this.twitter::getOAuthRequestToken)
@@ -71,6 +76,15 @@ public class TwitterHandler {
         );
     }
 
+    /**
+     * Tries registering a RequestToken with a given OTP to fetch a persistable AccessToken authenticating the current
+     * user to Twitter through Lyrebird.
+     *
+     * @param requestToken The request token of the authentication request
+     * @param pinCode      The OTP bound to this request token
+     *
+     * @return An optional containing the resulting {@link AccessToken} if the authentication was successful.
+     */
     public Optional<AccessToken> registerAccessToken(final RequestToken requestToken, final String pinCode) {
         LOG.info("Registering token {} with pincode {}", requestToken, pinCode);
 
@@ -95,6 +109,14 @@ public class TwitterHandler {
         return Optional.of(successAccessToken);
     }
 
+    /**
+     * Loads up the underlying Twitter instance with a given {@link AccessToken}. Useful for multiple account
+     * management.
+     *
+     * @param preloadedAccessToken The previously saved {@link AccessToken}.
+     *
+     * @see #registerAccessToken(RequestToken, String)
+     */
     public void registerAccessToken(final AccessToken preloadedAccessToken) {
         this.accessToken = preloadedAccessToken;
         this.twitter.setOAuthAccessToken(preloadedAccessToken);

@@ -33,8 +33,11 @@ import java.util.Objects;
 /**
  * A session represents one {@link AccessToken} and the corresponding user id, which is the primary key.
  * <p>
- * It is storable and can be retrieved to construct a {@link TwitterHandler instance}.
+ * It is serializable (and serialized) and can be retrieved to construct a {@link TwitterHandler instance}.
+ * <p>
+ * Unused warnings are disabled because setters need to be public for hibernate mapping to database.
  */
+@SuppressWarnings("unused")
 @Entity
 public class Session implements Serializable {
 
@@ -49,7 +52,8 @@ public class Session implements Serializable {
     @Transient
     private transient TwitterHandler twitterHandler;
 
-    public Session() {}
+    public Session() {
+    }
 
     public Session(final String userId, final AccessToken accessToken, final TwitterHandler twitterHandler) {
         this.userId = userId;
@@ -88,6 +92,9 @@ public class Session implements Serializable {
         this.twitterHandler = twitterHandler;
     }
 
+    /**
+     * @return the Twitter {@link User} associated with this Session.
+     */
     public Try<User> getTwitterUser() {
         final long self = accessToken.getUserId();
         return Try.of(twitterHandler::getTwitter).mapTry(twitter -> twitter.showUser(self));
@@ -95,12 +102,16 @@ public class Session implements Serializable {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Session)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Session)) {
+            return false;
+        }
         final Session session = (Session) o;
         return Objects.equals(userId, session.userId) &&
-                Objects.equals(accessToken, session.accessToken) &&
-                Objects.equals(twitterHandler, session.twitterHandler);
+               Objects.equals(accessToken, session.accessToken) &&
+               Objects.equals(twitterHandler, session.twitterHandler);
     }
 
     @Override
@@ -111,8 +122,8 @@ public class Session implements Serializable {
     @Override
     public String toString() {
         return "Session{" +
-                "userId='" + userId + '\'' +
-                ", accessToken=" + accessToken +
-                '}';
+               "userId='" + userId + '\'' +
+               ", accessToken=" + accessToken +
+               '}';
     }
 }

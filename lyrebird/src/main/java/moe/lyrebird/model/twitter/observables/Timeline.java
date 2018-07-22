@@ -33,6 +33,9 @@ import twitter4j.TwitterException;
 
 import java.util.concurrent.Executor;
 
+/**
+ * This class exposes the current user's timeline in an observable way
+ */
 @Lazy
 @Component
 public class Timeline extends TwitterTimelineBaseModel {

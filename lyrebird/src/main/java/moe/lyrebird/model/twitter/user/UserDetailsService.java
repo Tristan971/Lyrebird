@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.user.UserViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +31,11 @@ import twitter4j.User;
 
 import javafx.scene.layout.Pane;
 
+/**
+ * This service serves as a helper for displaying a given user's detailed view.
+ *
+ * @see Screen#USER_VIEW
+ */
 @Component
 public class UserDetailsService {
 
@@ -43,9 +48,14 @@ public class UserDetailsService {
         this.easyFxml = easyFxml;
     }
 
+    /**
+     * Opens the detailed view of a given user.
+     *
+     * @param targetUser the user whose detailed view is requested to be shown
+     */
     public void openUserDetails(final User targetUser) {
         LOG.info("Opening detailed view of user : {} (@{})", targetUser.getName(), targetUser.getScreenName());
-        easyFxml.loadNode(Screens.USER_VIEW, Pane.class, UserViewController.class)
+        easyFxml.loadNode(Screen.USER_VIEW, Pane.class, UserViewController.class)
                 .afterControllerLoaded(uvc -> uvc.targetUserProperty().setValue(targetUser))
                 .getNode()
                 .recover(ExceptionHandler::fromThrowable)

@@ -20,8 +20,16 @@ package moe.lyrebird.view.util;
 
 import javafx.stage.Stage;
 
+/**
+ * This interface indicates that any controller implementing it needs to know its embedding {@link Stage}.
+ */
 public interface StageAware {
 
+    /**
+     * Sets the embedding stage.
+     *
+     * @param embeddingStage The stage to feed the controller.
+     */
     default void setStage(final Stage embeddingStage) {
         // do nothing by default
     }

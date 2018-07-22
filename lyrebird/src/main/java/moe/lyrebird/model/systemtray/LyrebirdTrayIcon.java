@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.awt.integrations.SystemTrayIcon;
 import moe.tristan.easyfxml.model.awt.objects.OnMouseClickListener;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.screens.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +21,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * The {@link SystemTrayIcon} that is registered in the current OS's tray bar.
+ */
 @Component
 public class LyrebirdTrayIcon implements SystemTrayIcon {
 
@@ -67,9 +70,12 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
         });
     }
 
+    /**
+     * Fetches, shows and moves the main application stage to the front.
+     */
     private void showMainStage() {
         CompletableFuture.runAsync(
-                () -> stageManager.getSingle(Screens.ROOT_VIEW)
+                () -> stageManager.getSingle(Screen.ROOT_VIEW)
                                   .toTry(IllegalStateException::new)
                                   .onSuccess(stage -> {
                                       stage.show();
@@ -80,6 +86,9 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
         );
     }
 
+    /**
+     * Requests closure of the application.
+     */
     private void exitApplication() {
         LOG.info("Requesting application closure from tray icon.");
         Platform.exit();

@@ -31,8 +31,15 @@ import moe.lyrebird.view.components.notifications.NotificationsController;
 import moe.lyrebird.view.components.timeline.TimelineController;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
+import moe.lyrebird.view.screens.Screen;
 
-public enum Components implements FxmlNode {
+/**
+ * Components are {@link FxmlNode} that do not have their own stage but are embedded inside a {@link Screen} member.
+ *
+ * @see FxmlNode
+ * @see Screen
+ */
+public enum Component implements FxmlNode {
     CONTROL_BAR("controlbar/ControlBar.fxml", ControlBarController.class),
 
     CURRENT_ACCOUNT("currentaccount/CurrentAccount.fxml", CurrentAccountController.class),
@@ -55,7 +62,7 @@ public enum Components implements FxmlNode {
     private final String filePath;
     private final Class<? extends FxmlController> controllerClass;
 
-    Components(final String filePath, final Class<? extends FxmlController> controllerClass) {
+    Component(final String filePath, final Class<? extends FxmlController> controllerClass) {
         this.filePath = filePath;
         this.controllerClass = controllerClass;
     }

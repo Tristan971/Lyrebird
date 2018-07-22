@@ -20,44 +20,72 @@ package moe.lyrebird.view.screens.media;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import moe.lyrebird.view.screens.media.handlers.direct.DirectPhotoHandler;
+import moe.lyrebird.view.screens.media.handlers.direct.DirectImageHandler;
+import moe.lyrebird.view.screens.media.handlers.twitter.TwitterMediaEntity;
 import moe.lyrebird.view.screens.media.handlers.twitter.TwitterVideoHandler;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This service is in charge of creating preview {@link ImageView} for embedded images (and media in general) that a
+ * tweet can contain.
+ *
+ * @see moe.lyrebird.view.screens.media.handlers
+ * @see TwitterMediaEntity
+ */
 @Component
 public class MediaEmbeddingService {
 
     public static final double EMBEDDED_MEDIA_RECTANGLE_SIDE = 64.0;
     public static final double EMBEDDED_MEDIA_RECTANGLE_CORNER_RADIUS = 10.0;
 
-    private final DirectPhotoHandler directPhotoHandler;
+    private final DirectImageHandler directPhotoHandler;
     private final TwitterVideoHandler twitterVideoHandler;
 
     public MediaEmbeddingService(
-            final DirectPhotoHandler directPhotoHandler,
+            final DirectImageHandler directPhotoHandler,
             final TwitterVideoHandler twitterVideoHandler
     ) {
         this.directPhotoHandler = directPhotoHandler;
         this.twitterVideoHandler = twitterVideoHandler;
     }
 
+    /**
+     * Generates a cached list of appropriate nodes (usually {@link ImageView}) to preview the embedded media in the
+     * given status.
+     *
+     * @param status The status to generate previews for.
+     *
+     * @return The list of previews generated. Called only once for every tweet since it is cached via {@link
+     * Cacheable}.
+     */
     @Cacheable(value = "embeddedNodes", sync = true)
     public List<Node> embed(final Status status) {
         return Arrays.stream(status.getMediaEntities())
-                .filter(MediaEntityType::isSupported)
-                .map(this::embedOne)
-                .collect(Collectors.toList());
+                     .filter(TwitterMediaEntity::isSupported)
+                     .map(this::embedOne)
+                     .collect(Collectors.toList());
     }
 
+    /**
+     * Generates preview for a single Twitter-side {@link MediaEntity} matching it agains the {@link TwitterMediaEntity}
+     * enumeration.
+     *
+     * @param entity The entity whose preview will be generated.
+     *
+     * @return The preview for the given entity.
+     * @throws IllegalArgumentException when an unsupported entity is given since it should only be called on valid
+     *                                  entities.
+     */
     private Node embedOne(final MediaEntity entity) {
-        switch (MediaEntityType.fromTwitterType(entity.getType())) {
+        switch (TwitterMediaEntity.fromTwitterType(entity.getType())) {
             case PHOTO:
                 return directPhotoHandler.handleMedia(entity.getMediaURLHttps());
             case VIDEO:
@@ -65,7 +93,7 @@ public class MediaEmbeddingService {
                 return twitterVideoHandler.handleMedia(entity.getVideoVariants());
             case UNMANAGED:
             default:
-                throw new IllegalArgumentException("Twitter type "+entity.getType()+" is not supported!");
+                throw new IllegalArgumentException("Twitter type " + entity.getType() + " is not supported!");
         }
     }
 }

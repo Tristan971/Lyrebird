@@ -25,6 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import oshi.SystemInfo;
 
+/**
+ * This service helps choose the right package type for the current platform.
+ */
 @Component
 public class BinaryChoiceService {
 
@@ -34,6 +37,12 @@ public class BinaryChoiceService {
         return detectRunningPlatform().isDefined();
     }
 
+    /**
+     * Maps the current platform with a Lyrebird package type platform.
+     *
+     * @return the appropriate {@link TargetPlatform} for the current platform if supported. If the current platform is
+     * not specifically supported, returns {@link Option#none()}.
+     */
     Option<TargetPlatform> detectRunningPlatform() {
         LOG.debug("Detecting platform...");
         switch (SystemInfo.getCurrentPlatformEnum()) {

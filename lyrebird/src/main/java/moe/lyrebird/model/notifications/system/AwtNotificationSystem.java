@@ -28,6 +28,11 @@ import javafx.beans.property.Property;
 
 import java.awt.TrayIcon;
 
+/**
+ * AWT-based native OS notification implemention of {@link NotificationSystem}.
+ *
+ * @see SystemTrayService
+ */
 @Component
 public class AwtNotificationSystem implements NotificationSystem {
 
@@ -39,6 +44,11 @@ public class AwtNotificationSystem implements NotificationSystem {
         this.lyrebirdTrayIcon = trayService.trayIconProperty();
     }
 
+    /**
+     * Displays a notification bound to the application's {@link TrayIcon}.
+     *
+     * @param notification the notification to display
+     */
     @Override
     public void displayNotification(final Notification notification) {
         LOG.debug("Sending AWT native notification : {}", notification);

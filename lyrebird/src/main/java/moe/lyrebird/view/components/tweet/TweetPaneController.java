@@ -28,12 +28,15 @@ import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.model.twitter.services.interraction.StatusInterraction;
+import moe.lyrebird.model.twitter.services.interraction.TwitterBinaryInterraction;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
-import moe.lyrebird.view.screens.Screens;
+import moe.lyrebird.view.components.cells.TweetListCell;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.util.BrowserOpeningHyperlink;
+import moe.lyrebird.view.util.ClickableHyperlink;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.slf4j.Logger;
@@ -49,7 +52,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -62,11 +64,19 @@ import static moe.lyrebird.view.assets.ImageResources.BLANK_USER_PROFILE_PICTURE
 import static moe.lyrebird.view.components.tweet.TweetFormatter.time;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
+/**
+ * Displays a single tweet ({@link Status} in Twitter4J).
+ *
+ * @see TweetListCell
+ * @see NewTweetController
+ */
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class TweetPaneController implements ComponentCellFxmlController<Status> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
+
+    private static final double INTERRACTION_BUTTON_CLIP_RADIUS = 14.0;
 
     @FXML
     private Label author;
@@ -117,7 +127,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private final UserDetailsService userDetailsService;
     private final EasyFxml easyFxml;
 
-    private Status status;
+    private Status currentStatus;
     private final BooleanProperty isRetweet = new SimpleBooleanProperty(false);
     private final BooleanProperty embeddedProperty = new SimpleBooleanProperty(false);
 
@@ -139,7 +149,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     @Override
     public void initialize() {
-        authorProfilePicturePane.setClip(makePpClip());
+        authorProfilePicturePane.setClip(Clipping.getCircleClip(24.0));
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
         setUpInterractionButtons();
@@ -147,6 +157,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         mediaBox.setVisible(false);
     }
 
+    /**
+     * @return whether this tweet is displayed in an embedding node (e.g. for replies)
+     */
     public BooleanProperty embeddedPropertyProperty() {
         return embeddedProperty;
     }
@@ -158,52 +171,50 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
             return;
         }
 
-        final Circle replyClip = Clipping.getCircleClip(14.0);
-        replyClip.setCenterX(14.0);
-        replyClip.setCenterY(14.0);
         replyButton.setOnMouseClicked(e -> this.openReplyScreen());
-        replyButton.setClip(replyClip);
+        replyButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
 
-        final Circle likeClip = Clipping.getCircleClip(14.0);
-        likeClip.setCenterX(14.0);
-        likeClip.setCenterY(14.0);
         likeButton.setOnMouseClicked(e -> this.onLike());
-        likeButton.setClip(likeClip);
+        likeButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
 
-        final Circle retweetClip = Clipping.getCircleClip(14.0);
-        retweetClip.setCenterX(14.0);
-        retweetClip.setCenterY(14.0);
         retweetButton.setOnMouseClicked(e -> this.onRetweet());
-        retweetButton.setClip(retweetClip);
+        retweetButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
     }
 
+    /**
+     * @param newValue The status to prepare displaying for.
+     */
     @Override
     public void updateWithValue(final Status newValue) {
-        setStatus(newValue);
-    }
-
-    private void setStatus(final Status status) {
-        if (status == null || this.status == status) {
+        if (newValue == null || this.currentStatus == newValue) {
             return;
         }
+        this.currentStatus = newValue;
 
-        this.status = status;
-        this.isRetweet.set(status.isRetweet());
+        this.isRetweet.set(currentStatus.isRetweet());
 
         authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
-        if (status.isRetweet()) {
-            handleRetweet(status);
+        if (currentStatus.isRetweet()) {
+            handleRetweet(currentStatus);
         } else {
-            setStatusDisplay(status);
+            setStatusDisplay(currentStatus);
         }
     }
 
+    /**
+     * Handles retweets so as to add retweet info at the top and then display the actual underlying status.
+     *
+     * @param status The parent status (the one created by the actual retweet action itself).
+     */
     private void handleRetweet(final Status status) {
         retweeterLabel.setText(status.getUser().getName());
         retweeterIdLabel.setText("@" + status.getUser().getScreenName());
         setStatusDisplay(status.getRetweetedStatus());
     }
 
+    /**
+     * @param statusToDisplay The status to fill user readable information from.
+     */
     private void setStatusDisplay(final Status statusToDisplay) {
         author.setText(statusToDisplay.getUser().getName());
         authorId.setText("@" + statusToDisplay.getUser().getScreenName());
@@ -213,27 +224,46 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         asyncIO.loadImageMiniature(ppUrl, 96.0, 96.0)
                .thenAcceptAsync(authorProfilePicture::setImage, Platform::runLater);
         authorProfilePicture.setOnMouseClicked(e -> userDetailsService.openUserDetails(statusToDisplay.getUser()));
-        readMedias(status);
+        readMedias(currentStatus);
     }
 
+    /**
+     * Called on click of the like button.
+     *
+     * @see TwitterInterractionService
+     * @see TwitterBinaryInterraction
+     * @see StatusInterraction#LIKE
+     */
     private void onLike() {
-        LOG.debug("Like interraction on status {}", status.getId());
+        LOG.debug("Like interraction on status {}", currentStatus.getId());
         final CompletableFuture<Status> likeRequest = CompletableFuture.supplyAsync(
-                () -> interractionService.interract(status, LIKE)
+                () -> interractionService.interract(currentStatus, LIKE)
         );
         likeButton.setDisable(true);
         likeRequest.whenCompleteAsync((res, err) -> likeButton.setDisable(false), Platform::runLater);
     }
 
+    /**
+     * Called on click of the retweet button.
+     *
+     * @see TwitterInterractionService
+     * @see TwitterBinaryInterraction
+     * @see StatusInterraction#RETWEET
+     */
     private void onRetweet() {
-        LOG.debug("Retweet interraction on status {}", status.getId());
+        LOG.debug("Retweet interraction on status {}", currentStatus.getId());
         final CompletableFuture<Status> retweetRequest = CompletableFuture.supplyAsync(
-                () -> interractionService.interract(status, RETWEET)
+                () -> interractionService.interract(currentStatus, RETWEET)
         );
         retweetButton.setDisable(true);
         retweetRequest.whenCompleteAsync((res, err) -> retweetButton.setDisable(false), Platform::runLater);
     }
 
+    /**
+     * Preformats the tweet text content.
+     *
+     * @param tweetText The content to format (from the current tweet)
+     */
     private void loadTextIntoTextFlow(final String tweetText) {
         content.getChildren().clear();
         final String strippedText = HyperlinkUtils.stripAllUrls(tweetText);
@@ -245,6 +275,11 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
                   .forEach(content.getChildren()::add);
     }
 
+    /**
+     * Manages extracting and previewing the medias embedded in this tweet.
+     *
+     * @param status The status for which to manage the embedded media.
+     */
     private void readMedias(final Status status) {
         final List<Node> embeddingNodes = mediaEmbeddingService.embed(status);
         mediaBox.setManaged(!embeddingNodes.isEmpty());
@@ -252,24 +287,24 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         mediaBox.getChildren().setAll(embeddingNodes);
     }
 
-    private Circle makePpClip() {
-        final double clippingRadius = 24.0;
-        final Circle ppClip = Clipping.getCircleClip(clippingRadius);
-        ppClip.setCenterX(clippingRadius);
-        ppClip.setCenterY(clippingRadius);
-        return ppClip;
+    /**
+     * @param url The URL itself
+     *
+     * @return a clickable link targetting the URL
+     */
+    private ClickableHyperlink buildHyperlink(final String url) {
+        return new ClickableHyperlink(url, browserSupport::openUrl);
     }
 
-    private BrowserOpeningHyperlink buildHyperlink(final String url) {
-        return new BrowserOpeningHyperlink(browserSupport::openUrl).withTarget(url);
-    }
-
+    /**
+     * Opens a {@link Screen#NEW_TWEET_VIEW} with the current status embedded for reply features.
+     */
     private void openReplyScreen() {
         final FxmlLoadResult<Pane, NewTweetController> replyStageLoad = easyFxml.loadNode(
-                Screens.NEW_TWEET_VIEW,
+                Screen.NEW_TWEET_VIEW,
                 Pane.class,
                 NewTweetController.class
-        ).afterControllerLoaded(ntc -> ntc.setInReplyToTweet(status));
+        ).afterControllerLoaded(ntc -> ntc.setInReplyToTweet(currentStatus));
 
         final NewTweetController newTweetController = replyStageLoad.getController().get();
         final Pane newTweetPane = replyStageLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
