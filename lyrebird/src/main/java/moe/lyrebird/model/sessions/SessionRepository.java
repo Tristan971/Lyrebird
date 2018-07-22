@@ -20,6 +20,9 @@ package moe.lyrebird.model.sessions;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+/**
+ * Simple repository for {@link Session} elements mapped by twitter userId.
+ */
 public interface SessionRepository extends JpaRepository<Session, String> {
 
 }
