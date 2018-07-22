@@ -60,6 +60,9 @@ public class BackendComponents {
         return sessionManager;
     }
 
+    /**
+     * @return The Jackson object mapper used for deserialization
+     */
     @Lazy
     @Bean
     public ObjectMapper objectMapper() {
