@@ -29,6 +29,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Preconfigured extension filter helper for Twitter media.
+ */
 @Component
 public class TwitterMediaExtensionFilter {
 
@@ -40,11 +43,19 @@ public class TwitterMediaExtensionFilter {
         this.extensionFilter = buildExtensionFilter(environment);
     }
 
+    /**
+     * Builds the {@link ExtensionFilter} that will match allowed Twitter media types.
+     *
+     * @param environment The Spring {@link Environment} that will be used to fetch the allowed extensions from the
+     *                    application.properties.
+     *
+     * @return A premade extension filter configured for only allowing Twitter-supported attachment types
+     */
     private static ExtensionFilter buildExtensionFilter(final Environment environment) {
         final String allowedExtensionsStr = environment.getRequiredProperty("twitter.media.allowedExtensions");
         final List<String> allowedExtensions = Arrays.stream(allowedExtensionsStr.split(","))
-                                     .map(ext -> "*." + ext)
-                                     .collect(Collectors.toList());
+                                                     .map(ext -> "*." + ext)
+                                                     .collect(Collectors.toList());
 
         LOG.debug("Allowed media formats for tweet attachments are : {}", allowedExtensions);
         return new ExtensionFilter("Supported media types", allowedExtensions);
