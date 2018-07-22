@@ -22,6 +22,9 @@ import moe.lyrebird.model.notifications.system.AwtNotificationSystem;
 import moe.lyrebird.model.notifications.system.InternalNotificationSystem;
 import moe.lyrebird.model.notifications.system.NotificationSystem;
 
+/**
+ * Simple convenience enumeration of the notification systems for more elegant calls to {@link NotificationService}.
+ */
 public enum NotificationSystemType {
     INTERNAL(InternalNotificationSystem.class),
     SYSTEM(AwtNotificationSystem.class);
