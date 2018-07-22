@@ -18,11 +18,9 @@
 
 package moe.lyrebird.view.components.tweet;
 
+import org.ocpsoft.prettytime.PrettyTime;
 import twitter4j.Status;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -30,15 +28,15 @@ import java.util.Date;
  */
 final class TweetFormatter {
 
+    private static final PrettyTime PRETTY_TIME = new PrettyTime();
+
     private TweetFormatter() {
         throw new UnsupportedOperationException("Utility class");
     }
 
     static String time(final Status status) {
         final Date tweetDate = status.getCreatedAt();
-        final LocalDateTime localDateTime = LocalDateTime.ofInstant(tweetDate.toInstant(), ZoneId.systemDefault());
-
-        return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return PRETTY_TIME.format(tweetDate);
     }
 
 }
