@@ -33,6 +33,9 @@ import javafx.scene.control.ButtonType;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * This service is in charge of the orchestration of the selfupdate process
+ */
 @Component
 public class SelfupdateService {
 
@@ -50,6 +53,11 @@ public class SelfupdateService {
         this.binaryInstallationService = binaryInstallationService;
     }
 
+    /**
+     * Starts the selfupdate process to the given target version
+     *
+     * @param newVersion the version to which to selfupdate
+     */
     public void selfupdate(final LyrebirdVersion newVersion) {
         LOG.info("Requesting selfupdate to version : {}", newVersion);
 
@@ -81,6 +89,15 @@ public class SelfupdateService {
         return binaryChoiceService.currentPlatformSupportsSelfupdate();
     }
 
+    /**
+     * Launches an OS-level process to install the new version of Lyrebird
+     *
+     * @param platform The platform to target for the selfupdate (current one)
+     * @param version  The version to target for the selfupdate
+     *
+     * @return The underlying OS-level process managing the operation.
+     * @throws IOException If an I/O error occurs. See {@link ProcessBuilder#start()}.
+     */
     private Process installNewVersion(final TargetPlatform platform, final LyrebirdVersion version)
     throws IOException {
         LOG.info("Installing new version for platform {}", platform);
@@ -92,6 +109,10 @@ public class SelfupdateService {
         return installProcess.start();
     }
 
+    /**
+     * Displays an alert to the user informing them that the selfupdate is complete and they need to restart the
+     * application after we automatically stop it.
+     */
     private void displayRestartAlert() {
         LOG.debug("Displaying restart information alert!");
         final Alert restartAlert = new Alert(
