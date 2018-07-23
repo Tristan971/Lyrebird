@@ -34,7 +34,7 @@
                <children>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/assets/img/retweet_arrows_symbol.png" />
+                        <Image url="@/assets/img/tweetpane_icon_retweeted_status.png" />
                      </image></ImageView>
                </children></HBox>
             <HBox alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0">
@@ -59,7 +59,7 @@
                <children>
                   <ImageView fx:id="authorProfilePicture" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/assets/img/user_avatar_icon.png" />
+                        <Image url="@/assets/img/general_icon_user_avatar_dark.png" />
                      </image>
                   </ImageView>
                   <Circle centerX="24.0" centerY="24.0" fill="#ffffff00" mouseTransparent="true" radius="24.0" stroke="#000000" strokeType="INSIDE" strokeWidth="0.5" />
@@ -95,7 +95,7 @@
                            <children>
                               <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@/assets/img/reply.png" />
+                                    <Image url="@/assets/img/tweetpane_icon_reply.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -104,7 +104,7 @@
                            <children>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@/assets/img/like.png" />
+                                    <Image url="@/assets/img/tweetpane_icon_heart.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -113,7 +113,7 @@
                            <children>
                               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@/assets/img/retweet.png" />
+                                    <Image url="@/assets/img/tweetpane_icon_retweet_action.png" />
                                  </image>
                               </ImageView>
                            </children>

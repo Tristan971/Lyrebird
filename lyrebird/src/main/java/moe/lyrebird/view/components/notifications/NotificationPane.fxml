@@ -73,7 +73,7 @@
                            preserveRatio="true"
                            HBox.hgrow="NEVER">
                     <image>
-                        <Image url="@/assets/img/delete_button_black.png"/>
+                        <Image url="@/assets/img/notifications_icon_delete.png"/>
                     </image>
                 </ImageView>
             </children>

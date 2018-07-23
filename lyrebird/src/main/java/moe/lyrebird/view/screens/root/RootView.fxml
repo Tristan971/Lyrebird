@@ -39,7 +39,7 @@
                   <Label text="Start with adding an account. To do so, click the top-left &quot;+&quot; icon !" />
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/assets/img/logo.png" />
+                        <Image url="@/assets/img/general_icon_lyrebird_logo.png" />
                      </image>
                   </ImageView>
                </children>

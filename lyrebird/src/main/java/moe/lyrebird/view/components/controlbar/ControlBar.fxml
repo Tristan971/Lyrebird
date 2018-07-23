@@ -32,7 +32,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@/assets/img/feather-pen.png" />
+                              <Image url="@/assets/img/controlbar_icon_tweet.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -56,7 +56,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@/assets/img/timeline.png" />
+                              <Image url="@/assets/img/controlbar_icon_timeline.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -65,7 +65,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@/assets/img/at_sign.png" />
+                              <Image url="@/assets/img/controlbar_icon_at_sign.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -74,7 +74,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@/assets/img/direct_message.png" />
+                              <Image url="@/assets/img/controlbar_icon_direct_messages.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -83,7 +83,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@/assets/img/about.png" />
+                              <Image url="@/assets/img/controlbar_icon_about.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -92,7 +92,7 @@
                      <children>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@/assets/img/update.png" />
+                              <Image url="@/assets/img/controlbar_icon_update.png" />
                            </image>
                         </ImageView>
                      </children>

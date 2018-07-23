@@ -39,7 +39,7 @@
                                  <children>
                                     <ImageView fx:id="userProfilePictureImageView" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../../../../../resources/assets/img/user_avatar_icon.png" />
+                                          <Image url="@/assets/img/general_icon_user_avatar_dark.png" />
                                        </image></ImageView>
                                  </children>
                                  <HBox.margin>

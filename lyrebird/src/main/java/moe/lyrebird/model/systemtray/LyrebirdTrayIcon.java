@@ -48,7 +48,7 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
     @Override
     @Cacheable("lyrebirdTrayIconURL")
     public URL getIcon() {
-        return getClass().getClassLoader().getResource("assets/img/logo_small.png");
+        return getClass().getClassLoader().getResource("assets/img/general_icon_lyrebird_logo_small.png");
     }
 
     @Override
