@@ -51,6 +51,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.FOLLOW;
@@ -252,43 +253,53 @@ public class UserViewController implements FxmlController {
      * Updates the follow button's text to match the current status of the two user's relationship.
      */
     private void updateFollowStatusText() {
-        final User user = targetUser.getValue();
-        followButton.setText(interractionService.notYetFollowed(user) ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT);
-        sessionManager.currentSessionProperty().getValue().getTwitterUser().onSuccess(me -> {
-            if (me.getId() == user.getId()) {
-                followButton.setText(YOURSELF_BTN_TEXT);
-                followButton.setDisable(true);
-            } else {
-                followButton.setDisable(false);
-            }
-            updateFriendshipStatus();
-        });
+        final User targetUser = this.targetUser.getValue();
+
+        CompletableFuture.supplyAsync(() -> interractionService.notYetFollowed(targetUser))
+                         .thenApplyAsync(notFollowed -> notFollowed ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT)
+                         .thenAcceptAsync(followButton::setText, Platform::runLater);
+
+        CompletableFuture.supplyAsync(sessionManager.currentSessionProperty().getValue()::getTwitterUser)
+                         .thenApplyAsync(currentUser -> currentUser.get().getId())
+                         .thenAcceptAsync(
+                                 currentUserId -> {
+                                     if (currentUserId == targetUser.getId()) {
+                                         followButton.setText(YOURSELF_BTN_TEXT);
+                                         followButton.setDisable(true);
+                                     } else {
+                                         followButton.setDisable(false);
+                                     }
+                                 },
+                                 Platform::runLater
+                         )
+                         .thenRunAsync(this::updateFriendshipStatus, Platform::runLater);
     }
 
     /**
-     * Called by {@link #updateFollowStatusText()} ()} to give, if pertinent, a simple text displaying if the target user is
-     * already following the current user.
+     * Called by {@link #updateFollowStatusText()} ()} to give, if pertinent, a simple text displaying if the target
+     * user is already following the current user.
      */
     private void updateFriendshipStatus() {
-        final Relationship relationship = getRelationship();
+        CompletableFuture.supplyAsync(this::getRelationship)
+                         .thenAcceptAsync(relationship -> {
+                             String relStatusText = null;
+                             if (relationship.isTargetFollowingSource()) {
+                                 if (relationship.isTargetFollowedBySource()) {
+                                     relStatusText = "You follow each other!";
+                                 } else {
+                                     relStatusText = "Follows you.";
+                                 }
+                             }
 
-        String relStatusText = null;
-        if (relationship.isTargetFollowingSource()) {
-            if (relationship.isTargetFollowedBySource()) {
-                relStatusText = "You follow each other!";
-            } else {
-                relStatusText = "Follows you.";
-            }
-        }
-
-        if (relStatusText == null) {
-            userFriendshipStatus.setVisible(false);
-            userFriendshipStatus.setManaged(false);
-        } else {
-            userFriendshipStatus.setText(relStatusText);
-            userFriendshipStatus.setVisible(true);
-            userFriendshipStatus.setManaged(true);
-        }
+                             if (relStatusText == null) {
+                                 userFriendshipStatus.setVisible(false);
+                                 userFriendshipStatus.setManaged(false);
+                             } else {
+                                 userFriendshipStatus.setText(relStatusText);
+                                 userFriendshipStatus.setVisible(true);
+                                 userFriendshipStatus.setManaged(true);
+                             }
+                         }, Platform::runLater);
     }
 
     /**
