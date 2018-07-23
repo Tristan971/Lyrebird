@@ -27,6 +27,8 @@ import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
+import moe.lyrebird.model.settings.Setting;
+import moe.lyrebird.model.settings.SettingsService;
 import moe.lyrebird.view.screens.Screen;
 
 import javafx.application.Platform;
@@ -46,8 +48,9 @@ public class LyrebirdUiManager extends FxUiManager {
     private final StageManager stageManager;
     private final Environment environment;
     private final NotificationService notificationService;
+    private final SettingsService settingsService;
 
-    private final AtomicBoolean informedUserOfCloseBehavior = new AtomicBoolean(false);
+    private final AtomicBoolean informedUserOfCloseBehavior;
 
     /**
      * The constructor of this class, called by Spring automatically.
@@ -58,18 +61,25 @@ public class LyrebirdUiManager extends FxUiManager {
      * @param environment         The spring environment to use property keys for minimal size and main stage title.
      * @param notificationService The notification service that will be used to notify user of the custom behavior of
      *                            this main stage's closure view {@link #handleMainStageClosure(Stage)}.
+     * @param settingsService     The settings service used to retrieve user-saved settings
      */
     @Autowired
     public LyrebirdUiManager(
             final EasyFxml easyFxml,
             final StageManager stageManager,
             final Environment environment,
-            final NotificationService notificationService
+            final NotificationService notificationService,
+            final SettingsService settingsService
     ) {
         super(easyFxml);
         this.stageManager = stageManager;
         this.environment = environment;
         this.notificationService = notificationService;
+        this.settingsService = settingsService;
+        this.informedUserOfCloseBehavior = new AtomicBoolean(settingsService.get(
+                Setting.NOTIFICATION_MAIN_STAGE_TRAY_SEEN,
+                false
+        ));
     }
 
     /**
@@ -128,6 +138,7 @@ public class LyrebirdUiManager extends FxUiManager {
                     "Exiting the main window does not close Lyrebird, use the icon in the system tray."
             ));
             informedUserOfCloseBehavior.setRelease(true);
+            settingsService.set(Setting.NOTIFICATION_MAIN_STAGE_TRAY_SEEN, true);
         }
     }
 
