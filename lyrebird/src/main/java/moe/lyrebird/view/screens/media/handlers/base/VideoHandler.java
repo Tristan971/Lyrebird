@@ -46,13 +46,13 @@ public abstract class VideoHandler<T> implements MediaHandler<T> {
      *
      * @param mediaUrl The video described as an URL
      *
-     * @return An {@link ImageView} with a static image ({@link ImageResources#VIDEO_PLAYER}). This {@link ImageView}
+     * @return An {@link ImageView} with a static image ({@link ImageResources#TWEETPANE_VIDEO}). This {@link ImageView}
      * will open a {@link MediaDisplaySceen#VIDEO} screen displaying the media when it is clicked.
      */
     protected Pane handleMediaSource(final String mediaUrl) {
         return embeddedMediaViewHelper.makeWrapperWithIcon(
                 MediaDisplaySceen.VIDEO,
-                ImageResources.VIDEO_PLAYER,
+                ImageResources.TWEETPANE_VIDEO,
                 mediaUrl
         );
     }

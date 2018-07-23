@@ -56,13 +56,13 @@ public abstract class ImageHandler<T> implements MediaHandler<T> {
      * @param imageUrl The image described as an URL
      *
      * @return An {@link ImageView} with asynchronously loaded image miniature as display image with by default (until
-     * the asynchronous call is done) a static image ({@link ImageResources#LOADING_REMOTE}). This {@link ImageView}
+     * the asynchronous call is done) a static image ({@link ImageResources#GENERAL_LOADING_REMOTE}). This {@link ImageView}
      * will open a {@link MediaDisplaySceen#PHOTO} screen displaying the media when it is clicked.
      */
     protected Pane handleMediaSource(final String imageUrl) {
         return embeddedMediaViewHelper.makeWrapperWithIcon(
                 MediaDisplaySceen.PHOTO,
-                ImageResources.LOADING_REMOTE,
+                ImageResources.GENERAL_LOADING_REMOTE,
                 imageUrl,
                 imageView -> loadMiniatureAsync(imageView, imageUrl)
         );

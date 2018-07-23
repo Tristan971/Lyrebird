@@ -25,12 +25,17 @@ import javafx.scene.image.Image;
  */
 public enum ImageResources {
 
-    ADD_USER_PROFILE_PICTURE("controlbar_icon_add_user.png"),
     BACKGROUND_DARK_1PX("background-dark-1px.png"),
-    BLANK_USER_PROFILE_PICTURE("general_icon_user_avatar_dark.png"),
-    BLANK_USER_PROFILE_PICTURE_LIGHT("general_icon_user_avatar_light.png"),
-    LOADING_REMOTE("general_icon_loading_remote.png"),
-    VIDEO_PLAYER("tweetpane_icon_video.png");
+
+    CONTROLBAR_ADD_USER("controlbar_icon_add_user.png"),
+
+    GENERAL_USER_AVATAR_DARK("general_icon_user_avatar_dark.png"),
+    GENERAL_USER_AVATAR_LIGHT("general_icon_user_avatar_light.png"),
+    GENERAL_LOADING_REMOTE("general_icon_loading_remote.png"),
+
+    TWEETPANE_LIKE_OFF("tweetpane_icon_heart.png"),
+    TWEETPANE_LIKE_ON("tweetpane_icon_heart_on.png"),
+    TWEETPANE_VIDEO("tweetpane_icon_video.png");
 
     private final Image backingImage;
 

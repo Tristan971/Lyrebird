@@ -159,7 +159,7 @@ public class UserViewController implements FxmlController {
         userBanner.setPreserveRatio(false);
         userBanner.setImage(ImageResources.BACKGROUND_DARK_1PX.getImage());
 
-        userProfilePictureImageView.setImage(ImageResources.BLANK_USER_PROFILE_PICTURE_LIGHT.getImage());
+        userProfilePictureImageView.setImage(ImageResources.GENERAL_USER_AVATAR_LIGHT.getImage());
         final Rectangle profilePictureClip = Clipping.getSquareClip(290.0, 50.0);
 
         userProfilePictureImageView.setClip(profilePictureClip);
