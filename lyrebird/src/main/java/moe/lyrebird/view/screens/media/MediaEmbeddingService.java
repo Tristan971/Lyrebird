@@ -66,7 +66,6 @@ public class MediaEmbeddingService {
      * @return The list of previews generated. Called only once for every tweet since it is cached via {@link
      * Cacheable}.
      */
-    @Cacheable(value = "embeddedNodes", sync = true)
     public List<Node> embed(final Status status) {
         return Arrays.stream(status.getMediaEntities())
                      .filter(TwitterMediaEntity::isSupported)
