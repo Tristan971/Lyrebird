@@ -18,6 +18,8 @@
 
 package moe.lyrebird.api.server.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
@@ -36,20 +38,29 @@ import static io.vavr.API.unchecked;
 public class VersionService {
 
     private static final String VERSIONS_PATTERN = "classpath:versions/*.json";
-    private static final List<LyrebirdVersion> VERSIONS = findAllVersions();
 
-    public LyrebirdVersion getLatestVersion() {
-        return VERSIONS.get(0);
+    private final ObjectMapper objectMapper;
+
+    @Autowired
+    public VersionService(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
-    private static List<LyrebirdVersion> findAllVersions() {
+    @Cacheable("latestVersion")
+    public LyrebirdVersion getLatestVersion() {
+        return getAllVersions().stream()
+                               .max(Comparator.comparingInt(LyrebirdVersion::getBuildVersion))
+                               .orElse(null);
+    }
+
+    @Cacheable("availableVersions")
+    public List<LyrebirdVersion> getAllVersions() {
         final PathMatchingResourcePatternResolver versionsResourcesResolver = new PathMatchingResourcePatternResolver();
         try {
             final Resource[] versionResources = versionsResourcesResolver.getResources(VERSIONS_PATTERN);
-            final ObjectMapper mapper = new ObjectMapper();
             return Arrays.stream(versionResources)
                          .map(unchecked(Resource::getInputStream))
-                         .map(unchecked(is -> mapper.readValue(is, LyrebirdVersion.class)))
+                         .map(unchecked(is -> objectMapper.readValue(is, LyrebirdVersion.class)))
                          .sorted(Comparator.comparing(LyrebirdVersion::getBuildVersion).reversed())
                          .collect(Collectors.toList());
         } catch (final IOException e) {

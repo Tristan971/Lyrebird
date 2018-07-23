@@ -23,6 +23,9 @@ import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlContr
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.TwitterTimelineBaseModel;
 import moe.lyrebird.view.components.cells.TweetListCell;
+import moe.lyrebird.view.components.mentions.MentionsController;
+import moe.lyrebird.view.components.timeline.TimelineController;
+import moe.lyrebird.view.components.usertimeline.UserTimelineController;
 import org.slf4j.Logger;
 import twitter4j.Status;
 
@@ -31,12 +34,31 @@ import javafx.beans.property.ReadOnlyListWrapper;
 
 import java.util.Optional;
 
+/**
+ * This class serves as a base implementation for backend observing lists of chronologically reverse-sorted tweets (aka
+ * a timeline).
+ *
+ * @see TimelineController
+ * @see MentionsController
+ * @see UserTimelineController
+ */
 public abstract class TimelineBasedController extends ComponentListViewFxmlController<Status> {
 
     private final TwitterTimelineBaseModel timelineBase;
     private final ListProperty<Status> tweetsProperty;
     private final boolean shouldAutomaticallyFill;
 
+    /**
+     * This constructor is called by the implementing class rather than Spring because there is no way we will ever use
+     * field injection in Lyrebird.
+     *
+     * @param timelineBase            The backing model-side controller taking care of requests and exposing tweets
+     * @param sessionManager          The session manager is used only for bootstrapping and does not leak outside of
+     *                                constructor
+     * @param context                 The spring context that is passed onto {@link ComponentListViewFxmlController} for
+     *                                constructor injection.
+     * @param shouldAutomaticallyFill Whether this controller should directly start fetching tweets on creation.
+     */
     public TimelineBasedController(
             final TwitterTimelineBaseModel timelineBase,
             final SessionManager sessionManager,
@@ -59,6 +81,9 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
         }
     }
 
+    /**
+     * Requests loading of older tweets.
+     */
     private void loadMoreTweets() {
         getOldestTweetLoaded().ifPresent(oldestStatus -> {
             getLogger().debug("Loading tweets before {}", oldestStatus.getId());
@@ -67,6 +92,9 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
         });
     }
 
+    /**
+     * @return The previously oldest loaded tweets for use in {@link #loadMoreTweets()}.
+     */
     private Optional<Status> getOldestTweetLoaded() {
         if (tweetsProperty.isEmpty()) {
             getLogger().debug("No older tweets to load.");
@@ -77,11 +105,17 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
         return Optional.of(oldest);
     }
 
+    /**
+     * Called when the user scrolls to the end of {@link #listView}.
+     */
     @Override
     protected void onScrolledToEndOfListView() {
         loadMoreTweets();
     }
 
+    /**
+     * @return The logger to use for calls from the child class.
+     */
     protected abstract Logger getLogger();
 
 }

@@ -26,11 +26,11 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
+/**
+ * This service is called at shutdown to execute a certain amout of cleanup operations.
+ */
 @Component
 public class CleanupService {
 
@@ -41,14 +41,25 @@ public class CleanupService {
 
     public CleanupService(@Qualifier("cleanupExecutor") final Executor cleanupExecutor) {
         this.cleanupExecutor = cleanupExecutor;
-        onShutdownHooks = new LinkedList<>();
+        this.onShutdownHooks = new LinkedList<>();
     }
 
+    /**
+     * Registers a cleanup operation for execution at shutdown.
+     *
+     * @param cleanupOperation The operation to execute at shutdown
+     */
     public void registerCleanupOperation(final CleanupOperation cleanupOperation) {
-        LOG.debug("Registering cleanup operation : {}", cleanupOperation.getName());
-        onShutdownHooks.add(cleanupOperation);
+        CompletableFuture.runAsync(() -> {
+            LOG.debug("Registering cleanup operation : {}", cleanupOperation.getName());
+            onShutdownHooks.add(cleanupOperation);
+        }, cleanupExecutor);
     }
 
+    /**
+     * Executes the cleanup operations that were previously registered via
+     * {@link #registerCleanupOperation(CleanupOperation)}.
+     */
     public void executeCleanupOperations() {
         cleanupExecutor.execute(() -> {
             LOG.debug("Executing cleanup hooks !");
@@ -57,18 +68,22 @@ public class CleanupService {
         });
     }
 
+    /**
+     * This method executes a single cleanup operation with a timeout. We are not systemd that gives 1m30s for a cleanup
+     * operation so you get 5 seconds to do whatever it is you need.
+     *
+     * @param cleanupOperation The operation to execute
+     */
     private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
         LOG.debug("\t-> {}", cleanupOperation.getName());
         try {
-            CompletableFuture.runAsync(cleanupOperation.getOperation(), cleanupExecutor)
-                             .get(1, TimeUnit.SECONDS);
-        } catch (final InterruptedException e) {
-            LOG.error("Could not actually call the following hook [{}] !", cleanupOperation.getName(), e);
+            final Thread cleanupOpThread = new Thread(cleanupOperation.getOperation());
+            cleanupOpThread.join(5000);
+        } catch (InterruptedException e) {
+            LOG.error("The cleanup operation thread for {} was interrupted! Skipping!", e);
             Thread.currentThread().interrupt();
-        } catch (final ExecutionException e) {
-            LOG.error("The hook [{}] encountered an exception while executing!", cleanupOperation.getName(), e);
-        } catch (final TimeoutException e) {
-            LOG.error("The hook [{}] could not finish in the given time!", cleanupOperation.getName(), e);
+        } catch (final RuntimeException e) {
+            LOG.error("An uncaught exception was thrown in a cleanup task!", e);
         }
     }
 

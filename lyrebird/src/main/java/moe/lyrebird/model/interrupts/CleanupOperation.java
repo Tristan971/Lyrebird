@@ -18,21 +18,29 @@
 
 package moe.lyrebird.model.interrupts;
 
+/**
+ * A cleanup operation consists of a name and an operation which are respectively logged and executed during the
+ * application's shutdown process.
+ */
 public final class CleanupOperation {
 
     private final String name;
     private final Runnable operation;
 
+    /**
+     * @param name      The human-readable name that will be logged for this operation
+     * @param operation The actual operation to execute at shutdown time
+     */
     public CleanupOperation(final String name, final Runnable operation) {
         this.name = name;
         this.operation = operation;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public Runnable getOperation() {
+    Runnable getOperation() {
         return operation;
     }
 

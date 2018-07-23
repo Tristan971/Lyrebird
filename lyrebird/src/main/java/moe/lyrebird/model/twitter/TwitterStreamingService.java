@@ -32,6 +32,9 @@ import javafx.beans.property.Property;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * This class is responsible for orchestration of the subscription to Twitter4J's streaming service.
+ */
 @Component
 public class TwitterStreamingService {
 
@@ -59,6 +62,9 @@ public class TwitterStreamingService {
         startListening();
     }
 
+    /**
+     * Starts listening to the streaming service
+     */
     private void startListening() {
         LOG.debug("Preparing streaming service...");
         final Property<Session> currentSessionBinding = sessionManager.currentSessionProperty();
@@ -89,6 +95,11 @@ public class TwitterStreamingService {
         ));
     }
 
+    /**
+     * Changes the user whose account activity we are streaming
+     *
+     * @param newSession The new user session to whose we will be listening for events about
+     */
     private void switchToSession(final Session newSession) {
         LOG.info("Starting streaming for session {}", newSession);
         twitterStream.setOAuthAccessToken(newSession.getAccessToken());
@@ -96,9 +107,13 @@ public class TwitterStreamingService {
         twitterStream.user();
     }
 
+    /**
+     * Stops listening to Twitter-side user events
+     */
     private void closeSession() {
         LOG.info("Stopping streaming for current session.");
         twitterStream.clearListeners();
+        twitterStream.shutdown();
     }
 
 }

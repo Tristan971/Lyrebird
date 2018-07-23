@@ -23,35 +23,54 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Paging;
-import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
+import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+/**
+ * This class exposes the current user's timeline in an observable way
+ */
 @Lazy
 @Component
 public class Timeline extends TwitterTimelineBaseModel {
 
     private static final Logger LOG = LoggerFactory.getLogger(Timeline.class);
 
+    private final TwitterInterractionService interractionService;
+
     @Autowired
-    public Timeline(final SessionManager sessionManager, @Qualifier("twitterExecutor") final Executor twitterExecutor) {
+    public Timeline(
+            final SessionManager sessionManager,
+            final TwitterInterractionService interractionService,
+            @Qualifier("twitterExecutor") final Executor twitterExecutor
+    ) {
         super(sessionManager, twitterExecutor);
+        this.interractionService = interractionService;
     }
 
     @Override
-    protected ResponseList<Status> initialLoad(final Twitter twitter) throws TwitterException {
-        return twitter.getHomeTimeline();
+    protected List<Status> initialLoad(final Twitter twitter) throws TwitterException {
+        return twitter.getHomeTimeline()
+                      .stream()
+                      .filter(((Predicate<Status>) interractionService::isRetweetByCurrentUser).negate())
+                      .collect(Collectors.toList());
     }
 
     @Override
-    protected ResponseList<Status> backfillLoad(final Twitter twitter, final Paging paging) throws TwitterException {
-        return twitter.getHomeTimeline(paging);
+    protected List<Status> backfillLoad(final Twitter twitter, final Paging paging) throws TwitterException {
+        return twitter.getHomeTimeline(paging)
+                      .stream()
+                      .filter(((Predicate<Status>) interractionService::isRetweetByCurrentUser).negate())
+                      .collect(Collectors.toList());
     }
 
     @Override

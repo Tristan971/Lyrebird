@@ -40,6 +40,9 @@ import java.util.stream.Collectors;
 
 import static io.vavr.API.unchecked;
 
+/**
+ * This service handles tasks related to posting a new tweet
+ */
 @Component
 public class NewTweetService {
 
@@ -58,6 +61,14 @@ public class NewTweetService {
         this.sessionManager = sessionManager;
     }
 
+    /**
+     * Requests sending a new tweet.
+     *
+     * @param content The textual content of the tweet
+     * @param medias  The medias to embed in it
+     *
+     * @return A {@link CompletionStage} to monitor the request.
+     */
     public CompletionStage<Status> sendNewTweet(final String content, final List<File> medias) {
         return CompletableFuture.supplyAsync(
                 () -> sessionManager.getCurrentTwitter()
@@ -67,12 +78,31 @@ public class NewTweetService {
         );
     }
 
-    private static Status tweet(final Twitter twitter, final String content, final List<File> media) throws TwitterException {
+    /**
+     * Sends a tweet built from given parameters.
+     *
+     * @param twitter The twitter instance to use for sending the {@link Status} representation of the tweet
+     * @param content The textual content of the tweet
+     * @param media   The media to embed in the given tweet
+     *
+     * @return The tweet sent
+     * @throws TwitterException if something goes wrong
+     */
+    private static Status tweet(final Twitter twitter, final String content, final List<File> media)
+    throws TwitterException {
         final List<Long> uploadedMediaIds = uploadMedias(twitter, media);
         final StatusUpdate statusUpdate = buildStatus(content, uploadedMediaIds);
         return twitter.updateStatus(statusUpdate);
     }
 
+    /**
+     * Builds a {@link StatusUpdate} from given parameters
+     *
+     * @param content  The textual content of this update
+     * @param mediaIds The mediaIds (from Twitter-side) to be embedded in it
+     *
+     * @return The resulting status update to post
+     */
     private static StatusUpdate buildStatus(final String content, final List<Long> mediaIds) {
         LOG.debug("Preparing new tweet with content [\"{}\"] and mediaIds {}", content, mediaIds);
         final StatusUpdate statusUpdate = new StatusUpdate(content);
@@ -87,6 +117,14 @@ public class NewTweetService {
         return statusUpdate;
     }
 
+    /**
+     * Uploads the given media files to Twitter
+     *
+     * @param twitter     The twitter instance to use for uploading
+     * @param attachments The media files to upload
+     *
+     * @return The uploaded media files Twitter-side ids
+     */
     private static List<Long> uploadMedias(final Twitter twitter, final List<File> attachments) {
         return attachments.stream()
                           .map(unchecked((CheckedFunction1<File, UploadedMedia>) twitter::uploadMedia))

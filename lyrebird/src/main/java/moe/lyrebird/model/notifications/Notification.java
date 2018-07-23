@@ -20,11 +20,18 @@ package moe.lyrebird.model.notifications;
 
 import java.util.Objects;
 
+/**
+ * Simple POJO to describe a notification.
+ */
 public final class Notification {
 
     private final String title;
     private final String text;
 
+    /**
+     * @param title The title to display for this notification
+     * @param text  The textual content to display in this notification
+     */
     public Notification(final String title, final String text) {
         this.title = title;
         this.text = text != null ? text : "";

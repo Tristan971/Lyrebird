@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.lyrebird.model.credits.objects.CredittedWork;
+import moe.lyrebird.view.screens.Screen;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -33,6 +34,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 
+/**
+ * This component is the one managing a single credit displaimer unit in the credits list view.
+ *
+ * @see Screen#CREDITS_VIEW
+ */
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Component
 public class CreditController implements ComponentCellFxmlController<CredittedWork> {

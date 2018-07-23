@@ -60,8 +60,12 @@
     -fx-background-color: -fx-background;
 }
 
-#retweetButton:hover, #likeButton:hover, #replyButton:hover {
+.hoverableButton:hover {
     -fx-background-color: #ebebeb;
+}
+
+.list-view .list-cell:focused .hoverableButton:hover {
+    -fx-background-color: #cdd8e6;
 }
 
 #tweet {

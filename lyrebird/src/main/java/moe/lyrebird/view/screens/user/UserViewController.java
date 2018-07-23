@@ -19,8 +19,9 @@
 package moe.lyrebird.view.screens.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -28,8 +29,9 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.components.Components;
+import moe.lyrebird.view.components.Component;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
+import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,13 +51,23 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.FOLLOW;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
-@Component
-@Scope(SCOPE_PROTOTYPE)
+/**
+ * This controller is responsible for managing the {@link Screen#USER_VIEW} screen, which is used to display details
+ * about a specific user.
+ * <p>
+ * Made {@link Lazy} in case the user never uses it.
+ * <p>
+ * Also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} because the user might want to display multile users at the
+ * same time.
+ */
+@Lazy
+@org.springframework.stereotype.Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserViewController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserViewController.class);
@@ -133,6 +145,9 @@ public class UserViewController implements FxmlController {
         this.targetUser = new SimpleObjectProperty<>(null);
     }
 
+    /**
+     * @return The user this detailed user view is displaying.
+     */
     public Property<User> targetUserProperty() {
         return targetUser;
     }
@@ -145,7 +160,7 @@ public class UserViewController implements FxmlController {
         userBanner.setPreserveRatio(false);
         userBanner.setImage(ImageResources.BACKGROUND_DARK_1PX.getImage());
 
-        userProfilePictureImageView.setImage(ImageResources.BLANK_USER_PROFILE_PICTURE_LIGHT.getImage());
+        userProfilePictureImageView.setImage(ImageResources.GENERAL_USER_AVATAR_LIGHT.getImage());
         final Rectangle profilePictureClip = Clipping.getSquareClip(290.0, 50.0);
 
         userProfilePictureImageView.setClip(profilePictureClip);
@@ -156,13 +171,19 @@ public class UserViewController implements FxmlController {
         }
     }
 
+    /**
+     * Basic orchestrator method call for visual setup.
+     */
     private void displayTargetUser() {
         this.fillTextData();
         this.asyncLoadImages();
-        this.setupFollowButton();
+        this.setupFollowData();
         this.loadTargetUserTimeline();
     }
 
+    /**
+     * Method responsible for loading all the non-network-dependent textual data.
+     */
     private void fillTextData() {
         final User user = targetUser.getValue();
         userNameLabel.setText(user.getName());
@@ -199,6 +220,9 @@ public class UserViewController implements FxmlController {
 
     }
 
+    /**
+     * This method asynchronously loads the user's profile picture and banner in the view.
+     */
     private void asyncLoadImages() {
         final User user = targetUser.getValue();
         asyncIO.loadImage(user.getOriginalProfileImageURLHttps())
@@ -213,51 +237,74 @@ public class UserViewController implements FxmlController {
         }
     }
 
-    private void setupFollowButton() {
+    /**
+     * Sets up follow/unfollow related network-dependent data in the view.
+     */
+    private void setupFollowData() {
         final User user = targetUser.getValue();
         followButton.setOnAction(e -> {
             interractionService.interract(user, FOLLOW);
-            updateFollowButtonText();
+            updateFollowStatusText();
         });
-        updateFollowButtonText();
+        updateFollowStatusText();
     }
 
-    private void updateFollowButtonText() {
-        final User user = targetUser.getValue();
-        followButton.setText(interractionService.notYetFollowed(user) ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT);
-        sessionManager.currentSessionProperty().getValue().getTwitterUser().onSuccess(me -> {
-            if (me.getId() == user.getId()) {
-                followButton.setText(YOURSELF_BTN_TEXT);
-                followButton.setDisable(true);
-            } else {
-                followButton.setDisable(false);
-            }
-            updateFriendshipStatus();
-        });
+    /**
+     * Updates the follow button's text to match the current status of the two user's relationship.
+     */
+    private void updateFollowStatusText() {
+        final User targetUser = this.targetUser.getValue();
+
+        CompletableFuture.supplyAsync(() -> interractionService.notYetFollowed(targetUser))
+                         .thenApplyAsync(notFollowed -> notFollowed ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT)
+                         .thenAcceptAsync(followButton::setText, Platform::runLater);
+
+        CompletableFuture.supplyAsync(sessionManager.currentSessionProperty().getValue()::getTwitterUser)
+                         .thenApplyAsync(currentUser -> currentUser.get().getId())
+                         .thenAcceptAsync(
+                                 currentUserId -> {
+                                     if (currentUserId == targetUser.getId()) {
+                                         followButton.setText(YOURSELF_BTN_TEXT);
+                                         followButton.setDisable(true);
+                                     } else {
+                                         followButton.setDisable(false);
+                                     }
+                                 },
+                                 Platform::runLater
+                         )
+                         .thenRunAsync(this::updateFriendshipStatus, Platform::runLater);
     }
 
+    /**
+     * Called by {@link #updateFollowStatusText()} ()} to give, if pertinent, a simple text displaying if the target
+     * user is already following the current user.
+     */
     private void updateFriendshipStatus() {
-        final Relationship relationship = getRelationship();
+        CompletableFuture.supplyAsync(this::getRelationship)
+                         .thenAcceptAsync(relationship -> {
+                             String relStatusText = null;
+                             if (relationship.isTargetFollowingSource()) {
+                                 if (relationship.isTargetFollowedBySource()) {
+                                     relStatusText = "You follow each other!";
+                                 } else {
+                                     relStatusText = "Follows you.";
+                                 }
+                             }
 
-        String relStatusText = null;
-        if (relationship.isTargetFollowingSource()) {
-            if (relationship.isTargetFollowedBySource()) {
-                relStatusText = "You follow each other!";
-            } else {
-                relStatusText = "Follows you.";
-            }
-        }
-
-        if (relStatusText == null) {
-            userFriendshipStatus.setVisible(false);
-            userFriendshipStatus.setManaged(false);
-        } else {
-            userFriendshipStatus.setText(relStatusText);
-            userFriendshipStatus.setVisible(true);
-            userFriendshipStatus.setManaged(true);
-        }
+                             if (relStatusText == null) {
+                                 userFriendshipStatus.setVisible(false);
+                                 userFriendshipStatus.setManaged(false);
+                             } else {
+                                 userFriendshipStatus.setText(relStatusText);
+                                 userFriendshipStatus.setVisible(true);
+                                 userFriendshipStatus.setManaged(true);
+                             }
+                         }, Platform::runLater);
     }
 
+    /**
+     * @return The {@link Relationship} between the current user in the direction of the {@link #targetUser}.
+     */
     private Relationship getRelationship() {
         return sessionManager.doWithCurrentTwitter(
                 twitter -> sessionManager.currentSessionProperty()
@@ -270,9 +317,12 @@ public class UserViewController implements FxmlController {
         ).getOrElseThrow((Function<? super Throwable, IllegalStateException>) IllegalStateException::new);
     }
 
+    /**
+     * Loads the target user's timeline into the view.
+     */
     private void loadTargetUserTimeline() {
         final User user = targetUser.getValue();
-        easyFxml.loadNode(Components.USER_TIMELINE, Pane.class, UserTimelineController.class)
+        easyFxml.loadNode(Component.USER_TIMELINE, Pane.class, UserTimelineController.class)
                 .afterControllerLoaded(utc -> utc.setTargetUser(user))
                 .afterNodeLoaded(userDetailsTimeline -> VBox.setVgrow(userDetailsTimeline, Priority.ALWAYS))
                 .getNode()

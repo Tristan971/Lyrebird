@@ -23,6 +23,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.net.MalformedURLException;
 
+/**
+ * @see CredittedWork
+ */
 public final class CredittedWorkLicensor extends SimpleNameUrlBinding {
 
     @JsonCreator

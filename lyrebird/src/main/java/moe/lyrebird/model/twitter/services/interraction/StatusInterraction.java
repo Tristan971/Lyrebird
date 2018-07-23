@@ -22,7 +22,11 @@ import twitter4j.Status;
 
 import java.util.function.BiFunction;
 
+/**
+ * Convenience enumeration for {@link TwitterBinaryInterraction}s which apply to {@link Status}es.
+ */
 public enum StatusInterraction implements TwitterBinaryInterraction<Status> {
+
     LIKE(
             TwitterInterractionService::like,
             TwitterInterractionService::unlike,
@@ -62,4 +66,5 @@ public enum StatusInterraction implements TwitterBinaryInterraction<Status> {
     public BiFunction<TwitterInterractionService, Status, Boolean> shouldDo() {
         return shouldDo;
     }
+
 }

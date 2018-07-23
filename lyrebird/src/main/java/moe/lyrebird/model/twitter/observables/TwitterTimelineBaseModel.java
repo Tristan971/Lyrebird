@@ -21,7 +21,6 @@ package moe.lyrebird.model.twitter.observables;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import twitter4j.Paging;
-import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -35,6 +34,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
+/**
+ * This is the base class for reverse-chronologically sorted tweet lists (aka Timelines) backend model.
+ */
 public abstract class TwitterTimelineBaseModel {
 
     protected final SessionManager sessionManager;
@@ -50,10 +52,18 @@ public abstract class TwitterTimelineBaseModel {
         this.sessionManager = sessionManager;
     }
 
+    /**
+     * @return The currently loaded tweets.
+     */
     public ObservableList<Status> loadedTweets() {
         return FXCollections.unmodifiableObservableList(loadedTweets);
     }
 
+    /**
+     * Asynchronously requests loading of tweets prior to the given status.
+     *
+     * @param loadUntilThisStatus the status whose prior tweets are requested
+     */
     public void loadMoreTweets(final long loadUntilThisStatus) {
         CompletableFuture.runAsync(() -> {
             getLocalLogger().debug("Requesting more tweets.");
@@ -67,6 +77,9 @@ public abstract class TwitterTimelineBaseModel {
         }, twitterExecutor);
     }
 
+    /**
+     * Asynchronously loads the last tweets available
+     */
     public void loadLastTweets() {
         CompletableFuture.runAsync(() -> {
             getLocalLogger().debug("Requesting last tweets in timeline.");
@@ -76,11 +89,21 @@ public abstract class TwitterTimelineBaseModel {
         }, twitterExecutor);
     }
 
+    /**
+     * Add a given list of tweets to the currently loaded ones.
+     *
+     * @param receivedTweets The tweets to add.
+     */
     private void addTweets(final List<Status> receivedTweets) {
         receivedTweets.forEach(this::addTweet);
         getLocalLogger().debug("Loaded {} tweets successfully.", receivedTweets.size());
     }
 
+    /**
+     * Adds a single tweet to the list of currently loaded ones.
+     *
+     * @param newTweet The tweet to add.
+     */
     public void addTweet(final Status newTweet) {
         if (!this.loadedTweets.contains(newTweet)) {
             this.loadedTweets.add(newTweet);
@@ -88,6 +111,13 @@ public abstract class TwitterTimelineBaseModel {
         }
     }
 
+    /**
+     * Removes a given tweet from the list of currently loaded ones.
+     *
+     * @param removedId The id of the tweet to remove
+     *
+     * @see Status#getId()
+     */
     public void removeTweet(final long removedId) {
         this.loadedTweets.stream()
                          .filter(status -> status.getId() == removedId)
@@ -95,16 +125,39 @@ public abstract class TwitterTimelineBaseModel {
                          .ifPresent(this.loadedTweets::remove);
     }
 
+    /**
+     * Remove all loaded tweets.
+     */
     void clearLoadedTweets() {
         loadedTweets.clear();
     }
 
-    protected abstract ResponseList<Status> initialLoad(final Twitter twitter)
+    /**
+     * Performs the initial load of tweets (i.e. {@link #loadLastTweets()}).
+     *
+     * @param twitter The twitter instance to use
+     *
+     * @return The list of tweets received from Twitter
+     * @throws TwitterException if there was an issue loading tweets
+     */
+    protected abstract List<Status> initialLoad(final Twitter twitter)
     throws TwitterException;
 
-    protected abstract ResponseList<Status> backfillLoad(final Twitter twitter, final Paging paging)
+    /**
+     * Performs a request for loading more tweets (i.e. {@link #loadMoreTweets(long)}).
+     *
+     * @param twitter The twitter instance to use
+     * @param paging  Parameters for the request (containing the tweet whose prior tweets are requested for example)
+     *
+     * @return The list of tweets received from Twitter
+     * @throws TwitterException if there was an issue loading tweets
+     */
+    protected abstract List<Status> backfillLoad(final Twitter twitter, final Paging paging)
     throws TwitterException;
 
+    /**
+     * @return The subclass' logger that will be used for logging requests and potential errors
+     */
     protected abstract Logger getLocalLogger();
-    
+
 }

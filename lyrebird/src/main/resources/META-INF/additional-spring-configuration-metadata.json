@@ -1,6 +1,11 @@
 {
   "properties": [
     {
+      "name": "app.promo.name",
+      "type": "java.lang.String",
+      "description": "The application's name in places where \"promo\" style might be used."
+    },
+    {
       "name": "app.version",
       "type": "java.lang.String",
       "description": "Application version, extracted from Maven's project.version key."

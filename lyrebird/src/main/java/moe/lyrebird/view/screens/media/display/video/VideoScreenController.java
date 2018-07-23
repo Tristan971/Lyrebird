@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.view.assets.MediaResources;
-import moe.lyrebird.view.screens.media.MediaScreenController;
+import moe.lyrebird.view.screens.media.display.MediaScreenController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,9 +40,12 @@ import javafx.stage.Stage;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * This class manages a video's detailed view
+ */
 @Component
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class VideoScreenController extends MediaScreenController {
+public class VideoScreenController implements MediaScreenController {
 
     private static final Logger LOG = LoggerFactory.getLogger(VideoScreenController.class);
 
@@ -77,11 +80,14 @@ public class VideoScreenController extends MediaScreenController {
     }
 
     @Override
-    protected void bindViewSizeToParent() {
+    public void bindViewSizeToParent() {
         mediaView.fitHeightProperty().bind(container.heightProperty());
         mediaView.fitWidthProperty().bind(container.widthProperty());
     }
 
+    /**
+     * Opens a backing {@link MediaPlayer} for the embedded video.
+     */
     private void openMediaPlayer() {
         CompletableFuture.supplyAsync(() -> new MediaPlayer(mediaProperty.getValue()))
                          .thenAcceptAsync(mediaPlayer -> {
@@ -92,6 +98,13 @@ public class VideoScreenController extends MediaScreenController {
                          }, Platform::runLater);
     }
 
+    /**
+     * Sets up reasonable settings for {@link MediaPlayer} behavior when it comes to user interactions.
+     * <p>
+     * Basically the same as any wide-usage video player with replaying when unpausing after a video ended.
+     *
+     * @param mediaPlayer The media player to setup.
+     */
     private void onClickHandler(final MediaPlayer mediaPlayer) {
         final MediaPlayer.Status playerStatus = mediaPlayer.statusProperty().get();
         switch (playerStatus) {
@@ -118,6 +131,11 @@ public class VideoScreenController extends MediaScreenController {
         }
     }
 
+    /**
+     * Makes sure that this media player is stopped and disposed when the user closes the stage for this screen.
+     *
+     * @param embeddingStage The stage for which to listen to close requests
+     */
     @Override
     public void setStage(final Stage embeddingStage) {
         embeddingStage.setOnCloseRequest(e -> {

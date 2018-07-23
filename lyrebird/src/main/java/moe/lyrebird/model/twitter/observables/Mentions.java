@@ -30,9 +30,14 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import twitter4j.UserMentionEntity;
 
+import java.util.Arrays;
 import java.util.concurrent.Executor;
 
+/**
+ * This class exposes the current user's mentions in an observable way
+ */
 @Lazy
 @Component
 public class Mentions extends TwitterTimelineBaseModel {
@@ -53,10 +58,20 @@ public class Mentions extends TwitterTimelineBaseModel {
         return twitter.getMentionsTimeline(paging);
     }
 
+    /**
+     * @param status the status to test against
+     *
+     * @return whether a given status is a mention to the current user
+     */
     public boolean isMentionToCurrentUser(final Status status) {
         final Session currentSession = sessionManager.currentSessionProperty().getValue();
-        if (currentSession == null) return false;
-        return status.getText().contains('@' + currentSession.getUserScreenName());
+        if (currentSession == null) {
+            return false;
+        }
+        return Arrays.stream(status.getUserMentionEntities())
+                     .map(UserMentionEntity::getId)
+                     .map(String::valueOf)
+                     .anyMatch(currentSession.getUserId()::equals);
     }
 
     @Override

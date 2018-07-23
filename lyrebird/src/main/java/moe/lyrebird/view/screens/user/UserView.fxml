@@ -39,7 +39,7 @@
                                  <children>
                                     <ImageView fx:id="userProfilePictureImageView" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../../../../../resources/assets/img/user_avatar_icon.png" />
+                                          <Image url="@/assets/img/general_icon_user_avatar_dark.png" />
                                        </image></ImageView>
                                  </children>
                                  <HBox.margin>
@@ -64,7 +64,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER_LEFT" VBox.vgrow="NEVER">
                                        <children>
-                                          <Label fx:id="userFriendshipStatus" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="FRIENDSHIP_STATUS" />
+                                          <Label fx:id="userFriendshipStatus" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text=" " />
                                           <Button fx:id="followButton" maxHeight="1.7976931348623157E308" minWidth="128.0" mnemonicParsing="false" text=" " />
                                        </children>
                                     </VBox>

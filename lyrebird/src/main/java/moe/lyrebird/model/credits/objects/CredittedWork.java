@@ -21,6 +21,9 @@ package moe.lyrebird.model.credits.objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * POJO used to map the creditted works.
+ */
 public final class CredittedWork {
 
     @JsonProperty

@@ -16,26 +16,20 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.components.tweet;
+package moe.lyrebird.view.util;
 
-import twitter4j.Status;
+import javafx.geometry.Insets;
+import javafx.scene.control.Hyperlink;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.function.Consumer;
 
-final class TweetFormatter {
+public final class ClickableHyperlink extends Hyperlink {
 
-    private TweetFormatter() {
-        throw new UnsupportedOperationException("Utility class");
-    }
-
-    static String time(final Status status) {
-        final Date tweetDate = status.getCreatedAt();
-        final LocalDateTime localDateTime = LocalDateTime.ofInstant(tweetDate.toInstant(), ZoneId.systemDefault());
-
-        return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    public <T> ClickableHyperlink(final T element, final Consumer<T> onClicked) {
+        super();
+        setText(String.valueOf(element));
+        setOnAction(e -> onClicked.accept(element));
+        this.setPadding(Insets.EMPTY);
     }
 
 }

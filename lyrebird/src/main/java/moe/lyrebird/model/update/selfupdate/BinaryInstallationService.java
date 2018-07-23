@@ -33,6 +33,12 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
+/**
+ * This service, with the help of the {@link BinaryInstallationHelper}, generates the command line arguments for the
+ * current platform to execute a selfupdate.
+ *
+ * @see BinaryInstallationHelper
+ */
 @Component
 public class BinaryInstallationService {
 
@@ -41,6 +47,14 @@ public class BinaryInstallationService {
     private static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir");
     private static final String LYREBIRD_DL_FOLDER = "lyrebird";
 
+    /**
+     * Determines the correct command line arguments for selfupdating a given platform's executable to a given version.
+     *
+     * @param targetPlatform  The platform on which the selfupdate shall be performed
+     * @param lyrebirdVersion The version to which the selfupdate shall be performed
+     *
+     * @return The command line arguments for the selfupdate execution
+     */
     String[] getInstallationCommandLine(
             final TargetPlatform targetPlatform,
             final LyrebirdVersion lyrebirdVersion
@@ -59,6 +73,14 @@ public class BinaryInstallationService {
         return BinaryInstallationHelper.generateCommandLineForPlatformWithFile(targetPlatform, downloadedBinary);
     }
 
+    /**
+     * Finds the correct {@link LyrebirdPackage} for the given target platform.
+     *
+     * @param lyrebirdVersion The version to search a package from
+     * @param targetPlatform  The platform to search a package for
+     *
+     * @return The package if it was found, else {@link Optional#empty()}.
+     */
     private Optional<LyrebirdPackage> findPackageForPlatform(
             final LyrebirdVersion lyrebirdVersion,
             final TargetPlatform targetPlatform
@@ -69,6 +91,13 @@ public class BinaryInstallationService {
                               .findAny();
     }
 
+    /**
+     * Downloads a binary file locally to a temporary location that is platform dependent.
+     *
+     * @param binaryUrl The file to download's URL
+     *
+     * @return The downloaded file
+     */
     private File downloadBinary(final URL binaryUrl) {
         final File targetFile = prepareTargetFile(binaryUrl);
         LOG.debug("Downloading {} to file {}", binaryUrl, targetFile);
@@ -79,6 +108,13 @@ public class BinaryInstallationService {
         return targetFile;
     }
 
+    /**
+     * Prepares the location of the downloaded installation binary in the system's temporary folder.
+     *
+     * @param binaryUrl The URL of the binary (to match name mostly)
+     *
+     * @return The premade File reference to the location to which to download
+     */
     private File prepareTargetFile(final URL binaryUrl) {
         final String[] binaryUrlSplit = binaryUrl.toExternalForm().split("/");
         final String binaryFilename = binaryUrlSplit[binaryUrlSplit.length - 1];
@@ -91,6 +127,14 @@ public class BinaryInstallationService {
         return new File(tmpFolder, binaryFilename);
     }
 
+    /**
+     * Downloads a file from a URL to a local location.
+     *
+     * @param binaryUrl  The URL of the file to download
+     * @param targetFile The location where to save the downloaded file
+     *
+     * @return The size of the downloaded file in bytes
+     */
     private long downloadFileImpl(final URL binaryUrl, final File targetFile) {
         try (final InputStream binaryInputStream = binaryUrl.openStream()) {
             return Files.copy(binaryInputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);

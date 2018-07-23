@@ -19,75 +19,66 @@
 package moe.lyrebird.model.systemtray;
 
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.lyrebird.view.screens.Screens;
+import moe.tristan.easyfxml.model.awt.integrations.SystemTraySupport;
+import moe.lyrebird.model.interrupts.CleanupOperation;
+import moe.lyrebird.model.interrupts.CleanupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
-import javax.swing.SwingUtilities;
-import java.awt.AWTException;
-import java.awt.Image;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
-import java.net.URL;
-import java.util.concurrent.CompletableFuture;
 
+/**
+ * This class is responsible for management and exposure of the {@link LyrebirdTrayIcon}.
+ */
 @Component
 public class SystemTrayService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemTrayService.class);
 
-    private final StageManager stageManager;
+    private final LyrebirdTrayIcon lyrebirdTrayIcon;
+    private final SystemTraySupport traySupport;
+    private final CleanupService cleanupService;
 
-    private final Property<TrayIcon> lyrebirdTrayIcon = new SimpleObjectProperty<>(null);
+    private final Property<TrayIcon> trayIcon = new SimpleObjectProperty<>(null);
 
-    public SystemTrayService(final StageManager stageManager) {
-        this.stageManager = stageManager;
-        CompletableFuture.supplyAsync(this::loadTrayImage, SwingUtilities::invokeLater)
-                         .thenApplyAsync(this::buildTrayIcon, SwingUtilities::invokeLater)
-                         .thenAcceptAsync(this::registerTrayIcon, SwingUtilities::invokeLater);
+    public SystemTrayService(
+            final LyrebirdTrayIcon lyrebirdTrayIcon,
+            final SystemTraySupport traySupport,
+            final CleanupService cleanupService
+    ) {
+        this.lyrebirdTrayIcon = lyrebirdTrayIcon;
+        this.traySupport = traySupport;
+        this.cleanupService = cleanupService;
+        loadTrayIcon();
     }
 
-    public Property<TrayIcon> lyrebirdTrayIconProperty() {
-        return lyrebirdTrayIcon;
+    public Property<TrayIcon> trayIconProperty() {
+        return trayIcon;
     }
 
-    private Image loadTrayImage() {
-        final URL logoUrl = getClass().getClassLoader().getResource("assets/img/logo.png");
-        return Toolkit.getDefaultToolkit().getImage(logoUrl);
-    }
-
-    private TrayIcon buildTrayIcon(final Image image) {
-        return new TrayIcon(image, "Lyrebird", null);
-    }
-
-    private void registerTrayIcon(final TrayIcon trayIcon) {
-        trayIcon.addMouseListener(new OnMouseClickListener(this::openMainScreen));
-        trayIcon.setImageAutoSize(true);
-        try {
-            SystemTray.getSystemTray().add(trayIcon);
-            lyrebirdTrayIcon.setValue(trayIcon);
-        } catch (final AWTException e) {
-            LOG.error("Could not register tray icon!", e);
-        }
-    }
-
-    private void openMainScreen() {
-        CompletableFuture.runAsync(
-                () -> stageManager.getSingle(Screens.ROOT_VIEW)
-                                  .toTry(IllegalStateException::new)
-                                  .onSuccess(stage -> {
-                                      stage.show();
-                                      stage.setIconified(false);
-                                      stage.toFront();
-                                  }).onFailure(err -> LOG.error("Could not show main stage!", err)),
-                Platform::runLater
-        );
+    /**
+     * Loads the {@link LyrebirdTrayIcon} in the current OS's system tray.
+     */
+    private void loadTrayIcon() {
+        LOG.debug("Registering tray icon for Lyrebird...");
+        traySupport.registerTrayIcon(lyrebirdTrayIcon)
+                   .thenApplyAsync(trayIconRes -> trayIconRes.getOrElse(() -> {
+                       LOG.error("Could not load the tray icon!", trayIconRes.getCause());
+                       return null;
+                   }))
+                   .thenAcceptAsync(trayIcon::setValue)
+                   .thenRunAsync(() -> {
+                       if (trayIcon.getValue() == null) {
+                           return;
+                       }
+                       cleanupService.registerCleanupOperation(new CleanupOperation(
+                               "Remove system tray icon.",
+                               () -> traySupport.removeTrayIcon(trayIcon.getValue())
+                       ));
+                   });
     }
 
 }

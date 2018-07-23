@@ -20,8 +20,19 @@ package moe.lyrebird.model.notifications.system;
 
 import moe.lyrebird.model.notifications.Notification;
 
+/**
+ * Common interface for notification systems
+ *
+ * @see AwtNotificationSystem
+ * @see InternalNotificationSystem
+ */
 public interface NotificationSystem {
 
+    /**
+     * Requests the display of a given notification.
+     *
+     * @param notification The notification to display.
+     */
     void displayNotification(final Notification notification);
 
 }

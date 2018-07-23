@@ -16,42 +16,32 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.systemtray;
+package moe.lyrebird.view.screens.media.handlers.direct;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.base.ImageHandler;
 
-final class OnMouseClickListener implements MouseListener {
+import javafx.scene.layout.Pane;
 
-    private final Runnable onClick;
+/**
+ * Implementation of {@link ImageHandler} for images already in URL form.
+ * <p>
+ * Simple pass-through.
+ */
+@Component
+public class DirectImageHandler extends ImageHandler<String> {
 
-    OnMouseClickListener(final Runnable onClick) {
-        this.onClick = onClick;
+    @Autowired
+    public DirectImageHandler(final AsyncIO asyncIO, final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
+        super(asyncIO, embeddedMediaViewHelper);
     }
 
     @Override
-    public void mouseClicked(final MouseEvent e) {
-        onClick.run();
-    }
-
-    @Override
-    public void mousePressed(final MouseEvent e) {
-        // ignore
-    }
-
-    @Override
-    public void mouseReleased(final MouseEvent e) {
-        // ignore
-    }
-
-    @Override
-    public void mouseEntered(final MouseEvent e) {
-        // ignore
-    }
-
-    @Override
-    public void mouseExited(final MouseEvent e) {
-        // ignore
+    public Pane handleMedia(final String mediaSource) {
+        return handleMediaSource(mediaSource);
     }
 
 }

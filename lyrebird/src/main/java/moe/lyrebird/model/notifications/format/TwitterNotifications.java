@@ -22,9 +22,12 @@ import moe.lyrebird.model.notifications.Notification;
 import twitter4j.Status;
 import twitter4j.User;
 
-public final class TweetNotifications {
+/**
+ * Helper methods for formatting notifications related to twitter events.
+ */
+public final class TwitterNotifications {
 
-    private TweetNotifications() {
+    private TwitterNotifications() {
         throw new AssertionError("Not instanciable.");
     }
 

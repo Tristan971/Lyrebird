@@ -20,21 +20,41 @@ package moe.lyrebird.view.assets;
 
 import javafx.scene.image.Image;
 
+/**
+ * This enumetation contains some static images used either as placeholders or fallbacks.
+ */
 public enum ImageResources {
 
-    ADD_USER_PROFILE_PICTURE("add_user.png"),
     BACKGROUND_DARK_1PX("background-dark-1px.png"),
-    BLANK_USER_PROFILE_PICTURE("user_avatar_icon.png"),
-    BLANK_USER_PROFILE_PICTURE_LIGHT("user_avatar_icon_light.png"),
-    LOADING_REMOTE("loading_remote.png"),
-    VIDEO_PLAYER("video_player.png");
+
+    CONTROLBAR_ADD_USER("controlbar_icon_add_user.png"),
+
+    GENERAL_USER_AVATAR_DARK("general_icon_user_avatar_dark.png"),
+    GENERAL_USER_AVATAR_LIGHT("general_icon_user_avatar_light.png"),
+    GENERAL_LOADING_REMOTE("general_icon_loading_remote.png"),
+
+    TWEETPANE_RETWEET_OFF("tweetpane_icon_retweet_off.png"),
+    TWEETPANE_RETWEET_ON("tweetpane_icon_retweet_on.png"),
+    TWEETPANE_LIKE_OFF("tweetpane_icon_heart_off.png"),
+    TWEETPANE_LIKE_ON("tweetpane_icon_heart_on.png"),
+    TWEETPANE_VIDEO("tweetpane_icon_video.png");
 
     private final Image backingImage;
 
+    /**
+     * @param path The path of the resource relative to src/main/resources/assets/img
+     */
     ImageResources(final String path) {
         this.backingImage = loadImage(path);
     }
 
+    /**
+     * This method is the load call executed on constructor call to preload the images on startup.
+     *
+     * @param path The path from the enum member declaration.
+     *
+     * @return The underlying image that will actually get used.
+     */
     private static Image loadImage(final String path) {
         final ClassLoader cl = ImageResources.class.getClassLoader();
         final String finalPath = "assets/img/" + path;

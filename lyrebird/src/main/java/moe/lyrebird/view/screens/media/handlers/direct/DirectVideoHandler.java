@@ -19,11 +19,16 @@
 package moe.lyrebird.view.screens.media.handlers.direct;
 
 import org.springframework.stereotype.Component;
-import moe.lyrebird.view.screens.media.display.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
 import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
 
 import javafx.scene.layout.Pane;
 
+/**
+ * Implementation of {@link VideoHandler} for videos already in URL form.
+ * <p>
+ * Simple pass-through.
+ */
 @Component
 public class DirectVideoHandler extends VideoHandler<String> {
 

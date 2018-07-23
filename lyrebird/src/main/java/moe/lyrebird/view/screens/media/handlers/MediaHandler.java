@@ -20,6 +20,12 @@ package moe.lyrebird.view.screens.media.handlers;
 
 import javafx.scene.layout.Pane;
 
+/**
+ * A media handler is responsible for mapping a given media to a miniature of it that will open a detailed view on
+ * click.
+ *
+ * @param <T> The inpout type for the media in question
+ */
 public interface MediaHandler<T> {
 
     Pane handleMedia(final T mediaSource);

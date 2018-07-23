@@ -28,6 +28,12 @@ import javafx.scene.media.Media;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
+/**
+ * This class exposes convenience method to execute asynchronous network operations on the asyncIo thread.
+ * <p>
+ * Every call here must be explicitly made with the {@link CachedIO} service until proven that the cache really grows
+ * too big with that rule.
+ */
 @Component
 public class AsyncIO {
 
@@ -43,10 +49,28 @@ public class AsyncIO {
         this.cachedIO = cachedIO;
     }
 
+    /**
+     * Asynchronously loads an image.
+     *
+     * @param imageUrl the image to load's url as a string
+     *
+     * @return A {@link CompletableFuture} which can be asynchronously consumed if needed upon termination of this load
+     * operation.
+     */
     public CompletableFuture<Image> loadImage(final String imageUrl) {
         return CompletableFuture.supplyAsync(() -> cachedIO.loadImage(imageUrl), asyncIoExecutor);
     }
 
+    /**
+     * Asynchronously loads an image in miniature version.
+     *
+     * @param imageUrl the image to load's url as a string
+     * @param width    the width of the miniature
+     * @param heigth   the heigth of the miniature
+     *
+     * @return A {@link CompletableFuture} which can be asynchronously consumed if needed upon termination of this load
+     * operation.
+     */
     public CompletableFuture<Image> loadImageMiniature(final String imageUrl, final double width, final double heigth) {
         return CompletableFuture.supplyAsync(
                 () -> cachedIO.loadImageMiniature(imageUrl, width, heigth),
@@ -54,6 +78,14 @@ public class AsyncIO {
         );
     }
 
+    /**
+     * Asynchronously loads a given media.
+     *
+     * @param mediaUrl The loaded media's string-represented url
+     *
+     * @return A {@link CompletableFuture} which can be asynchronously consumed if needed upon termination of this load
+     * operation.
+     */
     public CompletableFuture<Media> loadMedia(final String mediaUrl) {
         return CompletableFuture.supplyAsync(
                 () -> cachedIO.loadMediaFile(mediaUrl),

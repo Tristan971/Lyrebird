@@ -22,15 +22,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
+/**
+ * This class serves for the organization of all the background threads in the client application.
+ */
 @Configuration
 public class ConcurrenceConfiguration {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ConcurrenceConfiguration.class);
+
+    /**
+     * @return The executor for asynchronous io operations.
+     */
     @Bean
     public Executor asyncIoExecutor() {
         final ThreadFactory asyncIoThreadFactory =
@@ -46,13 +56,15 @@ public class ConcurrenceConfiguration {
         return Executors.newCachedThreadPool(asyncIoThreadFactory);
     }
 
+    /**
+     * @return The executor for cleanup operations execution.
+     */
     @Bean
     public Executor cleanupExecutor() {
         final ThreadFactory cleanupThreadFactory =
                 new ThreadFactoryBuilder()
-                        .setUncaughtExceptionHandler((t, e) -> ExceptionHandler.displayExceptionPane(
-                                "Cleanup issue",
-                                "Could not execute cleanup in the background.",
+                        .setUncaughtExceptionHandler((t, e) -> LOG.error(
+                                "Exception on cleanup thread" + t.toString(),
                                 e
                         ))
                         .setNameFormat("Cleanup-%d")
@@ -61,6 +73,9 @@ public class ConcurrenceConfiguration {
         return Executors.newCachedThreadPool(cleanupThreadFactory);
     }
 
+    /**
+     * @return The executor for asynchronous twitter network operations
+     */
     @Bean
     public Executor twitterExecutor() {
         final ThreadFactory asyncTwitterThreadFactory =
@@ -76,6 +91,9 @@ public class ConcurrenceConfiguration {
         return Executors.newSingleThreadExecutor(asyncTwitterThreadFactory);
     }
 
+    /**
+     * @return The executor for update service operations
+     */
     @Bean
     public ScheduledExecutorService updateExecutor() {
         final ThreadFactory updateThreadFactory =

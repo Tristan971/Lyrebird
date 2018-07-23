@@ -20,12 +20,16 @@ package moe.lyrebird.model.notifications.system;
 
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.notifications.Notification;
+import moe.lyrebird.view.components.notifications.NotificationsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
+/**
+ * JavaFX-based application-internal implementation of {@link NotificationSystem}.
+ */
 @Component
 public class InternalNotificationSystem implements NotificationSystem {
 
@@ -33,12 +37,20 @@ public class InternalNotificationSystem implements NotificationSystem {
 
     private final Property<Notification> notificationProperty = new SimpleObjectProperty<>(null);
 
+    /**
+     * Sets-up the notification to display property for consumption by {@link NotificationsController}.
+     *
+     * @param notification the notification to display
+     */
     @Override
     public void displayNotification(final Notification notification) {
         LOG.debug("Queuing notification {} for display", notification);
         notificationProperty.setValue(notification);
     }
 
+    /**
+     * @return The notification currently requested for displaying
+     */
     public Property<Notification> notificationProperty() {
         return notificationProperty;
     }

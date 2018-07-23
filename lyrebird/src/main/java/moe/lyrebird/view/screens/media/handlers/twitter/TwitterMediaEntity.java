@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.screens.media;
+package moe.lyrebird.view.screens.media.handlers.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,30 +24,51 @@ import twitter4j.MediaEntity;
 
 import java.util.Arrays;
 
-public enum MediaEntityType {
+/**
+ * Contains matchers for the currently known media entity types from Twitter.
+ */
+public enum TwitterMediaEntity {
     PHOTO("photo"),
+    ANIMATED_GIF("animated_gif"),
     VIDEO("video"),
     UNMANAGED("<UNMANAGED_TYPE>");
 
-    private static final Logger LOG = LoggerFactory.getLogger(MediaEntityType.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterMediaEntity.class);
 
     private final String codeName;
 
-    MediaEntityType(final String codeName) {
+    TwitterMediaEntity(final String codeName) {
         this.codeName = codeName;
     }
 
+    /**
+     * @return The Twitter-side entity type code.
+     */
     public String getCodeName() {
         return codeName;
     }
 
-    public static MediaEntityType fromTwitterType(final String actualCode) {
+    /**
+     * Maps a given Twitter-side {@link MediaEntity} to a Lyrebird-side {@link TwitterMediaEntity}.
+     *
+     * @param actualCode The twitter code of a {@link MediaEntity}.
+     *
+     * @return The matching Lyrebird-side entity or {@link #UNMANAGED}.
+     */
+    public static TwitterMediaEntity fromTwitterType(final String actualCode) {
         return Arrays.stream(values())
-                .filter(type -> type.getCodeName().equals(actualCode))
-                .findAny()
-                .orElse(UNMANAGED);
+                     .filter(type -> type.getCodeName().equals(actualCode))
+                     .findAny()
+                     .orElse(UNMANAGED);
     }
 
+    /**
+     * Tests whether a given entity has an associated embedding mapping inside of Lyrebird.
+     *
+     * @param entity The entity to test
+     *
+     * @return true if and only if calling {@link #fromTwitterType(String)} does not yield {@link #UNMANAGED}.
+     */
     public static boolean isSupported(final MediaEntity entity) {
         final boolean supported = fromTwitterType(entity.getType()) != UNMANAGED;
         if (!supported) {

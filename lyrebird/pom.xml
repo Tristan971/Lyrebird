@@ -25,11 +25,11 @@
     <parent>
         <groupId>moe.lyrebird</groupId>
         <artifactId>lyrebird-parent</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
     </parent>
 
     <artifactId>lyrebird</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
 
     <name>Lyrebird</name>
@@ -164,7 +164,7 @@
         <dependency>
             <groupId>moe.tristan</groupId>
             <artifactId>easyfxml</artifactId>
-            <version>1.1.5</version>
+            <version>1.1.6</version>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
@@ -211,6 +211,12 @@
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
             <version>3.6.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <version>4.0.1.Final</version>
         </dependency>
     </dependencies>
 

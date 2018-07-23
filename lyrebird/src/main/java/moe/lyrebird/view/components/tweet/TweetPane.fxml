@@ -22,10 +22,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
+
 <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.tweet.TweetPaneController">
    <children>
       <HBox fx:id="retweetHbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
@@ -34,7 +38,7 @@
                <children>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/assets/img/retweet_arrows_symbol.png" />
+                        <Image url="@/assets/img/tweetpane_icon_retweeted_status.png" />
                      </image></ImageView>
                </children></HBox>
             <HBox alignment="BOTTOM_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0">
@@ -59,7 +63,7 @@
                <children>
                   <ImageView fx:id="authorProfilePicture" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/assets/img/user_avatar_icon.png" />
+                        <Image url="@/assets/img/general_icon_user_avatar_dark.png" />
                      </image>
                   </ImageView>
                   <Circle centerX="24.0" centerY="24.0" fill="#ffffff00" mouseTransparent="true" radius="24.0" stroke="#000000" strokeType="INSIDE" strokeWidth="0.5" />
@@ -89,37 +93,7 @@
                   </BorderPane>
                   <TextFlow fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                   <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="20.0" minWidth="138.0" spacing="5.0" VBox.vgrow="ALWAYS" />
-                  <HBox fx:id="interractionBox" alignment="CENTER_LEFT" spacing="6.0" VBox.vgrow="NEVER">
-                     <children>
-                        <HBox fx:id="replyButton" alignment="CENTER" minHeight="28.0" minWidth="28.0">
-                           <children>
-                              <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@/assets/img/reply.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                        <HBox fx:id="likeButton" alignment="CENTER" minHeight="28.0" minWidth="28.0" HBox.hgrow="NEVER">
-                           <children>
-                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@/assets/img/like.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                        <HBox fx:id="retweetButton" alignment="CENTER" minHeight="28.0" minWidth="28.0">
-                           <children>
-                              <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@/assets/img/retweet.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                     </children>
-                  </HBox>
+                  <BorderPane fx:id="interractionBox" />
                </children>
             </VBox>
          </children>
