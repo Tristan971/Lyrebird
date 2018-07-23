@@ -64,7 +64,7 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
             - [ ] Officially supported
                 - [x] Twitter image embedding
                 - [x] Twitter video embedding
-                - [ ] Twitter gif images embedding
+                - [x] Twitter gif images embedding
             - [ ] Easy embedding
                 - [ ] Direct image embedding
                 - [ ] Direct video embedding
