@@ -24,7 +24,7 @@
                     <children>
                         <ImageView fx:id="retweetButtonGraphic" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@/assets/img/tweetpane_icon_retweet_action.png" />
+                                <Image url="@/assets/img/tweetpane_icon_retweet_off.png" />
                             </image>
                         </ImageView>
                     </children>
