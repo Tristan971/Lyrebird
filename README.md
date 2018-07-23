@@ -1,6 +1,6 @@
 ![Promo logo](docs/img/promo-logo-png.png)
 
-Last `develop` branch's (version 1.1.0) statistics :
+Last `develop` branch's statistics :
 
 [![Build Status](https://jenkins.tristan.moe/job/Lyrebird/job/master/badge/icon)](https://jenkins.tristan.moe/job/Lyrebird/job/master)
 [![Sonar bugs](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird-parent&metric=bugs)](https://sonar.tristan.moe/project/issues?id=moe.lyrebird%3Alyrebird-parent&resolved=false&types=BUG)
