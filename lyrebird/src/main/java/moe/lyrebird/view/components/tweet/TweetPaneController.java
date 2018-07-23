@@ -24,44 +24,37 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Nodes;
-import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.model.twitter.services.interraction.StatusInterraction;
-import moe.lyrebird.model.twitter.services.interraction.TwitterBinaryInterraction;
-import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.components.cells.TweetListCell;
-import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.util.ClickableHyperlink;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.ocpsoft.prettytime.PrettyTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
-import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.LIKE;
-import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.RETWEET;
 import static moe.lyrebird.view.assets.ImageResources.GENERAL_USER_AVATAR_DARK;
+import static moe.lyrebird.view.components.Component.TWEET_INTERRACTION_BOX;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -74,10 +67,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class TweetPaneController implements ComponentCellFxmlController<Status> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
-
     private static final PrettyTime PRETTY_TIME = new PrettyTime();
-    private static final double INTERRACTION_BUTTON_CLIP_RADIUS = 14.0;
 
     @FXML
     private Label author;
@@ -98,19 +88,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private TextFlow content;
 
     @FXML
-    private HBox interractionBox;
-
-    @FXML
     private HBox mediaBox;
-
-    @FXML
-    private HBox replyButton;
-
-    @FXML
-    private HBox likeButton;
-
-    @FXML
-    private HBox retweetButton;
 
     @FXML
     private Label retweeterLabel;
@@ -121,31 +99,32 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     @FXML
     private HBox retweetHbox;
 
+    @FXML
+    private BorderPane interractionBox;
+
     private final BrowserSupport browserSupport;
-    private final TwitterInterractionService interractionService;
     private final AsyncIO asyncIO;
     private final MediaEmbeddingService mediaEmbeddingService;
     private final UserDetailsService userDetailsService;
     private final EasyFxml easyFxml;
 
-    private Status currentStatus;
+    private final Property<Status> currentStatus;
     private final BooleanProperty isRetweet = new SimpleBooleanProperty(false);
     private final BooleanProperty embeddedProperty = new SimpleBooleanProperty(false);
 
     public TweetPaneController(
             final BrowserSupport browserSupport,
-            final TwitterInterractionService interractionService,
             final AsyncIO asyncIO,
             final MediaEmbeddingService mediaEmbeddingService,
             final UserDetailsService userDetailsService,
             final EasyFxml easyFxml
     ) {
         this.browserSupport = browserSupport;
-        this.interractionService = interractionService;
         this.asyncIO = asyncIO;
         this.mediaEmbeddingService = mediaEmbeddingService;
         this.userDetailsService = userDetailsService;
         this.easyFxml = easyFxml;
+        this.currentStatus = new SimpleObjectProperty<>(null);
     }
 
     @Override
@@ -168,9 +147,12 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private void setUpInterractionButtons() {
         interractionBox.visibleProperty().bind(embeddedProperty.not());
         interractionBox.managedProperty().bind(embeddedProperty.not());
-        if (!embeddedProperty.getValue()) {
-            setUpInterractions();
-        }
+
+        easyFxml.loadNode(TWEET_INTERRACTION_BOX, Pane.class, TweetInterractionPaneController.class)
+                .afterControllerLoaded(tipc -> tipc.targetStatusProperty().bind(currentStatus))
+                .getNode()
+                .recover(ExceptionHandler::fromThrowable)
+                .onSuccess(interractionBox::setCenter);
     }
 
     /**
@@ -181,38 +163,25 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         if (newValue == null || this.currentStatus == newValue) {
             return;
         }
-        this.currentStatus = newValue;
+        this.currentStatus.setValue(newValue);
 
-        this.isRetweet.set(currentStatus.isRetweet());
+        this.isRetweet.set(currentStatus.getValue().isRetweet());
 
         authorProfilePicture.setImage(GENERAL_USER_AVATAR_DARK.getImage());
-        if (currentStatus.isRetweet()) {
-            handleRetweet(currentStatus);
+        if (currentStatus.getValue().isRetweet()) {
+            handleRetweet(currentStatus.getValue());
         } else {
-            setStatusDisplay(currentStatus);
+            setStatusDisplay(currentStatus.getValue());
         }
     }
 
     /**
      * Handles retweets so as to add retweet info at the top and then display the actual underlying status.
-     *
-     * @param status The parent status (the one created by the actual retweet action itself).
      */
     private void handleRetweet(final Status status) {
         retweeterLabel.setText(status.getUser().getName());
         retweeterIdLabel.setText("@" + status.getUser().getScreenName());
         setStatusDisplay(status.getRetweetedStatus());
-    }
-
-    private void setUpInterractions() {
-        replyButton.setOnMouseClicked(e -> this.openReplyScreen());
-        replyButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
-
-        likeButton.setOnMouseClicked(e -> this.onLike());
-        likeButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
-
-        retweetButton.setOnMouseClicked(e -> this.onRetweet());
-        retweetButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
     }
 
     /**
@@ -227,39 +196,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         asyncIO.loadImageMiniature(ppUrl, 96.0, 96.0)
                .thenAcceptAsync(authorProfilePicture::setImage, Platform::runLater);
         authorProfilePicture.setOnMouseClicked(e -> userDetailsService.openUserDetails(statusToDisplay.getUser()));
-        readMedias(currentStatus);
-    }
-
-    /**
-     * Called on click of the like button.
-     *
-     * @see TwitterInterractionService
-     * @see TwitterBinaryInterraction
-     * @see StatusInterraction#LIKE
-     */
-    private void onLike() {
-        LOG.debug("Like interraction on status {}", currentStatus.getId());
-        final CompletableFuture<Status> likeRequest = CompletableFuture.supplyAsync(
-                () -> interractionService.interract(currentStatus, LIKE)
-        );
-        likeButton.setDisable(true);
-        likeRequest.whenCompleteAsync((res, err) -> likeButton.setDisable(false), Platform::runLater);
-    }
-
-    /**
-     * Called on click of the retweet button.
-     *
-     * @see TwitterInterractionService
-     * @see TwitterBinaryInterraction
-     * @see StatusInterraction#RETWEET
-     */
-    private void onRetweet() {
-        LOG.debug("Retweet interraction on status {}", currentStatus.getId());
-        final CompletableFuture<Status> retweetRequest = CompletableFuture.supplyAsync(
-                () -> interractionService.interract(currentStatus, RETWEET)
-        );
-        retweetButton.setDisable(true);
-        retweetRequest.whenCompleteAsync((res, err) -> retweetButton.setDisable(false), Platform::runLater);
+        readMedias(currentStatus.getValue());
     }
 
     /**
@@ -297,26 +234,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
      */
     private ClickableHyperlink buildHyperlink(final String url) {
         return new ClickableHyperlink(url, browserSupport::openUrl);
-    }
-
-    /**
-     * Opens a {@link Screen#NEW_TWEET_VIEW} with the current status embedded for reply features.
-     */
-    private void openReplyScreen() {
-        final FxmlLoadResult<Pane, NewTweetController> replyStageLoad = easyFxml.loadNode(
-                Screen.NEW_TWEET_VIEW,
-                Pane.class,
-                NewTweetController.class
-        ).afterControllerLoaded(ntc -> ntc.setInReplyToTweet(currentStatus));
-
-        final NewTweetController newTweetController = replyStageLoad.getController().get();
-        final Pane newTweetPane = replyStageLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
-
-        Stages.stageOf("Reply to tweet", newTweetPane)
-              .thenAcceptAsync(stage -> {
-                  newTweetController.setStage(stage);
-                  Stages.scheduleDisplaying(stage);
-              });
     }
 
 }
