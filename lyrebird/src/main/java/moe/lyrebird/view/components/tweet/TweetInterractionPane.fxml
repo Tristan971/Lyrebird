@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="moe.lyrebird.view.components.tweet.TweetInterractionPaneController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <children>
+        <HBox fx:id="interractionBox" alignment="CENTER_LEFT" spacing="6.0" VBox.vgrow="NEVER">
+            <children>
+                <HBox fx:id="replyButton" alignment="CENTER" minHeight="28.0" minWidth="28.0">
+                    <children>
+                        <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/assets/img/tweetpane_icon_reply.png"/>
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
+                <HBox fx:id="likeButton" alignment="CENTER" minHeight="28.0" minWidth="28.0" HBox.hgrow="NEVER">
+                    <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/assets/img/tweetpane_icon_heart.png"/>
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
+                <HBox fx:id="retweetButton" alignment="CENTER" minHeight="28.0" minWidth="28.0">
+                    <children>
+                        <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/assets/img/tweetpane_icon_retweet_action.png"/>
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </children>
+
+</AnchorPane>

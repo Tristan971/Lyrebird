@@ -39,6 +39,7 @@ import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.util.ClickableHyperlink;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
@@ -60,8 +61,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.RETWEET;
-import static moe.lyrebird.view.assets.ImageResources.BLANK_USER_PROFILE_PICTURE;
-import static moe.lyrebird.view.components.tweet.TweetFormatter.time;
+import static moe.lyrebird.view.assets.ImageResources.GENERAL_USER_AVATAR_DARK;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -76,6 +76,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
     private static final Logger LOG = LoggerFactory.getLogger(TweetPaneController.class);
 
+    private static final PrettyTime PRETTY_TIME = new PrettyTime();
     private static final double INTERRACTION_BUTTON_CLIP_RADIUS = 14.0;
 
     @FXML
@@ -151,7 +152,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     public void initialize() {
         authorProfilePicturePane.setClip(Clipping.getCircleClip(24.0));
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
-        authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
+        authorProfilePicture.setImage(GENERAL_USER_AVATAR_DARK.getImage());
         setUpInterractionButtons();
         mediaBox.setManaged(false);
         mediaBox.setVisible(false);
@@ -167,18 +168,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private void setUpInterractionButtons() {
         interractionBox.visibleProperty().bind(embeddedProperty.not());
         interractionBox.managedProperty().bind(embeddedProperty.not());
-        if (embeddedProperty.getValue()) {
-            return;
+        if (!embeddedProperty.getValue()) {
+            setUpInterractions();
         }
-
-        replyButton.setOnMouseClicked(e -> this.openReplyScreen());
-        replyButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
-
-        likeButton.setOnMouseClicked(e -> this.onLike());
-        likeButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
-
-        retweetButton.setOnMouseClicked(e -> this.onRetweet());
-        retweetButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
     }
 
     /**
@@ -193,7 +185,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
         this.isRetweet.set(currentStatus.isRetweet());
 
-        authorProfilePicture.setImage(BLANK_USER_PROFILE_PICTURE.getImage());
+        authorProfilePicture.setImage(GENERAL_USER_AVATAR_DARK.getImage());
         if (currentStatus.isRetweet()) {
             handleRetweet(currentStatus);
         } else {
@@ -212,13 +204,24 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         setStatusDisplay(status.getRetweetedStatus());
     }
 
+    private void setUpInterractions() {
+        replyButton.setOnMouseClicked(e -> this.openReplyScreen());
+        replyButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
+
+        likeButton.setOnMouseClicked(e -> this.onLike());
+        likeButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
+
+        retweetButton.setOnMouseClicked(e -> this.onRetweet());
+        retweetButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
+    }
+
     /**
      * @param statusToDisplay The status to fill user readable information from.
      */
     private void setStatusDisplay(final Status statusToDisplay) {
         author.setText(statusToDisplay.getUser().getName());
         authorId.setText("@" + statusToDisplay.getUser().getScreenName());
-        time.setText(time(statusToDisplay));
+        time.setText(PRETTY_TIME.format(statusToDisplay.getCreatedAt()));
         loadTextIntoTextFlow(statusToDisplay.getText());
         final String ppUrl = statusToDisplay.getUser().getOriginalProfileImageURLHttps();
         asyncIO.loadImageMiniature(ppUrl, 96.0, 96.0)
