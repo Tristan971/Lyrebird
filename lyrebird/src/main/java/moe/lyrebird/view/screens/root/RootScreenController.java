@@ -25,9 +25,12 @@ import moe.lyrebird.view.components.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+
+import java.util.concurrent.CompletableFuture;
 
 import static moe.lyrebird.view.components.Component.CONTROL_BAR;
 
@@ -55,8 +58,8 @@ public class RootScreenController implements FxmlController {
     }
 
     /**
-     * Loads up the {@link Component#CONTROL_BAR} on the left side of the {@link BorderPane} which is the main
-     * container for the main view.
+     * Loads up the {@link Component#CONTROL_BAR} on the left side of the {@link BorderPane} which is the main container
+     * for the main view.
      */
     private void loadControlBar() {
         LOG.debug("Initializing control bar...");
@@ -89,14 +92,13 @@ public class RootScreenController implements FxmlController {
      * @param component The component to load.
      */
     public void setContent(final Component component) {
-        LOG.info("Switching content of root pane to {}", component);
-        final Pane contentNode = this.easyFxml
-                .loadNode(component)
-                .getNode()
-                .getOrElseGet(ExceptionHandler::fromThrowable);
-
-        this.contentPane.setCenter(contentNode);
-        LOG.info("Set content of root pane to {}", component);
+        CompletableFuture.supplyAsync(() -> {
+            LOG.info("Switching content of root pane to {}", component);
+            return this.easyFxml
+                    .loadNode(component)
+                    .getNode()
+                    .getOrElseGet(ExceptionHandler::fromThrowable);
+        }).thenAcceptAsync(this.contentPane::setCenter, Platform::runLater);
     }
 
 }
