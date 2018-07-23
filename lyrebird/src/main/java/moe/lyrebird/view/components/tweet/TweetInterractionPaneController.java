@@ -73,7 +73,10 @@ public class TweetInterractionPaneController implements FxmlController {
     @Override
     public void initialize() {
         setUpInterractionActions();
-        targetStatus.addListener((o, prev, cur) -> updateLikeVisual(cur.isFavorited()));
+        targetStatus.addListener((o, prev, cur) -> {
+            updateRetweetVisual(cur.isRetweet() ? cur.getRetweetedStatus().isRetweeted() : cur.isRetweeted());
+            updateLikeVisual(cur.isFavorited());
+        });
     }
 
     public Property<Status> targetStatusProperty() {
@@ -120,11 +123,21 @@ public class TweetInterractionPaneController implements FxmlController {
      */
     private void onRetweet() {
         LOG.debug("Retweet interraction on status {}", targetStatus.getValue().getId());
-        final CompletableFuture<Status> retweetRequest = CompletableFuture.supplyAsync(
-                () -> interractionService.interract(targetStatus.getValue(), RETWEET)
-        );
         retweetButton.setDisable(true);
-        retweetRequest.thenAcceptAsync(res -> retweetButton.setDisable(false), Platform::runLater);
+        CompletableFuture.supplyAsync(
+                () -> interractionService.interract(targetStatus.getValue(), RETWEET)
+        ).thenAcceptAsync(res -> {
+            updateRetweetVisual(!interractionService.notYetRetweeted(targetStatus.getValue()));
+            retweetButton.setDisable(false);
+        }, Platform::runLater);
+    }
+
+    private void updateRetweetVisual(final boolean retweeted) {
+        retweetButtonGraphic.setImage(
+                retweeted ?
+                ImageResources.TWEETPANE_RETWEET_ON.getImage() :
+                ImageResources.TWEETPANE_RETWEET_OFF.getImage()
+        );
     }
 
     /**
@@ -136,18 +149,16 @@ public class TweetInterractionPaneController implements FxmlController {
      */
     private void onLike() {
         LOG.debug("Like interraction on status {}", targetStatus.getValue().getId());
-        final CompletableFuture<Status> likeRequest = CompletableFuture.supplyAsync(
-                () -> interractionService.interract(targetStatus.getValue(), LIKE)
-        );
         likeButton.setDisable(true);
-        likeRequest.thenAcceptAsync(res -> {
+        CompletableFuture.supplyAsync(
+                () -> interractionService.interract(targetStatus.getValue(), LIKE)
+        ).thenAcceptAsync(res -> {
             updateLikeVisual(res.isFavorited());
             likeButton.setDisable(false);
         }, Platform::runLater);
     }
 
     private void updateLikeVisual(final boolean liked) {
-        LOG.debug("Updating visual like status for {} : {}", targetStatus.getValue().getId(), liked);
         likeButtonGraphic.setImage(
                 liked ?
                 ImageResources.TWEETPANE_LIKE_ON.getImage() :

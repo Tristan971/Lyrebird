@@ -21,7 +21,6 @@ package moe.lyrebird.model.twitter.observables;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import twitter4j.Paging;
-import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -141,7 +140,7 @@ public abstract class TwitterTimelineBaseModel {
      * @return The list of tweets received from Twitter
      * @throws TwitterException if there was an issue loading tweets
      */
-    protected abstract ResponseList<Status> initialLoad(final Twitter twitter)
+    protected abstract List<Status> initialLoad(final Twitter twitter)
     throws TwitterException;
 
     /**
@@ -153,7 +152,7 @@ public abstract class TwitterTimelineBaseModel {
      * @return The list of tweets received from Twitter
      * @throws TwitterException if there was an issue loading tweets
      */
-    protected abstract ResponseList<Status> backfillLoad(final Twitter twitter, final Paging paging)
+    protected abstract List<Status> backfillLoad(final Twitter twitter, final Paging paging)
     throws TwitterException;
 
     /**

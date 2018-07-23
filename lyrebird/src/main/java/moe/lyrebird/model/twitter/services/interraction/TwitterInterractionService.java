@@ -62,6 +62,17 @@ public class TwitterInterractionService {
         }
     }
 
+    public boolean isRetweetByCurrentUser(final Status status) {
+        if (status.isRetweet()) {
+            final Status retweetedStatus = status.getRetweetedStatus();
+            return retweetedStatus.isRetweeted() ||
+                   retweetedStatus.isRetweetedByMe() ||
+                   sessionManager.isCurrentUser(status.getUser());
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Likes a given tweet
      *
