@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 /**
@@ -49,8 +50,10 @@ public class CleanupService {
      * @param cleanupOperation The operation to execute at shutdown
      */
     public void registerCleanupOperation(final CleanupOperation cleanupOperation) {
-        LOG.debug("Registering cleanup operation : {}", cleanupOperation.getName());
-        onShutdownHooks.add(cleanupOperation);
+        CompletableFuture.runAsync(() -> {
+            LOG.debug("Registering cleanup operation : {}", cleanupOperation.getName());
+            onShutdownHooks.add(cleanupOperation);
+        }, cleanupExecutor);
     }
 
     /**
