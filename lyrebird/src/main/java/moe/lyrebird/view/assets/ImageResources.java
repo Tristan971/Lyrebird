@@ -33,7 +33,7 @@ public enum ImageResources {
     GENERAL_USER_AVATAR_LIGHT("general_icon_user_avatar_light.png"),
     GENERAL_LOADING_REMOTE("general_icon_loading_remote.png"),
 
-    TWEETPANE_LIKE_OFF("tweetpane_icon_heart.png"),
+    TWEETPANE_LIKE_OFF("tweetpane_icon_heart_off.png"),
     TWEETPANE_LIKE_ON("tweetpane_icon_heart_on.png"),
     TWEETPANE_VIDEO("tweetpane_icon_video.png");
 
