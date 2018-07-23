@@ -48,7 +48,7 @@ public class ImageScreenController implements MediaScreenController {
 
     private final CachedIO cachedIO;
 
-    private final Property<Image> imageProp = new SimpleObjectProperty<>(ImageResources.LOADING_REMOTE.getImage());
+    private final Property<Image> imageProp = new SimpleObjectProperty<>(ImageResources.GENERAL_LOADING_REMOTE.getImage());
 
     @Autowired
     public ImageScreenController(final CachedIO cachedIO) {

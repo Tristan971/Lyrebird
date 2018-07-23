@@ -26,6 +26,7 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
 import moe.lyrebird.model.twitter.observables.Mentions;
 import moe.lyrebird.model.twitter.observables.Timeline;
+import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.DirectMessage;
@@ -59,16 +60,19 @@ public class TwitterUserListener implements UserStreamListener {
     private final DirectMessages directMessages;
     private final SessionManager sessionManager;
     private final NotificationService notificationService;
+    private final TwitterInterractionService interractionService;
 
     public TwitterUserListener(
             final Timeline timeline,
             final Mentions mentions,
             final DirectMessages directMessages,
             final SessionManager sessionManager,
-            final NotificationService notificationService
+            final NotificationService notificationService,
+            final TwitterInterractionService interractionService
     ) {
         this.sessionManager = sessionManager;
         this.notificationService = notificationService;
+        this.interractionService = interractionService;
         LOG.debug("Initializing twitter data listener.");
         LOG.debug("\t-> Timeline... OK");
         this.timeline = timeline;
@@ -81,7 +85,13 @@ public class TwitterUserListener implements UserStreamListener {
     @Override
     public void onStatus(final Status status) {
         LOG.debug("New tweet streamed : [@{} : {}]", status.getUser().getScreenName(), status.getText());
+        if (interractionService.isRetweetByCurrentUser(status)) {
+            LOG.debug("Is retweet made by current user. Filter it out from display.");
+            return;
+        }
+
         timeline.addTweet(status);
+
         if (mentions.isMentionToCurrentUser(status)) {
             LOG.debug("User {} mentionned current user in tweet {}", status.getUser().getScreenName(), status.getId());
             notificationService.sendNotification(fromMention(status));

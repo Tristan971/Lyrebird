@@ -41,7 +41,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.concurrent.CompletableFuture;
 
-import static moe.lyrebird.view.assets.ImageResources.ADD_USER_PROFILE_PICTURE;
+import static moe.lyrebird.view.assets.ImageResources.CONTROLBAR_ADD_USER;
 
 /**
  * This component is laoded at the top of the {@link Component#CONTROL_BAR} and serves as a very basic preview for who
@@ -81,7 +81,7 @@ public class CurrentAccountController implements FxmlController {
     @Override
     public void initialize() {
         userProfilePicture.setClip(Clipping.getCircleClip(32.0));
-        userProfilePicture.setImage(ADD_USER_PROFILE_PICTURE.getImage());
+        userProfilePicture.setImage(CONTROLBAR_ADD_USER.getImage());
         userProfilePicture.setOnMouseClicked(e -> handleClickOnProfile());
         bindUsername();
         bindProfilePicture();
