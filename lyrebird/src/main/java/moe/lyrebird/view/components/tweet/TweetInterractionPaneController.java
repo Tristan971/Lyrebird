@@ -33,6 +33,14 @@ import java.util.concurrent.CompletableFuture;
 import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.LIKE;
 import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.RETWEET;
 
+/**
+ * This class manages the display of an interraction toolbar under every non-embedded tweet.
+ * <p>
+ * Its role is to enable interraction and reflect it visually.
+ *
+ * @see TweetPaneController
+ * @see TwitterInterractionService
+ */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TweetInterractionPaneController implements FxmlController {
@@ -83,6 +91,9 @@ public class TweetInterractionPaneController implements FxmlController {
         return targetStatus;
     }
 
+    /**
+     * Binds click on a button to its expected action
+     */
     private void setUpInterractionActions() {
         replyButton.setOnMouseClicked(e -> this.onReply());
         replyButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
@@ -116,6 +127,8 @@ public class TweetInterractionPaneController implements FxmlController {
 
     /**
      * Called on click of the retweet button.
+     * <p>
+     * Will call {@link #updateRetweetVisual(boolean)} on task finish to set the appropriate visual value.
      *
      * @see TwitterInterractionService
      * @see TwitterBinaryInterraction
@@ -132,6 +145,11 @@ public class TweetInterractionPaneController implements FxmlController {
         }, Platform::runLater);
     }
 
+    /**
+     * Updates the visual clue for whether the current tweet was already retweeted by the current user.
+     *
+     * @param retweeted whether the current tweet was determined to having been retweeted by the current user
+     */
     private void updateRetweetVisual(final boolean retweeted) {
         retweetButtonGraphic.setImage(
                 retweeted ?
@@ -142,6 +160,8 @@ public class TweetInterractionPaneController implements FxmlController {
 
     /**
      * Called on click of the like button.
+     * <p>
+     * Will call {@link #updateLikeVisual(boolean)} on task finish to set the appropriate visual value.
      *
      * @see TwitterInterractionService
      * @see TwitterBinaryInterraction
@@ -158,6 +178,11 @@ public class TweetInterractionPaneController implements FxmlController {
         }, Platform::runLater);
     }
 
+    /**
+     * Updates the visual clue for whether the current tweet was already liked by the current user.
+     *
+     * @param liked whether the current tweet was determined to having been liked by the current user
+     */
     private void updateLikeVisual(final boolean liked) {
         likeButtonGraphic.setImage(
                 liked ?

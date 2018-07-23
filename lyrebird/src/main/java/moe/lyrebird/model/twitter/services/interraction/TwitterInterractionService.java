@@ -62,6 +62,14 @@ public class TwitterInterractionService {
         }
     }
 
+    /**
+     * Determines whether a given tweet is a retweet made by the current user. Twitter's API really is unhelpful on this
+     * side so we mostly take an educated guess here, although it should be enough in most cases.
+     *
+     * @param status the tweet to test against
+     *
+     * @return true if and only if the given status is a retweet made by the current user
+     */
     public boolean isRetweetByCurrentUser(final Status status) {
         if (status.isRetweet()) {
             final Status retweetedStatus = status.getRetweetedStatus();
