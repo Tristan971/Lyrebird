@@ -61,32 +61,39 @@ public class SelfupdateService {
     public void selfupdate(final LyrebirdVersion newVersion) {
         LOG.info("Requesting selfupdate to version : {}", newVersion);
 
-        CompletableFuture.supplyAsync(() -> {
-            final Option<TargetPlatform> executablePlatform = binaryChoiceService.detectRunningPlatform();
-            if (executablePlatform.isEmpty()) {
-                LOG.error("Lyrebird does not currently support selfupdating on this platform!");
-                throw new UnsupportedOperationException("Cannot selfupdate with current binary platform!");
-            }
-            return executablePlatform.get();
-        }).thenAcceptAsync(platform -> {
-            try {
-                installNewVersion(platform, newVersion).onExit().thenAcceptAsync(installProcess -> {
-                    LOG.info("Installation of new version finished!");
-                    Platform.runLater(() -> {
-                        displayRestartAlert();
-                        LOG.info("Exiting old version of the application.");
-                        Runtime.getRuntime().halt(0);
-                    });
-                });
-            } catch (final IOException e) {
-                LOG.error("Cannot install new version!", e);
-                throw new IllegalStateException("Cannot install new version!", e);
-            }
-        });
+        CompletableFuture.runAsync(this::displayUpdateDownloadAlert, Platform::runLater).join();
+
+        CompletableFuture.supplyAsync(this::getTargetPlatform)
+                         .thenAcceptAsync(
+                                 platform -> launchUpdate(newVersion, platform),
+                                 Platform::runLater
+                         );
     }
 
     public boolean selfupdateCompatible() {
         return binaryChoiceService.currentPlatformSupportsSelfupdate();
+    }
+
+    private void launchUpdate(LyrebirdVersion newVersion, TargetPlatform platform) {
+        displayRestartAlert();
+        try {
+            installNewVersion(platform, newVersion);
+            System.exit(0);
+        } catch (IOException e) {
+            new Alert(
+                    Alert.AlertType.ERROR,
+                    "Coult not start update, please update manually instead."
+            ).showAndWait();
+        }
+    }
+
+    private TargetPlatform getTargetPlatform() {
+        final Option<TargetPlatform> executablePlatform = binaryChoiceService.detectRunningPlatform();
+        if (executablePlatform.isEmpty()) {
+            LOG.error("Lyrebird does not currently support selfupdating on this platform!");
+            throw new UnsupportedOperationException("Cannot selfupdate with current binary platform!");
+        }
+        return executablePlatform.get();
     }
 
     /**
@@ -94,11 +101,8 @@ public class SelfupdateService {
      *
      * @param platform The platform to target for the selfupdate (current one)
      * @param version  The version to target for the selfupdate
-     *
-     * @return The underlying OS-level process managing the operation.
-     * @throws IOException If an I/O error occurs. See {@link ProcessBuilder#start()}.
      */
-    private Process installNewVersion(final TargetPlatform platform, final LyrebirdVersion version)
+    private void installNewVersion(final TargetPlatform platform, final LyrebirdVersion version)
     throws IOException {
         LOG.info("Installing new version for platform {}", platform);
         final String[] executable = binaryInstallationService.getInstallationCommandLine(platform, version);
@@ -106,19 +110,28 @@ public class SelfupdateService {
         final ProcessBuilder installProcess = new ProcessBuilder(executable);
         installProcess.redirectError(ProcessBuilder.Redirect.INHERIT);
         installProcess.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        return installProcess.start();
+        installProcess.start();
+    }
+
+    private void displayUpdateDownloadAlert() {
+        final Alert selfupdateStartedAlert = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "Started downloading update in the background. We will tell you when it is ready !",
+                ButtonType.OK
+        );
+        selfupdateStartedAlert.showAndWait();
     }
 
     /**
-     * Displays an alert to the user informing them that the selfupdate is complete and they need to restart the
+     * Displays an alert to the user informing them that the selfupdate is ready to start and they need to restart the
      * application after we automatically stop it.
      */
     private void displayRestartAlert() {
         LOG.debug("Displaying restart information alert!");
         final Alert restartAlert = new Alert(
                 Alert.AlertType.INFORMATION,
-                "Lyrebird has successfully been updated! " +
-                "The application will automatically quit, please reopen it afterwards :-)",
+                "Lyrebird has downloaded the update! " +
+                "The application will automatically quit and start updating!",
                 ButtonType.OK
         );
         restartAlert.showAndWait();
