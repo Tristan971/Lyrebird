@@ -140,7 +140,10 @@ public class TweetInterractionPaneController implements FxmlController {
         CompletableFuture.supplyAsync(
                 () -> interractionService.interract(targetStatus.getValue(), RETWEET)
         ).thenAcceptAsync(res -> {
-            updateRetweetVisual(!interractionService.notYetRetweeted(targetStatus.getValue()));
+            final Status originalStatus = targetStatus.getValue().isRetweet() ?
+                                          targetStatus.getValue().getRetweetedStatus() :
+                                          targetStatus.getValue();
+            updateRetweetVisual(!interractionService.notYetRetweeted(originalStatus));
             retweetButton.setDisable(false);
         }, Platform::runLater);
     }
