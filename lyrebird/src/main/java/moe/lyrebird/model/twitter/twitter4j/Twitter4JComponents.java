@@ -20,6 +20,7 @@ package moe.lyrebird.model.twitter.twitter4j;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import twitter4a.Twitter;
@@ -33,6 +34,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 /**
  * Configuration class for Twitter4J related components.
  */
+@Lazy
 @Configuration
 public class Twitter4JComponents {
 

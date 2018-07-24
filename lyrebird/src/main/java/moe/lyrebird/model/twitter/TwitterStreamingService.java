@@ -18,6 +18,7 @@
 
 package moe.lyrebird.model.twitter;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.interrupts.CleanupOperation;
 import moe.lyrebird.model.interrupts.CleanupService;
@@ -39,6 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * This class is responsible for orchestration of the subscription to Twitter4J's streaming service.
  */
+@Lazy
 @Component
 public class TwitterStreamingService {
 
