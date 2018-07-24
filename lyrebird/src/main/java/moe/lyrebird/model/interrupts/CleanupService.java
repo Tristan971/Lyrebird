@@ -18,7 +18,6 @@
 
 package moe.lyrebird.model.interrupts;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +26,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * This service is called at shutdown to execute a certain amout of cleanup operations.
@@ -36,13 +36,9 @@ public class CleanupService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CleanupService.class);
 
-    private final Executor cleanupExecutor;
-    private final Queue<CleanupOperation> onShutdownHooks;
+    private static final Executor CLEANUP_EXECUTOR = Executors.newSingleThreadExecutor();
 
-    public CleanupService(@Qualifier("cleanupExecutor") final Executor cleanupExecutor) {
-        this.cleanupExecutor = cleanupExecutor;
-        this.onShutdownHooks = new LinkedList<>();
-    }
+    private final Queue<CleanupOperation> onShutdownHooks = new LinkedList<>();
 
     /**
      * Registers a cleanup operation for execution at shutdown.
@@ -53,7 +49,7 @@ public class CleanupService {
         CompletableFuture.runAsync(() -> {
             LOG.debug("Registering cleanup operation : {}", cleanupOperation.getName());
             onShutdownHooks.add(cleanupOperation);
-        }, cleanupExecutor);
+        }, CLEANUP_EXECUTOR);
     }
 
     /**
@@ -61,7 +57,7 @@ public class CleanupService {
      * {@link #registerCleanupOperation(CleanupOperation)}.
      */
     public void executeCleanupOperations() {
-        cleanupExecutor.execute(() -> {
+        CLEANUP_EXECUTOR.execute(() -> {
             LOG.info("Cleaning up...");
             LOG.debug("Executing cleanup hooks:");
             onShutdownHooks.forEach(this::executeCleanupOperationWithTimeout);

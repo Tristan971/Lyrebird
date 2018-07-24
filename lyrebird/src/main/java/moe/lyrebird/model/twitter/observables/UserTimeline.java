@@ -35,8 +35,6 @@ import twitter4a.User;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
-import java.util.concurrent.Executor;
-
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -52,8 +50,8 @@ public class UserTimeline extends TwitterTimelineBaseModel {
     private final Property<User> targetUser = new SimpleObjectProperty<>(null);
 
     @Autowired
-    public UserTimeline(final SessionManager sessionManager, final Executor twitterExecutor) {
-        super(sessionManager, twitterExecutor);
+    public UserTimeline(final SessionManager sessionManager) {
+        super(sessionManager);
         this.targetUser.addListener((o, prev, cur) -> {
             this.clearLoadedTweets();
             loadLastTweets();

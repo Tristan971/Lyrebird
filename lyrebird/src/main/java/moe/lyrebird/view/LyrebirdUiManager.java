@@ -29,11 +29,14 @@ import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
 import moe.lyrebird.model.settings.Setting;
 import moe.lyrebird.model.settings.SettingsService;
+import moe.lyrebird.model.twitter.TwitterStreamingService;
 import moe.lyrebird.view.screens.Screen;
 
 import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -49,6 +52,7 @@ public class LyrebirdUiManager extends FxUiManager {
     private final Environment environment;
     private final NotificationService notificationService;
     private final SettingsService settingsService;
+    private final TwitterStreamingService streamingService;
 
     private final AtomicBoolean informedUserOfCloseBehavior;
 
@@ -62,6 +66,7 @@ public class LyrebirdUiManager extends FxUiManager {
      * @param notificationService The notification service that will be used to notify user of the custom behavior of
      *                            this main stage's closure view {@link #handleMainStageClosure(Stage)}.
      * @param settingsService     The settings service used to retrieve user-saved settings
+     * @param streamingService    The streaming service that is to be started asynchronously once stage is loaded
      */
     @Autowired
     public LyrebirdUiManager(
@@ -69,7 +74,8 @@ public class LyrebirdUiManager extends FxUiManager {
             final StageManager stageManager,
             final Environment environment,
             final NotificationService notificationService,
-            final SettingsService settingsService
+            final SettingsService settingsService,
+            final TwitterStreamingService streamingService
     ) {
         super(easyFxml);
         this.stageManager = stageManager;
@@ -80,6 +86,7 @@ public class LyrebirdUiManager extends FxUiManager {
                 Setting.NOTIFICATION_MAIN_STAGE_TRAY_SEEN,
                 false
         ));
+        this.streamingService = streamingService;
     }
 
     /**
@@ -115,6 +122,11 @@ public class LyrebirdUiManager extends FxUiManager {
         mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeigth", Integer.class));
         mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
         stageManager.registerSingle(Screen.ROOT_VIEW, mainStage);
+    }
+
+    @Override
+    protected void onSceneCreated(Scene mainScene) {
+        CompletableFuture.runAsync(streamingService::startListening);
     }
 
     /**

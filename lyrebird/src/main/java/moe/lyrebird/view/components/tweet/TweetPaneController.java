@@ -160,7 +160,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
      */
     @Override
     public void updateWithValue(final Status newValue) {
-        if (newValue == null || this.currentStatus == newValue) {
+        if (newValue == null || this.currentStatus.getValue() == newValue) {
             return;
         }
         this.currentStatus.setValue(newValue);

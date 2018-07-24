@@ -18,7 +18,6 @@
 
 package moe.lyrebird.model.twitter.observables;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.Session;
@@ -33,7 +32,6 @@ import twitter4a.TwitterException;
 import twitter4a.UserMentionEntity;
 
 import java.util.Arrays;
-import java.util.concurrent.Executor;
 
 /**
  * This class exposes the current user's mentions in an observable way
@@ -44,8 +42,8 @@ public class Mentions extends TwitterTimelineBaseModel {
 
     private static final Logger LOG = LoggerFactory.getLogger(Mentions.class);
 
-    public Mentions(final SessionManager sessionManager, @Qualifier("twitterExecutor") final Executor twitterExecutor) {
-        super(sessionManager, twitterExecutor);
+    public Mentions(final SessionManager sessionManager) {
+        super(sessionManager);
     }
 
     @Override

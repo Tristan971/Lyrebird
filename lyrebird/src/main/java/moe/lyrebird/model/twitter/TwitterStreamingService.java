@@ -27,14 +27,10 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.twitter4j.TwitterUserListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.Dispatcher;
 import twitter4a.TwitterStream;
 
 import javafx.beans.property.Property;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -60,18 +56,16 @@ public class TwitterStreamingService {
             final TwitterUserListener twitterUserListener
     ) {
         this.cleanupService = cleanupService;
-        LOG.debug("Starting twitter stream connection...");
         this.currentlyListening = new AtomicBoolean(false);
         this.twitterStream = twitterStream;
         this.sessionManager = sessionManager;
         this.twitterUserListener = twitterUserListener;
-        startListening();
     }
 
     /**
      * Starts listening to the streaming service
      */
-    private void startListening() {
+    public void startListening() {
         LOG.debug("Preparing streaming service...");
         final Property<Session> currentSessionBinding = sessionManager.currentSessionProperty();
         currentSessionBinding.addListener((observable, oldValue, newValue) -> {
@@ -92,12 +86,8 @@ public class TwitterStreamingService {
         }
 
         cleanupService.registerCleanupOperation(new CleanupOperation(
-                "Stop Twitter streaming listeners",
+                "Stop Twitter streaming connection",
                 this::closeSession
-        ));
-        cleanupService.registerCleanupOperation(new CleanupOperation(
-                "Stop Twitter4J's internal dispatcher thread",
-                twitterStream::shutdown
         ));
     }
 
@@ -118,32 +108,7 @@ public class TwitterStreamingService {
      */
     private void closeSession() {
         LOG.info("\t\tStop Twitter4J streaming.");
-        twitterStream.clearListeners();
-        reflectForceCloseTwitter4J();
-    }
-
-    private void reflectForceCloseTwitter4J() {
-        try {
-            final Field handler = twitterStream.getClass().getDeclaredField("handler");
-            handler.setAccessible(true);
-            final Class<?> handlerClass = handler.get(twitterStream).getClass();
-            final Method handlerCloseMethod = handlerClass.getMethod("close");
-            handlerCloseMethod.setAccessible(true);
-            handlerCloseMethod.invoke(handler.get(twitterStream));
-
-            final Field dispatcherField = twitterStream.getClass().getDeclaredField("dispatcher");
-            dispatcherField.setAccessible(true);
-            final Dispatcher dispatcher = (Dispatcher) dispatcherField.get(null);
-            dispatcher.shutdown();
-        } catch (NoSuchFieldException e) {
-            LOG.error("Cannot find dispatcher field in TwitterStream running implementation", e);
-        } catch (IllegalAccessException e) {
-            LOG.error("Cannot make handler field accessible.");
-        } catch (NoSuchMethodException e) {
-            LOG.error("Cannot find TwitterStreamConsumer#close method.");
-        } catch (InvocationTargetException e) {
-            LOG.error("Error while stopping the TwitterStreamConsumer.");
-        }
+        twitterStream.shutdown();
     }
 
 }

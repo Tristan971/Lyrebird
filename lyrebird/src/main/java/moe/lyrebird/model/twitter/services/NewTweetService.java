@@ -19,7 +19,6 @@
 package moe.lyrebird.model.twitter.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import io.vavr.CheckedFunction1;
 import moe.lyrebird.model.sessions.SessionManager;
@@ -36,6 +35,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import static io.vavr.API.unchecked;
@@ -48,16 +48,13 @@ public class NewTweetService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewTweetService.class);
 
+    private static final Executor TWITTER_EXECUTOR = Executors.newSingleThreadExecutor();
+
     private final SessionManager sessionManager;
-    private final Executor twitterExecutor;
 
     @Autowired
-    public NewTweetService(
-            final SessionManager sessionManager,
-            @Qualifier("twitterExecutor") final Executor twitterExecutor
-    ) {
+    public NewTweetService(final SessionManager sessionManager) {
         LOG.debug("Initializing {}...", getClass().getSimpleName());
-        this.twitterExecutor = twitterExecutor;
         this.sessionManager = sessionManager;
     }
 
@@ -74,7 +71,7 @@ public class NewTweetService {
                 () -> sessionManager.getCurrentTwitter()
                                     .mapTry(twitter -> tweet(twitter, content, medias))
                                     .get()
-                , twitterExecutor
+                , TWITTER_EXECUTOR
         );
     }
 
