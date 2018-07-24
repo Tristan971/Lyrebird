@@ -74,7 +74,6 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
             LOG.debug("Requested display of main stage!");
             this.showMainStage();
-            handleTrayClick(mouseEvent);
         }
     }
 
@@ -88,7 +87,6 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
                                   .onSuccess(stage -> {
                                       stage.show();
                                       stage.setIconified(false);
-                                      stage.toFront();
                                   }).onFailure(err -> LOG.error("Could not show main stage!", err)),
                 Platform::runLater
         );
