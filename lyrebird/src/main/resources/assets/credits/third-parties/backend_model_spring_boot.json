@@ -1,0 +1,15 @@
+{
+  "title": "Spring Boot framework",
+  "author": {
+    "name": "Pivotal Software",
+    "url": "https://pivotal.io/"
+  },
+  "licensor": {
+    "name": "Spring & Spring Boot projects",
+    "url": "https://spring.io/"
+  },
+  "license": {
+    "name": "Apache License 2.0",
+    "url": "https://github.com/spring-projects/spring-boot/blob/master/LICENSE.txt"
+  }
+}
