@@ -21,7 +21,7 @@ package moe.lyrebird.view.components.cells;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import twitter4j.DirectMessage;
+import twitter4a.DirectMessage;
 
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;

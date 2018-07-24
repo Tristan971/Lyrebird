@@ -26,10 +26,12 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.twitter4j.TwitterUserListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.TwitterStream;
+import twitter4a.Dispatcher;
+import twitter4a.TwitterStream;
 
 import javafx.beans.property.Property;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -113,7 +115,22 @@ public class TwitterStreamingService {
     private void closeSession() {
         LOG.info("Stopping streaming for current session.");
         twitterStream.clearListeners();
+        twitterStream.cleanUp();
         twitterStream.shutdown();
+        //forceCloseTheStupidTwitter4JDispatcherThread();
+    }
+
+    private void forceCloseTheStupidTwitter4JDispatcherThread() {
+        try {
+            final Field dispatcherField = twitterStream.getClass().getDeclaredField("dispatcher");
+            dispatcherField.setAccessible(true);
+            final Dispatcher dispatcher = (Dispatcher) dispatcherField.get(null);
+            dispatcher.shutdown();
+        } catch (NoSuchFieldException e) {
+            LOG.error("Cannot find dispatcher field in TwitterStream running implementation", e);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
 }

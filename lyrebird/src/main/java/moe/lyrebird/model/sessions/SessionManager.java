@@ -24,9 +24,9 @@ import io.vavr.control.Try;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Twitter;
-import twitter4j.User;
-import twitter4j.auth.AccessToken;
+import twitter4a.Twitter;
+import twitter4a.User;
+import twitter4a.auth.AccessToken;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;

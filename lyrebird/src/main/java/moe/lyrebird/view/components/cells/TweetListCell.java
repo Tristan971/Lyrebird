@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Scope;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
 import moe.lyrebird.view.components.Component;
-import twitter4j.Status;
+import twitter4a.Status;
 
 import javafx.scene.control.ListView;
 

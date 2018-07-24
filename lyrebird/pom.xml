@@ -143,14 +143,14 @@
 
         <!-- Twitter4J -->
         <dependency>
-            <groupId>org.twitter4j</groupId>
-            <artifactId>twitter4j-core</artifactId>
-            <version>4.0.6</version>
+            <groupId>org.twitter4a</groupId>
+            <artifactId>twitter4a-core</artifactId>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
-            <groupId>org.twitter4j</groupId>
-            <artifactId>twitter4j-stream</artifactId>
-            <version>4.0.6</version>
+            <groupId>org.twitter4a</groupId>
+            <artifactId>twitter4a-stream</artifactId>
+            <version>4.1.0</version>
         </dependency>
 
         <!-- Vavr -->
@@ -229,6 +229,13 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+    <repositories>
+        <repository>
+            <id>Bintray</id>
+            <url>https://dl.bintray.com/panecraft/maven</url>
+        </repository>
+    </repositories>
 
 
 </project>
