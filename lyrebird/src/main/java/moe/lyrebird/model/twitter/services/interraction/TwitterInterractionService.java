@@ -157,10 +157,10 @@ public class TwitterInterractionService {
      * @return The retweet that was deleted
      */
     Status unretweet(final Status tweet) {
-        return sessionManager.doWithCurrentTwitter(twitter -> {
-            final long retweetId = twitter.showStatus(tweet.getId()).getCurrentUserRetweetId();
-            return twitter.destroyStatus(retweetId);
-        }).onSuccess(resultingStatus -> LOG.debug(
+        final Status original = tweet.isRetweet() ? tweet.getRetweetedStatus() : tweet;
+        return sessionManager.doWithCurrentTwitter(
+                twitter -> twitter.unRetweetStatus(original.getId())
+        ).onSuccess(resultingStatus -> LOG.debug(
                 "User {} unretweeted tweet {}",
                 getCurrentScreenName(),
                 resultingStatus.getId()
@@ -182,8 +182,11 @@ public class TwitterInterractionService {
      * @return Whether the given tweet had not yet been retweeted by the current user.
      */
     public boolean notYetRetweeted(final Status tweet) {
-        return !sessionManager.doWithCurrentTwitter(twitter -> twitter.showStatus(tweet.getId()).isRetweetedByMe())
-                              .get();
+        return !sessionManager.doWithCurrentTwitter(twitter -> {
+            final Status updatedTweet = twitter.showStatus(tweet.getId());
+            final Status originalStatus = updatedTweet.isRetweet() ? updatedTweet.getRetweetedStatus() : updatedTweet;
+            return originalStatus.isRetweeted();
+        }).get();
     }
 
     /**
