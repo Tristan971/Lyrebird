@@ -32,6 +32,8 @@ import twitter4a.TwitterStream;
 import javafx.beans.property.Property;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -113,15 +115,20 @@ public class TwitterStreamingService {
      * Stops listening to Twitter-side user events
      */
     private void closeSession() {
-        LOG.info("Stopping streaming for current session.");
+        LOG.info("\t\tStop Twitter4J streaming.");
         twitterStream.clearListeners();
-        twitterStream.cleanUp();
-        twitterStream.shutdown();
-        //forceCloseTheStupidTwitter4JDispatcherThread();
+        reflectForceCloseTwitter4J();
     }
 
-    private void forceCloseTheStupidTwitter4JDispatcherThread() {
+    private void reflectForceCloseTwitter4J() {
         try {
+            final Field handler = twitterStream.getClass().getDeclaredField("handler");
+            handler.setAccessible(true);
+            final Class<?> handlerClass = handler.get(twitterStream).getClass();
+            final Method handlerCloseMethod = handlerClass.getMethod("close");
+            handlerCloseMethod.setAccessible(true);
+            handlerCloseMethod.invoke(handler.get(twitterStream));
+
             final Field dispatcherField = twitterStream.getClass().getDeclaredField("dispatcher");
             dispatcherField.setAccessible(true);
             final Dispatcher dispatcher = (Dispatcher) dispatcherField.get(null);
@@ -129,7 +136,11 @@ public class TwitterStreamingService {
         } catch (NoSuchFieldException e) {
             LOG.error("Cannot find dispatcher field in TwitterStream running implementation", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            LOG.error("Cannot make handler field accessible.");
+        } catch (NoSuchMethodException e) {
+            LOG.error("Cannot find TwitterStreamConsumer#close method.");
+        } catch (InvocationTargetException e) {
+            LOG.error("Error while stopping the TwitterStreamConsumer.");
         }
     }
 

@@ -70,7 +70,7 @@ public class ConcurrenceConfiguration {
                         .setNameFormat("Cleanup-%d")
                         .build();
 
-        return Executors.newCachedThreadPool(cleanupThreadFactory);
+        return Executors.newSingleThreadExecutor(cleanupThreadFactory);
     }
 
     /**

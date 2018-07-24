@@ -62,7 +62,8 @@ public class CleanupService {
      */
     public void executeCleanupOperations() {
         cleanupExecutor.execute(() -> {
-            LOG.debug("Executing cleanup hooks !");
+            LOG.info("Cleaning up...");
+            LOG.debug("Executing cleanup hooks:");
             onShutdownHooks.forEach(this::executeCleanupOperationWithTimeout);
             LOG.debug("All cleanup hooks have been executed!");
         });
@@ -76,15 +77,7 @@ public class CleanupService {
      */
     private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
         LOG.debug("\t-> {}", cleanupOperation.getName());
-        try {
-            final Thread cleanupOpThread = new Thread(cleanupOperation.getOperation());
-            cleanupOpThread.join(5000);
-        } catch (InterruptedException e) {
-            LOG.error("The cleanup operation thread for {} was interrupted! Skipping!", e);
-            Thread.currentThread().interrupt();
-        } catch (final RuntimeException e) {
-            LOG.error("An uncaught exception was thrown in a cleanup task!", e);
-        }
+        cleanupOperation.getOperation().run();
     }
 
 }
