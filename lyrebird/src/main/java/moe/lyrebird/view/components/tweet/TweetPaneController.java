@@ -34,7 +34,7 @@ import moe.lyrebird.view.util.ClickableHyperlink;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.ocpsoft.prettytime.PrettyTime;
-import twitter4j.Status;
+import twitter4a.Status;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;

@@ -29,7 +29,7 @@ import moe.lyrebird.model.twitter.twitter4j.Twitter4JComponents;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Twitter;
+import twitter4a.Twitter;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 

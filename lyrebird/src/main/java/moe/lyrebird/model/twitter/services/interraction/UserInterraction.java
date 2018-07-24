@@ -18,7 +18,7 @@
 
 package moe.lyrebird.model.twitter.services.interraction;
 
-import twitter4j.User;
+import twitter4a.User;
 
 import java.util.function.BiFunction;
 

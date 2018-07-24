@@ -23,10 +23,10 @@ import io.vavr.Predicates;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.DirectMessage;
-import twitter4j.Paging;
-import twitter4j.Twitter;
-import twitter4j.User;
+import twitter4a.DirectMessage;
+import twitter4a.Paging;
+import twitter4a.Twitter;
+import twitter4a.User;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;

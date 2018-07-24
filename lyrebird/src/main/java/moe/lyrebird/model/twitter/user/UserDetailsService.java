@@ -27,7 +27,7 @@ import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.user.UserViewController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.User;
+import twitter4a.User;
 
 import javafx.scene.layout.Pane;
 

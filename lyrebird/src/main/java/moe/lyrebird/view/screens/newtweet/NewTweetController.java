@@ -34,9 +34,9 @@ import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.StageAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Status;
-import twitter4j.User;
-import twitter4j.UserMentionEntity;
+import twitter4a.Status;
+import twitter4a.User;
+import twitter4a.UserMentionEntity;
 
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;

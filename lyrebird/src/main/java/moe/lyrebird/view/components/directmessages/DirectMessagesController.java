@@ -26,8 +26,8 @@ import moe.lyrebird.model.twitter.observables.DirectMessages;
 import moe.lyrebird.view.components.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.DirectMessage;
-import twitter4j.User;
+import twitter4a.DirectMessage;
+import twitter4a.User;
 
 import javafx.collections.MapChangeListener;
 import javafx.collections.MapChangeListener.Change;

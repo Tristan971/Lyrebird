@@ -29,14 +29,14 @@ import moe.lyrebird.model.twitter.observables.Timeline;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.DirectMessage;
-import twitter4j.StallWarning;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.TwitterStream;
-import twitter4j.User;
-import twitter4j.UserList;
-import twitter4j.UserStreamListener;
+import twitter4a.DirectMessage;
+import twitter4a.StallWarning;
+import twitter4a.Status;
+import twitter4a.StatusDeletionNotice;
+import twitter4a.TwitterStream;
+import twitter4a.User;
+import twitter4a.UserList;
+import twitter4a.UserStreamListener;
 
 import java.net.SocketException;
 

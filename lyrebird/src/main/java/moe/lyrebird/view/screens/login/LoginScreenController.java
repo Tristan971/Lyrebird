@@ -31,8 +31,8 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
+import twitter4a.auth.AccessToken;
+import twitter4a.auth.RequestToken;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
