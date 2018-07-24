@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
+import javafx.stage.Stage;
 
 import java.awt.MenuItem;
 import java.awt.event.ActionListener;
@@ -61,13 +62,19 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
 
     @Override
     public MouseListener onMouseClickListener() {
-        return new OnMouseClickListener(e -> {
-            LOG.debug("Registered a click on the tray icon!");
-            if (e.getButton() == MouseEvent.BUTTON1) {
-                LOG.debug("Requested display of main stage!");
-                this.showMainStage();
-            }
-        });
+        return new OnMouseClickListener(this::handleTrayClick);
+    }
+
+    private void handleTrayClick(final MouseEvent mouseEvent) {
+        final Stage mainStage = stageManager.getSingle(Screen.ROOT_VIEW).get();
+        LOG.debug("Registered a click on the tray icon!");
+        if (mainStage.isShowing() && !mainStage.isIconified()) {
+            LOG.debug("Main stage already showing. Do not re-force front focus.");
+        }
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+            LOG.debug("Requested display of main stage!");
+            this.showMainStage();
+        }
     }
 
     /**
@@ -80,7 +87,6 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
                                   .onSuccess(stage -> {
                                       stage.show();
                                       stage.setIconified(false);
-                                      stage.toFront();
                                   }).onFailure(err -> LOG.error("Could not show main stage!", err)),
                 Platform::runLater
         );
