@@ -56,7 +56,7 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
     public Map<MenuItem, ActionListener> getMenuItems() {
         final Map<MenuItem, ActionListener> menuItems = new LinkedHashMap<>();
         menuItems.put(new MenuItem("Open Lyrebird", null), e -> showMainStage());
-        menuItems.put(new MenuItem("Quit Lyrebird", null), e -> exitApplication());
+        menuItems.put(new MenuItem("Quit Lyrebird", null), e -> Platform.runLater(this::exitApplication));
         return menuItems;
     }
 
@@ -97,6 +97,7 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
      */
     private void exitApplication() {
         LOG.info("Requesting application closure from tray icon.");
+        stageManager.getSingle(Screen.ROOT_VIEW).getOrElseThrow(IllegalStateException::new).close();
         Platform.exit();
     }
 

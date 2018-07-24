@@ -79,5 +79,6 @@ public class Lyrebird extends FxSpringApplication {
     public void stop() {
         springContext.getBean(CleanupService.class).executeCleanupOperations();
         super.stop();
+        System.exit(0);
     }
 }
