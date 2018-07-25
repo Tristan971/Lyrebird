@@ -20,15 +20,18 @@ package moe.lyrebird.model.update.selfupdate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import io.vavr.control.Option;
 import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.api.model.TargetPlatform;
+import moe.lyrebird.view.screens.Screen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -43,14 +46,17 @@ public class SelfupdateService {
 
     private final BinaryChoiceService binaryChoiceService;
     private final BinaryInstallationService binaryInstallationService;
+    private final StageManager stageManager;
 
     @Autowired
     public SelfupdateService(
             final BinaryChoiceService binaryChoiceService,
-            final BinaryInstallationService binaryInstallationService
+            final BinaryInstallationService binaryInstallationService,
+            final StageManager stageManager
     ) {
         this.binaryChoiceService = binaryChoiceService;
         this.binaryInstallationService = binaryInstallationService;
+        this.stageManager = stageManager;
     }
 
     /**
@@ -61,30 +67,22 @@ public class SelfupdateService {
     public void selfupdate(final LyrebirdVersion newVersion) {
         LOG.info("Requesting selfupdate to version : {}", newVersion);
 
-        CompletableFuture.runAsync(this::displayUpdateDownloadAlert, Platform::runLater).join();
+        Platform.runLater(this::displayUpdateDownloadAlert);
 
         CompletableFuture.supplyAsync(this::getTargetPlatform)
-                         .thenAcceptAsync(
-                                 platform -> launchUpdate(newVersion, platform),
-                                 Platform::runLater
-                         );
+                         .thenApplyAsync(platform -> binaryInstallationService.getInstallationCommandLine(platform, newVersion))
+                         .thenAcceptAsync(this::launchUpdate, Platform::runLater);
     }
 
     public boolean selfupdateCompatible() {
         return binaryChoiceService.currentPlatformSupportsSelfupdate();
     }
 
-    private void launchUpdate(LyrebirdVersion newVersion, TargetPlatform platform) {
-        displayRestartAlert();
-        try {
-            installNewVersion(platform, newVersion);
-            System.exit(0);
-        } catch (IOException e) {
-            new Alert(
-                    Alert.AlertType.ERROR,
-                    "Coult not start update, please update manually instead."
-            ).showAndWait();
-        }
+    private void launchUpdate(final String[] exec) {
+        stageManager.getSingle(Screen.ROOT_VIEW).peek(Stage::close);
+        this.displayRestartAlert();
+        this.installNewVersion(exec);
+        System.exit(0);
     }
 
     private TargetPlatform getTargetPlatform() {
@@ -99,18 +97,18 @@ public class SelfupdateService {
     /**
      * Launches an OS-level process to install the new version of Lyrebird
      *
-     * @param platform The platform to target for the selfupdate (current one)
-     * @param version  The version to target for the selfupdate
+     * @param executable The system executable update installation command
      */
-    private void installNewVersion(final TargetPlatform platform, final LyrebirdVersion version)
-    throws IOException {
-        LOG.info("Installing new version for platform {}", platform);
-        final String[] executable = binaryInstallationService.getInstallationCommandLine(platform, version);
+    private void installNewVersion(final String[] executable) {
         LOG.info("Executing : {}", (Object) executable);
         final ProcessBuilder installProcess = new ProcessBuilder(executable);
         installProcess.redirectError(ProcessBuilder.Redirect.INHERIT);
         installProcess.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        installProcess.start();
+        try {
+            installProcess.start();
+        } catch (IOException e) {
+            LOG.error("Cannot start installation.", e);
+        }
     }
 
     private void displayUpdateDownloadAlert() {
