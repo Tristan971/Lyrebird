@@ -70,7 +70,10 @@ public class SelfupdateService {
         Platform.runLater(this::displayUpdateDownloadAlert);
 
         CompletableFuture.supplyAsync(this::getTargetPlatform)
-                         .thenApplyAsync(platform -> binaryInstallationService.getInstallationCommandLine(platform, newVersion))
+                         .thenApplyAsync(platform -> binaryInstallationService.getInstallationCommandLine(
+                                 platform,
+                                 newVersion
+                         ))
                          .thenAcceptAsync(this::launchUpdate, Platform::runLater);
     }
 
