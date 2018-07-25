@@ -193,7 +193,7 @@ public class TwitterUserListener implements UserStreamListener {
     @Override
     public void onDirectMessage(final DirectMessage directMessage) {
         LOG.debug("Streamed DM {}", directMessage);
-        directMessages.loadDirectMessages(10);
+        directMessages.refresh();
     }
 
     @Override
