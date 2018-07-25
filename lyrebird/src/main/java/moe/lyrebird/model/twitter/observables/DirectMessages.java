@@ -18,20 +18,22 @@
 
 package moe.lyrebird.model.twitter.observables;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4a.DirectMessageEvent;
+import twitter4a.User;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static org.springframework.util.CollectionUtils.toMultiValueMap;
 
 @Component
 public class DirectMessages {
@@ -39,39 +41,50 @@ public class DirectMessages {
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
     private final SessionManager sessionManager;
-    private final ObservableMap<Long, List<DirectMessageEvent>> directMessagesMap;
+    private final ObservableMap<User, ObservableList<DirectMessageEvent>> messageEvents;
 
     public DirectMessages(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
-        this.directMessagesMap = FXCollections.observableMap(toMultiValueMap(new ConcurrentHashMap<>()));
+        this.messageEvents = FXCollections.observableMap(new ConcurrentHashMap<>());
     }
 
-    public ObservableMap<Long, List<DirectMessageEvent>> loadedConversations() {
-        return FXCollections.unmodifiableObservableMap(directMessagesMap);
+    public ObservableMap<User, ObservableList<DirectMessageEvent>> loadedConversations() {
+        return messageEvents;
     }
 
-    public void loadDirectMessages() {
-        loadDirectMessages(50);
-    }
-
-    public void loadDirectMessages(final int count) {
-        LOG.debug("Requesting last {} direct messages.", count);
-        sessionManager.getCurrentTwitter()
-                      .mapTry(twitter -> twitter.getDirectMessageEvents(count))
-                      .onSuccess(messages -> messages.forEach(this::addDirectMessage))
-                      .onFailure(err -> LOG.error("Could not load direct messages successfully!", err));
+    public void refresh() {
+        CompletableFuture.runAsync(() -> {
+            LOG.debug("Requesting last {} direct messages.", 50);
+            sessionManager.getCurrentTwitter()
+                          .mapTry(twitter -> twitter.getDirectMessageEvents(50))
+                          .onSuccess(messages -> messages.forEach(this::addDirectMessage))
+                          .onFailure(err -> LOG.error("Could not load direct messages successfully!", err));
+        });
     }
 
     private void addDirectMessage(final DirectMessageEvent directMessage) {
-        final long sender = directMessage.getSenderId();
-        if (!directMessagesMap.keySet().contains(sender)) {
-            directMessagesMap.put(sender, FXCollections.observableArrayList());
-        }
+        final long senderId = directMessage.getSenderId();
+        final User sender = messageEvents.keySet()
+                                                 .stream()
+                                                 .filter(user -> user.getId() == senderId)
+                                                 .findAny()
+                                                 .orElseGet(() -> showUser(senderId));
 
-        final List<DirectMessageEvent> messagesFromSender = directMessagesMap.get(sender);
+        messageEvents.computeIfAbsent(sender, __ -> FXCollections.observableArrayList());
+
+        final List<DirectMessageEvent> messagesFromSender = messageEvents.get(sender);
         messagesFromSender.add(directMessage);
         messagesFromSender.sort(Comparator.comparingLong(DirectMessageEvent::getId).reversed());
+    }
+
+    @Cacheable(value = "userFromUserId", sync = true)
+    public User showUser(final long userId) {
+        return sessionManager.doWithCurrentTwitter(
+                twitter -> twitter.showUser(userId)
+        ).getOrElseThrow(
+                err -> new IllegalStateException("Cannot find user with id " + userId, err)
+        );
     }
 
 }
