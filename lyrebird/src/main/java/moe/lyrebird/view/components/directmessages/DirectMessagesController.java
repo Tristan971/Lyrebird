@@ -35,7 +35,7 @@ public class DirectMessagesController implements FxmlController {
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessagesController.class);
 
     @FXML
-    private TabPane conversationsPane;
+    private TabPane conversationsTabPane;
 
     private final EasyFxml easyFxml;
     private final DirectMessages directMessages;
@@ -49,11 +49,13 @@ public class DirectMessagesController implements FxmlController {
     @Override
     public void initialize() {
         LOG.info("Loading direct messages!");
-        directMessages.loadDirectMessages();
-        displayMessages();
+
     }
 
     private void displayMessages() {
+        directMessages.loadedConversations().forEach((userId, event) -> {
+
+        });
     }
 
 }
