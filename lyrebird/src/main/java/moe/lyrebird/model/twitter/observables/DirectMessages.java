@@ -75,7 +75,7 @@ public class DirectMessages {
 
         final List<DirectMessageEvent> messagesFromSender = messageEvents.get(sender);
         messagesFromSender.add(directMessage);
-        messagesFromSender.sort(Comparator.comparingLong(DirectMessageEvent::getId).reversed());
+        messagesFromSender.sort(Comparator.comparingLong(DirectMessageEvent::getId));
     }
 
     @Cacheable(value = "userFromUserId", sync = true)
