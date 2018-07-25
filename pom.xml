@@ -138,13 +138,21 @@
                                 <overwrite>true</overwrite>
                                 <resources>
                                     <resource>
+                                        <directory>${project.basedir}/src/main/java</directory>
+                                        <includes>
+                                            <include>**/*.fxml</include>
+                                        </includes>
+                                    </resource>
+                                    <resource>
                                         <directory>${project.basedir}/src/main/resources</directory>
+                                        <filtering>true</filtering>
                                         <includes>
                                             <include>**/*</include>
                                         </includes>
                                     </resource>
                                     <resource>
                                         <directory>${project.basedir}/src/main/resources-dev</directory>
+                                        <filtering>true</filtering>
                                         <includes>
                                             <include>**/*</include>
                                         </includes>
