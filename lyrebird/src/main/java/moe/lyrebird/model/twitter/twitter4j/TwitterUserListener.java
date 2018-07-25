@@ -128,6 +128,11 @@ public class TwitterUserListener implements UserStreamListener {
 
     @Override
     public void onStallWarning(final StallWarning warning) {
+        if ("DEPRECATED_ENDPOINT".equals(warning.getCode())) {
+            LOG.debug("Fuck you Twitter for disallowing 3rd-party apps. Shame on you forever.");
+            return;
+        }
+
         LOG.debug("Internet connection was too slow and could not keep-alive the stream.");
         ExceptionHandler.displayExceptionPane(
                 "Stall warning",

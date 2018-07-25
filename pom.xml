@@ -125,4 +125,45 @@
         </pluginManagement>
     </build>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-resources-plugin</artifactId>
+                            <configuration>
+                                <overwrite>true</overwrite>
+                                <resources>
+                                    <resource>
+                                        <directory>${project.basedir}/src/main/java</directory>
+                                        <includes>
+                                            <include>**/*.fxml</include>
+                                        </includes>
+                                    </resource>
+                                    <resource>
+                                        <directory>${project.basedir}/src/main/resources</directory>
+                                        <filtering>true</filtering>
+                                        <includes>
+                                            <include>**/*</include>
+                                        </includes>
+                                    </resource>
+                                    <resource>
+                                        <directory>${project.basedir}/src/main/resources-dev</directory>
+                                        <filtering>true</filtering>
+                                        <includes>
+                                            <include>**/*</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+
 </project>

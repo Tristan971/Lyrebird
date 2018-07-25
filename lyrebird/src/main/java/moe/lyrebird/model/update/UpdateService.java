@@ -113,7 +113,7 @@ public class UpdateService {
      * Starts selfupdating to the latest version available
      */
     public void selfupdate() {
-        getLatestVersion().thenAccept(selfupdateService::selfupdate);
+        getLatestVersion().thenAcceptAsync(selfupdateService::selfupdate);
     }
 
     /**

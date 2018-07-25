@@ -83,27 +83,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
-        <resources>
-            <!-- Maven won't copy non-java files under source root (/src/main/java) but because SceneBuilder
-            is basically a broken tool we really want our .fxml files sitting there next to their controller
-            classes. -->
-            <resource>
-                <directory>
-                    src/main/java
-                </directory>
-                <includes>
-                    <include>**/*.fxml</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.scss</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
     <dependencies>
