@@ -21,7 +21,7 @@ package moe.lyrebird.view.components.cells;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import twitter4a.DirectMessage;
+import twitter4a.DirectMessageEvent;
 
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -35,10 +35,10 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  */
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
-public class DirectMessageListCell extends ListCell<DirectMessage> {
+public class DirectMessageListCell extends ListCell<DirectMessageEvent> {
 
     @Override
-    protected void updateItem(final DirectMessage item, final boolean empty) {
+    protected void updateItem(final DirectMessageEvent item, final boolean empty) {
         super.updateItem(item, empty);
 
         if (item == null) {

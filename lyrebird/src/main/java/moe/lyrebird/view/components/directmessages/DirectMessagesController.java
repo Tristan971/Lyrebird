@@ -22,12 +22,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import twitter4a.DirectMessageEvent;
+import twitter4a.User;
 
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.Pane;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static moe.lyrebird.view.components.Component.DIRECT_MESSAGE_CONVERSATION;
 
 @Component
 public class DirectMessagesController implements FxmlController {
@@ -40,6 +52,8 @@ public class DirectMessagesController implements FxmlController {
     private final EasyFxml easyFxml;
     private final DirectMessages directMessages;
 
+    private final Set<User> loadedPals = new HashSet<>();
+
     @Autowired
     public DirectMessagesController(final EasyFxml easyFxml, final DirectMessages directMessages) {
         this.easyFxml = easyFxml;
@@ -49,13 +63,27 @@ public class DirectMessagesController implements FxmlController {
     @Override
     public void initialize() {
         LOG.info("Loading direct messages!");
-
+        directMessages.refresh();
+        listenToNewConversations();
     }
 
-    private void displayMessages() {
-        directMessages.loadedConversations().forEach((userId, event) -> {
+    private void listenToNewConversations() {
+        directMessages.loadedConversations()
+                      .addListener((MapChangeListener<User, ObservableList<DirectMessageEvent>>) change -> {
+                          if (change.wasAdded() && !loadedPals.contains(change.getKey())) {
+                              createTabForPal(change.getKey());
+                          }
+                      });
+    }
 
-        });
+    private synchronized void createTabForPal(final User user) {
+        easyFxml.loadNode(DIRECT_MESSAGE_CONVERSATION, Pane.class, DMConversationController.class)
+                .afterControllerLoaded(dmc -> dmc.setPal(user))
+                .getNode()
+                .recover(ExceptionHandler::fromThrowable)
+                .map(conversation -> new Tab(user.getName(), conversation))
+                .onSuccess(this.conversationsTabPane.getTabs()::add);
+        loadedPals.add(user);
     }
 
 }
