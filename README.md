@@ -6,6 +6,7 @@ Last `develop` branch's statistics :
 [![Sonar bugs](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird-parent&metric=bugs)](https://sonar.tristan.moe/project/issues?id=moe.lyrebird%3Alyrebird-parent&resolved=false&types=BUG)
 [![Lines of code](https://sonar.tristan.moe/api/project_badges/measure?project=moe.lyrebird%3Alyrebird-parent&metric=ncloc)](https://sonar.tristan.moe/component_measures?id=moe.lyrebird%3Alyrebird-parent&metric=ncloc)
 [![Known Vulnerabilities](https://snyk.io/test/github/tristan971/lyrebird/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/tristan971/lyrebird?targetFile=pom.xml)
+[![OpenHub Stats](https://www.openhub.net/p/Lyrebird-twitter/widgets/project_thin_badge?format=gif)](https://www.openhub.net/p/Lyrebird-twitter/)
 
 [![Quality gate status](https://sonar.tristan.moe/api/project_badges/quality_gate?project=moe.lyrebird%3Alyrebird-parent)](https://sonar.tristan.moe/dashboard?id=moe.lyrebird%3Alyrebird-parent)
 
