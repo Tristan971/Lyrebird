@@ -40,7 +40,7 @@ import javafx.scene.layout.Pane;
 import java.util.HashSet;
 import java.util.Set;
 
-import static moe.lyrebird.view.components.Component.DIRECT_MESSAGE_CONVERSATION;
+import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGE_CONVERSATION;
 
 @Component
 public class DirectMessagesController implements FxmlController {

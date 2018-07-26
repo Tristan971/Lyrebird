@@ -18,6 +18,7 @@
 
 package moe.lyrebird.view.components.controlbar;
 
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -25,7 +26,7 @@ import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.update.UpdateService;
-import moe.lyrebird.view.components.Component;
+import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.screens.root.RootScreenController;
@@ -42,13 +43,18 @@ import javafx.scene.layout.Pane;
 
 import java.util.List;
 
+import static moe.lyrebird.view.components.FxComponent.CURRENT_ACCOUNT;
+import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGES;
+import static moe.lyrebird.view.components.FxComponent.MENTIONS;
+import static moe.lyrebird.view.components.FxComponent.TIMELINE;
+import static moe.lyrebird.view.screens.Screen.CREDITS_VIEW;
 import static moe.lyrebird.view.screens.Screen.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 /**
  * The ControlBar is the left-side view selector for Lyrebird's main UI window.
  */
-@org.springframework.stereotype.Component
+@Component
 public class ControlBarController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ControlBarController.class);
@@ -107,15 +113,15 @@ public class ControlBarController implements FxmlController {
 
         setUpTweetButton();
 
-        bindActionImageToLoadingView(timeline, Component.TIMELINE);
-        bindActionImageToLoadingView(mentions, Component.MENTIONS);
-        bindActionImageToLoadingView(directMessages, Component.DIRECT_MESSAGES);
+        bindActionImageToLoadingView(timeline, TIMELINE);
+        bindActionImageToLoadingView(mentions, MENTIONS);
+        bindActionImageToLoadingView(directMessages, DIRECT_MESSAGES);
 
-        credits.setOnMouseClicked(e ->
-                                          easyFxml.loadNode(Screen.CREDITS_VIEW)
-                                                  .orExceptionPane()
-                                                  .map(pane -> Stages.stageOf("Credits", pane))
-                                                  .andThen(Stages::scheduleDisplaying)
+        credits.setOnMouseClicked(
+                e -> easyFxml.loadNode(CREDITS_VIEW)
+                             .orExceptionPane()
+                             .map(pane -> Stages.stageOf("Credits", pane))
+                             .andThen(Stages::scheduleDisplaying)
         );
 
         sessionManager.isLoggedInProperty().addListener((o, prev, cur) -> handleLogStatusChange(prev, cur));
@@ -137,11 +143,9 @@ public class ControlBarController implements FxmlController {
 
     /**
      * Loads the current user's account view on the top of the bar.
-     *
-     * @see Component#CURRENT_ACCOUNT
      */
     private void loadCurrentAccountPanel() {
-        easyFxml.loadNode(Component.CURRENT_ACCOUNT)
+        easyFxml.loadNode(CURRENT_ACCOUNT)
                 .getNode()
                 .onSuccess(container::setTop)
                 .onFailure(err -> displayExceptionPane(
@@ -194,16 +198,19 @@ public class ControlBarController implements FxmlController {
         }
     }
 
-    private void bindActionImageToLoadingView(final HBox imageBox, final Component component) {
+    private void bindActionImageToLoadingView(
+            final HBox imageBox,
+            final FxComponent FxComponent
+    ) {
         imageBox.setOnMouseClicked(e -> {
             currentViewButton.setValue(imageBox);
-            rootScreenController.setContent(component);
+            rootScreenController.setContent(FxComponent);
         });
     }
 
     /**
-     * The {@link #update} box only show up when an update is detected as available. Then if it is the case,
-     * this method is called on click to open the update information screen.
+     * The {@link #update} box only show up when an update is detected as available. Then if it is the case, this method
+     * is called on click to open the update information screen.
      *
      * @see Screen#UPDATE_VIEW
      */

@@ -54,7 +54,7 @@ import javafx.scene.text.TextFlow;
 import java.util.List;
 
 import static moe.lyrebird.view.assets.ImageResources.GENERAL_USER_AVATAR_DARK;
-import static moe.lyrebird.view.components.Component.TWEET_INTERRACTION_BOX;
+import static moe.lyrebird.view.components.FxComponent.TWEET_INTERRACTION_BOX;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
