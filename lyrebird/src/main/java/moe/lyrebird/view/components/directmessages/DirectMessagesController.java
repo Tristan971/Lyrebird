@@ -74,7 +74,7 @@ public class DirectMessagesController implements FxmlController {
     }
 
     private void listenToNewConversations() {
-        directMessages.loadedConversations()
+        directMessages.directMessages()
                       .addListener((MapChangeListener<User, ObservableList<DirectMessageEvent>>) change -> {
                           if (change.wasAdded() && !loadedPals.contains(change.getKey())) {
                               createTabForPal(change.getKey());

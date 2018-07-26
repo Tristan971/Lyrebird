@@ -25,7 +25,7 @@ import moe.lyrebird.view.components.controlbar.ControlBarController;
 import moe.lyrebird.view.components.credits.CreditController;
 import moe.lyrebird.view.components.currentaccount.CurrentAccountController;
 import moe.lyrebird.view.components.directmessages.DMConversationController;
-import moe.lyrebird.view.components.directmessages.DirectMessagePaneController;
+import moe.lyrebird.view.components.directmessages.DMPaneController;
 import moe.lyrebird.view.components.directmessages.DirectMessagesController;
 import moe.lyrebird.view.components.mentions.MentionsController;
 import moe.lyrebird.view.components.notifications.NotificationsController;
@@ -51,7 +51,7 @@ public enum FxComponent implements FxmlNode {
 
     DIRECT_MESSAGES("directmessages/DirectMessages.fxml", DirectMessagesController.class),
     DIRECT_MESSAGE_CONVERSATION("directmessages/DMConversation.fxml", DMConversationController.class),
-    DIRECT_MESSAGE_PANE("directmessages/DirectMessagePane.fxml", DirectMessagePaneController.class),
+    DIRECT_MESSAGE_PANE("directmessages/DMPane.fxml", DMPaneController.class),
 
     TWEET("tweet/TweetPane.fxml", TweetPaneController.class),
     TWEET_INTERRACTION_BOX("tweet/TweetInterractionPane.fxml", TweetInterractionPaneController.class),

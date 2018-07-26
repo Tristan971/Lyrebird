@@ -51,7 +51,7 @@ public class DirectMessages {
         this.messageEvents = FXCollections.observableMap(new ConcurrentHashMap<>());
     }
 
-    public ObservableMap<User, ObservableList<DirectMessageEvent>> loadedConversations() {
+    public ObservableMap<User, ObservableList<DirectMessageEvent>> directMessages() {
         return messageEvents;
     }
 

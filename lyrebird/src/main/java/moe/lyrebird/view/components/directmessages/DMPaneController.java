@@ -13,9 +13,9 @@ import javafx.scene.control.Label;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DirectMessagePaneController implements ComponentCellFxmlController<DirectMessage> {
+public class DMPaneController implements ComponentCellFxmlController<DirectMessage> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DirectMessagePaneController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DMPaneController.class);
 
     @FXML
     private Label messageContent;
@@ -27,7 +27,7 @@ public class DirectMessagePaneController implements ComponentCellFxmlController<
 
     @Override
     public void updateWithValue(DirectMessage newValue) {
-        LOG.debug("Direct message pane {} assigned with displaying {}", this, newValue);
+        LOG.debug("Direct message pane assigned with displaying message : {}", newValue);
         messageContent.setText(newValue.getText());
     }
 

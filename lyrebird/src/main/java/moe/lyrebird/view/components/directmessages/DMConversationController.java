@@ -29,8 +29,8 @@ import org.slf4j.LoggerFactory;
 import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -60,7 +60,7 @@ public class DMConversationController extends ComponentListViewFxmlController<Di
         LOG.debug("Schedule displaying of conversation once senderId has been received!");
         palProperty.addListener((palVal, oldVal, newVal) -> {
             LOG.debug("Detected palProperty being set! New value : {}", newVal.getScreenName());
-            listView.itemsProperty().bind(new SimpleListProperty<>(directMessages.loadedConversations().get(newVal)));
+            Bindings.bindContent(listView.getItems(), directMessages.directMessages().get(newVal));
         });
     }
 
