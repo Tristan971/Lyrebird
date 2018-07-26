@@ -21,7 +21,7 @@ package moe.lyrebird.view.components.directmessages;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
 import moe.lyrebird.view.components.cells.DirectMessageListCell;
 import org.slf4j.Logger;
@@ -32,24 +32,16 @@ import twitter4a.User;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-
-import java.util.function.Supplier;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
-public class DMConversationController implements FxmlController {
+public class DMConversationController extends ComponentListViewFxmlController<DirectMessageEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DMConversationController.class);
 
-    @FXML
-    private ListView<DirectMessageEvent> messageListView;
-
     private final DirectMessages directMessages;
-    private final Supplier<DirectMessageListCell> directMessageListCellSupplier;
 
     private final Property<User> palProperty;
 
@@ -57,18 +49,18 @@ public class DMConversationController implements FxmlController {
             final DirectMessages directMessages,
             final ApplicationContext applicationContext
     ) {
+        super(applicationContext, DirectMessageListCell.class);
         this.directMessages = directMessages;
-        this.directMessageListCellSupplier = () -> applicationContext.getBean(DirectMessageListCell.class);
         this.palProperty = new SimpleObjectProperty<>(null);
     }
 
     @Override
     public void initialize() {
+        super.initialize();
         LOG.debug("Schedule displaying of conversation once senderId has been received!");
-        messageListView.setCellFactory(messages -> directMessageListCellSupplier.get());
         palProperty.addListener((palVal, oldVal, newVal) -> {
             LOG.debug("Detected palProperty being set! New value : {}", newVal.getScreenName());
-            messageListView.itemsProperty().bind(new SimpleListProperty<>(directMessages.loadedConversations().get(newVal)));
+            listView.itemsProperty().bind(new SimpleListProperty<>(directMessages.loadedConversations().get(newVal)));
         });
     }
 
