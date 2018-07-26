@@ -34,6 +34,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
 public class DirectMessages {
@@ -55,26 +57,40 @@ public class DirectMessages {
 
     public void refresh() {
         CompletableFuture.runAsync(() -> {
-            LOG.debug("Requesting last {} direct messages.", 50);
+            LOG.debug("Requesting last direct messages.");
             sessionManager.getCurrentTwitter()
-                          .mapTry(twitter -> twitter.getDirectMessageEvents(50))
-                          .onSuccess(messages -> messages.forEach(this::addDirectMessage))
+                          .mapTry(twitter -> twitter.getDirectMessageEvents(20))
+                          .onSuccess(this::addDirectMessages)
                           .onFailure(err -> LOG.error("Could not load direct messages successfully!", err));
         });
     }
 
-    private void addDirectMessage(final DirectMessageEvent directMessage) {
-        final long otherId = getOtherId(directMessage);
+    private void addDirectMessages(final List<DirectMessageEvent> loadedMessages) {
+        var knownMessages = messageEvents.values()
+                                         .stream()
+                                         .flatMap(List::stream)
+                                         .collect(Collectors.toList());
+
+        var newMessages = loadedMessages.stream()
+                                        .filter(((Predicate<DirectMessageEvent>) knownMessages::contains).negate())
+                                        .collect(Collectors.toList());
+        LOG.debug("Loaded {} new messages", newMessages.size());
+
+        newMessages.forEach(this::addDirectMessage);
+    }
+
+    private void addDirectMessage(final DirectMessageEvent directMessageEvent) {
+        final long otherId = getOtherId(directMessageEvent);
         final User other = messageEvents.keySet()
-                                                 .stream()
-                                                 .filter(user -> user.getId() == otherId)
-                                                 .findAny()
-                                                 .orElseGet(() -> showUser(otherId));
+                                        .stream()
+                                        .filter(user -> user.getId() == otherId)
+                                        .findAny()
+                                        .orElseGet(() -> showUser(otherId));
 
         messageEvents.computeIfAbsent(other, __ -> FXCollections.observableArrayList());
 
         final List<DirectMessageEvent> messagesFromSender = messageEvents.get(other);
-        messagesFromSender.add(directMessage);
+        messagesFromSender.add(directMessageEvent);
         messagesFromSender.sort(Comparator.comparingLong(DirectMessageEvent::getId));
     }
 
