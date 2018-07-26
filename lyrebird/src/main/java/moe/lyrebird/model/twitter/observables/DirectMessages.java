@@ -64,18 +64,24 @@ public class DirectMessages {
     }
 
     private void addDirectMessage(final DirectMessageEvent directMessage) {
-        final long senderId = directMessage.getSenderId();
-        final User sender = messageEvents.keySet()
+        final long otherId = getOtherId(directMessage);
+        final User other = messageEvents.keySet()
                                                  .stream()
-                                                 .filter(user -> user.getId() == senderId)
+                                                 .filter(user -> user.getId() == otherId)
                                                  .findAny()
-                                                 .orElseGet(() -> showUser(senderId));
+                                                 .orElseGet(() -> showUser(otherId));
 
-        messageEvents.computeIfAbsent(sender, __ -> FXCollections.observableArrayList());
+        messageEvents.computeIfAbsent(other, __ -> FXCollections.observableArrayList());
 
-        final List<DirectMessageEvent> messagesFromSender = messageEvents.get(sender);
+        final List<DirectMessageEvent> messagesFromSender = messageEvents.get(other);
         messagesFromSender.add(directMessage);
         messagesFromSender.sort(Comparator.comparingLong(DirectMessageEvent::getId));
+    }
+
+    private long getOtherId(final DirectMessageEvent directMessageEvent) {
+        return sessionManager.isCurrentUser(directMessageEvent.getSenderId()) ?
+               directMessageEvent.getRecipientId() :
+               directMessageEvent.getSenderId();
     }
 
     @Cacheable(value = "userFromUserId", sync = true)

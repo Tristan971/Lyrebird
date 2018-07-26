@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
+import javafx.application.Platform;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -76,13 +77,17 @@ public class DirectMessagesController implements FxmlController {
                       });
     }
 
-    private synchronized void createTabForPal(final User user) {
+    private void createTabForPal(final User user) {
+        LOG.debug("Creating a conversation tab for conversation with {}", user.getScreenName());
         easyFxml.loadNode(DIRECT_MESSAGE_CONVERSATION, Pane.class, DMConversationController.class)
                 .afterControllerLoaded(dmc -> dmc.setPal(user))
                 .getNode()
                 .recover(ExceptionHandler::fromThrowable)
                 .map(conversation -> new Tab(user.getName(), conversation))
-                .onSuccess(this.conversationsTabPane.getTabs()::add);
+                .onSuccess(tab -> Platform.runLater(() -> {
+                    LOG.debug("Adding [{}] as tab for user {}", tab.getText(), user.getScreenName());
+                    this.conversationsTabPane.getTabs().add(tab);
+                }));
         loadedPals.add(user);
     }
 

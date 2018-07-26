@@ -83,10 +83,14 @@ public class SessionManager {
     }
 
     public boolean isCurrentUser(final User user) {
+        return isCurrentUser(user.getId());
+    }
+
+    public boolean isCurrentUser(final long userId) {
         return currentSessionProperty().getValue()
                                        .getTwitterUser()
                                        .map(User::getId)
-                                       .map(curUserId -> curUserId == user.getId())
+                                       .map(curUserId -> curUserId == userId)
                                        .getOrElse(false);
     }
 
