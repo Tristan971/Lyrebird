@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -48,15 +47,11 @@ public class DirectMessages {
     public DirectMessages(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
-        this.messageEvents = FXCollections.observableMap(new ConcurrentHashMap<>());
+        this.messageEvents = FXCollections.observableHashMap();
     }
 
     public ObservableMap<User, List<DirectMessageEvent>> directMessages() {
         return messageEvents;
-    }
-
-    public List<DirectMessageEvent> directMessages(final User user) {
-        return messageEvents.get(user);
     }
 
     public void refresh() {
