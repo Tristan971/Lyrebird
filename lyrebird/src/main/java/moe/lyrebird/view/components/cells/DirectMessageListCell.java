@@ -41,8 +41,9 @@ public class DirectMessageListCell extends ListCell<DirectMessageEvent> {
     protected void updateItem(final DirectMessageEvent item, final boolean empty) {
         super.updateItem(item, empty);
 
-        if (item == null) {
+        if (item == null || empty) {
             setGraphic(null);
+            setText(null);
         } else {
             setText(item.getText());
         }
