@@ -30,6 +30,8 @@ import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -54,18 +56,21 @@ public class DirectMessagesController implements FxmlController {
     private final DirectMessages directMessages;
 
     private final Set<User> loadedPals = new HashSet<>();
+    private final ObservableList<Tab> conversationsManaged;
 
     @Autowired
     public DirectMessagesController(final EasyFxml easyFxml, final DirectMessages directMessages) {
         this.easyFxml = easyFxml;
         this.directMessages = directMessages;
+        this.conversationsManaged = FXCollections.observableArrayList();
+        listenToNewConversations();
     }
 
     @Override
     public void initialize() {
-        LOG.info("Loading direct messages!");
+        LOG.info("Displaying direct messages.");
+        Bindings.bindContent(conversationsTabPane.getTabs(), conversationsManaged);
         directMessages.refresh();
-        listenToNewConversations();
     }
 
     private void listenToNewConversations() {
@@ -86,7 +91,7 @@ public class DirectMessagesController implements FxmlController {
                 .map(conversation -> new Tab(user.getName(), conversation))
                 .onSuccess(tab -> Platform.runLater(() -> {
                     LOG.debug("Adding [{}] as tab for user {}", tab.getText(), user.getScreenName());
-                    this.conversationsTabPane.getTabs().add(tab);
+                    this.conversationsManaged.add(tab);
                 }));
         loadedPals.add(user);
     }
