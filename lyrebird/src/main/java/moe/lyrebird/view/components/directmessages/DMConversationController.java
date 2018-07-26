@@ -29,9 +29,7 @@ import org.slf4j.LoggerFactory;
 import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -43,30 +41,25 @@ public class DMConversationController extends ComponentListViewFxmlController<Di
 
     private final DirectMessages directMessages;
 
-    private final Property<User> palProperty;
-
     public DMConversationController(
             final DirectMessages directMessages,
             final ApplicationContext applicationContext
     ) {
         super(applicationContext, DirectMessageListCell.class);
         this.directMessages = directMessages;
-        this.palProperty = new SimpleObjectProperty<>(null);
     }
 
     @Override
     public void initialize() {
         super.initialize();
         LOG.debug("Schedule displaying of conversation once senderId has been received!");
-        palProperty.addListener((palVal, oldVal, newVal) -> {
-            LOG.debug("Detected palProperty being set! New value : {}", newVal.getScreenName());
-            Bindings.bindContent(listView.getItems(), directMessages.directMessages().get(newVal));
-        });
     }
 
     public void setPal(final User pal) {
         LOG.debug("Mapping DM conversation view {} with senderId {}", this, pal.getScreenName());
-        this.palProperty.setValue(pal);
+        listView.itemsProperty().bind(
+                new ReadOnlyListWrapper<>(directMessages.directMessages().get(pal))
+        );
     }
 
 }
