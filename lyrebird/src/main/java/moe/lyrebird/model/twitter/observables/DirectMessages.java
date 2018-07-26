@@ -30,6 +30,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -43,7 +44,7 @@ public class DirectMessages {
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
     private final SessionManager sessionManager;
-    private final ObservableMap<User, ObservableList<DirectMessageEvent>> messageEvents;
+    private final ObservableMap<User, List<DirectMessageEvent>> messageEvents;
 
     public DirectMessages(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
@@ -51,8 +52,12 @@ public class DirectMessages {
         this.messageEvents = FXCollections.observableMap(new ConcurrentHashMap<>());
     }
 
-    public ObservableMap<User, ObservableList<DirectMessageEvent>> directMessages() {
+    public ObservableMap<User, List<DirectMessageEvent>> directMessages() {
         return messageEvents;
+    }
+
+    public ObservableList<DirectMessageEvent> directMessages(final User user) {
+        return FXCollections.observableList(messageEvents.get(user));
     }
 
     public void refresh() {
@@ -87,7 +92,7 @@ public class DirectMessages {
                                         .findAny()
                                         .orElseGet(() -> showUser(otherId));
 
-        messageEvents.computeIfAbsent(other, __ -> FXCollections.observableArrayList());
+        messageEvents.computeIfAbsent(other, k -> new ArrayList<>());
 
         final List<DirectMessageEvent> messagesFromSender = messageEvents.get(other);
         messagesFromSender.add(directMessageEvent);

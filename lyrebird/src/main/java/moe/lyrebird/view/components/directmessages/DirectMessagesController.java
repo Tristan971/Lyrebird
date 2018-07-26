@@ -19,6 +19,7 @@
 package moe.lyrebird.view.components.directmessages;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
@@ -40,10 +41,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGE_CONVERSATION;
 
+@Lazy
 @Component
 public class DirectMessagesController implements FxmlController {
 
@@ -75,7 +78,7 @@ public class DirectMessagesController implements FxmlController {
 
     private void listenToNewConversations() {
         directMessages.directMessages()
-                      .addListener((MapChangeListener<User, ObservableList<DirectMessageEvent>>) change -> {
+                      .addListener((MapChangeListener<User, List<DirectMessageEvent>>) change -> {
                           if (change.wasAdded() && !loadedPals.contains(change.getKey())) {
                               createTabForPal(change.getKey());
                           }

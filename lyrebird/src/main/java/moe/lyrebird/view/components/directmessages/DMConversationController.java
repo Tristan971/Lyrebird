@@ -58,7 +58,7 @@ public class DMConversationController extends ComponentListViewFxmlController<Di
     public void setPal(final User pal) {
         LOG.debug("Mapping DM conversation view {} with senderId {}", this, pal.getScreenName());
         listView.itemsProperty().bind(
-                new ReadOnlyListWrapper<>(directMessages.directMessages().get(pal))
+                new ReadOnlyListWrapper<>(directMessages.directMessages(pal))
         );
     }
 
