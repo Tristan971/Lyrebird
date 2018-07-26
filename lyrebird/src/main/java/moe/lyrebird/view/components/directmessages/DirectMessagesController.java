@@ -72,8 +72,8 @@ public class DirectMessagesController implements FxmlController {
     @Override
     public void initialize() {
         LOG.info("Displaying direct messages.");
-        Bindings.bindContent(conversationsTabPane.getTabs(), conversationsManaged);
         directMessages.refresh();
+        Bindings.bindContent(conversationsTabPane.getTabs(), conversationsManaged);
     }
 
     private void listenToNewConversations() {

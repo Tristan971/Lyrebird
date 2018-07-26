@@ -27,7 +27,6 @@ import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.ArrayList;
@@ -56,8 +55,8 @@ public class DirectMessages {
         return messageEvents;
     }
 
-    public ObservableList<DirectMessageEvent> directMessages(final User user) {
-        return FXCollections.observableList(messageEvents.get(user));
+    public List<DirectMessageEvent> directMessages(final User user) {
+        return messageEvents.get(user);
     }
 
     public void refresh() {
