@@ -30,9 +30,10 @@ import javafx.scene.media.Media;
  * This class exposes convenience methods for doing cached IO operations.
  */
 @Component
-public class CachedIO {
+@Cacheable(value = "cachedMedia", sync = true)
+public class CachedMedia {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CachedIO.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CachedMedia.class);
 
     /**
      * Loads and caches an image.
@@ -41,7 +42,6 @@ public class CachedIO {
      *
      * @return This image loaded in an {@link Image} instance.
      */
-    @Cacheable(value = "image", sync = true)
     public Image loadImage(final String imageUrl) {
         LOG.trace("First load of image {}", imageUrl);
         return new Image(imageUrl);
@@ -56,7 +56,6 @@ public class CachedIO {
      *
      * @return This image's miniature loaded in an {@link Image} instance.
      */
-    @Cacheable(value = "imageMiniature", sync = true)
     public Image loadImageMiniature(final String imageUrl, final double width, final double heigth) {
         LOG.trace("First load of miniature image {} [width = {}, heigth = {}]", imageUrl, width, heigth);
         return new Image(imageUrl, width, heigth, false, true);
@@ -69,7 +68,6 @@ public class CachedIO {
      *
      * @return This media loaded in a {@link Media} instance.
      */
-    @Cacheable(value = "mediaFile", sync = true)
     public Media loadMediaFile(final String mediaUrl) {
         LOG.trace("First load of media {}", mediaUrl);
         return new Media(mediaUrl);

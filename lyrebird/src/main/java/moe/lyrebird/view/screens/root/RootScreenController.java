@@ -18,10 +18,11 @@
 
 package moe.lyrebird.view.screens.root;
 
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.lyrebird.view.components.Component;
+import moe.lyrebird.view.components.FxComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +33,12 @@ import javafx.scene.layout.Pane;
 
 import java.util.concurrent.CompletableFuture;
 
-import static moe.lyrebird.view.components.Component.CONTROL_BAR;
+import static moe.lyrebird.view.components.FxComponent.CONTROL_BAR;
 
 /**
  * The RootViewController manages the location of content on the root view scene.
  */
-@org.springframework.stereotype.Component
+@Component
 public class RootScreenController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(RootScreenController.class);
@@ -58,7 +59,7 @@ public class RootScreenController implements FxmlController {
     }
 
     /**
-     * Loads up the {@link Component#CONTROL_BAR} on the left side of the {@link BorderPane} which is the main container
+     * Loads up the {@link FxComponent#CONTROL_BAR} on the left side of the {@link BorderPane} which is the main container
      * for the main view.
      */
     private void loadControlBar() {
@@ -72,13 +73,13 @@ public class RootScreenController implements FxmlController {
     }
 
     /**
-     * Loads up the {@link Component#NOTIFICATIONS_PANE} on the top side of the {@link BorderPane} which is the main
+     * Loads up the {@link FxComponent#NOTIFICATIONS_PANE} on the top side of the {@link BorderPane} which is the main
      * container for the main view.
      */
     private void loadNotificationPane() {
         LOG.debug("Initializing notification pane...");
         final Pane notificationPane = this.easyFxml
-                .loadNode(Component.NOTIFICATIONS_PANE)
+                .loadNode(FxComponent.NOTIFICATIONS_PANE)
                 .getNode()
                 .getOrElseGet(ExceptionHandler::fromThrowable);
 
@@ -86,16 +87,16 @@ public class RootScreenController implements FxmlController {
     }
 
     /**
-     * Helper function to load a given component as center node for the {@link BorderPane} which is the main container
+     * Helper function to load a given FxComponent as center node for the {@link BorderPane} which is the main container
      * for the main view.
      *
-     * @param component The component to load.
+     * @param FxComponent The FxComponent to load.
      */
-    public void setContent(final Component component) {
+    public void setContent(final FxComponent FxComponent) {
         CompletableFuture.supplyAsync(() -> {
-            LOG.info("Switching content of root pane to {}", component);
+            LOG.info("Switching content of root pane to {}", FxComponent);
             return this.easyFxml
-                    .loadNode(component)
+                    .loadNode(FxComponent)
                     .getNode()
                     .getOrElseGet(ExceptionHandler::fromThrowable);
         }).thenAcceptAsync(this.contentPane::setCenter, Platform::runLater);

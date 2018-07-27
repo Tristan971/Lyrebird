@@ -19,15 +19,16 @@
 package moe.lyrebird.view.components.cells;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
 import moe.lyrebird.model.credits.objects.CredittedWork;
-import moe.lyrebird.view.components.Component;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.ListView;
 
+import static moe.lyrebird.view.components.FxComponent.CREDIT;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -35,14 +36,14 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  *
  * @see ComponentListCell
  */
-@org.springframework.stereotype.Component
+@Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class CreditsCell extends ComponentListCell<CredittedWork> {
 
     private final BooleanProperty shouldDisplay;
 
     public CreditsCell(final EasyFxml easyFxml) {
-        super(easyFxml, Component.CREDIT);
+        super(easyFxml, CREDIT);
         this.shouldDisplay = new SimpleBooleanProperty(false);
         this.cellNode.visibleProperty().bind(shouldDisplay);
     }

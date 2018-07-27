@@ -86,6 +86,13 @@
 
         <resources>
             <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+            <resource>
                 <directory>${project.basedir}/src/main/java</directory>
                 <includes>
                     <include>**/*.fxml</include>
@@ -153,6 +160,16 @@
             <groupId>moe.tristan</groupId>
             <artifactId>easyfxml</artifactId>
             <version>1.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjavafx</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>2.1.17</version>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>

@@ -154,7 +154,6 @@ public class TwitterUserListener implements UserStreamListener {
     @Override
     public void onDeletionNotice(final long directMessageId, final long userId) {
         LOG.debug("DM {} from {} requested to be deleted.", directMessageId, userId);
-        directMessages.removeDirectMessage(userId, directMessageId);
     }
 
     @Override
@@ -193,8 +192,8 @@ public class TwitterUserListener implements UserStreamListener {
 
     @Override
     public void onDirectMessage(final DirectMessage directMessage) {
-        LOG.debug("Received DM {}", directMessage);
-        directMessages.addDirectMessage(directMessage);
+        LOG.debug("Streamed DM {}", directMessage);
+        directMessages.refresh();
     }
 
     @Override

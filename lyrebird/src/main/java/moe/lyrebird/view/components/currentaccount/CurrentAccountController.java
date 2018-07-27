@@ -19,6 +19,7 @@
 package moe.lyrebird.view.components.currentaccount;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.util.Stages;
@@ -27,7 +28,7 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
-import moe.lyrebird.view.components.Component;
+import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
@@ -44,12 +45,12 @@ import java.util.concurrent.CompletableFuture;
 import static moe.lyrebird.view.assets.ImageResources.CONTROLBAR_ADD_USER;
 
 /**
- * This component is laoded at the top of the {@link Component#CONTROL_BAR} and serves as a very basic preview for who
+ * This component is laoded at the top of the {@link FxComponent#CONTROL_BAR} and serves as a very basic preview for who
  * is the current user that will be used to perform all the actions requested.
  *
  * @see SessionManager
  */
-@org.springframework.stereotype.Component
+@Component
 public class CurrentAccountController implements FxmlController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CurrentAccountController.class);
