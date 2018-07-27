@@ -38,7 +38,11 @@ public class NewDirectMessageService {
                 }).onFailure(
                         err -> LOG.error("Could not send direct message!", err)
                 ).getOrElseThrow((Function<Throwable, RuntimeException>) RuntimeException::new)
-        );
+        ).whenCompleteAsync((res, err) -> {
+            if (err != null) {
+                LOG.error("Could not correctly executed the direct message sending request!", err);
+            }
+        });
     }
 
     private MessageData buildMessage(final User recipient, final String content) {

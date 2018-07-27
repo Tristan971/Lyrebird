@@ -87,7 +87,7 @@ public class DMConversationController extends ComponentListViewFxmlController<Di
         newDirectMessageService.sendMessage(
                 currentPal.getValue(),
                 messageContent.getText()
-        ).thenAcceptAsync(__ -> {
+        ).whenCompleteAsync((res, err) -> {
             messageContent.clear();
             messageContent.setDisable(false);
             sendButton.setDisable(false);
