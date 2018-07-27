@@ -7,18 +7,19 @@ import moe.lyrebird.model.sessions.SessionManager;
 import twitter4a.User;
 
 @Component
-public class TwitterInformationService {
+@Cacheable("cachedTwitterInfo")
+public class CachedTwitterInfoService {
 
     private final SessionManager sessionManager;
 
     @Autowired
-    public TwitterInformationService(SessionManager sessionManager) {
+    public CachedTwitterInfoService(SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
-    @Cacheable("showUser")
     public User getUser(final long userId) {
         return sessionManager.doWithCurrentTwitter(twitter -> twitter.showUser(userId)).getOrNull();
     }
 
 }
+

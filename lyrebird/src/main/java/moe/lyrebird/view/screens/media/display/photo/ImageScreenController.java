@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.lyrebird.model.io.CachedIO;
+import moe.lyrebird.model.io.CachedMedia;
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.media.display.MediaScreenController;
 
@@ -46,13 +46,13 @@ public class ImageScreenController implements MediaScreenController {
     @FXML
     private ImageView photoImageView;
 
-    private final CachedIO cachedIO;
+    private final CachedMedia cachedMedia;
 
     private final Property<Image> imageProp = new SimpleObjectProperty<>(ImageResources.GENERAL_LOADING_REMOTE.getImage());
 
     @Autowired
-    public ImageScreenController(final CachedIO cachedIO) {
-        this.cachedIO = cachedIO;
+    public ImageScreenController(final CachedMedia cachedMedia) {
+        this.cachedMedia = cachedMedia;
         imageProp.addListener((observable, oldValue, newValue) -> bindViewSizeToParent());
     }
 
@@ -63,7 +63,7 @@ public class ImageScreenController implements MediaScreenController {
 
     @Override
     public void handleMedia(final String mediaUrl) {
-        imageProp.setValue(cachedIO.loadImage(mediaUrl));
+        imageProp.setValue(cachedMedia.loadImage(mediaUrl));
     }
 
     @Override

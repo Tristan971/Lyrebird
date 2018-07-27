@@ -9,7 +9,7 @@ import io.reactivex.rxjavafx.observables.JavaFxObservable;
 import io.reactivex.rxjavafx.schedulers.JavaFxScheduler;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.services.TwitterInformationService;
+import moe.lyrebird.model.twitter.services.CachedTwitterInfoService;
 import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
@@ -34,7 +34,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     private Label messageContent;
 
     private final AsyncIO asyncIO;
-    private final TwitterInformationService twitterInformationService;
+    private final CachedTwitterInfoService cachedTwitterInfoService;
     private final SessionManager sessionManager;
 
     private final Property<DirectMessageEvent> currentMessage = new SimpleObjectProperty<>(null);
@@ -43,11 +43,11 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     public DMPaneController(
             final SessionManager sessionManager,
             final AsyncIO asyncIO,
-            final TwitterInformationService twitterInformationService
+            final CachedTwitterInfoService cachedTwitterInfoService
     ) {
         this.sessionManager = sessionManager;
         this.asyncIO = asyncIO;
-        this.twitterInformationService = twitterInformationService;
+        this.cachedTwitterInfoService = cachedTwitterInfoService;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     private void profilePictures() {
         JavaFxObservable.valuesOf(currentMessage).forEach(messageEvent -> {
             final boolean isSentByMe = sessionManager.isCurrentUser(messageEvent.getSenderId());
-            final User sender = twitterInformationService.getUser(messageEvent.getSenderId());
+            final User sender = cachedTwitterInfoService.getUser(messageEvent.getSenderId());
             if (isSentByMe) {
                 ppSetupSender(currentUserPpBox, sender);
                 ppSetupReceiver(otherPpBox);
