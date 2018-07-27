@@ -82,6 +82,7 @@ public class DirectMessagesController implements FxmlController {
     }
 
     private void createTabForPal(final User user) {
+        if (loadedPals.contains(user)) return;
         LOG.debug("Creating a conversation tab for conversation with {}", user.getScreenName());
         easyFxml.loadNode(DIRECT_MESSAGE_CONVERSATION, Pane.class, DMConversationController.class)
                 .afterControllerLoaded(dmc -> dmc.setPal(user))
