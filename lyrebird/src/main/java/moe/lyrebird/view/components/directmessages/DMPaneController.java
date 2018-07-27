@@ -78,11 +78,11 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
             final boolean isSentByMe = sessionManager.isCurrentUser(messageEvent.getSenderId());
             final User sender = cachedTwitterInfoService.getUser(messageEvent.getSenderId());
             if (isSentByMe) {
-                container.setAlignment(Pos.CENTER_RIGHT);
+                container.setAlignment(Pos.TOP_RIGHT);
                 ppSetupSender(currentUserPpBox, sender);
                 ppSetupReceiver(otherPpBox);
             } else {
-                container.setAlignment(Pos.CENTER_LEFT);
+                container.setAlignment(Pos.TOP_LEFT);
                 ppSetupSender(otherPpBox, sender);
                 ppSetupReceiver(currentUserPpBox);
             }
