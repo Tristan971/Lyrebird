@@ -6,19 +6,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.directmessages.DMPaneController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.directmessages.DMPaneController">
    <children>
-      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <children>
-            <HBox VBox.vgrow="ALWAYS">
+            <HBox fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
                <children>
-                  <ImageView fx:id="otherPpBox" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
-                  <VBox>
+                  <ImageView fx:id="otherPpBox" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                        <Label fx:id="messageContent" text="MESSAGE_CONTENT" />
+                        <Label fx:id="messageContent" alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="THIS IS A SUPER LONG MESSAGE CONTENT" wrapText="true" />
                      </children>
                   </VBox>
-                  <ImageView fx:id="currentUserPpBox" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="currentUserPpBox" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </HBox>
          </children>
