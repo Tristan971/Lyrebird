@@ -24,16 +24,15 @@ import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import io.reactivex.rxjavafx.observables.JavaFxObservable;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
@@ -41,7 +40,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGE_CONVERSATION;
@@ -72,17 +71,14 @@ public class DirectMessagesController implements FxmlController {
     @Override
     public void initialize() {
         LOG.info("Displaying direct messages.");
-        directMessages.refresh();
         Bindings.bindContent(conversationsTabPane.getTabs(), conversationsManaged);
     }
 
     private void listenToNewConversations() {
-        directMessages.directMessages()
-                      .addListener((MapChangeListener<User, List<DirectMessageEvent>>) change -> {
-                          if (change.wasAdded() && !loadedPals.contains(change.getKey())) {
-                              createTabForPal(change.getKey());
-                          }
-                      });
+        directMessages.directMessages().keySet().forEach(this::createTabForPal);
+        JavaFxObservable.additionsOf(directMessages.directMessages())
+                        .map(Map.Entry::getKey)
+                        .forEach(this::createTabForPal);
     }
 
     private void createTabForPal(final User user) {

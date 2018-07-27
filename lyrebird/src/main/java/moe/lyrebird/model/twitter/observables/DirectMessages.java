@@ -27,9 +27,9 @@ import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -42,15 +42,16 @@ public class DirectMessages {
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
     private final SessionManager sessionManager;
-    private final ObservableMap<User, List<DirectMessageEvent>> messageEvents;
+    private final ObservableMap<User, ObservableList<DirectMessageEvent>> messageEvents;
 
     public DirectMessages(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
         this.messageEvents = FXCollections.observableHashMap();
+        refresh();
     }
 
-    public ObservableMap<User, List<DirectMessageEvent>> directMessages() {
+    public ObservableMap<User, ObservableList<DirectMessageEvent>> directMessages() {
         return messageEvents;
     }
 
@@ -86,11 +87,12 @@ public class DirectMessages {
                                         .findAny()
                                         .orElseGet(() -> showUser(otherId));
 
-        messageEvents.computeIfAbsent(other, k -> new ArrayList<>());
-
-        final List<DirectMessageEvent> messagesFromSender = messageEvents.get(other);
-        messagesFromSender.add(directMessageEvent);
-        messagesFromSender.sort(Comparator.comparingLong(DirectMessageEvent::getId));
+        final ObservableList<DirectMessageEvent> messagesWithOther = messageEvents.computeIfAbsent(
+                other,
+                k -> FXCollections.observableArrayList()
+        );
+        messagesWithOther.add(directMessageEvent);
+        messagesWithOther.sort(Comparator.comparingLong(DirectMessageEvent::getId));
     }
 
     private long getOtherId(final DirectMessageEvent directMessageEvent) {

@@ -29,7 +29,10 @@ import org.slf4j.LoggerFactory;
 import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
-import javafx.collections.FXCollections;
+import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -40,6 +43,8 @@ public class DMConversationController extends ComponentListViewFxmlController<Di
     private static final Logger LOG = LoggerFactory.getLogger(DMConversationController.class);
 
     private final DirectMessages directMessages;
+
+    private final Property<ObservableList<DirectMessageEvent>> loadedMessages = new SimpleObjectProperty<>();
 
     public DMConversationController(
             final DirectMessages directMessages,
@@ -53,11 +58,12 @@ public class DMConversationController extends ComponentListViewFxmlController<Di
     public void initialize() {
         super.initialize();
         LOG.debug("Schedule displaying of conversation once senderId has been received!");
+        loadedMessages.addListener((observable, oldValue, newValue) -> listView.itemsProperty().set(newValue));
     }
 
     public void setPal(final User pal) {
-        LOG.debug("Mapping DM conversation view {} with senderId {}", this, pal.getScreenName());
-        listView.setItems(FXCollections.observableList(directMessages.directMessages().get(pal)));
+        LOG.debug("Messages for [{}] loaded!", pal.getScreenName());
+        listView.itemsProperty().bind(new ReadOnlyListWrapper<>(directMessages.directMessages().get(pal)));
     }
 
 }

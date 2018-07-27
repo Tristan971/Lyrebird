@@ -27,8 +27,12 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
 
     @Override
     public void updateWithValue(DirectMessage newValue) {
-        LOG.debug("Direct message pane assigned with displaying message : {}", newValue);
-        messageContent.setText(newValue.getText());
+        if (newValue != null) {
+            LOG.debug("Direct message pane assigned with displaying message : {}", newValue);
+            messageContent.setText(newValue.getText());
+        } else {
+            messageContent.setText("");
+        }
     }
 
 }

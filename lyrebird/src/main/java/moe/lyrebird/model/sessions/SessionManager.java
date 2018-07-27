@@ -18,6 +18,7 @@
 
 package moe.lyrebird.model.sessions;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
@@ -86,6 +87,7 @@ public class SessionManager {
         return isCurrentUser(user.getId());
     }
 
+    @Cacheable("currentUserTest")
     public boolean isCurrentUser(final long userId) {
         return currentSessionProperty().getValue()
                                        .getTwitterUser()
