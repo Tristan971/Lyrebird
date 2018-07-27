@@ -22,7 +22,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
-import io.reactivex.rxjavafx.observables.JavaFxObservable;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
 import moe.lyrebird.model.twitter.services.NewDirectMessageService;
 import moe.lyrebird.view.components.cells.DirectMessageListCell;
@@ -31,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
+import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.SimpleObjectProperty;
@@ -76,14 +76,22 @@ public class DMConversationController extends ComponentListViewFxmlController<Di
 
     public void setPal(final User pal) {
         LOG.debug("Messages for [{}] loaded!", pal.getScreenName());
-        JavaFxObservable.valuesOf(currentPal)
-                        .map(directMessages.directMessages()::get)
-                        .map(ReadOnlyListWrapper::new)
-                        .forEach(listView.itemsProperty()::bind);
+        this.currentPal.setValue(pal);
+        listView.itemsProperty().bind(new ReadOnlyListWrapper<>(directMessages.directMessages().get(pal)));
     }
 
     private void sendMessage() {
-        newDirectMessageService.sendMessage(currentPal.getValue(), messageContent.getText());
+        LOG.debug("Sending direct message!");
+        messageContent.setDisable(true);
+        sendButton.setDisable(true);
+        newDirectMessageService.sendMessage(
+                currentPal.getValue(),
+                messageContent.getText()
+        ).thenAcceptAsync(__ -> {
+            messageContent.clear();
+            messageContent.setDisable(false);
+            sendButton.setDisable(false);
+        }, Platform::runLater);
     }
 
 }
