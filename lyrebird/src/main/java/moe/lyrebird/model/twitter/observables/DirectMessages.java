@@ -79,7 +79,7 @@ public class DirectMessages {
         newMessages.forEach(this::addDirectMessage);
     }
 
-    private void addDirectMessage(final DirectMessageEvent directMessageEvent) {
+    public void addDirectMessage(final DirectMessageEvent directMessageEvent) {
         final long otherId = getOtherId(directMessageEvent);
         final User other = messageEvents.keySet()
                                         .stream()
