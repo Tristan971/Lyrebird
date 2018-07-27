@@ -7,7 +7,7 @@ import moe.lyrebird.model.sessions.SessionManager;
 import twitter4a.User;
 
 @Component
-@Cacheable("cachedTwitterInfo")
+@Cacheable(value = "cachedTwitterInfo", sync = true)
 public class CachedTwitterInfoService {
 
     private final SessionManager sessionManager;
