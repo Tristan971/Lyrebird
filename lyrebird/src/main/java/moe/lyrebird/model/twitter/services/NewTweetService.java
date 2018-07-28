@@ -57,6 +57,14 @@ public class NewTweetService {
         this.sessionManager = sessionManager;
     }
 
+    /**
+     * Asynchronously sends a normal tweet.
+     *
+     * @param content The content of the tweet
+     * @param medias  The attachments to upload and link in the tweet
+     *
+     * @return A {@link CompletionStage} to follow the status of the asynchronous request
+     */
     public CompletionStage<Status> sendTweet(final String content, final List<File> medias) {
         return prepateNewTweet(content, medias).thenApplyAsync(
                 update -> sessionManager.doWithCurrentTwitter(twitter -> twitter.updateStatus(update)).get(),
@@ -64,6 +72,15 @@ public class NewTweetService {
         );
     }
 
+    /**
+     * Asynchronously sends a reply to a tweet.
+     *
+     * @param content   The content of the reply
+     * @param medias    The attachments to upload and link in the reply
+     * @param inReplyTo The tweet that this is in reply to
+     *
+     * @return A {@link CompletionStage} to follow the status of the asynchronous request
+     */
     public CompletionStage<Status> sendReply(final String content, final List<File> medias, final long inReplyTo) {
         return prepateNewTweet(content, medias).thenApplyAsync(
                 update -> {

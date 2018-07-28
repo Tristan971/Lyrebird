@@ -218,6 +218,10 @@ public class NewTweetController implements FxmlController, StageAware {
         });
     }
 
+    /**
+     * Dynamically either sends a normal tweet or a reply depending on whether the controller was used to prepare a
+     * "normal" new tweet or a reply (i.e. if there was a value set for {@link #inReplyStatus}.
+     */
     private void send() {
         if (inReplyStatus.getValue() == null) {
             sendTweet();
