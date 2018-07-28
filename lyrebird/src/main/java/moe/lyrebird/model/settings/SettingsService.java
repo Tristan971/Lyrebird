@@ -16,7 +16,7 @@ public class SettingsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SettingsService.class);
 
-    private static final Preferences USER_PREFERENCES = Preferences.userRoot();
+    private static final Preferences USER_PREFERENCES = Preferences.userRoot().node("Lyrebird");
 
     public String get(final Setting setting, final String defaultValue) {
         final String value = USER_PREFERENCES.get(setting.getPreferenceKey(), defaultValue);

@@ -48,7 +48,7 @@ public class DirectMessages {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
         this.messageEvents = FXCollections.observableHashMap();
-        refresh();
+        sessionManager.currentSessionProperty().addListener((o, prev, cur) -> refresh());
     }
 
     public ObservableMap<User, ObservableList<DirectMessageEvent>> directMessages() {
@@ -56,6 +56,11 @@ public class DirectMessages {
     }
 
     public void refresh() {
+        if (!sessionManager.isLoggedInProperty().getValue()) {
+            LOG.debug("Logged out, not refreshing direct messages.");
+            return;
+        }
+
         CompletableFuture.runAsync(() -> {
             LOG.debug("Requesting last direct messages.");
             sessionManager.getCurrentTwitter()
