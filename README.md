@@ -19,9 +19,31 @@ Hopefully this works out.
 
 ## How to get it
 
-#### [Precompiled releases](https://github.com/Tristan971/Lyrebird/releases)
+### [Precompiled](https://github.com/Tristan971/Lyrebird/releases)
+Recommendations :
 
-#### Build it yourself
+- Windows & macOS : download according [precompiled release](https://github.com/Tristan971/Lyrebird/releases).
+
+- Debian/Ubuntu (& derivatives that use dpkg/apt) :
+Add repository source `deb https://deb.lyrebird.moe any main`, then download signing key and add it to apt keyring
+```bash
+wget https://deb.lyrebird.moe/lyrebird_repositories.gpg
+sudo apt-key add lyrebird_repositories.gpg
+rm lyrebird_repositories.gpg
+```
+Then install latest version with `apt update && apt install lyrebird`.
+
+- RedHat/CentOS/Fedora (& derivatives that use yum/dnf/rpm) :
+Add repository source (unsure if gpgcheck=0 is needed as I sign rpm packets, but doesn't hurt)
+```
+[Lyrebird]
+name=Lyrebird releases
+baseurl=https://rpm.lyrebird.moe
+gpgcheck=0
+```
+Then update your repositories and install package `lyrebird`.
+
+### Build it yourself
 
 Requirements:
 - A Java 10+ development kit with JavaFX components included (i.e. an Oracle JDK or an OpenJDK+OpenJFX combo)
