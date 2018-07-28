@@ -20,10 +20,10 @@ package moe.lyrebird.model.twitter.observables;
 
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
-import twitter4j.Paging;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
+import twitter4a.Paging;
+import twitter4a.Status;
+import twitter4a.Twitter;
+import twitter4a.TwitterException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,7 +32,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 /**
  * This is the base class for reverse-chronologically sorted tweet lists (aka Timelines) backend model.
@@ -40,15 +39,10 @@ import java.util.concurrent.Executor;
 public abstract class TwitterTimelineBaseModel {
 
     protected final SessionManager sessionManager;
-    private final Executor twitterExecutor;
 
     private final ObservableList<Status> loadedTweets = FXCollections.observableList(new LinkedList<>());
 
-    public TwitterTimelineBaseModel(
-            final SessionManager sessionManager,
-            final Executor twitterExecutor
-    ) {
-        this.twitterExecutor = twitterExecutor;
+    public TwitterTimelineBaseModel(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
@@ -74,7 +68,7 @@ public abstract class TwitterTimelineBaseModel {
                           .mapTry(twitter -> backfillLoad(twitter, requestPaging))
                           .onSuccess(this::addTweets);
             getLocalLogger().debug("Finished loading more tweets.");
-        }, twitterExecutor);
+        });
     }
 
     /**
@@ -86,7 +80,7 @@ public abstract class TwitterTimelineBaseModel {
             sessionManager.getCurrentTwitter()
                           .mapTry(this::initialLoad)
                           .onSuccess(this::addTweets);
-        }, twitterExecutor);
+        });
     }
 
     /**

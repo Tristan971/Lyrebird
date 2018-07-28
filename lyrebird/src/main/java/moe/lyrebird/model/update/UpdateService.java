@@ -18,11 +18,12 @@
 
 package moe.lyrebird.model.update;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.model.LyrebirdVersion;
+import moe.lyrebird.model.interrupts.CleanupOperation;
+import moe.lyrebird.model.interrupts.CleanupService;
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
 import moe.lyrebird.model.notifications.NotificationSystemType;
@@ -36,6 +37,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -48,13 +50,14 @@ public class UpdateService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UpdateService.class);
 
+    private static final ScheduledExecutorService EXECUTOR = Executors.newSingleThreadScheduledExecutor();
     private static final Pattern BUILD_VERSION_PATTERN = Pattern.compile("\\.");
 
-    private final ScheduledExecutorService updateExecutor;
     private final MarkdownRenderingService markdownRenderingService;
     private final LyrebirdServerClient apiClient;
     private final NotificationService notificationService;
     private final SelfupdateService selfupdateService;
+    private final CleanupService cleanupService;
 
     private final String currentVersion;
     private final int currentBuildVersion;
@@ -63,19 +66,19 @@ public class UpdateService {
     private final Property<LyrebirdVersion> latestVersion = new SimpleObjectProperty<>(null);
 
     public UpdateService(
-            @Qualifier("updateExecutor") final ScheduledExecutorService updateExecutor,
             final MarkdownRenderingService markdownRenderingService,
             final LyrebirdServerClient apiClient,
             final NotificationService notificationService,
             final SelfupdateService selfupdateService,
-            final Environment environment
+            final Environment environment,
+            final CleanupService cleanupService
     ) {
-        this.updateExecutor = updateExecutor;
         this.markdownRenderingService = markdownRenderingService;
         this.apiClient = apiClient;
         this.notificationService = notificationService;
         this.selfupdateService = selfupdateService;
         this.currentVersion = environment.getRequiredProperty("app.version");
+        this.cleanupService = cleanupService;
         this.currentBuildVersion = getCurrentBuildVersion();
         this.isUpdateAvailable.addListener((o, prev, cur) -> handleUpdateStatus(prev, cur));
         startPolling();
@@ -90,7 +93,7 @@ public class UpdateService {
                 poll();
             }
             return latestVersion.getValue();
-        }, updateExecutor);
+        });
     }
 
     public BooleanProperty isUpdateAvailableProperty() {
@@ -102,16 +105,15 @@ public class UpdateService {
      */
     public CompletableFuture<String> getLatestChangeNotes() {
         return CompletableFuture.supplyAsync(
-                () -> apiClient.getChangeNotes(latestVersion.getValue().getBuildVersion()),
-                updateExecutor
-        ).thenApplyAsync(markdownRenderingService::render, updateExecutor);
+                () -> apiClient.getChangeNotes(latestVersion.getValue().getBuildVersion())
+        ).thenApplyAsync(markdownRenderingService::render);
     }
 
     /**
      * Starts selfupdating to the latest version available
      */
     public void selfupdate() {
-        getLatestVersion().thenAccept(selfupdateService::selfupdate);
+        getLatestVersion().thenAcceptAsync(selfupdateService::selfupdate);
     }
 
     /**
@@ -125,12 +127,16 @@ public class UpdateService {
      * Starts the scheduled check for updates
      */
     private void startPolling() {
-        updateExecutor.scheduleAtFixedRate(
+        EXECUTOR.scheduleAtFixedRate(
                 this::poll,
                 10L,
                 5L * 60L,
                 TimeUnit.SECONDS
         );
+        cleanupService.registerCleanupOperation(new CleanupOperation(
+                "Stop update service",
+                EXECUTOR::shutdownNow
+        ));
     }
 
     /**
@@ -158,11 +164,11 @@ public class UpdateService {
     }
 
     /**
-     * Handles changes to {@link #isUpdateAvailable}.
-     * If it becomes true, we notify the user via the OS of the availability of the update.
+     * Handles changes to {@link #isUpdateAvailable}. If it becomes true, we notify the user via the OS of the
+     * availability of the update.
      *
      * @param prev previous status
-     * @param cur new status
+     * @param cur  new status
      */
     private void handleUpdateStatus(final boolean prev, final boolean cur) {
         if (cur && !prev) {

@@ -20,19 +20,21 @@ package moe.lyrebird.model.twitter.twitter4j;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
-import twitter4j.Twitter;
-import twitter4j.TwitterFactory;
-import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
-import twitter4j.conf.ConfigurationBuilder;
+import twitter4a.Twitter;
+import twitter4a.TwitterFactory;
+import twitter4a.TwitterStream;
+import twitter4a.TwitterStreamFactory;
+import twitter4a.conf.ConfigurationBuilder;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * Configuration class for Twitter4J related components.
  */
+@Lazy
 @Configuration
 public class Twitter4JComponents {
 
@@ -41,7 +43,7 @@ public class Twitter4JComponents {
      * @return this application's configuration for connecting to the Twitter API
      */
     @Bean
-    public twitter4j.conf.Configuration configuration(final Environment environment) {
+    public twitter4a.conf.Configuration configuration(final Environment environment) {
         final ConfigurationBuilder cb = new ConfigurationBuilder();
         final String consumerKey = environment.getProperty("twitter.consumerKey");
         final String consumerSecret = environment.getProperty("twitter.consumerSecret");
@@ -56,7 +58,7 @@ public class Twitter4JComponents {
      * @return a configured TwitterFactory to generate twitter instances
      */
     @Bean
-    public TwitterFactory twitterFactory(final twitter4j.conf.Configuration configuration) {
+    public TwitterFactory twitterFactory(final twitter4a.conf.Configuration configuration) {
         return new TwitterFactory(configuration);
     }
 
@@ -75,7 +77,7 @@ public class Twitter4JComponents {
      * @return a configured TwitterStreamFactory
      */
     @Bean
-    public TwitterStreamFactory twitterStreamFactory(final twitter4j.conf.Configuration configuration) {
+    public TwitterStreamFactory twitterStreamFactory(final twitter4a.conf.Configuration configuration) {
         return new TwitterStreamFactory(configuration);
     }
 

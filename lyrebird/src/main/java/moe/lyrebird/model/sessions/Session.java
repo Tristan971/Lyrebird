@@ -20,8 +20,8 @@ package moe.lyrebird.model.sessions;
 
 import io.vavr.control.Try;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
-import twitter4j.User;
-import twitter4j.auth.AccessToken;
+import twitter4a.User;
+import twitter4a.auth.AccessToken;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

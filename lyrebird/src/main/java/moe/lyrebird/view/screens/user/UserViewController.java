@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -29,14 +30,14 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.components.Component;
+import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
 import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Relationship;
-import twitter4j.User;
+import twitter4a.Relationship;
+import twitter4a.User;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -66,7 +67,7 @@ import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.
  * same time.
  */
 @Lazy
-@org.springframework.stereotype.Component
+@Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserViewController implements FxmlController {
 
@@ -322,7 +323,7 @@ public class UserViewController implements FxmlController {
      */
     private void loadTargetUserTimeline() {
         final User user = targetUser.getValue();
-        easyFxml.loadNode(Component.USER_TIMELINE, Pane.class, UserTimelineController.class)
+        easyFxml.loadNode(FxComponent.USER_TIMELINE, Pane.class, UserTimelineController.class)
                 .afterControllerLoaded(utc -> utc.setTargetUser(user))
                 .afterNodeLoaded(userDetailsTimeline -> VBox.setVgrow(userDetailsTimeline, Priority.ALWAYS))
                 .getNode()

@@ -18,15 +18,16 @@
 
 package moe.lyrebird.model.sessions;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Twitter;
-import twitter4j.User;
-import twitter4j.auth.AccessToken;
+import twitter4a.Twitter;
+import twitter4a.User;
+import twitter4a.auth.AccessToken;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -83,10 +84,15 @@ public class SessionManager {
     }
 
     public boolean isCurrentUser(final User user) {
+        return isCurrentUser(user.getId());
+    }
+
+    @Cacheable("currentUserTest")
+    public boolean isCurrentUser(final long userId) {
         return currentSessionProperty().getValue()
                                        .getTwitterUser()
                                        .map(User::getId)
-                                       .map(curUserId -> curUserId == user.getId())
+                                       .map(curUserId -> curUserId == userId)
                                        .getOrElse(false);
     }
 

@@ -26,6 +26,7 @@ import moe.tristan.easyfxml.spring.application.FxSpringContext;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 import moe.lyrebird.api.client.LyrebirdServerClientConfiguration;
 import moe.lyrebird.model.interrupts.CleanupService;
+import moe.lyrebird.model.update.compatibility.PostUpdateCompatiblityHelper;
 import moe.lyrebird.view.LyrebirdUiManager;
 
 import javafx.application.Application;
@@ -63,6 +64,7 @@ public class Lyrebird extends FxSpringApplication {
      * @param args The command line arguments given on JAR execution. Usually empty.
      */
     public static void main(final String[] args) {
+        PostUpdateCompatiblityHelper.getInstance().executeCompatibilityTasks();
         Toolkit.getDefaultToolkit();
         launch(args);
     }
@@ -79,6 +81,6 @@ public class Lyrebird extends FxSpringApplication {
     public void stop() {
         springContext.getBean(CleanupService.class).executeCleanupOperations();
         super.stop();
-        Runtime.getRuntime().halt(0);
+        System.exit(0);
     }
 }

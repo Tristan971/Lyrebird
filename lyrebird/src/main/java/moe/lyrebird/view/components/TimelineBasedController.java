@@ -27,7 +27,7 @@ import moe.lyrebird.view.components.mentions.MentionsController;
 import moe.lyrebird.view.components.timeline.TimelineController;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
 import org.slf4j.Logger;
-import twitter4j.Status;
+import twitter4a.Status;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;

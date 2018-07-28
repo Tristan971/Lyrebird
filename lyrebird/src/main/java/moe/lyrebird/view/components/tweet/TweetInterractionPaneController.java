@@ -18,7 +18,7 @@ import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.util.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Status;
+import twitter4a.Status;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -140,7 +140,10 @@ public class TweetInterractionPaneController implements FxmlController {
         CompletableFuture.supplyAsync(
                 () -> interractionService.interract(targetStatus.getValue(), RETWEET)
         ).thenAcceptAsync(res -> {
-            updateRetweetVisual(!interractionService.notYetRetweeted(targetStatus.getValue()));
+            final Status originalStatus = targetStatus.getValue().isRetweet() ?
+                                          targetStatus.getValue().getRetweetedStatus() :
+                                          targetStatus.getValue();
+            updateRetweetVisual(!interractionService.notYetRetweeted(originalStatus));
             retweetButton.setDisable(false);
         }, Platform::runLater);
     }

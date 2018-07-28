@@ -34,7 +34,7 @@ import moe.lyrebird.view.util.ClickableHyperlink;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.HyperlinkUtils;
 import org.ocpsoft.prettytime.PrettyTime;
-import twitter4j.Status;
+import twitter4a.Status;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -54,7 +54,7 @@ import javafx.scene.text.TextFlow;
 import java.util.List;
 
 import static moe.lyrebird.view.assets.ImageResources.GENERAL_USER_AVATAR_DARK;
-import static moe.lyrebird.view.components.Component.TWEET_INTERRACTION_BOX;
+import static moe.lyrebird.view.components.FxComponent.TWEET_INTERRACTION_BOX;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -160,7 +160,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
      */
     @Override
     public void updateWithValue(final Status newValue) {
-        if (newValue == null || this.currentStatus == newValue) {
+        if (newValue == null || this.currentStatus.getValue() == newValue) {
             return;
         }
         this.currentStatus.setValue(newValue);

@@ -19,20 +19,18 @@
 package moe.lyrebird.model.twitter.observables;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Paging;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
+import twitter4a.Paging;
+import twitter4a.Status;
+import twitter4a.Twitter;
+import twitter4a.TwitterException;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -50,10 +48,9 @@ public class Timeline extends TwitterTimelineBaseModel {
     @Autowired
     public Timeline(
             final SessionManager sessionManager,
-            final TwitterInterractionService interractionService,
-            @Qualifier("twitterExecutor") final Executor twitterExecutor
+            final TwitterInterractionService interractionService
     ) {
-        super(sessionManager, twitterExecutor);
+        super(sessionManager);
         this.interractionService = interractionService;
     }
 

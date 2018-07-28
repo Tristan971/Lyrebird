@@ -18,7 +18,6 @@
 
 package moe.lyrebird.model.interrupts;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +26,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * This service is called at shutdown to execute a certain amout of cleanup operations.
@@ -36,13 +36,9 @@ public class CleanupService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CleanupService.class);
 
-    private final Executor cleanupExecutor;
-    private final Queue<CleanupOperation> onShutdownHooks;
+    private static final Executor CLEANUP_EXECUTOR = Executors.newSingleThreadExecutor();
 
-    public CleanupService(@Qualifier("cleanupExecutor") final Executor cleanupExecutor) {
-        this.cleanupExecutor = cleanupExecutor;
-        this.onShutdownHooks = new LinkedList<>();
-    }
+    private final Queue<CleanupOperation> onShutdownHooks = new LinkedList<>();
 
     /**
      * Registers a cleanup operation for execution at shutdown.
@@ -53,7 +49,7 @@ public class CleanupService {
         CompletableFuture.runAsync(() -> {
             LOG.debug("Registering cleanup operation : {}", cleanupOperation.getName());
             onShutdownHooks.add(cleanupOperation);
-        }, cleanupExecutor);
+        }, CLEANUP_EXECUTOR);
     }
 
     /**
@@ -61,8 +57,9 @@ public class CleanupService {
      * {@link #registerCleanupOperation(CleanupOperation)}.
      */
     public void executeCleanupOperations() {
-        cleanupExecutor.execute(() -> {
-            LOG.debug("Executing cleanup hooks !");
+        CLEANUP_EXECUTOR.execute(() -> {
+            LOG.info("Cleaning up...");
+            LOG.debug("Executing cleanup hooks:");
             onShutdownHooks.forEach(this::executeCleanupOperationWithTimeout);
             LOG.debug("All cleanup hooks have been executed!");
         });
@@ -76,15 +73,7 @@ public class CleanupService {
      */
     private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
         LOG.debug("\t-> {}", cleanupOperation.getName());
-        try {
-            final Thread cleanupOpThread = new Thread(cleanupOperation.getOperation());
-            cleanupOpThread.join(5000);
-        } catch (InterruptedException e) {
-            LOG.error("The cleanup operation thread for {} was interrupted! Skipping!", e);
-            Thread.currentThread().interrupt();
-        } catch (final RuntimeException e) {
-            LOG.error("An uncaught exception was thrown in a cleanup task!", e);
-        }
+        cleanupOperation.getOperation().run();
     }
 
 }

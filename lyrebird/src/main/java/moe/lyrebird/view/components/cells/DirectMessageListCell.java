@@ -20,12 +20,13 @@ package moe.lyrebird.view.components.cells;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import twitter4j.DirectMessage;
+import twitter4a.DirectMessageEvent;
 
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
+import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGE_PANE;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -35,17 +36,10 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  */
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
-public class DirectMessageListCell extends ListCell<DirectMessage> {
+public class DirectMessageListCell extends ComponentListCell<DirectMessageEvent> {
 
-    @Override
-    protected void updateItem(final DirectMessage item, final boolean empty) {
-        super.updateItem(item, empty);
-
-        if (item == null) {
-            setGraphic(null);
-        } else {
-            setText(item.getText());
-        }
+    public DirectMessageListCell(final EasyFxml easyFxml) {
+        super(easyFxml, DIRECT_MESSAGE_PANE);
     }
 
 }

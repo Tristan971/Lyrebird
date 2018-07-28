@@ -25,11 +25,11 @@
     <parent>
         <groupId>moe.lyrebird</groupId>
         <artifactId>lyrebird-parent</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
     </parent>
 
     <artifactId>lyrebird</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
 
     <name>Lyrebird</name>
@@ -85,23 +85,18 @@
         </plugins>
 
         <resources>
-            <!-- Maven won't copy non-java files under source root (/src/main/java) but because SceneBuilder
-            is basically a broken tool we really want our .fxml files sitting there next to their controller
-            classes. -->
             <resource>
-                <directory>
-                    src/main/java
-                </directory>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/java</directory>
                 <includes>
                     <include>**/*.fxml</include>
                 </includes>
-                <excludes>
-                    <exclude>**/*.scss</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
             </resource>
         </resources>
     </build>
@@ -143,14 +138,14 @@
 
         <!-- Twitter4J -->
         <dependency>
-            <groupId>org.twitter4j</groupId>
-            <artifactId>twitter4j-core</artifactId>
-            <version>4.0.6</version>
+            <groupId>org.twitter4a</groupId>
+            <artifactId>twitter4a-core</artifactId>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
-            <groupId>org.twitter4j</groupId>
-            <artifactId>twitter4j-stream</artifactId>
-            <version>4.0.6</version>
+            <groupId>org.twitter4a</groupId>
+            <artifactId>twitter4a-stream</artifactId>
+            <version>4.1.0</version>
         </dependency>
 
         <!-- Vavr -->
@@ -164,7 +159,17 @@
         <dependency>
             <groupId>moe.tristan</groupId>
             <artifactId>easyfxml</artifactId>
-            <version>1.1.6</version>
+            <version>1.1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjavafx</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>2.1.17</version>
         </dependency>
         <dependency>
             <groupId>org.testfx</groupId>
@@ -229,6 +234,13 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+    <repositories>
+        <repository>
+            <id>Bintray</id>
+            <url>https://dl.bintray.com/panecraft/maven</url>
+        </repository>
+    </repositories>
 
 
 </project>

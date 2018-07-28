@@ -18,6 +18,7 @@
 
 package moe.lyrebird.model.twitter;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.interrupts.CleanupOperation;
 import moe.lyrebird.model.interrupts.CleanupService;
@@ -26,7 +27,7 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.twitter4j.TwitterUserListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.TwitterStream;
+import twitter4a.TwitterStream;
 
 import javafx.beans.property.Property;
 
@@ -35,6 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * This class is responsible for orchestration of the subscription to Twitter4J's streaming service.
  */
+@Lazy
 @Component
 public class TwitterStreamingService {
 
@@ -54,18 +56,16 @@ public class TwitterStreamingService {
             final TwitterUserListener twitterUserListener
     ) {
         this.cleanupService = cleanupService;
-        LOG.debug("Starting twitter stream connection...");
         this.currentlyListening = new AtomicBoolean(false);
         this.twitterStream = twitterStream;
         this.sessionManager = sessionManager;
         this.twitterUserListener = twitterUserListener;
-        startListening();
     }
 
     /**
      * Starts listening to the streaming service
      */
-    private void startListening() {
+    public void startListening() {
         LOG.debug("Preparing streaming service...");
         final Property<Session> currentSessionBinding = sessionManager.currentSessionProperty();
         currentSessionBinding.addListener((observable, oldValue, newValue) -> {
@@ -86,12 +86,8 @@ public class TwitterStreamingService {
         }
 
         cleanupService.registerCleanupOperation(new CleanupOperation(
-                "Stop Twitter streaming listeners",
+                "Stop Twitter streaming connection",
                 this::closeSession
-        ));
-        cleanupService.registerCleanupOperation(new CleanupOperation(
-                "Stop Twitter4J's internal dispatcher thread",
-                twitterStream::shutdown
         ));
     }
 
@@ -111,8 +107,7 @@ public class TwitterStreamingService {
      * Stops listening to Twitter-side user events
      */
     private void closeSession() {
-        LOG.info("Stopping streaming for current session.");
-        twitterStream.clearListeners();
+        LOG.info("\t\tStop Twitter4J streaming.");
         twitterStream.shutdown();
     }
 

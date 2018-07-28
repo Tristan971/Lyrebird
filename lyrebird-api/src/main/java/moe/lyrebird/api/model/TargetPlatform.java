@@ -34,4 +34,12 @@ public enum TargetPlatform {
         this.readableName = readableName;
     }
 
+    public String getCodename() {
+        return codename;
+    }
+
+    public String getReadableName() {
+        return readableName;
+    }
+
 }

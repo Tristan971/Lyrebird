@@ -18,26 +18,23 @@
 
 package moe.lyrebird.model.twitter.observables;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import io.vavr.Predicates;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.DirectMessage;
-import twitter4j.Paging;
-import twitter4j.Twitter;
-import twitter4j.User;
+import twitter4a.DirectMessageEvent;
+import twitter4a.User;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static org.springframework.util.CollectionUtils.toMultiValueMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Component
 public class DirectMessages {
@@ -45,61 +42,77 @@ public class DirectMessages {
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
     private final SessionManager sessionManager;
-    private final ObservableMap<User, List<DirectMessage>> directMessagesMap;
+    private final ObservableMap<User, ObservableList<DirectMessageEvent>> messageEvents;
 
     public DirectMessages(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
-        this.directMessagesMap = FXCollections.observableMap(toMultiValueMap(new ConcurrentHashMap<>()));
+        this.messageEvents = FXCollections.observableHashMap();
+        sessionManager.currentSessionProperty().addListener((o, prev, cur) -> refresh());
     }
 
-    public ObservableMap<User, List<DirectMessage>> loadedConversations() {
-        return FXCollections.unmodifiableObservableMap(directMessagesMap);
+    public ObservableMap<User, ObservableList<DirectMessageEvent>> directMessages() {
+        return messageEvents;
     }
 
-    public void loadMoreDirectMessages(final long loadUntilThisStatus) {
-        LOG.debug("Requesting more direct messages.");
-        final Paging requestPaging = new Paging();
-        requestPaging.setMaxId(loadUntilThisStatus);
-
-        sessionManager.getCurrentTwitter()
-                      .mapTry(twitter -> twitter.getDirectMessages(requestPaging))
-                      .onSuccess(messages -> messages.forEach(this::addDirectMessage));
-        LOG.debug("Finished loading more direct messages.");
-    }
-
-    public void loadLatestDirectMessages() {
-        LOG.debug("Requesting latest direct messages.");
-        sessionManager.getCurrentTwitter()
-                      .mapTry(Twitter::getDirectMessages)
-                      .onSuccess(messages -> messages.forEach(this::addDirectMessage))
-                      .onFailure(err -> LOG.error("Could not load direct messages successfully!", err));
-    }
-
-    public void addDirectMessage(final DirectMessage directMessage) {
-        final User sender = directMessage.getSender();
-        if (!directMessagesMap.keySet().contains(sender)) {
-            directMessagesMap.put(sender, new ArrayList<>());
+    public void refresh() {
+        if (!sessionManager.isLoggedInProperty().getValue()) {
+            LOG.debug("Logged out, not refreshing direct messages.");
+            return;
         }
 
-        final List<DirectMessage> messagesFromSender = directMessagesMap.get(sender);
-        messagesFromSender.add(directMessage);
-        messagesFromSender.sort(Comparator.comparingLong(DirectMessage::getId).reversed());
+        CompletableFuture.runAsync(() -> {
+            LOG.debug("Requesting last direct messages.");
+            sessionManager.getCurrentTwitter()
+                          .mapTry(twitter -> twitter.getDirectMessageEvents(20))
+                          .onSuccess(this::addDirectMessages)
+                          .onFailure(err -> LOG.error("Could not load direct messages successfully!", err));
+        });
     }
 
-    public void removeDirectMessage(final long senderId, final long directMessageId) {
-        directMessagesMap.keySet()
-                         .stream()
-                         .filter(user -> user.getId() == senderId)
-                         .findAny()
-                         .map(directMessagesMap::get)
-                         .filter(Predicates.noneOf(Objects::isNull, List::isEmpty))
-                         .ifPresent(dmList ->
-                                         dmList.stream()
-                                               .filter(dm -> dm.getId() == directMessageId)
-                                               .findAny()
-                                               .ifPresent(dmList::remove)
-                      );
+    private void addDirectMessages(final List<DirectMessageEvent> loadedMessages) {
+        var knownMessages = messageEvents.values()
+                                         .stream()
+                                         .flatMap(List::stream)
+                                         .collect(Collectors.toList());
+
+        var newMessages = loadedMessages.stream()
+                                        .filter(((Predicate<DirectMessageEvent>) knownMessages::contains).negate())
+                                        .collect(Collectors.toList());
+        LOG.debug("Loaded {} new messages", newMessages.size());
+
+        newMessages.forEach(this::addDirectMessage);
+    }
+
+    public void addDirectMessage(final DirectMessageEvent directMessageEvent) {
+        final long otherId = getOtherId(directMessageEvent);
+        final User other = messageEvents.keySet()
+                                        .stream()
+                                        .filter(user -> user.getId() == otherId)
+                                        .findAny()
+                                        .orElseGet(() -> showUser(otherId));
+
+        final ObservableList<DirectMessageEvent> messagesWithOther = messageEvents.computeIfAbsent(
+                other,
+                k -> FXCollections.observableArrayList()
+        );
+        messagesWithOther.add(directMessageEvent);
+        messagesWithOther.sort(Comparator.comparingLong(DirectMessageEvent::getId));
+    }
+
+    private long getOtherId(final DirectMessageEvent directMessageEvent) {
+        return sessionManager.isCurrentUser(directMessageEvent.getSenderId()) ?
+               directMessageEvent.getRecipientId() :
+               directMessageEvent.getSenderId();
+    }
+
+    @Cacheable(value = "userFromUserId", sync = true)
+    public User showUser(final long userId) {
+        return sessionManager.doWithCurrentTwitter(
+                twitter -> twitter.showUser(userId)
+        ).getOrElseThrow(
+                err -> new IllegalStateException("Cannot find user with id " + userId, err)
+        );
     }
 
 }

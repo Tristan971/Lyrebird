@@ -19,8 +19,8 @@
 package moe.lyrebird.model.notifications.format;
 
 import moe.lyrebird.model.notifications.Notification;
-import twitter4j.Status;
-import twitter4j.User;
+import twitter4a.Status;
+import twitter4a.User;
 
 /**
  * Helper methods for formatting notifications related to twitter events.

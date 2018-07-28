@@ -19,7 +19,6 @@
 package moe.lyrebird.model.io;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javafx.scene.image.Image;
@@ -27,26 +26,24 @@ import javafx.scene.media.Media;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * This class exposes convenience method to execute asynchronous network operations on the asyncIo thread.
  * <p>
- * Every call here must be explicitly made with the {@link CachedIO} service until proven that the cache really grows
+ * Every call here must be explicitly made with the {@link CachedMedia} service until proven that the cache really grows
  * too big with that rule.
  */
 @Component
 public class AsyncIO {
 
-    private final Executor asyncIoExecutor;
-    private final CachedIO cachedIO;
+    private static final Executor ASYNC_IO_EXECUTOR = Executors.newFixedThreadPool(4);
+
+    private final CachedMedia cachedMedia;
 
     @Autowired
-    public AsyncIO(
-            @Qualifier("asyncIoExecutor") final Executor asyncIoExecutor,
-            final CachedIO cachedIO
-    ) {
-        this.asyncIoExecutor = asyncIoExecutor;
-        this.cachedIO = cachedIO;
+    public AsyncIO(final CachedMedia cachedMedia) {
+        this.cachedMedia = cachedMedia;
     }
 
     /**
@@ -58,7 +55,7 @@ public class AsyncIO {
      * operation.
      */
     public CompletableFuture<Image> loadImage(final String imageUrl) {
-        return CompletableFuture.supplyAsync(() -> cachedIO.loadImage(imageUrl), asyncIoExecutor);
+        return CompletableFuture.supplyAsync(() -> cachedMedia.loadImage(imageUrl), ASYNC_IO_EXECUTOR);
     }
 
     /**
@@ -73,8 +70,8 @@ public class AsyncIO {
      */
     public CompletableFuture<Image> loadImageMiniature(final String imageUrl, final double width, final double heigth) {
         return CompletableFuture.supplyAsync(
-                () -> cachedIO.loadImageMiniature(imageUrl, width, heigth),
-                asyncIoExecutor
+                () -> cachedMedia.loadImageMiniature(imageUrl, width, heigth),
+                ASYNC_IO_EXECUTOR
         );
     }
 
@@ -88,8 +85,8 @@ public class AsyncIO {
      */
     public CompletableFuture<Media> loadMedia(final String mediaUrl) {
         return CompletableFuture.supplyAsync(
-                () -> cachedIO.loadMediaFile(mediaUrl),
-                asyncIoExecutor
+                () -> cachedMedia.loadMediaFile(mediaUrl),
+                ASYNC_IO_EXECUTOR
         );
     }
 

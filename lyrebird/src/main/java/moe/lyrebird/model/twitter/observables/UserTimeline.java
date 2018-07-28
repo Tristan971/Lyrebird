@@ -25,17 +25,15 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Paging;
-import twitter4j.ResponseList;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.User;
+import twitter4a.Paging;
+import twitter4a.ResponseList;
+import twitter4a.Status;
+import twitter4a.Twitter;
+import twitter4a.TwitterException;
+import twitter4a.User;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-
-import java.util.concurrent.Executor;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -52,8 +50,8 @@ public class UserTimeline extends TwitterTimelineBaseModel {
     private final Property<User> targetUser = new SimpleObjectProperty<>(null);
 
     @Autowired
-    public UserTimeline(final SessionManager sessionManager, final Executor twitterExecutor) {
-        super(sessionManager, twitterExecutor);
+    public UserTimeline(final SessionManager sessionManager) {
+        super(sessionManager);
         this.targetUser.addListener((o, prev, cur) -> {
             this.clearLoadedTweets();
             loadLastTweets();
