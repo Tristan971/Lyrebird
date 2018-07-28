@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import twitter4a.Status;
 import twitter4a.StatusUpdate;
 import twitter4a.Twitter;
-import twitter4a.TwitterException;
 import twitter4a.UploadedMedia;
 
 import java.io.File;
@@ -58,38 +57,42 @@ public class NewTweetService {
         this.sessionManager = sessionManager;
     }
 
+    public CompletionStage<Status> sendTweet(final String content, final List<File> medias) {
+        return prepateNewTweet(content, medias).thenApplyAsync(
+                update -> sessionManager.doWithCurrentTwitter(twitter -> twitter.updateStatus(update)).get(),
+                TWITTER_EXECUTOR
+        );
+    }
+
+    public CompletionStage<Status> sendReply(final String content, final List<File> medias, final long inReplyTo) {
+        return prepateNewTweet(content, medias).thenApplyAsync(
+                update -> {
+                    LOG.debug("Set inReplyTo for status update {} as : {}", update, inReplyTo);
+                    update.setInReplyToStatusId(inReplyTo);
+                    return update;
+                }, TWITTER_EXECUTOR
+        ).thenApplyAsync(
+                update -> sessionManager.doWithCurrentTwitter(twitter -> twitter.updateStatus(update)).get(),
+                TWITTER_EXECUTOR
+        );
+    }
+
     /**
-     * Requests sending a new tweet.
+     * Prepares a new tweet by uploading media related.
      *
      * @param content The textual content of the tweet
      * @param medias  The medias to embed in it
      *
      * @return A {@link CompletionStage} to monitor the request.
      */
-    public CompletionStage<Status> sendNewTweet(final String content, final List<File> medias) {
+    private CompletionStage<StatusUpdate> prepateNewTweet(final String content, final List<File> medias) {
         return CompletableFuture.supplyAsync(
-                () -> sessionManager.getCurrentTwitter()
-                                    .mapTry(twitter -> tweet(twitter, content, medias))
-                                    .get()
-                , TWITTER_EXECUTOR
+                () -> sessionManager.doWithCurrentTwitter(twitter -> uploadMedias(twitter, medias)).get(),
+                TWITTER_EXECUTOR
+        ).thenApplyAsync(
+                uploadedMediasIds -> buildStatus(content, uploadedMediasIds),
+                TWITTER_EXECUTOR
         );
-    }
-
-    /**
-     * Sends a tweet built from given parameters.
-     *
-     * @param twitter The twitter instance to use for sending the {@link Status} representation of the tweet
-     * @param content The textual content of the tweet
-     * @param media   The media to embed in the given tweet
-     *
-     * @return The tweet sent
-     * @throws TwitterException if something goes wrong
-     */
-    private static Status tweet(final Twitter twitter, final String content, final List<File> media)
-    throws TwitterException {
-        final List<Long> uploadedMediaIds = uploadMedias(twitter, media);
-        final StatusUpdate statusUpdate = buildStatus(content, uploadedMediaIds);
-        return twitter.updateStatus(statusUpdate);
     }
 
     /**
@@ -123,6 +126,7 @@ public class NewTweetService {
      * @return The uploaded media files Twitter-side ids
      */
     private static List<Long> uploadMedias(final Twitter twitter, final List<File> attachments) {
+        LOG.debug("Uploading media attachments {}", attachments);
         return attachments.stream()
                           .map(unchecked((CheckedFunction1<File, UploadedMedia>) twitter::uploadMedia))
                           .map(UploadedMedia::getMediaId)
