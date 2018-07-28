@@ -124,7 +124,7 @@ public class NewTweetController implements FxmlController, StageAware {
 
     private final ListProperty<File> mediasToUpload;
     private final Property<Stage> embeddingStage;
-    private final Property<Status> inReplyStatus = new SimpleObjectProperty<>(null);
+    private final Property<Status> inReplyStatus = new SimpleObjectProperty<>();
 
     public NewTweetController(
             final NewTweetService newTweetService,
@@ -144,7 +144,7 @@ public class NewTweetController implements FxmlController, StageAware {
     public void initialize() {
         LOG.debug("New tweet stage ready.");
         enableTweetLengthCheck();
-        Buttons.setOnClick(sendButton, this::sendTweet);
+        Buttons.setOnClick(sendButton, this::send);
         Buttons.setOnClick(pickMediaButton, this::openMediaAttachmentsFilePicker);
 
         final BooleanBinding mediasNotEmpty = mediasToUpload.emptyProperty().not();
@@ -218,14 +218,35 @@ public class NewTweetController implements FxmlController, StageAware {
         });
     }
 
+    private void send() {
+        if (inReplyStatus.getValue() == null) {
+            sendTweet();
+        } else {
+            sendReply();
+        }
+    }
+
     /**
      * Sends a tweet using the {@link NewTweetService}.
      */
     private void sendTweet() {
         Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
-        newTweetService.sendNewTweet(tweetTextArea.getText(), mediasToUpload)
+        newTweetService.sendTweet(tweetTextArea.getText(), mediasToUpload)
                        .thenAcceptAsync(status -> {
                            LOG.info("Tweeted status : {} [{}]", status.getId(), status.getText());
+                           this.embeddingStage.getValue().hide();
+                       }, Platform::runLater);
+    }
+
+    /**
+     * Sends a reply using the {@link NewTweetService}.
+     */
+    private void sendReply() {
+        final long inReplyToId = inReplyStatus.getValue().getId();
+        Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
+        newTweetService.sendReply(tweetTextArea.getText(), mediasToUpload, inReplyToId)
+                       .thenAcceptAsync(status -> {
+                           LOG.info("Tweeted reply to {} : {} [{}]", inReplyToId, status.getId(), status.getText());
                            this.embeddingStage.getValue().hide();
                        }, Platform::runLater);
     }
