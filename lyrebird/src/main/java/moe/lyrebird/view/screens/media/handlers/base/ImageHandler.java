@@ -20,7 +20,7 @@ package moe.lyrebird.view.screens.media.handlers.base;
 
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
+import moe.lyrebird.view.screens.media.display.MediaDisplayScreen;
 import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
 import moe.lyrebird.view.screens.media.handlers.MediaHandler;
 
@@ -57,11 +57,11 @@ public abstract class ImageHandler<T> implements MediaHandler<T> {
      *
      * @return An {@link ImageView} with asynchronously loaded image miniature as display image with by default (until
      * the asynchronous call is done) a static image ({@link ImageResources#GENERAL_LOADING_REMOTE}). This {@link ImageView}
-     * will open a {@link MediaDisplaySceen#PHOTO} screen displaying the media when it is clicked.
+     * will open a {@link MediaDisplayScreen#PHOTO} screen displaying the media when it is clicked.
      */
     protected Pane handleMediaSource(final String imageUrl) {
         return embeddedMediaViewHelper.makeWrapperWithIcon(
-                MediaDisplaySceen.PHOTO,
+                MediaDisplayScreen.PHOTO,
                 ImageResources.GENERAL_LOADING_REMOTE,
                 imageUrl,
                 imageView -> loadMiniatureAsync(imageView, imageUrl)

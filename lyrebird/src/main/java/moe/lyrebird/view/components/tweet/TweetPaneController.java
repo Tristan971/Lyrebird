@@ -54,7 +54,7 @@ import javafx.scene.text.TextFlow;
 import java.util.List;
 
 import static moe.lyrebird.view.assets.ImageResources.GENERAL_USER_AVATAR_DARK;
-import static moe.lyrebird.view.components.FxComponent.TWEET_INTERRACTION_BOX;
+import static moe.lyrebird.view.components.FxComponent.TWEET_INTERACTION_BOX;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -100,7 +100,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private HBox retweetHbox;
 
     @FXML
-    private BorderPane interractionBox;
+    private BorderPane interactionBox;
 
     private final BrowserSupport browserSupport;
     private final AsyncIO asyncIO;
@@ -132,7 +132,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         authorProfilePicturePane.setClip(Clipping.getCircleClip(24.0));
         Nodes.hideAndResizeParentIf(retweetHbox, isRetweet);
         authorProfilePicture.setImage(GENERAL_USER_AVATAR_DARK.getImage());
-        setUpInterractionButtons();
+        setUpInteractionButtons();
         mediaBox.setManaged(false);
         mediaBox.setVisible(false);
     }
@@ -144,15 +144,15 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         return embeddedProperty;
     }
 
-    private void setUpInterractionButtons() {
-        interractionBox.visibleProperty().bind(embeddedProperty.not());
-        interractionBox.managedProperty().bind(embeddedProperty.not());
+    private void setUpInteractionButtons() {
+        interactionBox.visibleProperty().bind(embeddedProperty.not());
+        interactionBox.managedProperty().bind(embeddedProperty.not());
 
-        easyFxml.loadNode(TWEET_INTERRACTION_BOX, Pane.class, TweetInterractionPaneController.class)
+        easyFxml.loadNode(TWEET_INTERACTION_BOX, Pane.class, TweetInteractionPaneController.class)
                 .afterControllerLoaded(tipc -> tipc.targetStatusProperty().bind(currentStatus))
                 .getNode()
                 .recover(ExceptionHandler::fromThrowable)
-                .onSuccess(interractionBox::setCenter);
+                .onSuccess(interactionBox::setCenter);
     }
 
     /**
@@ -200,7 +200,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     /**
-     * Preformats the tweet text content.
+     * Pre-formats the tweet text content.
      *
      * @param tweetText The content to format (from the current tweet)
      */
@@ -230,7 +230,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     /**
      * @param url The URL itself
      *
-     * @return a clickable link targetting the URL
+     * @return a clickable link targeting the given URL
      */
     private ClickableHyperlink buildHyperlink(final String url) {
         return new ClickableHyperlink(url, browserSupport::openUrl);

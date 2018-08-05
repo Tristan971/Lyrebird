@@ -45,7 +45,7 @@ import java.util.concurrent.CompletableFuture;
 import static moe.lyrebird.view.assets.ImageResources.CONTROLBAR_ADD_USER;
 
 /**
- * This component is laoded at the top of the {@link FxComponent#CONTROL_BAR} and serves as a very basic preview for who
+ * This component is loaded at the top of the {@link FxComponent#CONTROL_BAR} and serves as a very basic preview for who
  * is the current user that will be used to perform all the actions requested.
  *
  * @see SessionManager

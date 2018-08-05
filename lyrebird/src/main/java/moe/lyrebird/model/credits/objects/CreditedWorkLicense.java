@@ -16,29 +16,32 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.twitter.services.interraction;
+package moe.lyrebird.model.credits.objects;
 
-import java.util.function.BiFunction;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.net.MalformedURLException;
 
 /**
- * A binary interraction is a twitter operation that can be executed in two ways depending on a third information.
- * @param <T> The type over which to execute these operations
+ * @see CreditedWork
  */
-public interface TwitterBinaryInterraction<T> {
+public final class CreditedWorkLicense extends SimpleNameUrlBinding {
 
-    /**
-     * @return the operation to execute if {@link #shouldDo()} returns true.
-     */
-    BiFunction<TwitterInterractionService, T, T> onTrue();
+    @JsonCreator
+    protected CreditedWorkLicense(
+            @JsonProperty("name") final String name,
+            @JsonProperty("url") final String url
+    ) throws MalformedURLException {
+        super(name, url);
+    }
 
-    /**
-     * @return the operation to execute if {@link #shouldDo()} returns false.
-     */
-    BiFunction<TwitterInterractionService, T, T> onFalse();
-
-    /**
-     * @return whether the {@link #onTrue()} is the relevant one.
-     */
-    BiFunction<TwitterInterractionService, T, Boolean> shouldDo();
+    @Override
+    public String toString() {
+        return "CreditedWorkLicense{" +
+               "name='" + name + '\'' +
+               ", url=" + url +
+               '}';
+    }
 
 }

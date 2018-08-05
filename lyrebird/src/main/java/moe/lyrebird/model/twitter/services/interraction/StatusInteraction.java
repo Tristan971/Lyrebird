@@ -23,29 +23,29 @@ import twitter4a.Status;
 import java.util.function.BiFunction;
 
 /**
- * Convenience enumeration for {@link TwitterBinaryInterraction}s which apply to {@link Status}es.
+ * Convenience enumeration for {@link TwitterBinaryInteraction}s which apply to {@link Status}es.
  */
-public enum StatusInterraction implements TwitterBinaryInterraction<Status> {
+public enum StatusInteraction implements TwitterBinaryInteraction<Status> {
 
     LIKE(
-            TwitterInterractionService::like,
-            TwitterInterractionService::unlike,
-            TwitterInterractionService::notYetLiked
+            TwitterInteractionService::like,
+            TwitterInteractionService::unlike,
+            TwitterInteractionService::notYetLiked
     ),
     RETWEET(
-            TwitterInterractionService::retweet,
-            TwitterInterractionService::unretweet,
-            TwitterInterractionService::notYetRetweeted
+            TwitterInteractionService::retweet,
+            TwitterInteractionService::unretweet,
+            TwitterInteractionService::notYetRetweeted
     );
 
-    private final BiFunction<TwitterInterractionService, Status, Status> onTrue;
-    private final BiFunction<TwitterInterractionService, Status, Status> onFalse;
-    private final BiFunction<TwitterInterractionService, Status, Boolean> shouldDo;
+    private final BiFunction<TwitterInteractionService, Status, Status> onTrue;
+    private final BiFunction<TwitterInteractionService, Status, Status> onFalse;
+    private final BiFunction<TwitterInteractionService, Status, Boolean> shouldDo;
 
-    StatusInterraction(
-            final BiFunction<TwitterInterractionService, Status, Status> onTrue,
-            final BiFunction<TwitterInterractionService, Status, Status> onFalse,
-            final BiFunction<TwitterInterractionService, Status, Boolean> shouldDo
+    StatusInteraction(
+            final BiFunction<TwitterInteractionService, Status, Status> onTrue,
+            final BiFunction<TwitterInteractionService, Status, Status> onFalse,
+            final BiFunction<TwitterInteractionService, Status, Boolean> shouldDo
     ) {
         this.onTrue = onTrue;
         this.onFalse = onFalse;
@@ -53,17 +53,17 @@ public enum StatusInterraction implements TwitterBinaryInterraction<Status> {
     }
 
     @Override
-    public BiFunction<TwitterInterractionService, Status, Status> onTrue() {
+    public BiFunction<TwitterInteractionService, Status, Status> onTrue() {
         return onTrue;
     }
 
     @Override
-    public BiFunction<TwitterInterractionService, Status, Status> onFalse() {
+    public BiFunction<TwitterInteractionService, Status, Status> onFalse() {
         return onFalse;
     }
 
     @Override
-    public BiFunction<TwitterInterractionService, Status, Boolean> shouldDo() {
+    public BiFunction<TwitterInteractionService, Status, Boolean> shouldDo() {
         return shouldDo;
     }
 

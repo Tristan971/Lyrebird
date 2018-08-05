@@ -40,7 +40,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * The {@link LyrebirdUiManager} is responsible for bootstraping the GUI of the application correctly.
+ * The {@link LyrebirdUiManager} is responsible for bootstrapping the GUI of the application correctly.
  * <p>
  * To do so, it serves as the entry point for the JavaFX side of things and uses overriding from {@link FxUiManager} for
  * root view configuration.
@@ -109,8 +109,8 @@ public class LyrebirdUiManager extends FxUiManager {
      * <ul>
      * <li>Disable closure of the application on closure of main stage</li>
      * <li>Treating closure of main stage as a request to hide it</li>
-     * <li>Set-up minimum stage size contraints</li>
-     * <li>Register it agains {@link StageManager} for retrieval in various places</li>
+     * <li>Set-up minimum stage size constraints</li>
+     * <li>Register it again {@link StageManager} for retrieval in various places</li>
      * </ul>
      *
      * @param mainStage The application's main stage.
@@ -119,7 +119,7 @@ public class LyrebirdUiManager extends FxUiManager {
     protected void onStageCreated(final Stage mainStage) {
         Platform.setImplicitExit(false);
         mainStage.setOnCloseRequest(e -> handleMainStageClosure(mainStage));
-        mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeigth", Integer.class));
+        mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeight", Integer.class));
         mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
         stageManager.registerSingle(Screen.ROOT_VIEW, mainStage);
     }

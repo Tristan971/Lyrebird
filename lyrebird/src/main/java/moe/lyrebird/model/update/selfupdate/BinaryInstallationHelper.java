@@ -41,7 +41,7 @@ final class BinaryInstallationHelper {
     private static final String LYREBIRD_DL_FOLDER = "lyrebird";
 
     private BinaryInstallationHelper() {
-        throw new IllegalStateException("Not instianciable class.");
+        throw new IllegalStateException("Not instantiable class.");
     }
 
     /**

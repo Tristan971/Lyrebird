@@ -24,14 +24,14 @@ import moe.tristan.easyfxml.api.FxmlNode;
 import moe.lyrebird.view.screens.media.display.photo.ImageScreenController;
 import moe.lyrebird.view.screens.media.display.video.VideoScreenController;
 
-public enum MediaDisplaySceen implements FxmlNode {
+public enum MediaDisplayScreen implements FxmlNode {
     PHOTO("photo/ImageScreen.fxml", ImageScreenController.class),
     VIDEO("video/VideoScreen.fxml", VideoScreenController.class);
 
     private final String file;
     private final Class<? extends MediaScreenController> mediaScreenController;
 
-    MediaDisplaySceen(final String file, final Class<? extends MediaScreenController> mediaScreenController) {
+    MediaDisplayScreen(final String file, final Class<? extends MediaScreenController> mediaScreenController) {
         this.file = file;
         this.mediaScreenController = mediaScreenController;
     }

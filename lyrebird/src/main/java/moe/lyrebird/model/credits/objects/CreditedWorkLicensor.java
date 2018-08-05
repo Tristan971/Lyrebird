@@ -24,12 +24,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.MalformedURLException;
 
 /**
- * @see CredittedWork
+ * @see CreditedWork
  */
-public final class CredittedWorkLicensor extends SimpleNameUrlBinding {
+public final class CreditedWorkLicensor extends SimpleNameUrlBinding {
 
     @JsonCreator
-    protected CredittedWorkLicensor(
+    protected CreditedWorkLicensor(
             @JsonProperty("name") final String name,
             @JsonProperty("url") final String url
     ) throws MalformedURLException {

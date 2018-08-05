@@ -86,7 +86,7 @@ public class TwitterHandler {
      * @return An optional containing the resulting {@link AccessToken} if the authentication was successful.
      */
     public Optional<AccessToken> registerAccessToken(final RequestToken requestToken, final String pinCode) {
-        LOG.info("Registering token {} with pincode {}", requestToken, pinCode);
+        LOG.info("Registering token {} with pin code {}", requestToken, pinCode);
 
         final Try<AccessToken> tryAccessToken = Try.of(
                 () -> this.twitter.getOAuthAccessToken(requestToken, pinCode)

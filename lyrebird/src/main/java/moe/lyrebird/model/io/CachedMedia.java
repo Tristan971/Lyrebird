@@ -52,13 +52,13 @@ public class CachedMedia {
      *
      * @param imageUrl The url of this image
      * @param width    The width to miniaturize this image to
-     * @param heigth   The heigth to miniaturize this image to
+     * @param height   The height to miniaturize this image to
      *
      * @return This image's miniature loaded in an {@link Image} instance.
      */
-    public Image loadImageMiniature(final String imageUrl, final double width, final double heigth) {
-        LOG.trace("First load of miniature image {} [width = {}, heigth = {}]", imageUrl, width, heigth);
-        return new Image(imageUrl, width, heigth, false, true);
+    public Image loadImageMiniature(final String imageUrl, final double width, final double height) {
+        LOG.trace("First load of miniature image {} [width = {}, height = {}]", imageUrl, width, height);
+        return new Image(imageUrl, width, height, false, true);
     }
 
     /**

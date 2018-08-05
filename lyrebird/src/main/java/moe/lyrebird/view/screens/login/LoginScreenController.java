@@ -53,9 +53,9 @@ import java.util.stream.Stream;
  * It is built around a multi-step process to guide the user better.
  * <p>
  * It is also made {@link Lazy} in the case the user is already authenticated and does not want to add another account
- * in the current run of the applciation.
+ * in the current run of the application.
  * <p>
- * It is made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} because there might be multiple logins going on at the
+ * It is made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} because there might be multiple login going on at the
  * same time.
  */
 @Lazy
@@ -109,7 +109,7 @@ public class LoginScreenController implements FxmlController {
     @Override
     public void initialize() {
         validatePinCodeButton.setDisable(true);
-        Stream.of(step1Box, step2Box, step3Box, separator1, separator2).forEach(node -> setNodeVisiblity(node, false));
+        Stream.of(step1Box, step2Box, step3Box, separator1, separator2).forEach(node -> setNodeVisibility(node, false));
         uiStep1();
 
         Buttons.setOnClick(openLoginUrlButton, this::startNewSession);
@@ -120,7 +120,7 @@ public class LoginScreenController implements FxmlController {
      * Start the first step of the process where the user clicks a link to open an oauth on Twitter's side.
      */
     private void uiStep1() {
-        setNodeVisiblity(step1Box, true);
+        setNodeVisibility(step1Box, true);
     }
 
     /**
@@ -128,15 +128,15 @@ public class LoginScreenController implements FxmlController {
      * login.
      */
     private void uiStep2() {
-        Stream.of(separator1, step2Box).forEach(node -> setNodeVisiblity(node, true));
+        Stream.of(separator1, step2Box).forEach(node -> setNodeVisibility(node, true));
     }
 
     /**
      * Ends the process by checking the OTP against the OAuth request and tells the user whether authentication was
-     * succesful in the end.
+     * successful in the end.
      */
     private void uiStep3() {
-        Stream.of(separator2, step3Box).forEach(node -> setNodeVisiblity(node, true));
+        Stream.of(separator2, step3Box).forEach(node -> setNodeVisibility(node, true));
     }
 
     /**
@@ -181,7 +181,7 @@ public class LoginScreenController implements FxmlController {
 
     /**
      * Checks whether anything was entered so the user does not mistakenly try to validate the authentication without
-     * priori entering of the Twitter OTP.
+     * prior entering of the Twitter OTP.
      *
      * @param currentPin The current pin inside the {@link #pinCodeField}.
      */
@@ -195,13 +195,13 @@ public class LoginScreenController implements FxmlController {
     }
 
     /**
-     * Helper method to manage step box visibility into the conaining {@link HBox} by taking advantage of JavaFX layout
+     * Helper method to manage step box visibility into the containing {@link HBox} by taking advantage of JavaFX layout
      * computation process.
      *
      * @param node    The node targeted
      * @param visible Whether to make it visible or not
      */
-    private void setNodeVisiblity(final Node node, final boolean visible) {
+    private void setNodeVisibility(final Node node, final boolean visible) {
         node.setVisible(visible);
         node.setManaged(visible);
     }

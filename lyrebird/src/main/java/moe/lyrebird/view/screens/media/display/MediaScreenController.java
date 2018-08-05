@@ -37,7 +37,7 @@ public interface MediaScreenController extends FxmlController, StageAware {
     void handleMedia(final String mediaUrl);
 
     /**
-     * Enforces media controllers to think about properly siszing their stage to fit as well as possible the embedded
+     * Enforces media controllers to think about properly sizing their stage to fit as well as possible the embedded
      * media.
      */
     void bindViewSizeToParent();

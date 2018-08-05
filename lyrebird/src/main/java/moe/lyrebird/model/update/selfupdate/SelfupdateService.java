@@ -91,7 +91,7 @@ public class SelfupdateService {
     private TargetPlatform getTargetPlatform() {
         final Option<TargetPlatform> executablePlatform = binaryChoiceService.detectRunningPlatform();
         if (executablePlatform.isEmpty()) {
-            LOG.error("Lyrebird does not currently support selfupdating on this platform!");
+            LOG.error("Lyrebird does not currently support self-updating on this platform!");
             throw new UnsupportedOperationException("Cannot selfupdate with current binary platform!");
         }
         return executablePlatform.get();

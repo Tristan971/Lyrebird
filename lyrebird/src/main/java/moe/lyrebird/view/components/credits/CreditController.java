@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
-import moe.lyrebird.model.credits.objects.CredittedWork;
+import moe.lyrebird.model.credits.objects.CreditedWork;
 import moe.lyrebird.view.screens.Screen;
 
 import javafx.application.Platform;
@@ -35,13 +35,13 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 
 /**
- * This component is the one managing a single credit displaimer unit in the credits list view.
+ * This component is the one managing a single credit disclaimer unit in the credits list view.
  *
  * @see Screen#CREDITS_VIEW
  */
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Component
-public class CreditController implements ComponentCellFxmlController<CredittedWork> {
+public class CreditController implements ComponentCellFxmlController<CreditedWork> {
 
     @FXML
     private Label title;
@@ -55,23 +55,23 @@ public class CreditController implements ComponentCellFxmlController<CredittedWo
     @FXML
     private Hyperlink license;
 
-    private final Property<CredittedWork> credittedWork;
+    private final Property<CreditedWork> creditedWork;
     private final BrowserSupport browserSupport;
 
     @Autowired
     public CreditController(final BrowserSupport browserSupport) {
         this.browserSupport = browserSupport;
-        this.credittedWork = new SimpleObjectProperty<>(null);
+        this.creditedWork = new SimpleObjectProperty<>(null);
     }
 
     @Override
-    public void updateWithValue(final CredittedWork newValue) {
-        credittedWork.setValue(newValue);
+    public void updateWithValue(final CreditedWork newValue) {
+        creditedWork.setValue(newValue);
     }
 
     @Override
     public void initialize() {
-        credittedWork.addListener((o, prev, cur) -> {
+        creditedWork.addListener((o, prev, cur) -> {
             if (cur != null) {
                 Platform.runLater(() -> {
                     title.setText(cur.getTitle());

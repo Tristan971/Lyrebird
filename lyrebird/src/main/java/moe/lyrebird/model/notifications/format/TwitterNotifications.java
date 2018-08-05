@@ -28,11 +28,11 @@ import twitter4a.User;
 public final class TwitterNotifications {
 
     private TwitterNotifications() {
-        throw new AssertionError("Not instanciable.");
+        throw new AssertionError("Not instantiable.");
     }
 
     public static Notification fromMention(final Status mention) {
-        final String title = mention.getUser().getName() + " mentionned you";
+        final String title = mention.getUser().getName() + " mentioned you";
         return new Notification(title, mention.getText());
     }
 

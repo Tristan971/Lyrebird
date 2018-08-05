@@ -23,19 +23,22 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
+import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
 import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.util.Clipping;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import twitter4a.Relationship;
 import twitter4a.User;
 
@@ -55,7 +58,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.FOLLOW;
+import static moe.lyrebird.model.twitter.services.interraction.UserInteraction.FOLLOW;
 
 /**
  * This controller is responsible for managing the {@link Screen#USER_VIEW} screen, which is used to display details
@@ -63,8 +66,8 @@ import static moe.lyrebird.model.twitter.services.interraction.UserInterraction.
  * <p>
  * Made {@link Lazy} in case the user never uses it.
  * <p>
- * Also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} because the user might want to display multile users at the
- * same time.
+ * Also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} because the user might want to display multiple users at
+ * the same time.
  */
 @Lazy
 @Component
@@ -128,7 +131,7 @@ public class UserViewController implements FxmlController {
     private final EasyFxml easyFxml;
     private final AsyncIO asyncIO;
     private final SessionManager sessionManager;
-    private final TwitterInterractionService interractionService;
+    private final TwitterInteractionService interactionService;
 
     private final Property<User> targetUser;
 
@@ -137,12 +140,12 @@ public class UserViewController implements FxmlController {
             final EasyFxml easyFxml,
             final AsyncIO asyncIO,
             final SessionManager sessionManager,
-            final TwitterInterractionService interractionService
+            final TwitterInteractionService interactionService
     ) {
         this.easyFxml = easyFxml;
         this.asyncIO = asyncIO;
         this.sessionManager = sessionManager;
-        this.interractionService = interractionService;
+        this.interactionService = interactionService;
         this.targetUser = new SimpleObjectProperty<>(null);
     }
 
@@ -244,7 +247,7 @@ public class UserViewController implements FxmlController {
     private void setupFollowData() {
         final User user = targetUser.getValue();
         followButton.setOnAction(e -> {
-            interractionService.interract(user, FOLLOW);
+            interactionService.interact(user, FOLLOW);
             updateFollowStatusText();
         });
         updateFollowStatusText();
@@ -256,7 +259,7 @@ public class UserViewController implements FxmlController {
     private void updateFollowStatusText() {
         final User targetUser = this.targetUser.getValue();
 
-        CompletableFuture.supplyAsync(() -> interractionService.notYetFollowed(targetUser))
+        CompletableFuture.supplyAsync(() -> interactionService.notYetFollowed(targetUser))
                          .thenApplyAsync(notFollowed -> notFollowed ? FOLLOW_BTN_TEXT : UNFOLLOW_BTN_TEXT)
                          .thenAcceptAsync(followButton::setText, Platform::runLater);
 

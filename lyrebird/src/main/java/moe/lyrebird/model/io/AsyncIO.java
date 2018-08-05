@@ -63,14 +63,14 @@ public class AsyncIO {
      *
      * @param imageUrl the image to load's url as a string
      * @param width    the width of the miniature
-     * @param heigth   the heigth of the miniature
+     * @param height   the height of the miniature
      *
      * @return A {@link CompletableFuture} which can be asynchronously consumed if needed upon termination of this load
      * operation.
      */
-    public CompletableFuture<Image> loadImageMiniature(final String imageUrl, final double width, final double heigth) {
+    public CompletableFuture<Image> loadImageMiniature(final String imageUrl, final double width, final double height) {
         return CompletableFuture.supplyAsync(
-                () -> cachedMedia.loadImageMiniature(imageUrl, width, heigth),
+                () -> cachedMedia.loadImageMiniature(imageUrl, width, height),
                 ASYNC_IO_EXECUTOR
         );
     }

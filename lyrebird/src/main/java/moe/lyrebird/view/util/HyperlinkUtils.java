@@ -33,7 +33,7 @@ public final class HyperlinkUtils {
     private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
     private HyperlinkUtils() {
-        throw new UnsupportedOperationException("Should not be instanciated.");
+        throw new UnsupportedOperationException("Should not be instantiated.");
     }
 
     /**

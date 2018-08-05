@@ -9,9 +9,9 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Stages;
-import moe.lyrebird.model.twitter.services.interraction.StatusInterraction;
-import moe.lyrebird.model.twitter.services.interraction.TwitterBinaryInterraction;
-import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
+import moe.lyrebird.model.twitter.services.interraction.StatusInteraction;
+import moe.lyrebird.model.twitter.services.interraction.TwitterBinaryInteraction;
+import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
@@ -30,24 +30,24 @@ import javafx.scene.layout.Pane;
 
 import java.util.concurrent.CompletableFuture;
 
-import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.LIKE;
-import static moe.lyrebird.model.twitter.services.interraction.StatusInterraction.RETWEET;
+import static moe.lyrebird.model.twitter.services.interraction.StatusInteraction.LIKE;
+import static moe.lyrebird.model.twitter.services.interraction.StatusInteraction.RETWEET;
 
 /**
- * This class manages the display of an interraction toolbar under every non-embedded tweet.
+ * This class manages the display of an interaction toolbar under every non-embedded tweet.
  * <p>
- * Its role is to enable interraction and reflect it visually.
+ * Its role is to enable interaction and reflect it visually.
  *
  * @see TweetPaneController
- * @see TwitterInterractionService
+ * @see TwitterInteractionService
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class TweetInterractionPaneController implements FxmlController {
+public class TweetInteractionPaneController implements FxmlController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TweetInterractionPaneController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TweetInteractionPaneController.class);
 
-    private static final double INTERRACTION_BUTTON_CLIP_RADIUS = 14.0;
+    private static final double INTERACTION_BUTTON_CLIP_RADIUS = 14.0;
 
     @FXML
     private HBox replyButton;
@@ -64,45 +64,45 @@ public class TweetInterractionPaneController implements FxmlController {
     @FXML
     private ImageView retweetButtonGraphic;
 
-    private final TwitterInterractionService interractionService;
+    private final TwitterInteractionService interactionService;
     private final EasyFxml easyFxml;
     private final Property<Status> targetStatus;
 
     @Autowired
-    public TweetInterractionPaneController(
-            TwitterInterractionService interractionService,
+    public TweetInteractionPaneController(
+            TwitterInteractionService interactionService,
             EasyFxml easyFxml
     ) {
-        this.interractionService = interractionService;
+        this.interactionService = interactionService;
         this.easyFxml = easyFxml;
         this.targetStatus = new SimpleObjectProperty<>(null);
     }
 
     @Override
     public void initialize() {
-        setUpInterractionActions();
+        setUpInteractionActions();
         targetStatus.addListener((o, prev, cur) -> {
             updateRetweetVisual(cur.isRetweet() ? cur.getRetweetedStatus().isRetweeted() : cur.isRetweeted());
             updateLikeVisual(cur.isFavorited());
         });
     }
 
-    public Property<Status> targetStatusProperty() {
+    Property<Status> targetStatusProperty() {
         return targetStatus;
     }
 
     /**
      * Binds click on a button to its expected action
      */
-    private void setUpInterractionActions() {
+    private void setUpInteractionActions() {
         replyButton.setOnMouseClicked(e -> this.onReply());
-        replyButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
+        replyButton.setClip(Clipping.getCircleClip(INTERACTION_BUTTON_CLIP_RADIUS));
 
         likeButton.setOnMouseClicked(e -> this.onLike());
-        likeButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
+        likeButton.setClip(Clipping.getCircleClip(INTERACTION_BUTTON_CLIP_RADIUS));
 
         retweetButton.setOnMouseClicked(e -> this.onRetweet());
-        retweetButton.setClip(Clipping.getCircleClip(INTERRACTION_BUTTON_CLIP_RADIUS));
+        retweetButton.setClip(Clipping.getCircleClip(INTERACTION_BUTTON_CLIP_RADIUS));
     }
 
     /**
@@ -130,20 +130,20 @@ public class TweetInterractionPaneController implements FxmlController {
      * <p>
      * Will call {@link #updateRetweetVisual(boolean)} on task finish to set the appropriate visual value.
      *
-     * @see TwitterInterractionService
-     * @see TwitterBinaryInterraction
-     * @see StatusInterraction#RETWEET
+     * @see TwitterInteractionService
+     * @see TwitterBinaryInteraction
+     * @see StatusInteraction#RETWEET
      */
     private void onRetweet() {
-        LOG.debug("Retweet interraction on status {}", targetStatus.getValue().getId());
+        LOG.debug("Retweet interaction on status {}", targetStatus.getValue().getId());
         retweetButton.setDisable(true);
         CompletableFuture.supplyAsync(
-                () -> interractionService.interract(targetStatus.getValue(), RETWEET)
+                () -> interactionService.interact(targetStatus.getValue(), RETWEET)
         ).thenAcceptAsync(res -> {
             final Status originalStatus = targetStatus.getValue().isRetweet() ?
                                           targetStatus.getValue().getRetweetedStatus() :
                                           targetStatus.getValue();
-            updateRetweetVisual(!interractionService.notYetRetweeted(originalStatus));
+            updateRetweetVisual(!interactionService.notYetRetweeted(originalStatus));
             retweetButton.setDisable(false);
         }, Platform::runLater);
     }
@@ -166,15 +166,15 @@ public class TweetInterractionPaneController implements FxmlController {
      * <p>
      * Will call {@link #updateLikeVisual(boolean)} on task finish to set the appropriate visual value.
      *
-     * @see TwitterInterractionService
-     * @see TwitterBinaryInterraction
-     * @see StatusInterraction#LIKE
+     * @see TwitterInteractionService
+     * @see TwitterBinaryInteraction
+     * @see StatusInteraction#LIKE
      */
     private void onLike() {
-        LOG.debug("Like interraction on status {}", targetStatus.getValue().getId());
+        LOG.debug("Like interaction on status {}", targetStatus.getValue().getId());
         likeButton.setDisable(true);
         CompletableFuture.supplyAsync(
-                () -> interractionService.interract(targetStatus.getValue(), LIKE)
+                () -> interactionService.interact(targetStatus.getValue(), LIKE)
         ).thenAcceptAsync(res -> {
             updateLikeVisual(res.isFavorited());
             likeButton.setDisable(false);

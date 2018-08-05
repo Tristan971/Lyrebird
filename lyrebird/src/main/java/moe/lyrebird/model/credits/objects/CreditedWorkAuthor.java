@@ -24,12 +24,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.net.MalformedURLException;
 
 /**
- * @see CredittedWork
+ * @see CreditedWork
  */
-public final class CredittedWorkAuthor extends SimpleNameUrlBinding {
+public final class CreditedWorkAuthor extends SimpleNameUrlBinding {
 
     @JsonCreator
-    protected CredittedWorkAuthor(
+    protected CreditedWorkAuthor(
             @JsonProperty("name") final String name,
             @JsonProperty("url") final String url
     ) throws MalformedURLException {
@@ -38,7 +38,7 @@ public final class CredittedWorkAuthor extends SimpleNameUrlBinding {
 
     @Override
     public String toString() {
-        return "CredittedWorkAuthor{" +
+        return "CreditedWorkAuthor{" +
                "name='" + name + '\'' +
                ", url=" + url +
                '}';

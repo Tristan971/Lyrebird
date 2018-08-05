@@ -29,7 +29,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * This service is called at shutdown to execute a certain amout of cleanup operations.
+ * This service is called at shutdown to execute a certain amount of cleanup operations.
  */
 @Component
 public class CleanupService {

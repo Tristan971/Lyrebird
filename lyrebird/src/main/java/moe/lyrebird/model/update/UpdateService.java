@@ -110,14 +110,14 @@ public class UpdateService {
     }
 
     /**
-     * Starts selfupdating to the latest version available
+     * Starts self-updating to the latest version available
      */
     public void selfupdate() {
         getLatestVersion().thenAcceptAsync(selfupdateService::selfupdate);
     }
 
     /**
-     * @return whether the current platform supports selfupdating
+     * @return whether the current platform supports self-updating
      */
     public boolean selfupdateCompatible() {
         return selfupdateService.selfupdateCompatible();

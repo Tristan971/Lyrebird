@@ -22,28 +22,28 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * POJO used to map the creditted works.
+ * POJO used to map the credited works.
  */
-public final class CredittedWork {
+public final class CreditedWork {
 
     @JsonProperty
     private final String title;
 
     @JsonProperty
-    private final CredittedWorkAuthor author;
+    private final CreditedWorkAuthor author;
 
     @JsonProperty
-    private final CredittedWorkLicensor licensor;
+    private final CreditedWorkLicensor licensor;
 
     @JsonProperty
-    private final CredittedWorkLicense license;
+    private final CreditedWorkLicense license;
 
     @JsonCreator
-    public CredittedWork(
+    public CreditedWork(
             @JsonProperty("title") final String title,
-            @JsonProperty("author") final CredittedWorkAuthor author,
-            @JsonProperty("licensor") final CredittedWorkLicensor licensor,
-            @JsonProperty("license") final CredittedWorkLicense license
+            @JsonProperty("author") final CreditedWorkAuthor author,
+            @JsonProperty("licensor") final CreditedWorkLicensor licensor,
+            @JsonProperty("license") final CreditedWorkLicense license
     ) {
         this.title = title;
         this.author = author;
@@ -55,15 +55,15 @@ public final class CredittedWork {
         return title;
     }
 
-    public CredittedWorkAuthor getAuthor() {
+    public CreditedWorkAuthor getAuthor() {
         return author;
     }
 
-    public CredittedWorkLicensor getLicensor() {
+    public CreditedWorkLicensor getLicensor() {
         return licensor;
     }
 
-    public CredittedWorkLicense getLicense() {
+    public CreditedWorkLicense getLicense() {
         return license;
     }
 

@@ -27,7 +27,7 @@ import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
 import moe.tristan.easyfxml.util.Buttons;
 import moe.lyrebird.model.credits.CreditsService;
-import moe.lyrebird.model.credits.objects.CredittedWork;
+import moe.lyrebird.model.credits.objects.CreditedWork;
 import moe.lyrebird.view.components.cells.CreditsCell;
 import moe.lyrebird.view.components.credits.CreditController;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ import java.net.URL;
  */
 @Lazy
 @Component
-public class CreditsScreenController extends ComponentListViewFxmlController<CredittedWork> {
+public class CreditsScreenController extends ComponentListViewFxmlController<CreditedWork> {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreditsScreenController.class);
 

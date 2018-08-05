@@ -93,7 +93,7 @@
                   </BorderPane>
                   <TextFlow fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                   <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="20.0" minWidth="138.0" spacing="5.0" VBox.vgrow="ALWAYS" />
-                  <BorderPane fx:id="interractionBox" />
+                  <BorderPane fx:id="interactionBox"/>
                </children>
             </VBox>
          </children>

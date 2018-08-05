@@ -101,7 +101,7 @@ public class VideoScreenController implements MediaScreenController {
     /**
      * Sets up reasonable settings for {@link MediaPlayer} behavior when it comes to user interactions.
      * <p>
-     * Basically the same as any wide-usage video player with replaying when unpausing after a video ended.
+     * Basically the same as any wide-usage video player with replaying when un-pausing after a video ended.
      *
      * @param mediaPlayer The media player to setup.
      */

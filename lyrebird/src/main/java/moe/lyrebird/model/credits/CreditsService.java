@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.collection.Stream;
 import io.vavr.control.Try;
-import moe.lyrebird.model.credits.objects.CredittedWork;
+import moe.lyrebird.model.credits.objects.CreditedWork;
 
 import javafx.collections.ObservableList;
 
@@ -37,9 +37,9 @@ import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.unmodifiableObservableList;
 
 /**
- * This service aims at exposing creditted works disclaimers in src/main/resources/assets/credits/third-parties
+ * This service aims at exposing credited works disclaimers in src/main/resources/assets/credits/third-parties
  *
- * @see CredittedWork
+ * @see CreditedWork
  */
 @Lazy
 @Component
@@ -47,25 +47,25 @@ public class CreditsService {
 
     private static final String CREDITS_RESOURCES_PATH = "classpath:assets/credits/third-parties/*.json";
 
-    private final ObservableList<CredittedWork> credittedWorks;
+    private final ObservableList<CreditedWork> creditedWorks;
 
     @Autowired
     public CreditsService(final ObjectMapper objectMapper) {
-        this.credittedWorks = unmodifiableObservableList(observableList(loadCreditsFiles(
+        this.creditedWorks = unmodifiableObservableList(observableList(loadCreditsFiles(
                 objectMapper,
                 new PathMatchingResourcePatternResolver()
         )));
     }
 
     /**
-     * Deserializes the creditted works matching the {@link #CREDITS_RESOURCES_PATH} location pattern.
+     * Deserializes the credited works matching the {@link #CREDITS_RESOURCES_PATH} location pattern.
      *
      * @param objectMapper The object mapper used for deserialization
      * @param pmpr         The {@link PathMatchingResourcePatternResolver} used for location pattern matching
      *
      * @return The list of deserialized credits files
      */
-    private List<CredittedWork> loadCreditsFiles(
+    private List<CreditedWork> loadCreditsFiles(
             final ObjectMapper objectMapper,
             final PathMatchingResourcePatternResolver pmpr
     ) {
@@ -73,15 +73,15 @@ public class CreditsService {
                   .toStream()
                   .flatMap(Stream::of)
                   .map(unchecked(Resource::getInputStream))
-                  .map(unchecked(cis -> objectMapper.readValue(cis, CredittedWork.class)))
+                  .map(unchecked(cis -> objectMapper.readValue(cis, CreditedWork.class)))
                   .toJavaList();
     }
 
     /**
-     * @return the observable list of loaded {@link CredittedWork}s.
+     * @return the observable list of loaded {@link CreditedWork}s.
      */
-    public ObservableList<CredittedWork> creditedWorks() {
-        return credittedWorks;
+    public ObservableList<CreditedWork> creditedWorks() {
+        return creditedWorks;
     }
 
 }

@@ -26,7 +26,7 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
 import moe.lyrebird.model.twitter.observables.Mentions;
 import moe.lyrebird.model.twitter.observables.Timeline;
-import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
+import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4a.DirectMessage;
@@ -60,7 +60,7 @@ public class TwitterUserListener implements UserStreamListener {
     private final DirectMessages directMessages;
     private final SessionManager sessionManager;
     private final NotificationService notificationService;
-    private final TwitterInterractionService interractionService;
+    private final TwitterInteractionService interactionService;
 
     public TwitterUserListener(
             final Timeline timeline,
@@ -68,11 +68,11 @@ public class TwitterUserListener implements UserStreamListener {
             final DirectMessages directMessages,
             final SessionManager sessionManager,
             final NotificationService notificationService,
-            final TwitterInterractionService interractionService
+            final TwitterInteractionService interactionService
     ) {
         this.sessionManager = sessionManager;
         this.notificationService = notificationService;
-        this.interractionService = interractionService;
+        this.interactionService = interactionService;
         LOG.debug("Initializing twitter data listener.");
         LOG.debug("\t-> Timeline... OK");
         this.timeline = timeline;
@@ -85,7 +85,7 @@ public class TwitterUserListener implements UserStreamListener {
     @Override
     public void onStatus(final Status status) {
         LOG.debug("New tweet streamed : [@{} : {}]", status.getUser().getScreenName(), status.getText());
-        if (interractionService.isRetweetByCurrentUser(status)) {
+        if (interactionService.isRetweetByCurrentUser(status)) {
             LOG.debug("Is retweet made by current user. Filter it out from display.");
             return;
         }
@@ -93,7 +93,7 @@ public class TwitterUserListener implements UserStreamListener {
         timeline.addTweet(status);
 
         if (mentions.isMentionToCurrentUser(status)) {
-            LOG.debug("User {} mentionned current user in tweet {}", status.getUser().getScreenName(), status.getId());
+            LOG.debug("User {} mentioned current user in tweet {}", status.getUser().getScreenName(), status.getId());
             notificationService.sendNotification(fromMention(status));
             mentions.addTweet(status);
         } else if (isRetweetOfMe(status)) {
@@ -262,7 +262,7 @@ public class TwitterUserListener implements UserStreamListener {
     }
 
     @Override
-    public void onFavoritedRetweet(final User source, final User target, final Status favoritedRetweeet) {
+    public void onFavoritedRetweet(final User source, final User target, final Status favoritedRetweet) {
         // ignored
     }
 

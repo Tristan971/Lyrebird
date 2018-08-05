@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
+import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4a.Paging;
@@ -43,22 +43,22 @@ public class Timeline extends TwitterTimelineBaseModel {
 
     private static final Logger LOG = LoggerFactory.getLogger(Timeline.class);
 
-    private final TwitterInterractionService interractionService;
+    private final TwitterInteractionService interactionService;
 
     @Autowired
     public Timeline(
             final SessionManager sessionManager,
-            final TwitterInterractionService interractionService
+            final TwitterInteractionService interactionService
     ) {
         super(sessionManager);
-        this.interractionService = interractionService;
+        this.interactionService = interactionService;
     }
 
     @Override
     protected List<Status> initialLoad(final Twitter twitter) throws TwitterException {
         return twitter.getHomeTimeline()
                       .stream()
-                      .filter(((Predicate<Status>) interractionService::isRetweetByCurrentUser).negate())
+                      .filter(((Predicate<Status>) interactionService::isRetweetByCurrentUser).negate())
                       .collect(Collectors.toList());
     }
 
@@ -66,7 +66,7 @@ public class Timeline extends TwitterTimelineBaseModel {
     protected List<Status> backfillLoad(final Twitter twitter, final Paging paging) throws TwitterException {
         return twitter.getHomeTimeline(paging)
                       .stream()
-                      .filter(((Predicate<Status>) interractionService::isRetweetByCurrentUser).negate())
+                      .filter(((Predicate<Status>) interactionService::isRetweetByCurrentUser).negate())
                       .collect(Collectors.toList());
     }
 

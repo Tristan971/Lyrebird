@@ -71,7 +71,7 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
         - [x] Direct messages
     - [ ] Display features :
         - [x] Basic textual display
-        - [x] Display username, @screenname and user profile picture
+        - [x] Display username, @screen_name and user profile picture
         - [ ] Display for chosen list
         - [ ] Text highlighting
             - [ ] Mentions
@@ -102,13 +102,13 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
     - [x] Support attachments
     - [ ] Support geolocation
     
-- [ ] Interraction with tweet
+- [ ] Interaction with tweet
     - [x] Reply
     - [ ] Quote
     - [x] Like (formerly _favourite_)
     - [x] Retweet
 
-- [x] Interraction with users
+- [x] Interaction with users
     - [x] Follow/unfollow
     - [ ] Block/mute
     - [ ] List management
@@ -116,7 +116,7 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
 
 - [ ] Searches
 
-- [ ] Miscellanelous
+- [ ] Miscellaneous
     - [x] System notifications
     - [x] Internal notifications
     - [x] Update system

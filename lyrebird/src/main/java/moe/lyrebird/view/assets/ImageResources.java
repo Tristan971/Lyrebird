@@ -21,7 +21,7 @@ package moe.lyrebird.view.assets;
 import javafx.scene.image.Image;
 
 /**
- * This enumetation contains some static images used either as placeholders or fallbacks.
+ * This enumeration contains some static images used either as placeholders or fallback.
  */
 public enum ImageResources {
 

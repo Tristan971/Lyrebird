@@ -12,19 +12,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public final class PostUpdateCompatiblityHelper {
+public final class PostUpdateCompatibilityHelper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PostUpdateCompatiblityHelper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PostUpdateCompatibilityHelper.class);
 
-    private static final PostUpdateCompatiblityHelper INSTANCE = new PostUpdateCompatiblityHelper();
+    private static final PostUpdateCompatibilityHelper INSTANCE = new PostUpdateCompatibilityHelper();
 
     private final Map<String, Runnable> oneTimeExecutions = new HashMap<>();
 
-    public static PostUpdateCompatiblityHelper getInstance() {
+    public static PostUpdateCompatibilityHelper getInstance() {
         return INSTANCE;
     }
 
-    private PostUpdateCompatiblityHelper() {
+    private PostUpdateCompatibilityHelper() {
         LOG.debug("Initialized post-update compatibility helper.");
     }
 

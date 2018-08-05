@@ -49,6 +49,9 @@ public class DirectMessages {
         LOG.debug("Initializing direct messages manager.");
         this.messageEvents = FXCollections.observableHashMap();
         sessionManager.currentSessionProperty().addListener((o, prev, cur) -> refresh());
+        if (sessionManager.isLoggedInProperty().getValue()) {
+            refresh();
+        }
     }
 
     public ObservableMap<User, ObservableList<DirectMessageEvent>> directMessages() {

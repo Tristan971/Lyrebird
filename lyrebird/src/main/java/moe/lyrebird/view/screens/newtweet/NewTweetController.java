@@ -22,6 +22,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -33,8 +34,10 @@ import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
 import moe.lyrebird.view.util.Clipping;
 import moe.lyrebird.view.util.StageAware;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import twitter4a.Status;
 import twitter4a.User;
 import twitter4a.UserMentionEntity;
@@ -181,7 +184,7 @@ public class NewTweetController implements FxmlController, StageAware {
     }
 
     /**
-     * In case this is a reply we prefill the content field with the appropiate mentions.
+     * In case this is a reply we pre-fill the content field with the appropriate mentions.
      */
     private void prefillMentionsForReply() {
         final User currentUser = sessionManager.currentSessionProperty().getValue().getTwitterUser().get();
@@ -269,8 +272,8 @@ public class NewTweetController implements FxmlController, StageAware {
     }
 
     /**
-     * Opens a {@link FileChooser} to pick attachments from with a premade {@link ExtensionFilter} for the allowed media
-     * types.
+     * Opens a {@link FileChooser} to pick attachments from with a pre-made {@link ExtensionFilter} for the allowed
+     * media types.
      *
      * @return an asynchronous result containing the list of selected files once user is done with choosing them.
      */

@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Service used to render markdown-formatted changelogs to HTML
+ * Service used to render markdown-formatted changelog to HTML
  */
 @Lazy
 @Component

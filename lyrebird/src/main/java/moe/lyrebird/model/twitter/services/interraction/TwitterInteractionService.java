@@ -30,35 +30,35 @@ import twitter4a.User;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 /**
- * This service is responsible for interractions with Twitter elements.
+ * This service is responsible for interactions with Twitter elements.
  * <p>
  * Most notably it manages the linking/retweeting of tweets and the following/unfollowing of users.
  */
 @Component
-public class TwitterInterractionService {
+public class TwitterInteractionService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TwitterInterractionService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterInteractionService.class);
 
     private final SessionManager sessionManager;
 
-    public TwitterInterractionService(final SessionManager sessionManager) {
+    public TwitterInteractionService(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
     /**
-     * Executes a given {@link TwitterBinaryInterraction} on an element.
+     * Executes a given {@link TwitterBinaryInteraction} on an element.
      *
-     * @param target                    The element this interraction will target
-     * @param twitterBinaryInterraction The interraction to execute
+     * @param target                    The element this interaction will target
+     * @param twitterBinaryInteraction  The interaction to execute
      * @param <T>                       The type of element this will target
      *
-     * @return The resulting operation's result which is of the type of the element this is targetting
+     * @return The resulting operation's result which is of the type of the element this is targeting
      */
-    public <T> T interract(final T target, final TwitterBinaryInterraction<T> twitterBinaryInterraction) {
-        if (twitterBinaryInterraction.shouldDo().apply(this, target)) {
-            return twitterBinaryInterraction.onTrue().apply(this, target);
+    public <T> T interact(final T target, final TwitterBinaryInteraction<T> twitterBinaryInteraction) {
+        if (twitterBinaryInteraction.shouldDo().apply(this, target)) {
+            return twitterBinaryInteraction.onTrue().apply(this, target);
         } else {
-            return twitterBinaryInterraction.onFalse().apply(this, target);
+            return twitterBinaryInteraction.onFalse().apply(this, target);
         }
     }
 
@@ -118,14 +118,14 @@ public class TwitterInterractionService {
     }
 
     /**
-     * Returns whether or not the given tweet has not yet been liked and that thus the interraction with it should be to
+     * Returns whether or not the given tweet has not yet been liked and that thus the interaction with it should be to
      * like it.
      *
      * @param tweet the tweet to check
      *
      * @return true if the given tweet is not liked yet but the current user
      */
-    public boolean notYetLiked(final Status tweet) {
+    boolean notYetLiked(final Status tweet) {
         return !sessionManager.doWithCurrentTwitter(twitter -> twitter.showStatus(tweet.getId()).isFavorited())
                               .get();
     }

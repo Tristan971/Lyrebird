@@ -48,7 +48,7 @@ public class BinaryInstallationService {
     private static final String LYREBIRD_DL_FOLDER = "lyrebird";
 
     /**
-     * Determines the correct command line arguments for selfupdating a given platform's executable to a given version.
+     * Determines the correct command line arguments for self-updating a given platform's executable to a given version.
      *
      * @param targetPlatform  The platform on which the selfupdate shall be performed
      * @param lyrebirdVersion The version to which the selfupdate shall be performed
@@ -87,7 +87,7 @@ public class BinaryInstallationService {
     ) {
         return lyrebirdVersion.getPackages()
                               .stream()
-                              .filter(distribuable -> distribuable.getTargetPlatform().equals(targetPlatform))
+                              .filter(distributable -> distributable.getTargetPlatform().equals(targetPlatform))
                               .findAny();
     }
 
@@ -113,7 +113,7 @@ public class BinaryInstallationService {
      *
      * @param binaryUrl The URL of the binary (to match name mostly)
      *
-     * @return The premade File reference to the location to which to download
+     * @return The pre-made File reference to the location to which to download
      */
     private File prepareTargetFile(final URL binaryUrl) {
         final String[] binaryUrlSplit = binaryUrl.toExternalForm().split("/");

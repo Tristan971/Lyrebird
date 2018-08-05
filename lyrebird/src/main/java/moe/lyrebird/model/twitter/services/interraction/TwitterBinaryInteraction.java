@@ -16,32 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.credits.objects;
+package moe.lyrebird.model.twitter.services.interraction;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.net.MalformedURLException;
+import java.util.function.BiFunction;
 
 /**
- * @see CredittedWork
+ * A binary interaction is a twitter operation that can be executed in two ways depending on a third information.
+ * @param <T> The type over which to execute these operations
  */
-public final class CredittedWorkLicense extends SimpleNameUrlBinding {
+public interface TwitterBinaryInteraction<T> {
 
-    @JsonCreator
-    protected CredittedWorkLicense(
-            @JsonProperty("name") final String name,
-            @JsonProperty("url") final String url
-    ) throws MalformedURLException {
-        super(name, url);
-    }
+    /**
+     * @return the operation to execute if {@link #shouldDo()} returns true.
+     */
+    BiFunction<TwitterInteractionService, T, T> onTrue();
 
-    @Override
-    public String toString() {
-        return "CredittedWorkLicense{" +
-               "name='" + name + '\'' +
-               ", url=" + url +
-               '}';
-    }
+    /**
+     * @return the operation to execute if {@link #shouldDo()} returns false.
+     */
+    BiFunction<TwitterInteractionService, T, T> onFalse();
+
+    /**
+     * @return whether the {@link #onTrue()} is the relevant one.
+     */
+    BiFunction<TwitterInteractionService, T, Boolean> shouldDo();
 
 }

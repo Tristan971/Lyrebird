@@ -49,7 +49,7 @@ public class TwitterMediaExtensionFilter {
      * @param environment The Spring {@link Environment} that will be used to fetch the allowed extensions from the
      *                    application.properties.
      *
-     * @return A premade extension filter configured for only allowing Twitter-supported attachment types
+     * @return A pre-made extension filter configured for only allowing Twitter-supported attachment types
      */
     private static ExtensionFilter buildExtensionFilter(final Environment environment) {
         final String allowedExtensionsStr = environment.getRequiredProperty("twitter.media.allowedExtensions");

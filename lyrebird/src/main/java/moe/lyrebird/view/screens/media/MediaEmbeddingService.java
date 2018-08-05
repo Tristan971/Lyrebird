@@ -20,6 +20,7 @@ package moe.lyrebird.view.screens.media;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+
 import moe.lyrebird.view.screens.media.handlers.direct.DirectImageHandler;
 import moe.lyrebird.view.screens.media.handlers.twitter.TwitterMediaEntity;
 import moe.lyrebird.view.screens.media.handlers.twitter.TwitterVideoHandler;
@@ -74,12 +75,13 @@ public class MediaEmbeddingService {
     }
 
     /**
-     * Generates preview for a single Twitter-side {@link MediaEntity} matching it agains the {@link TwitterMediaEntity}
-     * enumeration.
+     * Generates preview for a single Twitter-side {@link MediaEntity} matching it against the {@link
+     * TwitterMediaEntity} enumeration.
      *
      * @param entity The entity whose preview will be generated.
      *
      * @return The preview for the given entity.
+     *
      * @throws IllegalArgumentException when an unsupported entity is given since it should only be called on valid
      *                                  entities.
      */
@@ -95,4 +97,5 @@ public class MediaEmbeddingService {
                 throw new IllegalArgumentException("Twitter type " + entity.getType() + " is not supported!");
         }
     }
+
 }

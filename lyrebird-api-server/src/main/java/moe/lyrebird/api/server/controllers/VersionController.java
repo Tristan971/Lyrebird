@@ -61,7 +61,7 @@ public class VersionController {
         try (final InputStream fis = getClass().getClassLoader().getResourceAsStream("versions/" + buildVersion + ".md")) {
             return StreamUtils.copyToString(fis, StandardCharsets.UTF_8);
         } catch (final IOException e) {
-            LOG.error("Could not load changenotes for buildversion "+buildVersion, e);
+            LOG.error("Could not load changenotes for build version "+buildVersion, e);
             return "Could not load changenotes.";
         }
     }
