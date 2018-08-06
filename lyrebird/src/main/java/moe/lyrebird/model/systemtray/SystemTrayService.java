@@ -19,9 +19,6 @@
 package moe.lyrebird.model.systemtray;
 
 import java.awt.*;
-import java.util.concurrent.CompletableFuture;
-
-import javax.swing.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,26 +62,24 @@ public class SystemTrayService {
     private void loadTrayIcon() {
         LOG.debug("Registering tray icon for Lyrebird...");
         if (OS.isLinux()) {
-            SystemTray.FORCE_TRAY_TYPE= SystemTray.TrayType.GtkStatusIcon;
+            SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.Swing;
         }
 
-        CompletableFuture.supplyAsync(() -> {
-            LOG.debug("Creating a tray icon...");
-            SystemTray tray = SystemTray.get();
-            tray.setImage(lyrebirdTrayIcon.getIcon());
-            tray.setTooltip("Lyrebird");
-            return tray;
-        }).thenApplyAsync(tray -> {
-            LOG.debug("Adding items to tray icon's menu...");
-            final JMenu menu = new JMenu();
-            lyrebirdTrayIcon.getMenuItems().forEach((item, action) -> {
-                final JMenuItem menuItem = new JMenuItem(item.getLabel());
-                menuItem.addActionListener(action);
-                menu.add(menuItem);
-            });
-            tray.setMenu(menu);
-            return tray;
-        }).thenRunAsync(() -> LOG.debug("Finished creating tray icon!"));
+        LOG.debug("Creating a tray icon...");
+        SystemTray tray = SystemTray.get();
+        tray.setImage(lyrebirdTrayIcon.getIcon());
+        tray.setTooltip("Lyrebird");
+
+        LOG.debug("Adding items to tray icon's menu...");
+        //final JMenu menu = new JMenu();
+        //lyrebirdTrayIcon.getMenuItems().forEach((item, action) -> {
+        //    final JMenuItem menuItem = new JMenuItem(item.getLabel());
+        //    menuItem.addActionListener(action);
+        //    menu.add(menuItem);
+        //});
+        //tray.setMenu(menu);
+
+        LOG.debug("Finished creating tray icon!");
     }
 
 }
