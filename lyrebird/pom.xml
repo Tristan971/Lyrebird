@@ -223,6 +223,12 @@
             <artifactId>prettytime</artifactId>
             <version>4.0.1.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.dorkbox</groupId>
+            <artifactId>SystemTray</artifactId>
+            <version>3.14</version>
+        </dependency>
     </dependencies>
 
     <pluginRepositories>
