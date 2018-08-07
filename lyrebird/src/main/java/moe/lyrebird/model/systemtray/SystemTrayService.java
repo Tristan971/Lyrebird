@@ -24,11 +24,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import dorkbox.systemTray.Menu;
+import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
 import dorkbox.util.OS;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
-import moe.lyrebird.model.interrupts.CleanupService;
 
 /**
  * This class is responsible for management and exposure of the {@link LyrebirdTrayIcon}.
@@ -39,16 +40,11 @@ public class SystemTrayService {
     private static final Logger LOG = LoggerFactory.getLogger(SystemTrayService.class);
 
     private final LyrebirdTrayIcon lyrebirdTrayIcon;
-    private final CleanupService cleanupService;
 
     private final Property<TrayIcon> trayIcon = new SimpleObjectProperty<>(null);
 
-    public SystemTrayService(
-            final LyrebirdTrayIcon lyrebirdTrayIcon,
-            final CleanupService cleanupService
-    ) {
+    public SystemTrayService(final LyrebirdTrayIcon lyrebirdTrayIcon) {
         this.lyrebirdTrayIcon = lyrebirdTrayIcon;
-        this.cleanupService = cleanupService;
         loadTrayIcon();
     }
 
@@ -62,7 +58,7 @@ public class SystemTrayService {
     private void loadTrayIcon() {
         LOG.debug("Registering tray icon for Lyrebird...");
         if (OS.isLinux()) {
-            SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.Swing;
+            SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.GtkStatusIcon;
         }
 
         LOG.debug("Creating a tray icon...");
@@ -71,13 +67,14 @@ public class SystemTrayService {
         tray.setTooltip("Lyrebird");
 
         LOG.debug("Adding items to tray icon's menu...");
-        //final JMenu menu = new JMenu();
-        //lyrebirdTrayIcon.getMenuItems().forEach((item, action) -> {
-        //    final JMenuItem menuItem = new JMenuItem(item.getLabel());
-        //    menuItem.addActionListener(action);
-        //    menu.add(menuItem);
-        //});
-        //tray.setMenu(menu);
+        final Menu menu = tray.getMenu();
+
+        lyrebirdTrayIcon.getMenuItems().forEach((item, action) -> {
+            LOG.debug("Adding menu item : {} (callback : {})", item, action);
+            final MenuItem menuItem = new MenuItem(item.getLabel());
+            menuItem.setCallback(action);
+            menu.add(menuItem);
+        });
 
         LOG.debug("Finished creating tray icon!");
     }
