@@ -44,7 +44,7 @@ public final class HyperlinkUtils {
      *
      * @return The resulting string
      */
-    private static String transformUrls(final String input, final Function<String, String> replacer) {
+    public static String transformUrls(final String input, final Function<String, String> replacer) {
         return URL_PATTERN.matcher(input).replaceAll(match -> replacer.apply(match.group()));
     }
 

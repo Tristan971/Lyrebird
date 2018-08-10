@@ -24,15 +24,16 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Nodes;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
+import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.cells.TweetListCell;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.util.ClickableHyperlink;
 import moe.lyrebird.view.util.Clipping;
-import moe.lyrebird.view.util.HyperlinkUtils;
 import org.ocpsoft.prettytime.PrettyTime;
 import twitter4a.Status;
 
@@ -45,11 +46,10 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 
 import java.util.List;
 
@@ -85,7 +85,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private Pane authorProfilePicturePane;
 
     @FXML
-    private TextFlow content;
+    private AnchorPane content;
 
     @FXML
     private HBox mediaBox;
@@ -191,7 +191,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         author.setText(statusToDisplay.getUser().getName());
         authorId.setText("@" + statusToDisplay.getUser().getScreenName());
         time.setText(PRETTY_TIME.format(statusToDisplay.getCreatedAt()));
-        loadTextIntoTextFlow(statusToDisplay.getText());
+        loadTextIntoTextFlow(statusToDisplay);
         final String ppUrl = statusToDisplay.getUser().getOriginalProfileImageURLHttps();
         asyncIO.loadImageMiniature(ppUrl, 96.0, 96.0)
                .thenAcceptAsync(authorProfilePicture::setImage, Platform::runLater);
@@ -200,19 +200,23 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     }
 
     /**
-     * Pre-formats the tweet text content.
+     * Pre-formats a status' text content.
      *
-     * @param tweetText The content to format (from the current tweet)
+     * @param status The status whose content we have to format
      */
-    private void loadTextIntoTextFlow(final String tweetText) {
+    private void loadTextIntoTextFlow(final Status status) {
         content.getChildren().clear();
-        final String strippedText = HyperlinkUtils.stripAllUrls(tweetText);
-        final List<String> urlsInText = HyperlinkUtils.findAllUrls(tweetText);
 
-        content.getChildren().add(new Text(strippedText));
-        urlsInText.stream()
-                  .map(this::buildHyperlink)
-                  .forEach(content.getChildren()::add);
+        final FxmlLoadResult<Pane, TweetContentPaneController> result = easyFxml.loadNode(
+                FxComponent.TWEET_CONTENT_PANE,
+                Pane.class,
+                TweetContentPaneController.class
+        );
+
+        result.afterControllerLoaded(tcpc -> tcpc.setStatusProp(status))
+              .getNode()
+              .recover(ExceptionHandler::fromThrowable)
+              .andThen(content.getChildren()::add);
     }
 
     /**
