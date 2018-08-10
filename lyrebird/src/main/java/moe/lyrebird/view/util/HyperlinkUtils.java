@@ -70,4 +70,8 @@ public final class HyperlinkUtils {
         return transformUrls(input, url -> "");
     }
 
+    public static boolean isUrl(final String input) {
+        return URL_PATTERN.matcher(input).matches();
+    }
+
 }
