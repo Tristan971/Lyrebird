@@ -71,7 +71,7 @@
                   <Insets top="2.5" />
                </HBox.margin>
             </Pane>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" HBox.hgrow="ALWAYS">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <children>
                   <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefWidth="50000.0">
                      <right>
@@ -90,7 +90,7 @@
                         </HBox>
                      </left>
                   </BorderPane>
-                  <BorderPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" VBox.vgrow="ALWAYS" />
+                  <VBox fx:id="tweetContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" VBox.vgrow="ALWAYS" />
                   <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="20.0" minWidth="138.0" spacing="5.0" VBox.vgrow="ALWAYS" />
                   <BorderPane fx:id="interactionBox" />
                </children>

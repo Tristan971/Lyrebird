@@ -40,6 +40,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.components.FxComponent;
@@ -82,7 +84,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private Pane authorProfilePicturePane;
 
     @FXML
-    private BorderPane content;
+    private VBox tweetContent;
 
     @FXML
     private HBox mediaBox;
@@ -199,7 +201,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
      * @param status The status whose content we have to format
      */
     private void loadTextIntoTextFlow(final Status status) {
-        content.getChildren().clear();
+        tweetContent.getChildren().clear();
 
         final FxmlLoadResult<Pane, TweetContentPaneController> result = easyFxml.loadNode(
                 FxComponent.TWEET_CONTENT_PANE,
@@ -209,8 +211,9 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
 
         result.afterControllerLoaded(tcpc -> tcpc.setStatusProp(status))
               .getNode()
+              .peek(pane -> VBox.setVgrow(pane, Priority.ALWAYS))
               .recover(ExceptionHandler::fromThrowable)
-              .andThen(content::setCenter);
+              .andThen(tweetContent.getChildren()::add);
     }
 
     /**
