@@ -1,8 +1,6 @@
 package moe.lyrebird.view.components.tweet;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -12,17 +10,13 @@ import org.springframework.stereotype.Component;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import moe.lyrebird.view.util.ClickableHyperlink;
-import moe.lyrebird.view.util.HyperlinkUtils;
+import moe.lyrebird.view.util.TwitterUrlEntitiesBuilder;
 import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import twitter4a.Status;
-import twitter4a.URLEntity;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -31,13 +25,13 @@ public class TweetContentPaneController implements FxmlController {
     @FXML
     private TextFlow tweetContent;
 
-    private final BrowserSupport browserSupport;
+    private final TwitterUrlEntitiesBuilder twitterUrlEntitiesBuilder;
 
     private final Property<Status> statusProp = new SimpleObjectProperty<>();
 
     @Autowired
-    public TweetContentPaneController(final BrowserSupport browserSupport) {
-        this.browserSupport = browserSupport;
+    public TweetContentPaneController(TwitterUrlEntitiesBuilder twitterUrlEntitiesBuilder) {
+        this.twitterUrlEntitiesBuilder = twitterUrlEntitiesBuilder;
     }
 
     @Override
@@ -50,39 +44,13 @@ public class TweetContentPaneController implements FxmlController {
     }
 
 
-    public void setStatusProp(final Status statusProp) {
-        this.statusProp.setValue(statusProp);
+    public void setStatusProp(final Status status) {
+        this.statusProp.setValue(status);
     }
 
     private void statusReady() {
-        tweetContent.getChildren().clear();
-        final String expanded = HyperlinkUtils.transformUrls(
-                statusProp.getValue().getText(),
-                this::expandedUrl
-        );
-        final List<Node> textNodes = clickableUrls(expanded);
-        textNodes.forEach(node -> {
-            tweetContent.getChildren().add(node);
-            tweetContent.getChildren().add(new Text(" "));
-        });
+        final List<Text> textFlowElements = twitterUrlEntitiesBuilder.asTextFlowTokens(statusProp.getValue());
+        tweetContent.getChildren().setAll(textFlowElements);
     }
 
-    private String expandedUrl(final String shortUrl) {
-        return Arrays.stream(statusProp.getValue().getURLEntities())
-                     .filter(entity -> entity.getURL().equals(shortUrl))
-                     .map(URLEntity::getExpandedURL)
-                     .findAny()
-                     .orElse(shortUrl);
-    }
-
-    private List<Node> clickableUrls(final String content) {
-        return Arrays.stream(content.split(" "))
-                     .map(element -> {
-                         if (HyperlinkUtils.isUrl(element)) {
-                             return new ClickableHyperlink(element, browserSupport::openUrl);
-                         } else {
-                             return new Text(element);
-                         }
-                     }).collect(Collectors.toList());
-    }
 }

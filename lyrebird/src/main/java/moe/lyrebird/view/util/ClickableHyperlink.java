@@ -30,4 +30,10 @@ public final class ClickableHyperlink extends Text {
         getStyleClass().setAll("clickable-hyperlink");
     }
 
+    public <T> ClickableHyperlink(final T element, final Runnable onClicked) {
+        super(String.valueOf(element));
+        setOnMouseClicked(e -> onClicked.run());
+        getStyleClass().setAll("clickable-hyperlink");
+    }
+
 }
