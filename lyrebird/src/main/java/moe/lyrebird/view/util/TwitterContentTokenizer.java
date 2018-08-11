@@ -95,8 +95,8 @@ public class TwitterContentTokenizer {
             if (cursorRight > cursorLeft) {
                 nodes.add(new Token(input.substring(cursorLeft, cursorRight)));
             }
-            cursorLeft = cursorRight;
             cursorRight = entity.getEnd();
+            cursorLeft = cursorRight;
             nodes.add(linkOfEntity(entity));
         }
 
