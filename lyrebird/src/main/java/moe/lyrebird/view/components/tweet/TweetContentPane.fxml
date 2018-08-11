@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.tweet.TweetContentPaneController">
    <children>
-      <TextFlow fx:id="tweetContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Example of a super long piece of text that needs to be wrapped. https://gitlab.com/gitlab-org/gitlab-runner/issues/82https://gitlab.com/gitlab-org/gitlab-runner/issues/82https://gitlab.com/gitlab-org/gitlab-runner/issues/82https://gitlab.com/gitlab-org/gitlab-runner/issues/82https://gitlab.com/gitlab-org/gitlab-runner/issues/82https://gitlab.com/gitlab-org/gitlab-runner/issues/82" />
-         </children></TextFlow>
+      <TextFlow fx:id="tweetContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

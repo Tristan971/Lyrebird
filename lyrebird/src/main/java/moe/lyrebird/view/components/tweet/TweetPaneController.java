@@ -18,24 +18,15 @@
 
 package moe.lyrebird.view.components.tweet;
 
+import static moe.lyrebird.view.assets.ImageResources.GENERAL_USER_AVATAR_DARK;
+import static moe.lyrebird.view.components.FxComponent.TWEET_INTERACTION_BOX;
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
+import java.util.List;
+
+import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
-import moe.tristan.easyfxml.util.Nodes;
-import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.model.twitter.user.UserDetailsService;
-import moe.lyrebird.view.components.FxComponent;
-import moe.lyrebird.view.components.cells.TweetListCell;
-import moe.lyrebird.view.screens.media.MediaEmbeddingService;
-import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.util.ClickableHyperlink;
-import moe.lyrebird.view.util.Clipping;
-import org.ocpsoft.prettytime.PrettyTime;
-import twitter4a.Status;
 
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -46,16 +37,22 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-
-import java.util.List;
-
-import static moe.lyrebird.view.assets.ImageResources.GENERAL_USER_AVATAR_DARK;
-import static moe.lyrebird.view.components.FxComponent.TWEET_INTERACTION_BOX;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.model.twitter.user.UserDetailsService;
+import moe.lyrebird.view.components.FxComponent;
+import moe.lyrebird.view.components.cells.TweetListCell;
+import moe.lyrebird.view.screens.media.MediaEmbeddingService;
+import moe.lyrebird.view.screens.newtweet.NewTweetController;
+import moe.lyrebird.view.util.Clipping;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
+import moe.tristan.easyfxml.util.Nodes;
+import twitter4a.Status;
 
 /**
  * Displays a single tweet ({@link Status} in Twitter4J).
@@ -85,7 +82,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private Pane authorProfilePicturePane;
 
     @FXML
-    private AnchorPane content;
+    private BorderPane content;
 
     @FXML
     private HBox mediaBox;
@@ -102,7 +99,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     @FXML
     private BorderPane interactionBox;
 
-    private final BrowserSupport browserSupport;
     private final AsyncIO asyncIO;
     private final MediaEmbeddingService mediaEmbeddingService;
     private final UserDetailsService userDetailsService;
@@ -113,13 +109,11 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private final BooleanProperty embeddedProperty = new SimpleBooleanProperty(false);
 
     public TweetPaneController(
-            final BrowserSupport browserSupport,
             final AsyncIO asyncIO,
             final MediaEmbeddingService mediaEmbeddingService,
             final UserDetailsService userDetailsService,
             final EasyFxml easyFxml
     ) {
-        this.browserSupport = browserSupport;
         this.asyncIO = asyncIO;
         this.mediaEmbeddingService = mediaEmbeddingService;
         this.userDetailsService = userDetailsService;
@@ -216,7 +210,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         result.afterControllerLoaded(tcpc -> tcpc.setStatusProp(status))
               .getNode()
               .recover(ExceptionHandler::fromThrowable)
-              .andThen(content.getChildren()::add);
+              .andThen(content::setCenter);
     }
 
     /**
@@ -229,15 +223,6 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         mediaBox.setManaged(!embeddingNodes.isEmpty());
         mediaBox.setVisible(!embeddingNodes.isEmpty());
         mediaBox.getChildren().setAll(embeddingNodes);
-    }
-
-    /**
-     * @param url The URL itself
-     *
-     * @return a clickable link targeting the given URL
-     */
-    private ClickableHyperlink buildHyperlink(final String url) {
-        return new ClickableHyperlink(url, browserSupport::openUrl);
     }
 
 }

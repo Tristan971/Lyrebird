@@ -1,26 +1,28 @@
 package moe.lyrebird.view.components.tweet;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.lyrebird.view.util.ClickableHyperlink;
-import moe.lyrebird.view.util.HyperlinkUtils;
-import twitter4a.Status;
-import twitter4a.URLEntity;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import moe.lyrebird.view.util.ClickableHyperlink;
+import moe.lyrebird.view.util.HyperlinkUtils;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
+import twitter4a.Status;
+import twitter4a.URLEntity;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -44,6 +46,7 @@ public class TweetContentPaneController implements FxmlController {
             statusReady();
         }
         statusProp.addListener((observable, oldValue, newValue) -> statusReady());
+        VBox.setVgrow(tweetContent, Priority.ALWAYS);
     }
 
 

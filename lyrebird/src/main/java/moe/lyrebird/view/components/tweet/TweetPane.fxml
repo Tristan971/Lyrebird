@@ -22,7 +22,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -57,7 +56,7 @@
             </HBox>
          </children>
       </HBox>
-      <HBox spacing="5.0" VBox.vgrow="ALWAYS">
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
          <children>
             <Pane fx:id="authorProfilePicturePane" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefHeight="48.0" prefWidth="48.0" HBox.hgrow="NEVER">
                <children>
@@ -72,7 +71,7 @@
                   <Insets top="2.5" />
                </HBox.margin>
             </Pane>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
                   <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefWidth="50000.0">
                      <right>
@@ -91,7 +90,7 @@
                         </HBox>
                      </left>
                   </BorderPane>
-                  <AnchorPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="150.0" />
+                  <BorderPane fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" VBox.vgrow="ALWAYS" />
                   <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="20.0" minWidth="138.0" spacing="5.0" VBox.vgrow="ALWAYS" />
                   <BorderPane fx:id="interactionBox" />
                </children>
