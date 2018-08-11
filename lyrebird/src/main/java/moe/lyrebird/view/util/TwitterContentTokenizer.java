@@ -18,10 +18,20 @@ import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import twitter4a.Status;
 import twitter4a.URLEntity;
 
+/**
+ * This class helps with tokenization of Tweet content to make sure elements expected to be clickable are not
+ * rendered as simple {@link Text} but really as proper links (i.e. {@link ClickableHyperlink}), that is to say
+ * {@link Text} elements (because {@link javafx.scene.control.Hyperlink} does not wrap properly) that will open
+ * a browser on click.
+ *
+ * @see Status#getURLEntities()
+ * @see HyperlinkUtils
+ * @see Token
+ */
 @Component
-public class TwitterUrlEntitiesBuilder {
+public class TwitterContentTokenizer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TwitterUrlEntitiesBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TwitterContentTokenizer.class);
 
     private static final int MAX_TOKEN_CACHE = 1000;
 
@@ -35,15 +45,33 @@ public class TwitterUrlEntitiesBuilder {
     };
 
     @Autowired
-    public TwitterUrlEntitiesBuilder(BrowserSupport browserSupport) {
+    public TwitterContentTokenizer(BrowserSupport browserSupport) {
         this.browserSupport = browserSupport;
     }
 
+    /**
+     * Calls {@link #tokenizeTweetContent(Status)} via the {@link #tokenizations} local cache to not recompute
+     * tokens for a tweet on scrolling/replying/consulting user details etc.
+     *
+     * @param status The status to tokenize
+     *
+     * @return The list of {@link Text} elements that will be put into the {@link javafx.scene.text.TextFlow} that
+     * represents the content of a Tweet.
+     */
     public List<Text> asTextFlowTokens(final Status status) {
         List<Token> tokenizationResult = tokenizations.computeIfAbsent(status, this::tokenizeTweetContent);
         return tokenizationResult.stream().map(Token::asTextElement).collect(Collectors.toList());
     }
 
+    /**
+     * Uses a C-style cursor approach to efficiently tokenize a Tweet based off of a first pass prebuilding links
+     * via {@link Status#getURLEntities()} and a second pass for other URLs that are not considered by Twitter as
+     * {@link URLEntity}s via {@link #processNonUrlEntities(String, URLEntity[])}. (i.e. embedded media links).
+     *
+     * @param status The status to tokenize
+     *
+     * @return A list of {@link Token}s.
+     */
     private List<Token> tokenizeTweetContent(final Status status) {
         final String input = status.getText();
         final URLEntity[] entities = status.getURLEntities();
@@ -81,6 +109,13 @@ public class TwitterUrlEntitiesBuilder {
         return nodes;
     }
 
+    /**
+     * Helper method to generate a URL-specialized {@link Token}.
+     *
+     * @param urlEntity The entity to map as a Token
+     *
+     * @return A token that correctly this entity.
+     */
     private Token linkOfEntity(final URLEntity urlEntity) {
         return new Token(
                 urlEntity.getDisplayURL(),
@@ -89,6 +124,17 @@ public class TwitterUrlEntitiesBuilder {
         );
     }
 
+    /**
+     * This method uses {@link HyperlinkUtils} to process URLs in the tweet content that are not considered
+     * by Twitter to be proper {@link URLEntity}s (like embedded media links) but still need to be clickable by
+     * the end-user.
+     *
+     * @param endOfTweet        These non-URL url entities always are at the end of a tweet
+     * @param processedEntities The entities already processed to avoid reprinting in case something bad
+     *                          happens. Mostly useless right now.
+     *
+     * @return The list of {@link Token} that cannot be built from {@link Status#getURLEntities()} alone.
+     */
     private List<Token> processNonUrlEntities(final String endOfTweet, final URLEntity[] processedEntities) {
         LOGGER.debug("Processing post-entity : {}", endOfTweet);
 
@@ -109,10 +155,21 @@ public class TwitterUrlEntitiesBuilder {
         return postEntitiesNodes;
     }
 
-    private List<String> tokenizationResult(final List<Token> nodes) {
-        return nodes.stream().map(Token::getTextValue).collect(Collectors.toList());
+    /**
+     * Simple helper for debugging. Prints a list of token as a String-convertible representation.
+     *
+     * @param tokens The tokens that will be printed.
+     *
+     * @return The string-convertible list of the tokens given as parameter.
+     */
+    private List<String> tokenizationResult(final List<Token> tokens) {
+        return tokens.stream().map(Token::getTextValue).collect(Collectors.toList());
     }
 
+    /**
+     * This class represents a String-convertible token that can either represent some simple {@link TokenType#TEXT} or
+     * a clickable {@link TokenType#URL}.
+     */
     private static final class Token {
 
         private final String textValue;
@@ -145,6 +202,9 @@ public class TwitterUrlEntitiesBuilder {
 
     }
 
+    /**
+     * Simple enum flag for whether a given {@link Token} is actually plain text or a URL.
+     */
     private enum TokenType {
         TEXT, URL
     }
