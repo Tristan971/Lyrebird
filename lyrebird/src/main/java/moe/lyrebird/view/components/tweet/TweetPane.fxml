@@ -71,7 +71,7 @@
                   <Insets top="2.5" />
                </HBox.margin>
             </Pane>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="10.0" HBox.hgrow="ALWAYS">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
                   <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefWidth="50000.0">
                      <right>

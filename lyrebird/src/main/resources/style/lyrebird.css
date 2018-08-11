@@ -79,3 +79,18 @@
 .hyperlink {
     -fx-text-fill: #29618b !important;
 }
+
+.clickable-hyperlink {
+    -fx-fill: rgb(55, 122, 224);
+    -fx-padding: 0;
+}
+
+.clickable-hyperlink:hover {
+    -fx-fill: rgb(61, 139, 255);
+    -fx-underline: true;
+}
+
+.clickable-hyperlink:pressed {
+    -fx-fill: rgb(40, 92, 168);
+    -fx-underline: true;
+}
