@@ -28,11 +28,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
 
-<VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.tweet.TweetPaneController">
+<VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.tweet.TweetPaneController">
    <children>
-      <HBox fx:id="retweetHbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+      <HBox fx:id="retweetHbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0">
          <children>
             <HBox alignment="BOTTOM_RIGHT" prefWidth="48.0">
                <children>
@@ -57,7 +56,7 @@
             </HBox>
          </children>
       </HBox>
-      <HBox spacing="5.0" VBox.vgrow="ALWAYS">
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" VBox.vgrow="ALWAYS">
          <children>
             <Pane fx:id="authorProfilePicturePane" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="48.0" minWidth="48.0" prefHeight="48.0" prefWidth="48.0" HBox.hgrow="NEVER">
                <children>
@@ -72,7 +71,7 @@
                   <Insets top="2.5" />
                </HBox.margin>
             </Pane>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
                   <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mouseTransparent="true" prefWidth="50000.0">
                      <right>
@@ -91,9 +90,9 @@
                         </HBox>
                      </left>
                   </BorderPane>
-                  <TextFlow fx:id="content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                  <VBox fx:id="tweetContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" VBox.vgrow="ALWAYS" />
                   <HBox fx:id="mediaBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="20.0" minWidth="138.0" spacing="5.0" VBox.vgrow="ALWAYS" />
-                  <BorderPane fx:id="interactionBox"/>
+                  <BorderPane fx:id="interactionBox" />
                </children>
             </VBox>
          </children>

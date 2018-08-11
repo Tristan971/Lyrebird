@@ -44,7 +44,7 @@ public final class HyperlinkUtils {
      *
      * @return The resulting string
      */
-    private static String transformUrls(final String input, final Function<String, String> replacer) {
+    public static String transformUrls(final String input, final Function<String, String> replacer) {
         return URL_PATTERN.matcher(input).replaceAll(match -> replacer.apply(match.group()));
     }
 
@@ -68,6 +68,10 @@ public final class HyperlinkUtils {
      */
     public static String stripAllUrls(final String input) {
         return transformUrls(input, url -> "");
+    }
+
+    public static boolean isUrl(final String input) {
+        return URL_PATTERN.matcher(input).matches();
     }
 
 }

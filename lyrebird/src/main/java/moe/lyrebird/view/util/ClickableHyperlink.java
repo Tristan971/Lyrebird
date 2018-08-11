@@ -18,18 +18,22 @@
 
 package moe.lyrebird.view.util;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.Hyperlink;
-
 import java.util.function.Consumer;
 
-public final class ClickableHyperlink extends Hyperlink {
+import javafx.scene.text.Text;
+
+public final class ClickableHyperlink extends Text {
 
     public <T> ClickableHyperlink(final T element, final Consumer<T> onClicked) {
-        super();
-        setText(String.valueOf(element));
-        setOnAction(e -> onClicked.accept(element));
-        this.setPadding(Insets.EMPTY);
+        super(String.valueOf(element));
+        setOnMouseClicked(e -> onClicked.accept(element));
+        getStyleClass().setAll("clickable-hyperlink");
+    }
+
+    public <T> ClickableHyperlink(final T element, final Runnable onClicked) {
+        super(String.valueOf(element));
+        setOnMouseClicked(e -> onClicked.run());
+        getStyleClass().setAll("clickable-hyperlink");
     }
 
 }

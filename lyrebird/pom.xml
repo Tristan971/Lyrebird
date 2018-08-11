@@ -102,6 +102,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>moe.lyrebird</groupId>
+            <artifactId>lyrebird-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -125,7 +131,6 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
         <!-- DB (H2) -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -172,6 +177,11 @@
             <version>2.1.17</version>
         </dependency>
         <dependency>
+            <groupId>com.dorkbox</groupId>
+            <artifactId>SystemTray</artifactId>
+            <version>3.14</version>
+        </dependency>
+        <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
             <version>4.0.13-alpha</version>
@@ -190,26 +200,16 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
 
+        <!-- Misc -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>25.1-jre</version>
         </dependency>
         <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version>3.1.1</version>
-        </dependency>
-        <dependency>
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-all</artifactId>
             <version>0.34.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>moe.lyrebird</groupId>
-            <artifactId>lyrebird-api</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -222,12 +222,6 @@
             <groupId>org.ocpsoft.prettytime</groupId>
             <artifactId>prettytime</artifactId>
             <version>4.0.1.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.dorkbox</groupId>
-            <artifactId>SystemTray</artifactId>
-            <version>3.14</version>
         </dependency>
     </dependencies>
 
