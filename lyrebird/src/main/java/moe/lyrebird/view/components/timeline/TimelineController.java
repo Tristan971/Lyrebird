@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Timeline;
-import moe.lyrebird.view.components.base.TimelineBasedController;
 import moe.lyrebird.view.components.base.TimelineControllerBase;
 
 /**
