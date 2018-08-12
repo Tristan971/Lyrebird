@@ -28,7 +28,7 @@ import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.media.display.MediaDisplayScreen;
 import moe.lyrebird.view.screens.media.display.MediaScreenController;
-import moe.lyrebird.view.util.Clipping;
+import moe.lyrebird.view.viewmodel.Clipping;
 
 import javafx.application.Platform;
 import javafx.scene.Node;

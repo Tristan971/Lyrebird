@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.util;
+package moe.lyrebird.view.viewmodel;
 
 import java.util.List;
 import java.util.function.Function;

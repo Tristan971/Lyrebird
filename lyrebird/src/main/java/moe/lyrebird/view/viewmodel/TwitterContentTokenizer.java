@@ -1,4 +1,4 @@
-package moe.lyrebird.view.util;
+package moe.lyrebird.view.viewmodel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

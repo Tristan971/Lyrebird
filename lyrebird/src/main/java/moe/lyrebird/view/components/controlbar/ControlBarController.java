@@ -18,21 +18,19 @@
 
 package moe.lyrebird.view.components.controlbar;
 
-import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
-import moe.tristan.easyfxml.util.Stages;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.update.UpdateService;
-import moe.lyrebird.view.components.FxComponent;
-import moe.lyrebird.view.screens.Screen;
-import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.screens.root.RootScreenController;
-import moe.lyrebird.view.util.Clipping;
+import static moe.lyrebird.view.components.FxComponent.CURRENT_ACCOUNT;
+import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGES;
+import static moe.lyrebird.view.components.FxComponent.MENTIONS;
+import static moe.lyrebird.view.components.FxComponent.TIMELINE;
+import static moe.lyrebird.view.screens.Screen.CREDITS_VIEW;
+import static moe.lyrebird.view.screens.Screen.NEW_TWEET_VIEW;
+import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -41,15 +39,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import java.util.List;
-
-import static moe.lyrebird.view.components.FxComponent.CURRENT_ACCOUNT;
-import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGES;
-import static moe.lyrebird.view.components.FxComponent.MENTIONS;
-import static moe.lyrebird.view.components.FxComponent.TIMELINE;
-import static moe.lyrebird.view.screens.Screen.CREDITS_VIEW;
-import static moe.lyrebird.view.screens.Screen.NEW_TWEET_VIEW;
-import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.update.UpdateService;
+import moe.lyrebird.view.components.FxComponent;
+import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.newtweet.NewTweetController;
+import moe.lyrebird.view.screens.root.RootScreenController;
+import moe.lyrebird.view.viewmodel.Clipping;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
+import moe.tristan.easyfxml.util.Stages;
 
 /**
  * The ControlBar is the left-side view selector for Lyrebird's main UI window.

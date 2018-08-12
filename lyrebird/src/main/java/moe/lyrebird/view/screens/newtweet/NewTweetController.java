@@ -32,8 +32,8 @@ import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.services.NewTweetService;
 import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
-import moe.lyrebird.view.util.Clipping;
-import moe.lyrebird.view.util.StageAware;
+import moe.lyrebird.view.viewmodel.Clipping;
+import moe.lyrebird.view.viewmodel.StageAware;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
