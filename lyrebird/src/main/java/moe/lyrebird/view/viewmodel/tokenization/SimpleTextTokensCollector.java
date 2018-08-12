@@ -47,7 +47,6 @@ public final class SimpleTextTokensCollector {
     private static Token asToken(final String text, final int begin, final int end) {
         return new Token(
                 text,
-                text,
                 begin,
                 end,
                 Token.TokenType.SIMPLE_TEXT,
