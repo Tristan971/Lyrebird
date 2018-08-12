@@ -1,4 +1,4 @@
-package moe.lyrebird.view.viewmodel.tokenization.tokenizers;
+package moe.lyrebird.view.viewmodel.tokenization.extractors;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,7 +50,6 @@ public class ManagedUrlsTokensExtractor implements TokensExtractor {
     private Token linkOfEntity(final URLEntity urlEntity) {
         LOGGER.debug("Tokenizing URLEntity {}", urlEntity);
         return new Token(
-                urlEntity.getURL(),
                 urlEntity.getDisplayURL(),
                 urlEntity.getStart(),
                 urlEntity.getEnd(),

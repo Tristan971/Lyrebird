@@ -10,23 +10,20 @@ import moe.lyrebird.view.viewmodel.javafx.ClickableText;
  */
 public final class Token {
 
-    private final String originalStringValue;
-    private final String replacedStringValue;
+    private final String textRepresentation;
     private final int begin;
     private final int end;
     private final TokenType tokenType;
     private final Runnable onClick;
 
     public Token(
-            final String originalStringValue,
-            final String replacedStringValue,
+            final String textRepresentation,
             final int begin,
             final int end,
             final TokenType tokenType,
             final Runnable onClick
     ) {
-        this.originalStringValue = originalStringValue;
-        this.replacedStringValue = replacedStringValue;
+        this.textRepresentation = textRepresentation;
         this.begin = begin;
         this.end = end;
         this.tokenType = tokenType;
@@ -35,14 +32,14 @@ public final class Token {
 
     public Text asTextElement() {
         if (TokenType.SIMPLE_TEXT.equals(tokenType)) {
-            return new Text(replacedStringValue);
+            return new Text(textRepresentation);
         } else {
-            return new ClickableText(replacedStringValue, onClick);
+            return new ClickableText(textRepresentation, onClick);
         }
     }
 
-    public String getReplacedStringValue() {
-        return replacedStringValue;
+    public String getTextRepresentation() {
+        return textRepresentation;
     }
 
     public int getBegin() {
@@ -62,4 +59,3 @@ public final class Token {
     }
 
 }
-

@@ -106,7 +106,7 @@ public class TweetContentTokenizer {
      * @return The string-convertible list of the tokens given as parameter.
      */
     private static List<String> tokenizationStringValue(final List<Token> tokens) {
-        return tokens.stream().map(Token::getReplacedStringValue).collect(Collectors.toList());
+        return tokens.stream().map(Token::getTextRepresentation).collect(Collectors.toList());
     }
 
 }

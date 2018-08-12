@@ -1,4 +1,4 @@
-package moe.lyrebird.view.viewmodel.tokenization.tokenizers;
+package moe.lyrebird.view.viewmodel.tokenization.extractors;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,6 @@ public class MentionsTokensExtractor implements TokensExtractor {
     @Override
     public List<Token> extractTokens(final Status status) {
         return Arrays.stream(status.getUserMentionEntities()).map(mention -> new Token(
-                mention.getText(),
                 "@" + mention.getText(),
                 mention.getStart(),
                 mention.getEnd(),

@@ -1,4 +1,4 @@
-package moe.lyrebird.view.viewmodel.tokenization.tokenizers;
+package moe.lyrebird.view.viewmodel.tokenization.extractors;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +44,6 @@ public class UnmanagedUrlsTokensExtractor implements TokensExtractor {
 
         return URLMatcher.findAllUrlsWithPosition(unamanagedText).stream().map(
                 urlWithPos -> new Token(
-                        urlWithPos._1,
                         urlWithPos._1,
                         urlWithPos._2,
                         urlWithPos._3,
