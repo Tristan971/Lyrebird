@@ -14,7 +14,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import moe.lyrebird.view.viewmodel.TwitterContentTokenizer;
+import moe.lyrebird.view.viewmodel.tokenization.TwitterContentTokenizer;
 import moe.tristan.easyfxml.api.FxmlController;
 import twitter4a.Status;
 

@@ -1,4 +1,4 @@
-package moe.lyrebird.view.viewmodel;
+package moe.lyrebird.view.viewmodel.tokenization;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javafx.scene.text.Text;
+
+import moe.lyrebird.view.viewmodel.ClickableHyperlink;
+import moe.lyrebird.view.viewmodel.HyperlinkUtils;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
+
 import twitter4a.Status;
 import twitter4a.URLEntity;
 
@@ -119,7 +123,7 @@ public class TwitterContentTokenizer {
     private Token linkOfEntity(final URLEntity urlEntity) {
         return new Token(
                 urlEntity.getDisplayURL(),
-                TokenType.URL,
+                Token.TokenType.URL,
                 () -> browserSupport.openUrl(urlEntity.getExpandedURL())
         );
     }
@@ -146,7 +150,7 @@ public class TwitterContentTokenizer {
         List<Token> postEntitiesNodes = HyperlinkUtils.findAllUrls(fixedEnd).stream().map(
                 url -> new Token(
                         url,
-                        TokenType.URL,
+                        Token.TokenType.URL,
                         () -> browserSupport.openUrl(url)
                 )
         ).collect(Collectors.toList());
@@ -164,49 +168,6 @@ public class TwitterContentTokenizer {
      */
     private List<String> tokenizationResult(final List<Token> tokens) {
         return tokens.stream().map(Token::getTextValue).collect(Collectors.toList());
-    }
-
-    /**
-     * This class represents a String-convertible token that can either represent some simple {@link TokenType#TEXT} or
-     * a clickable {@link TokenType#URL}.
-     */
-    private static final class Token {
-
-        private final String textValue;
-        private final TokenType tokenType;
-        private final Runnable onClick;
-
-        private Token(String textValue, TokenType tokenType, Runnable onClick) {
-            this.textValue = textValue;
-            this.tokenType = tokenType;
-            this.onClick = onClick;
-        }
-
-        private Token(String textValue) {
-            this(textValue, TokenType.TEXT, null);
-        }
-
-        public String getTextValue() {
-            return textValue;
-        }
-
-        public Text asTextElement() {
-            switch (tokenType) {
-                case TEXT:
-                    return new Text(textValue);
-                case URL:
-                    return new ClickableHyperlink(textValue, onClick);
-            }
-            throw new UnsupportedOperationException("Tried to FXify undefined token type! [" + tokenType + "]");
-        }
-
-    }
-
-    /**
-     * Simple enum flag for whether a given {@link Token} is actually plain text or a URL.
-     */
-    private enum TokenType {
-        TEXT, URL
     }
 
 }
