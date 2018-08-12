@@ -10,59 +10,47 @@ import moe.lyrebird.view.viewmodel.javafx.ClickableText;
  */
 public final class Token {
 
-    private static final Runnable NO_OP = () -> {
-    };
-
     private final String originalStringValue;
     private final String replacedStringValue;
-    private final TokenPosition tokenPosition;
+    private final int begin;
+    private final int end;
     private final TokenType tokenType;
     private final Runnable onClick;
 
-    public Token(final String originalStringValue, final String replacedStringValue, final TokenPosition tokenPosition, final TokenType tokenType, final Runnable onClick) {
+    public Token(
+            final String originalStringValue,
+            final String replacedStringValue,
+            final int begin,
+            final int end,
+            final TokenType tokenType,
+            final Runnable onClick
+    ) {
         this.originalStringValue = originalStringValue;
         this.replacedStringValue = replacedStringValue;
-        this.tokenPosition = tokenPosition;
+        this.begin = begin;
+        this.end = end;
         this.tokenType = tokenType;
         this.onClick = onClick;
     }
 
-    public static Token simpleText(final String text, final int begin, final int end) {
-        return new Token(
-                text,
-                text,
-                new TokenPosition(begin, end),
-                TokenType.SIMPLE_TEXT,
-                NO_OP
-        );
-    }
-
-    public String getOriginalStringValue() {
-        return originalStringValue;
+    public Text asTextElement() {
+        if (TokenType.SIMPLE_TEXT.equals(tokenType)) {
+            return new Text(replacedStringValue);
+        } else {
+            return new ClickableText(replacedStringValue, onClick);
+        }
     }
 
     public String getReplacedStringValue() {
         return replacedStringValue;
     }
 
-    public TokenPosition getTokenPosition() {
-        return tokenPosition;
+    public int getBegin() {
+        return begin;
     }
 
-    public TokenType getTokenType() {
-        return tokenType;
-    }
-
-    public Runnable getOnClick() {
-        return onClick;
-    }
-
-    public static Text asTextElement(final Token token) {
-        if (TokenType.SIMPLE_TEXT.equals(token.getTokenType())) {
-            return new Text(token.getReplacedStringValue());
-        } else {
-            return new ClickableText(token.getReplacedStringValue(), token.onClick);
-        }
+    public int getEnd() {
+        return end;
     }
 
     /**
@@ -71,26 +59,6 @@ public final class Token {
     public enum TokenType {
         SIMPLE_TEXT,
         CLICKABLE
-    }
-
-    public static class TokenPosition {
-
-        private final int begin;
-        private final int end;
-
-        public TokenPosition(final int begin, final int end) {
-            this.begin = begin;
-            this.end = end;
-        }
-
-        public int getBegin() {
-            return begin;
-        }
-
-        public int getEnd() {
-            return end;
-        }
-
     }
 
 }

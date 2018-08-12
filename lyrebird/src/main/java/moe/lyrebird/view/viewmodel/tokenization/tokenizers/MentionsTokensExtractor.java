@@ -28,7 +28,8 @@ public class MentionsTokensExtractor implements TokensExtractor {
         return Arrays.stream(status.getUserMentionEntities()).map(mention -> new Token(
                 mention.getText(),
                 mention.getText(),
-                new Token.TokenPosition(mention.getStart(), mention.getEnd()),
+                mention.getStart(),
+                mention.getEnd(),
                 Token.TokenType.CLICKABLE,
                 () -> userDetailsService.openUserDetails(mention.getId())
         )).collect(Collectors.toList());
