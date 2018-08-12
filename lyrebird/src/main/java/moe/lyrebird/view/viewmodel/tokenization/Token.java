@@ -5,12 +5,13 @@ import javafx.scene.text.Text;
 import moe.lyrebird.view.viewmodel.javafx.ClickableText;
 
 /**
- * This class represents a String-convertible token that can either represent some simple {@link TokenType#TEXT} or
- * a clickable {@link TokenType#URL}.
+ * This class represents a String-convertible token that can either represent some {@link TokenType#SIMPLE_TEXT} or
+ * a {@link TokenType#CLICKABLE} element.
  */
 public final class Token {
 
-    private static final Runnable NO_OP = () -> {};
+    private static final Runnable NO_OP = () -> {
+    };
 
     private final String originalStringValue;
     private final String replacedStringValue;
