@@ -14,6 +14,7 @@ import javafx.scene.text.Text;
 
 import moe.lyrebird.view.viewmodel.javafx.ClickableText;
 import moe.lyrebird.model.util.URLMatcher;
+import moe.lyrebird.view.viewmodel.tokenization.tokenizers.LinksTokensExtractor;
 
 import twitter4a.Status;
 
@@ -28,28 +29,28 @@ import twitter4a.Status;
  * @see Token
  */
 @Component
-public class TwitterContentTokenizer {
+public class TweetContentTokenizer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TwitterContentTokenizer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TweetContentTokenizer.class);
 
     private static final int MAX_TOKEN_CACHE = 1000;
 
     private final Map<Status, List<Token>> tokenizations = new LinkedHashMap<>() {
         @Override
-        protected boolean removeEldestEntry(Map.Entry<Status, List<Token>> eldest) {
+        protected boolean removeEldestEntry(final Map.Entry<Status, List<Token>> eldest) {
             return size() > MAX_TOKEN_CACHE;
         }
     };
 
-    private final LinksTokenizer linksTokenizer;
+    private final LinksTokensExtractor linksTokensExtractor;
 
     @Autowired
-    public TwitterContentTokenizer(final LinksTokenizer linksTokenizer) {
-        this.linksTokenizer = linksTokenizer;
+    public TweetContentTokenizer(final LinksTokensExtractor linksTokensExtractor) {
+        this.linksTokensExtractor = linksTokensExtractor;
     }
 
     /**
-     * Calls {@link LinksTokenizer#tokenizeTweetContent(Status)} via the {@link #tokenizations} local cache to not
+     * Calls {@link LinksTokensExtractor#tokenizeTweetContent(Status)} via the {@link #tokenizations} local cache to not
      * recompute tokens for a tweet on scrolling/replying/consulting user details etc.
      *
      * @param status The status to tokenize
@@ -58,8 +59,8 @@ public class TwitterContentTokenizer {
      * represents the content of a Tweet.
      */
     public List<Text> asTextFlowTokens(final Status status) {
-        List<Token> tokenizationResult = tokenizations.computeIfAbsent(status, aStatus -> {
-            List<Token> tokenizedTweet = linksTokenizer.tokenize(aStatus);
+        final List<Token> tokenizationResult = tokenizations.computeIfAbsent(status, aStatus -> {
+            final List<Token> tokenizedTweet = linksTokensExtractor.tokenize(aStatus);
             LOGGER.debug("Tokenized status {} as : {}", status.getId(), tokenizationResult(tokenizedTweet));
             return tokenizedTweet;
         });
@@ -73,8 +74,8 @@ public class TwitterContentTokenizer {
      *
      * @return The string-convertible list of the tokens given as parameter.
      */
-    private List<String> tokenizationResult(final List<Token> tokens) {
-        return tokens.stream().map(Token::getTextValue).collect(Collectors.toList());
+    private static List<String> tokenizationResult(final List<Token> tokens) {
+        return tokens.stream().map(Token::getOriginalStringValue).collect(Collectors.toList());
     }
 
 }
