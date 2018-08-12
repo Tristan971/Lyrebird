@@ -22,15 +22,15 @@ import java.util.function.Consumer;
 
 import javafx.scene.text.Text;
 
-public final class ClickableHyperlink extends Text {
+public final class ClickableText extends Text {
 
-    public <T> ClickableHyperlink(final T element, final Consumer<T> onClicked) {
+    public <T> ClickableText(final T element, final Consumer<T> onClicked) {
         super(String.valueOf(element));
         setOnMouseClicked(e -> onClicked.accept(element));
         getStyleClass().setAll("clickable-hyperlink");
     }
 
-    public <T> ClickableHyperlink(final T element, final Runnable onClicked) {
+    public <T> ClickableText(final T element, final Runnable onClicked) {
         super(String.valueOf(element));
         setOnMouseClicked(e -> onClicked.run());
         getStyleClass().setAll("clickable-hyperlink");

@@ -2,7 +2,7 @@ package moe.lyrebird.view.viewmodel.tokenization;
 
 import javafx.scene.text.Text;
 
-import moe.lyrebird.view.viewmodel.ClickableHyperlink;
+import moe.lyrebird.view.viewmodel.ClickableText;
 
 /**
  * This class represents a String-convertible token that can either represent some simple {@link TokenType#TEXT} or
@@ -33,7 +33,7 @@ public final class Token {
             case TEXT:
                 return new Text(textValue);
             case URL:
-                return new ClickableHyperlink(textValue, onClick);
+                return new ClickableText(textValue, onClick);
         }
         throw new UnsupportedOperationException("Tried to FXify undefined token type! [" + tokenType + "]");
     }
