@@ -18,21 +18,23 @@
 
 package moe.lyrebird.view.components.timeline;
 
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Component;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.observables.Timeline;
-import moe.lyrebird.view.components.TimelineBasedController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
+
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.observables.Timeline;
+import moe.lyrebird.view.components.base.TimelineBasedController;
+import moe.lyrebird.view.components.base.TimelineControllerBase;
 
 /**
  * Mostly setup for default timeline view.
  *
- * @see TimelineBasedController
+ * @see TimelineControllerBase
  */
 @Component
-public class TimelineController extends TimelineBasedController {
+public class TimelineController extends TimelineControllerBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(TimelineController.class);
 

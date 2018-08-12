@@ -18,27 +18,29 @@
 
 package moe.lyrebird.view.components.usertimeline;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.UserTimeline;
-import moe.lyrebird.view.components.TimelineBasedController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4a.User;
+import moe.lyrebird.view.components.base.TimelineControllerBase;
 
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import twitter4a.User;
 
 /**
  * Mostly setup for the self timeline view of a given user.
  *
- * @see TimelineBasedController
+ * @see UserTimelineController
  */
 @Component
 @Scope(SCOPE_PROTOTYPE)
-public class UserTimelineController extends TimelineBasedController {
+public class UserTimelineController extends TimelineControllerBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserTimelineController.class);
     private final UserTimeline userTimeline;
@@ -64,4 +66,5 @@ public class UserTimelineController extends TimelineBasedController {
     protected Logger getLogger() {
         return LOG;
     }
+
 }

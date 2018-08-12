@@ -16,23 +16,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.components;
+package moe.lyrebird.view.components.base;
 
+import java.util.Optional;
+
+import org.slf4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
-import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
+
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
+
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.TwitterTimelineBaseModel;
 import moe.lyrebird.view.components.cells.TweetListCell;
 import moe.lyrebird.view.components.mentions.MentionsController;
 import moe.lyrebird.view.components.timeline.TimelineController;
-import moe.lyrebird.view.components.usertimeline.UserTimelineController;
-import org.slf4j.Logger;
+import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
+
 import twitter4a.Status;
-
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
-
-import java.util.Optional;
 
 /**
  * This class serves as a base implementation for backend observing lists of chronologically reverse-sorted tweets (aka
@@ -40,9 +41,9 @@ import java.util.Optional;
  *
  * @see TimelineController
  * @see MentionsController
- * @see UserTimelineController
+ * @see TimelineControllerBase
  */
-public abstract class TimelineBasedController extends ComponentListViewFxmlController<Status> {
+public abstract class TimelineControllerBase extends ComponentListViewFxmlController<Status> {
 
     private final TwitterTimelineBaseModel timelineBase;
     private final ListProperty<Status> tweetsProperty;
@@ -59,7 +60,7 @@ public abstract class TimelineBasedController extends ComponentListViewFxmlContr
      *                                constructor injection.
      * @param shouldAutomaticallyFill Whether this controller should directly start fetching tweets on creation.
      */
-    public TimelineBasedController(
+    public TimelineControllerBase(
             final TwitterTimelineBaseModel timelineBase,
             final SessionManager sessionManager,
             final ConfigurableApplicationContext context,
