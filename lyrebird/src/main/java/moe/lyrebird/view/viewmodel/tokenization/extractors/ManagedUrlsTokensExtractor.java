@@ -53,6 +53,7 @@ public class ManagedUrlsTokensExtractor implements TokensExtractor {
                 urlEntity.getDisplayURL(),
                 urlEntity.getStart(),
                 urlEntity.getEnd(),
+                Token.TokenType.CLICKABLE,
                 () -> browserSupport.openUrl(urlEntity.getExpandedURL())
         );
     }
