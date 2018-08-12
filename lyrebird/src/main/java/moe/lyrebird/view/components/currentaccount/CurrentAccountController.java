@@ -30,7 +30,7 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.screens.Screen;
-import moe.lyrebird.view.viewmodel.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4a.User;

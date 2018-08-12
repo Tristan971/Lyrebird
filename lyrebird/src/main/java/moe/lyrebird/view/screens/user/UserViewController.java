@@ -34,7 +34,7 @@ import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
 import moe.lyrebird.view.screens.Screen;
-import moe.lyrebird.view.viewmodel.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

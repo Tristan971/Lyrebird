@@ -48,7 +48,7 @@ import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.cells.TweetListCell;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.viewmodel.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;

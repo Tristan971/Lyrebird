@@ -19,7 +19,7 @@
 package moe.lyrebird.view.screens.media.display;
 
 import moe.tristan.easyfxml.api.FxmlController;
-import moe.lyrebird.view.viewmodel.StageAware;
+import moe.lyrebird.view.viewmodel.javafx.StageAware;
 
 import java.net.URL;
 

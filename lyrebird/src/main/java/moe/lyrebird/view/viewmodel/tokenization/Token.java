@@ -2,7 +2,7 @@ package moe.lyrebird.view.viewmodel.tokenization;
 
 import javafx.scene.text.Text;
 
-import moe.lyrebird.view.viewmodel.ClickableText;
+import moe.lyrebird.view.viewmodel.javafx.ClickableText;
 
 /**
  * This class represents a String-convertible token that can either represent some simple {@link TokenType#TEXT} or

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import moe.lyrebird.view.viewmodel.HyperlinkUtils;
+import moe.lyrebird.model.util.URLMatcher;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 
 import twitter4a.Status;
@@ -79,7 +79,7 @@ public class LinksTokenizer implements Tokenizer {
     }
 
     /**
-     * This method uses {@link HyperlinkUtils} to process URLs in the tweet content that are not considered
+     * This method uses {@link URLMatcher} to process URLs in the tweet content that are not considered
      * by Twitter to be proper {@link URLEntity}s (like embedded media links) but still need to be clickable by
      * the end-user.
      *
@@ -97,14 +97,14 @@ public class LinksTokenizer implements Tokenizer {
             fixedEnd = fixedEnd.replaceAll(processedEntity.getURL(), "");
         }
 
-        List<Token> postEntitiesNodes = HyperlinkUtils.findAllUrls(fixedEnd).stream().map(
+        List<Token> postEntitiesNodes = URLMatcher.findAllUrls(fixedEnd).stream().map(
                 url -> new Token(
                         url,
                         Token.TokenType.URL,
                         () -> browserSupport.openUrl(url)
                 )
         ).collect(Collectors.toList());
-        final Token postText = new Token(HyperlinkUtils.stripAllUrls(fixedEnd));
+        final Token postText = new Token(URLMatcher.stripAllUrls(fixedEnd));
         postEntitiesNodes.add(0, postText);
         return postEntitiesNodes;
     }

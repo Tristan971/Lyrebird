@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 import javafx.scene.text.Text;
 
-import moe.lyrebird.view.viewmodel.ClickableText;
-import moe.lyrebird.view.viewmodel.HyperlinkUtils;
+import moe.lyrebird.view.viewmodel.javafx.ClickableText;
+import moe.lyrebird.model.util.URLMatcher;
 
 import twitter4a.Status;
 
@@ -24,7 +24,7 @@ import twitter4a.Status;
  * a browser on click.
  *
  * @see Status#getURLEntities()
- * @see HyperlinkUtils
+ * @see URLMatcher
  * @see Token
  */
 @Component
