@@ -1,4 +1,4 @@
-package moe.lyrebird.view.viewmodel.tokenization.tokenizers;
+package moe.lyrebird.view.viewmodel.tokenization.extractors;
 
 import java.util.List;
 import java.util.stream.Collectors;
