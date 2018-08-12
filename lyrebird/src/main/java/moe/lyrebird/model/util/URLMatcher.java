@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.util;
+package moe.lyrebird.model.util;
 
 import java.util.List;
 import java.util.function.Function;
@@ -24,15 +24,18 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple3;
+
 /**
  * This class provides helper methods for filtering out URLs in text and extracting them out.
  */
-public final class HyperlinkUtils {
+public final class URLMatcher {
 
     private static final String URL_REGEX = "(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX);
 
-    private HyperlinkUtils() {
+    private URLMatcher() {
         throw new UnsupportedOperationException("Should not be instantiated.");
     }
 
@@ -57,6 +60,12 @@ public final class HyperlinkUtils {
      */
     public static List<String> findAllUrls(final String input) {
         return URL_PATTERN.matcher(input).results().map(MatchResult::group).collect(Collectors.toList());
+    }
+
+    public static List<Tuple3<String, Integer, Integer>> findAllUrlsWithPosition(final String input) {
+        return URL_PATTERN.matcher(input).results().map(
+                result -> Tuple.of(result.group(), result.start(), result.end())
+        ).collect(Collectors.toList());
     }
 
     /**

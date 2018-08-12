@@ -16,24 +16,22 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.view.util;
+package moe.lyrebird.view.viewmodel.javafx;
 
-import java.util.function.Consumer;
+import javafx.stage.Stage;
 
-import javafx.scene.text.Text;
+/**
+ * This interface indicates that any controller implementing it needs to know its embedding {@link Stage}.
+ */
+public interface StageAware {
 
-public final class ClickableHyperlink extends Text {
-
-    public <T> ClickableHyperlink(final T element, final Consumer<T> onClicked) {
-        super(String.valueOf(element));
-        setOnMouseClicked(e -> onClicked.accept(element));
-        getStyleClass().setAll("clickable-hyperlink");
-    }
-
-    public <T> ClickableHyperlink(final T element, final Runnable onClicked) {
-        super(String.valueOf(element));
-        setOnMouseClicked(e -> onClicked.run());
-        getStyleClass().setAll("clickable-hyperlink");
+    /**
+     * Sets the embedding stage.
+     *
+     * @param embeddingStage The stage to feed the controller.
+     */
+    default void setStage(final Stage embeddingStage) {
+        // do nothing by default
     }
 
 }

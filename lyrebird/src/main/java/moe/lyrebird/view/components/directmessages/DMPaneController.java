@@ -11,7 +11,7 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.CachedTwitterInfoService;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
-import moe.lyrebird.view.util.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 

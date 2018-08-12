@@ -15,7 +15,7 @@ import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionServic
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.util.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4a.Status;
