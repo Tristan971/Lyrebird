@@ -14,14 +14,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import moe.lyrebird.view.viewmodel.tokenization.TwitterContentTokenizer;
+import moe.lyrebird.view.viewmodel.tokenization.TweetContentTokenizer;
 import moe.tristan.easyfxml.api.FxmlController;
 import twitter4a.Status;
 
 /**
  * This controller and its associated view represent and display the textual content of a Tweet as rich text.
  *
- * @see TwitterContentTokenizer
+ * @see TweetContentTokenizer
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -30,13 +30,13 @@ public class TweetContentPaneController implements FxmlController {
     @FXML
     private TextFlow tweetContent;
 
-    private final TwitterContentTokenizer twitterContentTokenizer;
+    private final TweetContentTokenizer tweetContentTokenizer;
 
     private final Property<Status> statusProp = new SimpleObjectProperty<>();
 
     @Autowired
-    public TweetContentPaneController(TwitterContentTokenizer twitterContentTokenizer) {
-        this.twitterContentTokenizer = twitterContentTokenizer;
+    public TweetContentPaneController(TweetContentTokenizer tweetContentTokenizer) {
+        this.tweetContentTokenizer = tweetContentTokenizer;
     }
 
     @Override
@@ -54,11 +54,11 @@ public class TweetContentPaneController implements FxmlController {
     }
 
     /**
-     * This method tokenizes the newly loaded tweet via {@link TwitterContentTokenizer#asTextFlowTokens(Status)} and
+     * This method tokenizes the newly loaded tweet via {@link TweetContentTokenizer#asTextFlowTokens(Status)} and
      * puts that result inside the embedding {@link TextFlow}.
      */
     private void statusReady() {
-        final List<Text> textFlowElements = twitterContentTokenizer.asTextFlowTokens(statusProp.getValue());
+        final List<Text> textFlowElements = tweetContentTokenizer.asTextFlowTokens(statusProp.getValue());
         tweetContent.getChildren().setAll(textFlowElements);
     }
 
