@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 
 import moe.lyrebird.view.viewmodel.javafx.ClickableText;
 import moe.lyrebird.model.util.URLMatcher;
-import moe.lyrebird.view.viewmodel.tokenization.tokenizers.LinksTokensExtractor;
+import moe.lyrebird.view.viewmodel.tokenization.tokenizers.ManagedUrlsTokensExtractor;
 
 import twitter4a.Status;
 
@@ -42,15 +42,15 @@ public class TweetContentTokenizer {
         }
     };
 
-    private final LinksTokensExtractor linksTokensExtractor;
+    private final ManagedUrlsTokensExtractor managedUrlsTokensExtractor;
 
     @Autowired
-    public TweetContentTokenizer(final LinksTokensExtractor linksTokensExtractor) {
-        this.linksTokensExtractor = linksTokensExtractor;
+    public TweetContentTokenizer(final ManagedUrlsTokensExtractor managedUrlsTokensExtractor) {
+        this.managedUrlsTokensExtractor = managedUrlsTokensExtractor;
     }
 
     /**
-     * Calls {@link LinksTokensExtractor#tokenizeTweetContent(Status)} via the {@link #tokenizations} local cache to not
+     * Calls {@link ManagedUrlsTokensExtractor#extractTokens(Status)} via the {@link #tokenizations} local cache to not
      * recompute tokens for a tweet on scrolling/replying/consulting user details etc.
      *
      * @param status The status to tokenize
@@ -60,7 +60,7 @@ public class TweetContentTokenizer {
      */
     public List<Text> asTextFlowTokens(final Status status) {
         final List<Token> tokenizationResult = tokenizations.computeIfAbsent(status, aStatus -> {
-            final List<Token> tokenizedTweet = linksTokensExtractor.tokenize(aStatus);
+            final List<Token> tokenizedTweet = managedUrlsTokensExtractor.extractTokens(aStatus);
             LOGGER.debug("Tokenized status {} as : {}", status.getId(), tokenizationResult(tokenizedTweet));
             return tokenizedTweet;
         });

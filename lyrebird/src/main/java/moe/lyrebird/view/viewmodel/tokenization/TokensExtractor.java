@@ -6,6 +6,6 @@ import twitter4a.Status;
 
 public interface TokensExtractor {
 
-    List<Token> tokenize(final Status status);
+    List<Token> extractTokens(final Status status);
 
 }

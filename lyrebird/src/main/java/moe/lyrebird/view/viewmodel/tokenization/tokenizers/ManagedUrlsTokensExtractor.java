@@ -17,14 +17,14 @@ import twitter4a.Status;
 import twitter4a.URLEntity;
 
 @Component
-public class LinksTokensExtractor implements TokensExtractor {
+public class ManagedUrlsTokensExtractor implements TokensExtractor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LinksTokensExtractor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ManagedUrlsTokensExtractor.class);
 
     private final BrowserSupport browserSupport;
 
     @Autowired
-    public LinksTokensExtractor(final BrowserSupport browserSupport) {
+    public ManagedUrlsTokensExtractor(final BrowserSupport browserSupport) {
         this.browserSupport = browserSupport;
     }
 
@@ -36,7 +36,7 @@ public class LinksTokensExtractor implements TokensExtractor {
      * @return A list of {@link Token}s.
      */
     @Override
-    public List<Token> tokenize(final Status status) {
+    public List<Token> extractTokens(final Status status) {
         return Arrays.stream(status.getURLEntities()).map(this::linkOfEntity).collect(Collectors.toList());
     }
 

@@ -33,7 +33,7 @@ public class UnmanagedUrlsTokensExtractor implements TokensExtractor {
      * @return The list of {@link Token}s that cannot be built from {@link Status#getURLEntities()} alone.
      */
     @Override
-    public List<Token> tokenize(final Status status) {
+    public List<Token> extractTokens(final Status status) {
         final String statusText = status.getText();
         final URLEntity[] managedUrlEntities = status.getURLEntities();
 

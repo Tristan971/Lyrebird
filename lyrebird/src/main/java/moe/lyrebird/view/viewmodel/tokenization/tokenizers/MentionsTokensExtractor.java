@@ -24,7 +24,7 @@ public class MentionsTokensExtractor implements TokensExtractor {
     }
 
     @Override
-    public List<Token> tokenize(final Status status) {
+    public List<Token> extractTokens(final Status status) {
         return Arrays.stream(status.getUserMentionEntities()).map(mention -> new Token(
                 mention.getText(),
                 mention.getText(),
