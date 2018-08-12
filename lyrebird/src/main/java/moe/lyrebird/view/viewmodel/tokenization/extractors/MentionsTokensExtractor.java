@@ -29,7 +29,6 @@ public class MentionsTokensExtractor implements TokensExtractor {
                 "@" + mention.getText(),
                 mention.getStart(),
                 mention.getEnd(),
-                Token.TokenType.CLICKABLE,
                 () -> userDetailsService.openUserDetails(mention.getId())
         )).collect(Collectors.toList());
     }

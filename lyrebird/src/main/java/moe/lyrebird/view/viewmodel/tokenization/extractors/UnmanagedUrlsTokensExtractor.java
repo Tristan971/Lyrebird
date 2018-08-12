@@ -47,7 +47,6 @@ public class UnmanagedUrlsTokensExtractor implements TokensExtractor {
                         urlWithPos._1,
                         urlWithPos._2,
                         urlWithPos._3,
-                        Token.TokenType.CLICKABLE,
                         () -> browserSupport.openUrl(urlWithPos._1)
                 )
         ).collect(Collectors.toList());

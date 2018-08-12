@@ -31,7 +31,6 @@ public class HashtagTokensExtractor implements TokensExtractor {
                 "#" + hashtag.getText(),
                 hashtag.getStart(),
                 hashtag.getEnd(),
-                Token.TokenType.CLICKABLE,
                 () -> browserSupport.openUrl(HASHTAG_SEARCH_BASE_URL + hashtag.getText())
         )).collect(Collectors.toList());
     }
