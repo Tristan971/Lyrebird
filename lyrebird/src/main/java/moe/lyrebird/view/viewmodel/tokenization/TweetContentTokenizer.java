@@ -1,9 +1,12 @@
 package moe.lyrebird.view.viewmodel.tokenization;
 
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +15,8 @@ import org.springframework.stereotype.Component;
 
 import javafx.scene.text.Text;
 
-import moe.lyrebird.view.viewmodel.javafx.ClickableText;
 import moe.lyrebird.model.util.URLMatcher;
-import moe.lyrebird.view.viewmodel.tokenization.tokenizers.ManagedUrlsTokensExtractor;
+import moe.lyrebird.view.viewmodel.javafx.ClickableText;
 
 import twitter4a.Status;
 
@@ -33,7 +35,7 @@ public class TweetContentTokenizer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TweetContentTokenizer.class);
 
-    private static final int MAX_TOKEN_CACHE = 1000;
+    private static final int MAX_TOKEN_CACHE = 1024;
 
     private final Map<Status, List<Token>> tokenizations = new LinkedHashMap<>() {
         @Override
@@ -42,29 +44,58 @@ public class TweetContentTokenizer {
         }
     };
 
-    private final ManagedUrlsTokensExtractor managedUrlsTokensExtractor;
+    private final List<TokensExtractor> tokensExtractors;
 
     @Autowired
-    public TweetContentTokenizer(final ManagedUrlsTokensExtractor managedUrlsTokensExtractor) {
-        this.managedUrlsTokensExtractor = managedUrlsTokensExtractor;
+    public TweetContentTokenizer(final List<TokensExtractor> tokensExtractors) {
+        this.tokensExtractors = tokensExtractors;
     }
 
     /**
-     * Calls {@link ManagedUrlsTokensExtractor#extractTokens(Status)} via the {@link #tokenizations} local cache to not
-     * recompute tokens for a tweet on scrolling/replying/consulting user details etc.
+     * Computes the appropriate {@link Text} elements to represent the given {@link Status}' text content in a {@link
+     * javafx.scene.text.TextFlow}.
      *
-     * @param status The status to tokenize
+     * @param status The {@link Status}' whose text will be presented in a {@link javafx.scene.text.TextFlow}.
      *
-     * @return The list of {@link Text} elements that will be put into the {@link javafx.scene.text.TextFlow} that
+     * @return The {@link List} of {@link Text} elements that will be put into the {@link javafx.scene.text.TextFlow} that
      * represents the content of a Tweet.
      */
     public List<Text> asTextFlowTokens(final Status status) {
-        final List<Token> tokenizationResult = tokenizations.computeIfAbsent(status, aStatus -> {
-            final List<Token> tokenizedTweet = managedUrlsTokensExtractor.extractTokens(aStatus);
-            LOGGER.debug("Tokenized status {} as : {}", status.getId(), tokenizationResult(tokenizedTweet));
-            return tokenizedTweet;
-        });
-        return tokenizationResult.stream().map(Token::asTextElement).collect(Collectors.toList());
+        return tokenizations.computeIfAbsent(status, this::tokenize)
+                            .stream()
+                            .map(Token::asTextElement)
+                            .collect(Collectors.toList());
+    }
+
+    /**
+     * Tokenizes a given {@link Status} as a {@link List} of {@link Token}s.
+     * <p>
+     * Calls {@link TokensExtractor#extractTokens(Status)} on all the supported {@link TokensExtractor}s to compute
+     * the special {@link Token}s and collects the "leftover" text elements via {@link
+     * SimpleTextTokensCollector#collectLeftovers(Status, List)}.
+     * <p>
+     * Caches the tokenization results via {@link Map#computeIfAbsent(Object, Function)} on {@link #tokenizations}.
+     *
+     * @param status The status to tokenize.
+     *
+     * @return The {@link Token}ized representation of the given {@link Status}.
+     */
+    private List<Token> tokenize(final Status status) {
+        LOGGER.debug("Tokenizing status {}", status.getId());
+        final List<Token> clickableTokens = tokensExtractors.stream()
+                                                            .map(extractor -> extractor.extractTokens(status))
+                                                            .flatMap(List::stream)
+                                                            .collect(Collectors.toList());
+
+        final List<Token> simpleTextTokens = SimpleTextTokensCollector.collectLeftovers(status, clickableTokens);
+
+        final List<Token> tokenization = Stream.of(clickableTokens, simpleTextTokens)
+                                               .flatMap(List::stream)
+                                               .sorted(Comparator.comparingInt(Token::getBegin))
+                                               .collect(Collectors.toList());
+
+        LOGGER.debug("Tokenized status {} as : {}", status.getId(), tokenizationStringValue(tokenization));
+        return tokenization;
     }
 
     /**
@@ -74,8 +105,8 @@ public class TweetContentTokenizer {
      *
      * @return The string-convertible list of the tokens given as parameter.
      */
-    private static List<String> tokenizationResult(final List<Token> tokens) {
-        return tokens.stream().map(Token::getOriginalStringValue).collect(Collectors.toList());
+    private static List<String> tokenizationStringValue(final List<Token> tokens) {
+        return tokens.stream().map(Token::getReplacedStringValue).collect(Collectors.toList());
     }
 
 }
