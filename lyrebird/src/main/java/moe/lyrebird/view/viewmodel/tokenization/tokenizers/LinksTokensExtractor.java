@@ -1,4 +1,4 @@
-package moe.lyrebird.view.viewmodel.tokenization;
+package moe.lyrebird.view.viewmodel.tokenization.tokenizers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,20 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import moe.lyrebird.model.util.URLMatcher;
+import moe.lyrebird.view.viewmodel.tokenization.Token;
+import moe.lyrebird.view.viewmodel.tokenization.TokensExtractor;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 
 import twitter4a.Status;
 import twitter4a.URLEntity;
 
 @Component
-public class LinksTokenizer implements Tokenizer {
+public class LinksTokensExtractor implements TokensExtractor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LinksTokenizer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LinksTokensExtractor.class);
 
     private final BrowserSupport browserSupport;
 
     @Autowired
-    public LinksTokenizer(BrowserSupport browserSupport) {
+    public LinksTokensExtractor(BrowserSupport browserSupport) {
         this.browserSupport = browserSupport;
     }
 
@@ -64,7 +66,7 @@ public class LinksTokenizer implements Tokenizer {
         for (final URLEntity entity : sortedEntities) {
             cursorRight = entity.getStart();
             if (cursorRight > cursorLeft) {
-                nodes.add(new Token(input.substring(cursorLeft, cursorRight)));
+                nodes.add(Token.simpleText(input.substring(cursorLeft, cursorRight), cursorLeft, cursorRight));
             }
             cursorRight = entity.getEnd();
             cursorLeft = cursorRight;
@@ -118,8 +120,10 @@ public class LinksTokenizer implements Tokenizer {
      */
     private Token linkOfEntity(final URLEntity urlEntity) {
         return new Token(
+                urlEntity.getURL(),
                 urlEntity.getDisplayURL(),
-                Token.TokenType.URL,
+                new Token.TokenPosition(urlEntity.getStart(), urlEntity.getEnd()),
+                Token.TokenType.CLICKABLE,
                 () -> browserSupport.openUrl(urlEntity.getExpandedURL())
         );
     }

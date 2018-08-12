@@ -4,7 +4,7 @@ import java.util.List;
 
 import twitter4a.Status;
 
-public interface Tokenizer {
+public interface TokensExtractor {
 
     List<Token> tokenize(final Status status);
 
