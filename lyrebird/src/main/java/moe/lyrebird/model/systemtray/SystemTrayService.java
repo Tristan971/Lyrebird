@@ -18,18 +18,19 @@
 
 package moe.lyrebird.model.systemtray;
 
-import java.awt.*;
+import java.awt.TrayIcon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+
 import dorkbox.systemTray.Menu;
 import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
 import dorkbox.util.OS;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * This class is responsible for management and exposure of the {@link LyrebirdTrayIcon}.
@@ -38,6 +39,12 @@ import javafx.beans.property.SimpleObjectProperty;
 public class SystemTrayService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemTrayService.class);
+
+    static {
+        if (OS.isLinux()) {
+            SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.GtkStatusIcon;
+        }
+    }
 
     private final LyrebirdTrayIcon lyrebirdTrayIcon;
 
@@ -57,9 +64,6 @@ public class SystemTrayService {
      */
     private void loadTrayIcon() {
         LOG.debug("Registering tray icon for Lyrebird...");
-        if (OS.isLinux()) {
-            SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.GtkStatusIcon;
-        }
 
         LOG.debug("Creating a tray icon...");
         SystemTray tray = SystemTray.get();
