@@ -201,11 +201,11 @@ public class ControlBarController implements FxmlController {
 
     private void bindActionImageToLoadingView(
             final HBox imageBox,
-            final FxComponent FxComponent
+            final FxComponent fxComponent
     ) {
         imageBox.setOnMouseClicked(e -> {
             currentViewButton.setValue(imageBox);
-            rootScreenController.setContent(FxComponent);
+            rootScreenController.setContent(fxComponent);
         });
     }
 
