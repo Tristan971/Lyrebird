@@ -127,7 +127,7 @@ public class LyrebirdUiManager extends FxUiManager {
     }
 
     @Override
-    protected void onSceneCreated(Scene mainScene) {
+    protected void onSceneCreated(final Scene mainScene) {
         CompletableFuture.runAsync(streamingService::startListening);
     }
 

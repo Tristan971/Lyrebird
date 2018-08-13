@@ -13,7 +13,7 @@ public class CachedTwitterInfoService {
     private final SessionManager sessionManager;
 
     @Autowired
-    public CachedTwitterInfoService(SessionManager sessionManager) {
+    public CachedTwitterInfoService(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 

@@ -69,7 +69,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     }
 
     @Override
-    public void updateWithValue(DirectMessageEvent newValue) {
+    public void updateWithValue(final DirectMessageEvent newValue) {
         this.currentMessage.setValue(newValue);
     }
 

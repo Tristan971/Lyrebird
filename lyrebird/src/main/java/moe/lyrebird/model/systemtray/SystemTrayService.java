@@ -66,7 +66,7 @@ public class SystemTrayService {
         LOG.debug("Registering tray icon for Lyrebird...");
 
         LOG.debug("Creating a tray icon...");
-        SystemTray tray = SystemTray.get();
+        final SystemTray tray = SystemTray.get();
         tray.setImage(lyrebirdTrayIcon.getIcon());
         tray.setTooltip("Lyrebird");
 

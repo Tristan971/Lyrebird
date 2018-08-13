@@ -109,7 +109,7 @@ public class SelfupdateService {
         installProcess.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         try {
             installProcess.start();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error("Cannot start installation.", e);
         }
     }
