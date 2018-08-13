@@ -70,8 +70,8 @@ public class TweetInteractionPaneController implements FxmlController {
 
     @Autowired
     public TweetInteractionPaneController(
-            TwitterInteractionService interactionService,
-            EasyFxml easyFxml
+            final TwitterInteractionService interactionService,
+            final EasyFxml easyFxml
     ) {
         this.interactionService = interactionService;
         this.easyFxml = easyFxml;

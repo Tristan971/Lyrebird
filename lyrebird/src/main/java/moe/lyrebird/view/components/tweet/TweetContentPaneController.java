@@ -35,7 +35,7 @@ public class TweetContentPaneController implements FxmlController {
     private final Property<Status> statusProp = new SimpleObjectProperty<>();
 
     @Autowired
-    public TweetContentPaneController(TweetContentTokenizer tweetContentTokenizer) {
+    public TweetContentPaneController(final TweetContentTokenizer tweetContentTokenizer) {
         this.tweetContentTokenizer = tweetContentTokenizer;
     }
 

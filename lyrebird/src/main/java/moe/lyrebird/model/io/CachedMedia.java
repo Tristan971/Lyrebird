@@ -30,6 +30,7 @@ import javafx.scene.media.Media;
  * This class exposes convenience methods for doing cached IO operations.
  */
 @Component
+@SuppressWarnings("MethodMayBeStatic")
 @Cacheable(value = "cachedMedia", sync = true)
 public class CachedMedia {
 
@@ -74,3 +75,4 @@ public class CachedMedia {
     }
 
 }
+

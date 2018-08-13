@@ -201,7 +201,7 @@ public class LoginScreenController implements FxmlController {
      * @param node    The node targeted
      * @param visible Whether to make it visible or not
      */
-    private void setNodeVisibility(final Node node, final boolean visible) {
+    private static void setNodeVisibility(final Node node, final boolean visible) {
         node.setVisible(visible);
         node.setManaged(visible);
     }

@@ -18,10 +18,10 @@
 
 package moe.lyrebird.model.credits.objects;
 
+import java.net.MalformedURLException;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.net.MalformedURLException;
 
 /**
  * @see CreditedWork
@@ -29,7 +29,7 @@ import java.net.MalformedURLException;
 public final class CreditedWorkAuthor extends SimpleNameUrlBinding {
 
     @JsonCreator
-    protected CreditedWorkAuthor(
+    CreditedWorkAuthor(
             @JsonProperty("name") final String name,
             @JsonProperty("url") final String url
     ) throws MalformedURLException {

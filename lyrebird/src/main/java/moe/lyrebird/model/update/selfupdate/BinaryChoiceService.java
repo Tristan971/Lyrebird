@@ -18,22 +18,25 @@
 
 package moe.lyrebird.model.update.selfupdate;
 
-import org.springframework.stereotype.Component;
-import io.vavr.control.Option;
-import moe.lyrebird.api.model.TargetPlatform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import moe.lyrebird.api.model.TargetPlatform;
+
+import io.vavr.control.Option;
 import oshi.SystemInfo;
 
 /**
  * This service helps choose the right package type for the current platform.
  */
-@Component
-public class BinaryChoiceService {
+public final class BinaryChoiceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(BinaryChoiceService.class);
 
-    boolean currentPlatformSupportsSelfupdate() {
+    private BinaryChoiceService() {
+    }
+
+    static boolean currentPlatformSupportsSelfupdate() {
         return detectRunningPlatform().isDefined();
     }
 
@@ -43,7 +46,7 @@ public class BinaryChoiceService {
      * @return the appropriate {@link TargetPlatform} for the current platform if supported. If the current platform is
      * not specifically supported, returns {@link Option#none()}.
      */
-    Option<TargetPlatform> detectRunningPlatform() {
+    static Option<TargetPlatform> detectRunningPlatform() {
         LOG.debug("Detecting platform...");
         switch (SystemInfo.getCurrentPlatformEnum()) {
             case WINDOWS:

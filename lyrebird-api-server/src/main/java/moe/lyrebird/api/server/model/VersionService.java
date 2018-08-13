@@ -42,7 +42,7 @@ public class VersionService {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public VersionService(ObjectMapper objectMapper) {
+    public VersionService(final ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
