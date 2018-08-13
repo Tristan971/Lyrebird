@@ -1,40 +1,29 @@
 package moe.lyrebird.model.update.compatibility;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class PostUpdateCompatibilityHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(PostUpdateCompatibilityHelper.class);
 
-    private static final PostUpdateCompatibilityHelper INSTANCE = new PostUpdateCompatibilityHelper();
-
-    private final Map<String, Runnable> oneTimeExecutions = new HashMap<>();
-
-    public static PostUpdateCompatibilityHelper getInstance() {
-        return INSTANCE;
-    }
-
     private PostUpdateCompatibilityHelper() {
-        LOG.debug("Initialized post-update compatibility helper.");
     }
 
-    public void executeCompatibilityTasks() {
+    public static void executeCompatibilityTasks() {
         LOG.debug("Parsing post-update compatibility tasks.");
         Stream.of(wipeUserData())
               .forEach(PostUpdateCompatibilityTask::executeIfNecessary);
     }
 
-    private PostUpdateCompatibilityTask wipeUserData() {
+    private static PostUpdateCompatibilityTask wipeUserData() {
         final List<String> reasons = Collections.singletonList(
                 "1.1.2-twitter4j-to-twitter4a-hibernate"
         );
