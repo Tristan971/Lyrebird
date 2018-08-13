@@ -105,7 +105,7 @@ public class VideoScreenController implements MediaScreenController {
      *
      * @param mediaPlayer The media player to setup.
      */
-    private void onClickHandler(final MediaPlayer mediaPlayer) {
+    private static void onClickHandler(final MediaPlayer mediaPlayer) {
         final MediaPlayer.Status playerStatus = mediaPlayer.statusProperty().get();
         switch (playerStatus) {
             case READY:

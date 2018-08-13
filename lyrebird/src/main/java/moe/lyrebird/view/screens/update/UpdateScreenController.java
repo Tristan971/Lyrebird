@@ -20,17 +20,18 @@ package moe.lyrebird.view.screens.update;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.lyrebird.api.model.LyrebirdVersion;
-import moe.lyrebird.model.update.UpdateService;
-import moe.lyrebird.view.screens.Screen;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebView;
+
+import moe.lyrebird.api.model.LyrebirdVersion;
+import moe.lyrebird.model.update.UpdateService;
+import moe.lyrebird.view.screens.Screen;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 
 /**
  * This controller is responsible for managing the {@link Screen#UPDATE_VIEW} screen.
@@ -72,7 +73,7 @@ public class UpdateScreenController implements FxmlController {
         updateService.getLatestVersion()
                      .thenAcceptAsync(this::displayVersion, Platform::runLater);
 
-        final boolean canSelfupdate = updateService.selfupdateCompatible();
+        final boolean canSelfupdate = UpdateService.selfupdateCompatible();
         updateButton.setVisible(canSelfupdate);
         updateButton.setManaged(canSelfupdate);
         updateButton.setOnAction(e -> {

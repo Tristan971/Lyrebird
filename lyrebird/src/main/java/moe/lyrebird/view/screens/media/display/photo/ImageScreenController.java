@@ -22,9 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.lyrebird.model.io.CachedMedia;
-import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.media.display.MediaScreenController;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
@@ -32,6 +29,10 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+
+import moe.lyrebird.model.io.CachedMedia;
+import moe.lyrebird.view.assets.ImageResources;
+import moe.lyrebird.view.screens.media.display.MediaScreenController;
 
 /**
  * This controller if managing detailed views of images.

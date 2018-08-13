@@ -301,7 +301,7 @@ public class NewTweetController implements FxmlController, StageAware {
         mediasToUpload.addAll(selectedFiles);
         LOG.debug("Added media files for upload with next tweet : {}", selectedFiles);
         final List<ImageView> mediaImagePreviews = selectedFiles.stream()
-                                                                .map(this::buildMediaPreviewImageView)
+                                                                .map(NewTweetController::buildMediaPreviewImageView)
                                                                 .filter(Objects::nonNull)
                                                                 .collect(Collectors.toList());
         if (!mediaImagePreviews.isEmpty()) {
@@ -316,7 +316,7 @@ public class NewTweetController implements FxmlController, StageAware {
      *
      * @return The miniature {@link ImageView} previewing it
      */
-    private ImageView buildMediaPreviewImageView(final File previewedFile) {
+    private static ImageView buildMediaPreviewImageView(final File previewedFile) {
         try {
             final ImageView imageView = new ImageView();
             imageView.setFitHeight(MEDIA_PREVIEW_IMAGE_SIZE);

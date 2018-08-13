@@ -18,23 +18,25 @@
 
 package moe.lyrebird.model.credits;
 
+import static io.vavr.API.unchecked;
+import static javafx.collections.FXCollections.observableList;
+import static javafx.collections.FXCollections.unmodifiableObservableList;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.vavr.collection.Stream;
-import io.vavr.control.Try;
-import moe.lyrebird.model.credits.objects.CreditedWork;
 
 import javafx.collections.ObservableList;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.List;
+import moe.lyrebird.model.credits.objects.CreditedWork;
 
-import static io.vavr.API.unchecked;
-import static javafx.collections.FXCollections.observableList;
-import static javafx.collections.FXCollections.unmodifiableObservableList;
+import io.vavr.collection.Stream;
+import io.vavr.control.Try;
 
 /**
  * This service aims at exposing credited works disclaimers in src/main/resources/assets/credits/third-parties
@@ -65,7 +67,7 @@ public class CreditsService {
      *
      * @return The list of deserialized credits files
      */
-    private List<CreditedWork> loadCreditsFiles(
+    private static List<CreditedWork> loadCreditsFiles(
             final ObjectMapper objectMapper,
             final PathMatchingResourcePatternResolver pmpr
     ) {

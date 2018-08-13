@@ -18,15 +18,15 @@
 
 package moe.lyrebird.model.interrupts;
 
-import org.springframework.stereotype.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * This service is called at shutdown to execute a certain amount of cleanup operations.
@@ -60,7 +60,7 @@ public class CleanupService {
         CLEANUP_EXECUTOR.execute(() -> {
             LOG.info("Cleaning up...");
             LOG.debug("Executing cleanup hooks:");
-            onShutdownHooks.forEach(this::executeCleanupOperationWithTimeout);
+            onShutdownHooks.forEach(CleanupService::executeCleanupOperationWithTimeout);
             LOG.debug("All cleanup hooks have been executed!");
         });
     }
@@ -71,7 +71,7 @@ public class CleanupService {
      *
      * @param cleanupOperation The operation to execute
      */
-    private void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
+    private static void executeCleanupOperationWithTimeout(final CleanupOperation cleanupOperation) {
         LOG.debug("\t-> {}", cleanupOperation.getName());
         cleanupOperation.getOperation().run();
     }

@@ -18,15 +18,15 @@
 
 package moe.lyrebird.model.io;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * This class exposes convenience method to execute asynchronous network operations on the asyncIo thread.

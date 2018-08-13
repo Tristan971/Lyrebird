@@ -97,7 +97,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
                .thenAcceptAsync(ppView::setImage, Platform::runLater);
     }
 
-    private void ppSetupReceiver(final ImageView ppView) {
+    private static void ppSetupReceiver(final ImageView ppView) {
         ppView.setVisible(false);
         ppView.setManaged(false);
     }
