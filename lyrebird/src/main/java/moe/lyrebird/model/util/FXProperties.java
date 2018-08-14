@@ -23,7 +23,11 @@ public final class FXProperties {
         if (prop.getValue() != null && prop.getValue()) {
             onReady.run();
         } else {
-            waitForProp(prop, val -> onReady.run());
+            prop.addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    onReady.run();
+                }
+            });
         }
     }
 
