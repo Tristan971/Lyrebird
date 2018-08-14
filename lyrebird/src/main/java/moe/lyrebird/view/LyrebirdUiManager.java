@@ -18,26 +18,23 @@
 
 package moe.lyrebird.view;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import moe.lyrebird.model.notifications.Notification;
-import moe.lyrebird.model.notifications.NotificationService;
-import moe.lyrebird.model.settings.Setting;
-import moe.lyrebird.model.settings.SettingsUtils;
-import moe.lyrebird.model.twitter.TwitterStreamingService;
-import moe.lyrebird.view.screens.Screen;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
+import moe.lyrebird.model.notifications.Notification;
+import moe.lyrebird.model.notifications.NotificationService;
+import moe.lyrebird.model.settings.Setting;
+import moe.lyrebird.model.settings.SettingsUtils;
+import moe.lyrebird.view.screens.Screen;
+
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The {@link LyrebirdUiManager} is responsible for bootstrapping the GUI of the application correctly.
@@ -51,7 +48,6 @@ public class LyrebirdUiManager extends FxUiManager {
     private final StageManager stageManager;
     private final Environment environment;
     private final NotificationService notificationService;
-    private final TwitterStreamingService streamingService;
 
     private final AtomicBoolean informedUserOfCloseBehavior;
 
@@ -64,15 +60,13 @@ public class LyrebirdUiManager extends FxUiManager {
      * @param environment         The spring environment to use property keys for minimal size and main stage title.
      * @param notificationService The notification service that will be used to notify user of the custom behavior of
      *                            this main stage's closure view {@link #handleMainStageClosure(Stage)}.
-     * @param streamingService    The streaming service that is to be started asynchronously once stage is loaded
      */
     @Autowired
     public LyrebirdUiManager(
             final EasyFxml easyFxml,
             final StageManager stageManager,
             final Environment environment,
-            final NotificationService notificationService,
-            final TwitterStreamingService streamingService
+            final NotificationService notificationService
     ) {
         super(easyFxml);
         this.stageManager = stageManager;
@@ -82,7 +76,6 @@ public class LyrebirdUiManager extends FxUiManager {
                 Setting.NOTIFICATION_MAIN_STAGE_TRAY_SEEN,
                 false
         ));
-        this.streamingService = streamingService;
     }
 
     /**
@@ -120,11 +113,6 @@ public class LyrebirdUiManager extends FxUiManager {
         mainStage.setWidth(600.0);
         mainStage.setHeight(500.0);
         stageManager.registerSingle(Screen.ROOT_VIEW, mainStage);
-    }
-
-    @Override
-    protected void onSceneCreated(final Scene mainScene) {
-        CompletableFuture.runAsync(streamingService::startListening);
     }
 
     /**
