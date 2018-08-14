@@ -147,11 +147,6 @@
             <artifactId>twitter4a-core</artifactId>
             <version>4.1.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.twitter4a</groupId>
-            <artifactId>twitter4a-stream</artifactId>
-            <version>4.1.0</version>
-        </dependency>
 
         <!-- Vavr -->
         <dependency>
