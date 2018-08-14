@@ -25,8 +25,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import twitter4a.Twitter;
 import twitter4a.TwitterFactory;
-import twitter4a.TwitterStream;
-import twitter4a.TwitterStreamFactory;
 import twitter4a.conf.ConfigurationBuilder;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -70,24 +68,6 @@ public class Twitter4JComponents {
     @Scope(value = SCOPE_PROTOTYPE)
     public Twitter twitter(final TwitterFactory factory) {
         return factory.getInstance();
-    }
-
-    /**
-     * @param configuration the configuration of this application regarding Twitter API authentication
-     * @return a configured TwitterStreamFactory
-     */
-    @Bean
-    public TwitterStreamFactory twitterStreamFactory(final twitter4a.conf.Configuration configuration) {
-        return new TwitterStreamFactory(configuration);
-    }
-
-    /**
-     * @param streamFactory a configured TwitterStreamFactory
-     * @return a configured TwitterStream
-     */
-    @Bean
-    public TwitterStream twitterStream(final TwitterStreamFactory streamFactory) {
-        return streamFactory.getInstance();
     }
 
 }
