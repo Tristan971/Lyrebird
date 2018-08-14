@@ -95,7 +95,7 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
                 - [ ] Youtube video embedding
     - [x] Data loading features :
         - [x] Seeking older tweets by-demand (scroll or button)
-        - [x] Seek newer tweets all the time using streaming API
+        - [x] Streaming API  **NO LONGER ALLOWED BY TWITTER STARTING 16TH AUGUST 2018**
 
 - [ ] Tweeting
     - [x] Support text
