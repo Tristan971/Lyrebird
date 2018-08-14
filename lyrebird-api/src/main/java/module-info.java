@@ -1,4 +1,6 @@
 module moe.lyrebird.api {
+    exports moe.lyrebird.api.conf;
+    exports moe.lyrebird.api.model;
 
     requires slf4j.api;
 
