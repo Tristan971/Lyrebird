@@ -18,33 +18,28 @@
 
 package moe.lyrebird.view.screens.newtweet;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static javafx.scene.paint.Color.BLUE;
-import static javafx.scene.paint.Color.GREEN;
-import static javafx.scene.paint.Color.ORANGE;
-import static javafx.scene.paint.Color.RED;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Buttons;
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
+import moe.lyrebird.model.twitter.observables.Mentions;
+import moe.lyrebird.model.twitter.observables.Timeline;
+import moe.lyrebird.model.twitter.services.NewTweetService;
+import moe.lyrebird.view.components.FxComponent;
+import moe.lyrebird.view.components.tweet.TweetPaneController;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.StageAware;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import twitter4a.Status;
+import twitter4a.User;
+import twitter4a.UserMentionEntity;
 
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -68,21 +63,26 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
-import moe.lyrebird.model.twitter.services.NewTweetService;
-import moe.lyrebird.view.components.FxComponent;
-import moe.lyrebird.view.components.tweet.TweetPaneController;
-import moe.lyrebird.view.viewmodel.javafx.Clipping;
-import moe.lyrebird.view.viewmodel.javafx.StageAware;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.Buttons;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import twitter4a.Status;
-import twitter4a.User;
-import twitter4a.UserMentionEntity;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static javafx.scene.paint.Color.BLUE;
+import static javafx.scene.paint.Color.GREEN;
+import static javafx.scene.paint.Color.ORANGE;
+import static javafx.scene.paint.Color.RED;
 
 /**
  * This controller manages the new tweet view.
@@ -123,6 +123,8 @@ public class NewTweetController implements FxmlController, StageAware {
     private final TwitterMediaExtensionFilter twitterMediaExtensionFilter;
     private final EasyFxml easyFxml;
     private final SessionManager sessionManager;
+    private final Timeline timeline;
+    private final Mentions mentions;
 
     private final ListProperty<File> mediasToUpload;
     private final Property<Stage> embeddingStage;
@@ -132,12 +134,16 @@ public class NewTweetController implements FxmlController, StageAware {
             final NewTweetService newTweetService,
             final TwitterMediaExtensionFilter extensionFilter,
             final EasyFxml easyFxml,
-            final SessionManager sessionManager
+            final SessionManager sessionManager,
+            final Timeline timeline,
+            final Mentions mentions
     ) {
         this.newTweetService = newTweetService;
         this.twitterMediaExtensionFilter = extensionFilter;
         this.easyFxml = easyFxml;
         this.sessionManager = sessionManager;
+        this.timeline = timeline;
+        this.mentions = mentions;
         this.mediasToUpload = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<>()));
         this.embeddingStage = new SimpleObjectProperty<>(null);
     }
@@ -241,7 +247,9 @@ public class NewTweetController implements FxmlController, StageAware {
                        .thenAcceptAsync(status -> {
                            LOG.info("Tweeted status : {} [{}]", status.getId(), status.getText());
                            this.embeddingStage.getValue().hide();
-                       }, Platform::runLater);
+                       }, Platform::runLater)
+                       .thenRunAsync(timeline::loadLastTweets)
+                       .thenRunAsync(mentions::loadLastTweets);
     }
 
     /**
@@ -254,7 +262,9 @@ public class NewTweetController implements FxmlController, StageAware {
                        .thenAcceptAsync(status -> {
                            LOG.info("Tweeted reply to {} : {} [{}]", inReplyToId, status.getId(), status.getText());
                            this.embeddingStage.getValue().hide();
-                       }, Platform::runLater);
+                       }, Platform::runLater)
+                       .thenRunAsync(timeline::loadLastTweets)
+                       .thenRunAsync(mentions::loadLastTweets);
     }
 
     /**
