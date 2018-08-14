@@ -18,29 +18,26 @@
 
 package moe.lyrebird.view.screens.newtweet;
 
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.Buttons;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
-import moe.lyrebird.model.twitter.observables.Mentions;
-import moe.lyrebird.model.twitter.observables.Timeline;
-import moe.lyrebird.model.twitter.services.NewTweetService;
-import moe.lyrebird.view.components.FxComponent;
-import moe.lyrebird.view.components.tweet.TweetPaneController;
-import moe.lyrebird.view.viewmodel.javafx.Clipping;
-import moe.lyrebird.view.viewmodel.javafx.StageAware;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4a.Status;
-import twitter4a.User;
-import twitter4a.UserMentionEntity;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static javafx.scene.paint.Color.BLUE;
+import static javafx.scene.paint.Color.GREEN;
+import static javafx.scene.paint.Color.ORANGE;
+import static javafx.scene.paint.Color.RED;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ListProperty;
@@ -63,26 +60,29 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static javafx.scene.paint.Color.BLUE;
-import static javafx.scene.paint.Color.GREEN;
-import static javafx.scene.paint.Color.ORANGE;
-import static javafx.scene.paint.Color.RED;
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
+import moe.lyrebird.model.twitter.observables.Mentions;
+import moe.lyrebird.model.twitter.observables.Timeline;
+import moe.lyrebird.model.twitter.services.NewTweetService;
+import moe.lyrebird.view.components.FxComponent;
+import moe.lyrebird.view.components.tweet.TweetPaneController;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.StageAware;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Buttons;
+import twitter4a.Status;
+import twitter4a.User;
+import twitter4a.UserMentionEntity;
 
 /**
  * This controller manages the new tweet view.
