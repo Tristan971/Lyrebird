@@ -80,7 +80,7 @@ public class Timeline extends TwitterTimelineBaseModel implements RateLimited {
 
     @Override
     public int maxRequestsPer15Minutes() {
-        return 900;
+        return 15;
     }
 
 }

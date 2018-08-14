@@ -80,17 +80,14 @@ public abstract class TwitterTimelineBaseModel {
      * Asynchronously loads the last tweets available
      */
     public void refresh() {
-        if (!isFirstCall.get()) {
-            loadMoreTweets(loadedTweets.get(0).getId());
-        } else {
-            CompletableFuture.runAsync(() -> {
-                getLocalLogger().debug("Requesting last tweets in timeline.");
-                sessionManager.getCurrentTwitter()
-                              .mapTry(this::initialLoad)
-                              .onSuccess(this::addTweets)
-                              .andThen(() -> isFirstCall.set(false));
-            });
-        }
+        CompletableFuture.runAsync(() -> {
+            getLocalLogger().debug("Requesting last tweets in timeline.");
+            sessionManager.getCurrentTwitter()
+                          .mapTry(this::initialLoad)
+                          .onSuccess(this::addTweets)
+                          .onFailure(err -> getLocalLogger().error("Could not refresh!", err))
+                          .andThen(() -> isFirstCall.set(false));
+        });
     }
 
     /**
