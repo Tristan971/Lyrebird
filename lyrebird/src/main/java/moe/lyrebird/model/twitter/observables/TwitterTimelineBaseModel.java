@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 
@@ -41,6 +42,8 @@ import twitter4a.TwitterException;
 public abstract class TwitterTimelineBaseModel {
 
     protected final SessionManager sessionManager;
+
+    private final AtomicBoolean isFirstCall = new AtomicBoolean(true);
 
     private final ObservableList<Status> loadedTweets = FXCollections.observableList(new LinkedList<>());
 
@@ -77,12 +80,17 @@ public abstract class TwitterTimelineBaseModel {
      * Asynchronously loads the last tweets available
      */
     public void refresh() {
-        CompletableFuture.runAsync(() -> {
-            getLocalLogger().debug("Requesting last tweets in timeline.");
-            sessionManager.getCurrentTwitter()
-                          .mapTry(this::initialLoad)
-                          .onSuccess(this::addTweets);
-        });
+        if (!isFirstCall.get()) {
+            loadMoreTweets(loadedTweets.get(0).getId());
+        } else {
+            CompletableFuture.runAsync(() -> {
+                getLocalLogger().debug("Requesting last tweets in timeline.");
+                sessionManager.getCurrentTwitter()
+                              .mapTry(this::initialLoad)
+                              .onSuccess(this::addTweets)
+                              .andThen(() -> isFirstCall.set(false));
+            });
+        }
     }
 
     /**
@@ -100,11 +108,18 @@ public abstract class TwitterTimelineBaseModel {
      *
      * @param newTweet The tweet to add.
      */
-    protected void addTweet(final Status newTweet) {
+    private void addTweet(final Status newTweet) {
         if (!this.loadedTweets.contains(newTweet)) {
             this.loadedTweets.add(newTweet);
             this.loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
+            if (!isFirstCall.get()) {
+                onNewElementStreamed(newTweet);
+            }
         }
+    }
+
+    protected void onNewElementStreamed(final Status newElement) {
+        // do nothing by default
     }
 
     /**

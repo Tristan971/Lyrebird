@@ -62,9 +62,8 @@ public class Mentions extends TwitterTimelineBaseModel implements RateLimited {
     }
 
     @Override
-    protected void addTweet(final Status newTweet) {
-        super.addTweet(newTweet);
-        final Notification mentionNotification = TwitterNotifications.fromMention(newTweet);
+    protected void onNewElementStreamed(final Status newElement) {
+        final Notification mentionNotification = TwitterNotifications.fromMention(newElement);
         notificationService.sendNotification(mentionNotification);
     }
 
