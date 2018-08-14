@@ -18,20 +18,22 @@
 
 package moe.lyrebird.model.twitter.observables;
 
-import moe.lyrebird.model.sessions.SessionManager;
-import org.slf4j.Logger;
-import twitter4a.Paging;
-import twitter4a.Status;
-import twitter4a.Twitter;
-import twitter4a.TwitterException;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import org.slf4j.Logger;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import moe.lyrebird.model.sessions.SessionManager;
+
+import twitter4a.Paging;
+import twitter4a.Status;
+import twitter4a.Twitter;
+import twitter4a.TwitterException;
 
 /**
  * This is the base class for reverse-chronologically sorted tweet lists (aka Timelines) backend model.
@@ -74,7 +76,7 @@ public abstract class TwitterTimelineBaseModel {
     /**
      * Asynchronously loads the last tweets available
      */
-    public void loadLastTweets() {
+    public void refresh() {
         CompletableFuture.runAsync(() -> {
             getLocalLogger().debug("Requesting last tweets in timeline.");
             sessionManager.getCurrentTwitter()
@@ -98,25 +100,11 @@ public abstract class TwitterTimelineBaseModel {
      *
      * @param newTweet The tweet to add.
      */
-    public void addTweet(final Status newTweet) {
+    protected void addTweet(final Status newTweet) {
         if (!this.loadedTweets.contains(newTweet)) {
             this.loadedTweets.add(newTweet);
             this.loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
         }
-    }
-
-    /**
-     * Removes a given tweet from the list of currently loaded ones.
-     *
-     * @param removedId The id of the tweet to remove
-     *
-     * @see Status#getId()
-     */
-    public void removeTweet(final long removedId) {
-        this.loadedTweets.stream()
-                         .filter(status -> status.getId() == removedId)
-                         .findFirst()
-                         .ifPresent(this.loadedTweets::remove);
     }
 
     /**
@@ -127,7 +115,7 @@ public abstract class TwitterTimelineBaseModel {
     }
 
     /**
-     * Performs the initial load of tweets (i.e. {@link #loadLastTweets()}).
+     * Performs the initial load of tweets (i.e. {@link #refresh()}).
      *
      * @param twitter The twitter instance to use
      *
