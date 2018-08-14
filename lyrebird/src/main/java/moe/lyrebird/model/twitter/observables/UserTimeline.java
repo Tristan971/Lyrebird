@@ -18,24 +18,26 @@
 
 package moe.lyrebird.model.twitter.observables;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+
 import moe.lyrebird.model.sessions.SessionManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import twitter4a.Paging;
 import twitter4a.ResponseList;
 import twitter4a.Status;
 import twitter4a.Twitter;
 import twitter4a.TwitterException;
 import twitter4a.User;
-
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * This class exposes a user's self timeline in an observable way
@@ -54,7 +56,7 @@ public class UserTimeline extends TwitterTimelineBaseModel {
         super(sessionManager);
         this.targetUser.addListener((o, prev, cur) -> {
             this.clearLoadedTweets();
-            loadLastTweets();
+            refresh();
         });
     }
 
