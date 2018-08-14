@@ -201,11 +201,6 @@
             <artifactId>guava</artifactId>
             <version>25.1-jre</version>
         </dependency>
-        <dependency>
-            <groupId>com.vladsch.flexmark</groupId>
-            <artifactId>flexmark-all</artifactId>
-            <version>0.34.6</version>
-        </dependency>
 
         <dependency>
             <groupId>com.github.oshi</groupId>
