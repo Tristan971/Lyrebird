@@ -1,4 +1,5 @@
-module lyrebird {
+open module lyrebird {
+
     requires spring.boot.autoconfigure;
     requires spring.context;
     requires easyfxml;
@@ -19,5 +20,9 @@ module lyrebird {
     requires java.persistence;
     requires com.fasterxml.jackson.databind;
     requires jackson.annotations;
-
+    requires rxjavafx;
+    requires io.reactivex.rxjava2;
+    requires prettytime;
+    requires spring.data.jpa;
+    requires oshi.core;
 }

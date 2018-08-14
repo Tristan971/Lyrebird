@@ -1,9 +1,7 @@
-module moe.lyrebird.api {
-    exports moe.lyrebird.api.conf;
+open module moe.lyrebird.api {
     exports moe.lyrebird.api.model;
-    exports moe.lyrebird.api.client to lyrebird;
-
-    opens moe.lyrebird.api.model to com.fasterxml.jackson.databind;
+    exports moe.lyrebird.api.conf;
+    exports moe.lyrebird.api.client;
 
     requires slf4j.api;
 
