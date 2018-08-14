@@ -248,8 +248,8 @@ public class NewTweetController implements FxmlController, StageAware {
                            LOG.info("Tweeted status : {} [{}]", status.getId(), status.getText());
                            this.embeddingStage.getValue().hide();
                        }, Platform::runLater)
-                       .thenRunAsync(timeline::loadLastTweets)
-                       .thenRunAsync(mentions::loadLastTweets);
+                       .thenRunAsync(timeline::refresh)
+                       .thenRunAsync(mentions::refresh);
     }
 
     /**
@@ -263,8 +263,8 @@ public class NewTweetController implements FxmlController, StageAware {
                            LOG.info("Tweeted reply to {} : {} [{}]", inReplyToId, status.getId(), status.getText());
                            this.embeddingStage.getValue().hide();
                        }, Platform::runLater)
-                       .thenRunAsync(timeline::loadLastTweets)
-                       .thenRunAsync(mentions::loadLastTweets);
+                       .thenRunAsync(timeline::refresh)
+                       .thenRunAsync(mentions::refresh);
     }
 
     /**

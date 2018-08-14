@@ -70,7 +70,7 @@ public abstract class TimelineControllerBase extends ComponentListViewFxmlContro
         this.timelineBase = timelineBase;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timelineBase.loadedTweets());
         this.shouldAutomaticallyFill = shouldAutomaticallyFill;
-        sessionManager.currentSessionProperty().addListener(change -> timelineBase.loadLastTweets());
+        sessionManager.currentSessionProperty().addListener(change -> timelineBase.refresh());
     }
 
     @Override
@@ -78,7 +78,7 @@ public abstract class TimelineControllerBase extends ComponentListViewFxmlContro
         super.initialize();
         listView.itemsProperty().bind(new ReadOnlyListWrapper<>(timelineBase.loadedTweets()));
         if (shouldAutomaticallyFill) {
-            timelineBase.loadLastTweets();
+            timelineBase.refresh();
         }
     }
 
