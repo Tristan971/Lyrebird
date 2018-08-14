@@ -5,7 +5,7 @@ open module lyrebird {
     requires easyfxml;
     requires SystemTray;
     requires java.desktop;
-    requires moe.lyrebird.api;
+    requires lyrebird.api;
     requires javafx.graphics;
     requires slf4j.api;
     requires spring.beans;

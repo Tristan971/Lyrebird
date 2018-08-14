@@ -1,4 +1,4 @@
-open module moe.lyrebird.api {
+open module lyrebird.api {
     exports moe.lyrebird.api.model;
     exports moe.lyrebird.api.conf;
     exports moe.lyrebird.api.client;

@@ -1,4 +1,4 @@
-module moe.lyrebird.api.server {
+module lyrebird.server {
 
     opens moe.lyrebird.api.server to spring.core;
 
@@ -19,6 +19,6 @@ module moe.lyrebird.api.server {
     requires com.fasterxml.jackson.databind;
     requires io.vavr;
 
-    requires moe.lyrebird.api;
+    requires lyrebird.api;
 
 }
