@@ -2,6 +2,8 @@ module moe.lyrebird.api {
     exports moe.lyrebird.api.conf;
     exports moe.lyrebird.api.model;
 
+    opens moe.lyrebird.api.model to com.fasterxml.jackson.databind;
+
     requires slf4j.api;
 
     requires spring.beans;
@@ -11,5 +13,6 @@ module moe.lyrebird.api {
 
     requires com.fasterxml.jackson.databind;
     requires jackson.annotations;
+    requires java.sql;
 
 }
