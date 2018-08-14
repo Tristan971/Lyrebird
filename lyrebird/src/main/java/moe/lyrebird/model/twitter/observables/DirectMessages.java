@@ -79,7 +79,7 @@ public class DirectMessages implements RateLimited {
 
     @Override
     public int maxRequestsPer15Minutes() {
-        return 180;
+        return 15;
     }
 
     private void addDirectMessages(final List<DirectMessageEvent> loadedMessages) {
