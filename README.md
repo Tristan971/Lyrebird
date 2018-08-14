@@ -74,12 +74,13 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
         - [x] Display username, @screen_name and user profile picture
         - [ ] Display for chosen list
         - [ ] Text highlighting
-            - [ ] Mentions
-                - [ ] Color
-                - [ ] Clickable
+            - [x] Mentions
+                - [x] Color
+                - [x] Clickable
             - [ ] Hashtags
-                - [ ] Color
-                - [ ] Clickable
+                - [x] Color
+                - [x] Clickable
+                - [ ] In-app search
             - [x] URLs
                 - [x] Color
                 - [x] Clickable
