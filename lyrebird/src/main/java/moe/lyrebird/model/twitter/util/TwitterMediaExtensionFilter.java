@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.model.twitter;
+package moe.lyrebird.model.twitter.util;
 
 import java.util.Arrays;
 import java.util.List;

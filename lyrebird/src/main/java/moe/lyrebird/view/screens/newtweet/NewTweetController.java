@@ -68,7 +68,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.TwitterMediaExtensionFilter;
+import moe.lyrebird.model.twitter.util.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.observables.Mentions;
 import moe.lyrebird.model.twitter.observables.Timeline;
 import moe.lyrebird.model.twitter.services.NewTweetService;
