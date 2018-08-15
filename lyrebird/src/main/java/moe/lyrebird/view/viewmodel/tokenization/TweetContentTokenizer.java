@@ -81,7 +81,7 @@ public class TweetContentTokenizer {
      * @return The {@link Token}ized representation of the given {@link Status}.
      */
     private List<Token> tokenize(final Status status) {
-        LOGGER.debug("Tokenizing status {}", status.getId());
+        LOGGER.trace("Tokenizing status {}", status.getId());
         final List<Token> clickableTokens = tokensExtractors.stream()
                                                             .map(extractor -> extractor.extractTokens(status))
                                                             .flatMap(List::stream)
@@ -94,7 +94,7 @@ public class TweetContentTokenizer {
                                                .sorted(Comparator.comparingInt(Token::getBegin))
                                                .collect(Collectors.toList());
 
-        LOGGER.debug("Tokenized status {} as : {}", status.getId(), tokenizationStringValue(tokenization));
+        LOGGER.trace("Tokenized status {} as : {}", status.getId(), tokenizationStringValue(tokenization));
         return tokenization;
     }
 

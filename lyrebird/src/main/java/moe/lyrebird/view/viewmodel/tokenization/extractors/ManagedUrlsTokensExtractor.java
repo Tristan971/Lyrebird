@@ -48,7 +48,7 @@ public class ManagedUrlsTokensExtractor implements TokensExtractor {
      * @return A token that correctly this entity.
      */
     private Token linkOfEntity(final URLEntity urlEntity) {
-        LOGGER.debug("Tokenizing URLEntity {}", urlEntity);
+        LOGGER.trace("Tokenizing URLEntity {}", urlEntity);
         return new Token(
                 urlEntity.getDisplayURL(),
                 urlEntity.getStart(),

@@ -96,8 +96,8 @@ public abstract class TwitterTimelineBaseModel {
      * @param receivedTweets The tweets to add.
      */
     private void addTweets(final List<Status> receivedTweets) {
-        receivedTweets.forEach(this::addTweet);
-        getLocalLogger().debug("Loaded {} tweets successfully.", receivedTweets.size());
+        final int newTweets = receivedTweets.stream().map(this::addTweet).mapToInt(val -> val ? 1 : 0).sum();
+        getLocalLogger().debug("Loaded {} new tweets.", newTweets);
     }
 
     /**
@@ -105,14 +105,16 @@ public abstract class TwitterTimelineBaseModel {
      *
      * @param newTweet The tweet to add.
      */
-    private void addTweet(final Status newTweet) {
+    private boolean addTweet(final Status newTweet) {
         if (!this.loadedTweets.contains(newTweet)) {
             this.loadedTweets.add(newTweet);
             this.loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
             if (!isFirstCall.get()) {
                 onNewElementStreamed(newTweet);
             }
+            return true;
         }
+        return false;
     }
 
     protected void onNewElementStreamed(final Status newElement) {
