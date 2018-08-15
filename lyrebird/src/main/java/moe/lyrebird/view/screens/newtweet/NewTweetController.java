@@ -36,8 +36,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ListProperty;
@@ -60,18 +69,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.util.TwitterMediaExtensionFilter;
 import moe.lyrebird.model.twitter.observables.Mentions;
 import moe.lyrebird.model.twitter.observables.Timeline;
+import moe.lyrebird.model.twitter.refresh.RateLimited;
 import moe.lyrebird.model.twitter.services.NewTweetService;
+import moe.lyrebird.model.twitter.util.TwitterMediaExtensionFilter;
 import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
@@ -80,6 +83,7 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Buttons;
+
 import twitter4a.Status;
 import twitter4a.User;
 import twitter4a.UserMentionEntity;
@@ -231,40 +235,43 @@ public class NewTweetController implements FxmlController, StageAware {
      * "normal" new tweet or a reply (i.e. if there was a value set for {@link #inReplyStatus}.
      */
     private void send() {
-        if (inReplyStatus.getValue() == null) {
-            sendTweet();
-        } else {
-            sendReply();
-        }
+        Match(inReplyStatus.getValue()).of(
+                Case($(Objects::nonNull), this::sendReply),
+                Case($(Objects::isNull), this::sendTweet)
+        ).thenRunAsync(
+                () -> Stream.of(timeline, mentions).forEach(RateLimited::refresh),
+                CompletableFuture.delayedExecutor(2, TimeUnit.SECONDS)
+        );
     }
 
     /**
      * Sends a tweet using the {@link NewTweetService}.
      */
-    private void sendTweet() {
+    private CompletionStage<Void> sendTweet() {
         Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
-        newTweetService.sendTweet(tweetTextArea.getText(), mediasToUpload)
-                       .thenAcceptAsync(status -> {
-                           LOG.info("Tweeted status : {} [{}]", status.getId(), status.getText());
-                           this.embeddingStage.getValue().hide();
-                       }, Platform::runLater)
-                       .thenRunAsync(timeline::refresh)
-                       .thenRunAsync(mentions::refresh);
+        return newTweetService.sendTweet(tweetTextArea.getText(), mediasToUpload)
+                              .thenAcceptAsync(status -> {
+                                  LOG.info("Tweeted status : {} [{}]", status.getId(), status.getText());
+                                  this.embeddingStage.getValue().hide();
+                              }, Platform::runLater);
     }
 
     /**
      * Sends a reply using the {@link NewTweetService}.
      */
-    private void sendReply() {
+    private CompletionStage<Void> sendReply() {
         final long inReplyToId = inReplyStatus.getValue().getId();
         Stream.of(tweetTextArea, sendButton, pickMediaButton).forEach(ctr -> ctr.setDisable(true));
-        newTweetService.sendReply(tweetTextArea.getText(), mediasToUpload, inReplyToId)
-                       .thenAcceptAsync(status -> {
-                           LOG.info("Tweeted reply to {} : {} [{}]", inReplyToId, status.getId(), status.getText());
-                           this.embeddingStage.getValue().hide();
-                       }, Platform::runLater)
-                       .thenRunAsync(timeline::refresh)
-                       .thenRunAsync(mentions::refresh);
+        return newTweetService.sendReply(tweetTextArea.getText(), mediasToUpload, inReplyToId)
+                              .thenAcceptAsync(status -> {
+                                  LOG.info(
+                                          "Tweeted reply to {} : {} [{}]",
+                                          inReplyToId,
+                                          status.getId(),
+                                          status.getText()
+                                  );
+                                  this.embeddingStage.getValue().hide();
+                              }, Platform::runLater);
     }
 
     /**
