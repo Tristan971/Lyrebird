@@ -97,6 +97,7 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
     - [x] Data loading features :
         - [x] Seeking older tweets by-demand (scroll or button)
         - [x] Streaming API  **NO LONGER ALLOWED BY TWITTER STARTING 16TH AUGUST 2018**
+        - [x] Seeking updated information as often as possible while respecting rate limits
 
 - [ ] Tweeting
     - [x] Support text
