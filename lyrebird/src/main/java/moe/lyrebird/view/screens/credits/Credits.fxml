@@ -24,9 +24,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="480.0" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="780.0" stylesheets="@/style/lyrebird.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.screens.credits.CreditsScreenController">
    <children>
@@ -55,17 +56,14 @@
                      <children>
                         <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@/assets/credits/contributors/tristandeloche.jpg" />
-                                 </image>
-                              </ImageView>
+                              <ImageView fx:id="applicationAuthorProfilePicture" fitHeight="32.0" fitWidth="32.0"
+                                         pickOnBounds="true" preserveRatio="true"/>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Tristan Deloche">
                                  <font>
                                     <Font name="System Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <Hyperlink maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="\@_tristan971_">
+                              <Hyperlink fx:id="applicationAuthorProfileLink" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="\@_tristan971_">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>

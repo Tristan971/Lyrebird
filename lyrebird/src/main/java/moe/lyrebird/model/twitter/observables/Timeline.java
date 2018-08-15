@@ -18,47 +18,50 @@
 
 package moe.lyrebird.model.twitter.observables;
 
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.services.interraction.TwitterInterractionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import moe.lyrebird.model.twitter.refresh.RateLimited;
+import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
+
 import twitter4a.Paging;
 import twitter4a.Status;
 import twitter4a.Twitter;
 import twitter4a.TwitterException;
-
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * This class exposes the current user's timeline in an observable way
  */
 @Lazy
 @Component
-public class Timeline extends TwitterTimelineBaseModel {
+public class Timeline extends TwitterTimelineBaseModel implements RateLimited {
 
     private static final Logger LOG = LoggerFactory.getLogger(Timeline.class);
 
-    private final TwitterInterractionService interractionService;
+    private final TwitterInteractionService interactionService;
 
     @Autowired
     public Timeline(
             final SessionManager sessionManager,
-            final TwitterInterractionService interractionService
+            final TwitterInteractionService interactionService
     ) {
         super(sessionManager);
-        this.interractionService = interractionService;
+        this.interactionService = interactionService;
     }
 
     @Override
     protected List<Status> initialLoad(final Twitter twitter) throws TwitterException {
         return twitter.getHomeTimeline()
                       .stream()
-                      .filter(((Predicate<Status>) interractionService::isRetweetByCurrentUser).negate())
+                      .filter(((Predicate<Status>) interactionService::isRetweetByCurrentUser).negate())
                       .collect(Collectors.toList());
     }
 
@@ -66,13 +69,18 @@ public class Timeline extends TwitterTimelineBaseModel {
     protected List<Status> backfillLoad(final Twitter twitter, final Paging paging) throws TwitterException {
         return twitter.getHomeTimeline(paging)
                       .stream()
-                      .filter(((Predicate<Status>) interractionService::isRetweetByCurrentUser).negate())
+                      .filter(((Predicate<Status>) interactionService::isRetweetByCurrentUser).negate())
                       .collect(Collectors.toList());
     }
 
     @Override
     protected Logger getLocalLogger() {
         return LOG;
+    }
+
+    @Override
+    public int maxRequestsPer15Minutes() {
+        return 15;
     }
 
 }

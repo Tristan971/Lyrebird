@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import moe.lyrebird.model.credits.objects.CredittedWork;
+import moe.lyrebird.model.credits.objects.CreditedWork;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -38,7 +38,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  */
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
-public class CreditsCell extends ComponentListCell<CredittedWork> {
+public class CreditsCell extends ComponentListCell<CreditedWork> {
 
     private final BooleanProperty shouldDisplay;
 
@@ -49,7 +49,7 @@ public class CreditsCell extends ComponentListCell<CredittedWork> {
     }
 
     @Override
-    protected void updateItem(final CredittedWork item, final boolean empty) {
+    protected void updateItem(final CreditedWork item, final boolean empty) {
         super.updateItem(item, empty);
         this.shouldDisplay.setValue(item != null && !empty);
     }

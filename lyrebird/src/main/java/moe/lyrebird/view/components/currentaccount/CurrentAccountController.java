@@ -18,34 +18,37 @@
 
 package moe.lyrebird.view.components.currentaccount;
 
+import static moe.lyrebird.view.assets.ImageResources.CONTROLBAR_ADD_USER;
+
+import java.util.concurrent.CompletableFuture;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.util.Stages;
-import io.vavr.control.Try;
+
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
+
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.screens.Screen;
-import moe.lyrebird.view.util.Clipping;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.util.Stages;
+
+import io.vavr.control.Try;
 import twitter4a.User;
 
-import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-
-import java.util.concurrent.CompletableFuture;
-
-import static moe.lyrebird.view.assets.ImageResources.CONTROLBAR_ADD_USER;
-
 /**
- * This component is laoded at the top of the {@link FxComponent#CONTROL_BAR} and serves as a very basic preview for who
+ * This component is loaded at the top of the {@link FxComponent#CONTROL_BAR} and serves as a very basic preview for who
  * is the current user that will be used to perform all the actions requested.
  *
  * @see SessionManager
@@ -57,6 +60,9 @@ public class CurrentAccountController implements FxmlController {
 
     @FXML
     private ImageView userProfilePicture;
+
+    @FXML
+    private Circle userProfilePictureBorder;
 
     @FXML
     private Label userScreenName;
@@ -81,6 +87,7 @@ public class CurrentAccountController implements FxmlController {
 
     @Override
     public void initialize() {
+        userProfilePictureBorder.visibleProperty().bind(sessionManager.isLoggedInProperty());
         userProfilePicture.setClip(Clipping.getCircleClip(32.0));
         userProfilePicture.setImage(CONTROLBAR_ADD_USER.getImage());
         userProfilePicture.setOnMouseClicked(e -> handleClickOnProfile());

@@ -18,29 +18,27 @@
 
 package moe.lyrebird.view;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
+import moe.lyrebird.model.notifications.Notification;
+import moe.lyrebird.model.notifications.NotificationService;
+import moe.lyrebird.model.settings.Setting;
+import moe.lyrebird.model.settings.SettingsUtils;
+import moe.lyrebird.view.screens.Screen;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
-import moe.lyrebird.model.notifications.Notification;
-import moe.lyrebird.model.notifications.NotificationService;
-import moe.lyrebird.model.settings.Setting;
-import moe.lyrebird.model.settings.SettingsService;
-import moe.lyrebird.model.twitter.TwitterStreamingService;
-import moe.lyrebird.view.screens.Screen;
-
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * The {@link LyrebirdUiManager} is responsible for bootstraping the GUI of the application correctly.
+ * The {@link LyrebirdUiManager} is responsible for bootstrapping the GUI of the application correctly.
  * <p>
  * To do so, it serves as the entry point for the JavaFX side of things and uses overriding from {@link FxUiManager} for
  * root view configuration.
@@ -51,8 +49,6 @@ public class LyrebirdUiManager extends FxUiManager {
     private final StageManager stageManager;
     private final Environment environment;
     private final NotificationService notificationService;
-    private final SettingsService settingsService;
-    private final TwitterStreamingService streamingService;
 
     private final AtomicBoolean informedUserOfCloseBehavior;
 
@@ -65,28 +61,22 @@ public class LyrebirdUiManager extends FxUiManager {
      * @param environment         The spring environment to use property keys for minimal size and main stage title.
      * @param notificationService The notification service that will be used to notify user of the custom behavior of
      *                            this main stage's closure view {@link #handleMainStageClosure(Stage)}.
-     * @param settingsService     The settings service used to retrieve user-saved settings
-     * @param streamingService    The streaming service that is to be started asynchronously once stage is loaded
      */
     @Autowired
     public LyrebirdUiManager(
             final EasyFxml easyFxml,
             final StageManager stageManager,
             final Environment environment,
-            final NotificationService notificationService,
-            final SettingsService settingsService,
-            final TwitterStreamingService streamingService
+            final NotificationService notificationService
     ) {
         super(easyFxml);
         this.stageManager = stageManager;
         this.environment = environment;
         this.notificationService = notificationService;
-        this.settingsService = settingsService;
-        this.informedUserOfCloseBehavior = new AtomicBoolean(settingsService.get(
+        this.informedUserOfCloseBehavior = new AtomicBoolean(SettingsUtils.get(
                 Setting.NOTIFICATION_MAIN_STAGE_TRAY_SEEN,
                 false
         ));
-        this.streamingService = streamingService;
     }
 
     /**
@@ -109,8 +99,8 @@ public class LyrebirdUiManager extends FxUiManager {
      * <ul>
      * <li>Disable closure of the application on closure of main stage</li>
      * <li>Treating closure of main stage as a request to hide it</li>
-     * <li>Set-up minimum stage size contraints</li>
-     * <li>Register it agains {@link StageManager} for retrieval in various places</li>
+     * <li>Set-up minimum stage size constraints</li>
+     * <li>Register it again {@link StageManager} for retrieval in various places</li>
      * </ul>
      *
      * @param mainStage The application's main stage.
@@ -119,14 +109,11 @@ public class LyrebirdUiManager extends FxUiManager {
     protected void onStageCreated(final Stage mainStage) {
         Platform.setImplicitExit(false);
         mainStage.setOnCloseRequest(e -> handleMainStageClosure(mainStage));
-        mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeigth", Integer.class));
+        mainStage.setMinHeight(environment.getRequiredProperty("mainStage.minHeight", Integer.class));
         mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
+        mainStage.setWidth(600.0);
+        mainStage.setHeight(500.0);
         stageManager.registerSingle(Screen.ROOT_VIEW, mainStage);
-    }
-
-    @Override
-    protected void onSceneCreated(Scene mainScene) {
-        CompletableFuture.runAsync(streamingService::startListening);
     }
 
     /**
@@ -150,7 +137,7 @@ public class LyrebirdUiManager extends FxUiManager {
                     "Exiting the main window does not close Lyrebird, use the icon in the system tray."
             ));
             informedUserOfCloseBehavior.setRelease(true);
-            settingsService.set(Setting.NOTIFICATION_MAIN_STAGE_TRAY_SEEN, true);
+            SettingsUtils.set(Setting.NOTIFICATION_MAIN_STAGE_TRAY_SEEN, true);
         }
     }
 

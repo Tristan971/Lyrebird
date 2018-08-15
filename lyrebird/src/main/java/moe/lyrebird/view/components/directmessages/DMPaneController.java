@@ -11,7 +11,7 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.CachedTwitterInfoService;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
-import moe.lyrebird.view.util.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import twitter4a.DirectMessageEvent;
 import twitter4a.User;
 
@@ -69,7 +69,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     }
 
     @Override
-    public void updateWithValue(DirectMessageEvent newValue) {
+    public void updateWithValue(final DirectMessageEvent newValue) {
         this.currentMessage.setValue(newValue);
     }
 
@@ -97,7 +97,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
                .thenAcceptAsync(ppView::setImage, Platform::runLater);
     }
 
-    private void ppSetupReceiver(final ImageView ppView) {
+    private static void ppSetupReceiver(final ImageView ppView) {
         ppView.setVisible(false);
         ppView.setManaged(false);
     }

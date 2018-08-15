@@ -18,31 +18,6 @@
 
 package moe.lyrebird.view.components.controlbar;
 
-import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
-import moe.tristan.easyfxml.util.Stages;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.update.UpdateService;
-import moe.lyrebird.view.components.FxComponent;
-import moe.lyrebird.view.screens.Screen;
-import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.screens.root.RootScreenController;
-import moe.lyrebird.view.util.Clipping;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-
-import java.util.List;
-
 import static moe.lyrebird.view.components.FxComponent.CURRENT_ACCOUNT;
 import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGES;
 import static moe.lyrebird.view.components.FxComponent.MENTIONS;
@@ -50,6 +25,38 @@ import static moe.lyrebird.view.components.FxComponent.TIMELINE;
 import static moe.lyrebird.view.screens.Screen.CREDITS_VIEW;
 import static moe.lyrebird.view.screens.Screen.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
+
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.fxml.FXML;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.update.UpdateService;
+import moe.lyrebird.view.components.FxComponent;
+import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.newtweet.NewTweetController;
+import moe.lyrebird.view.screens.root.RootScreenController;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
+import moe.tristan.easyfxml.util.Stages;
+
+import io.vavr.control.Option;
 
 /**
  * The ControlBar is the left-side view selector for Lyrebird's main UI window.
@@ -84,6 +91,7 @@ public class ControlBarController implements FxmlController {
     private final RootScreenController rootScreenController;
     private final SessionManager sessionManager;
     private final UpdateService updateService;
+    private final StageManager stageManager;
 
     private final Property<HBox> currentViewButton;
 
@@ -91,12 +99,14 @@ public class ControlBarController implements FxmlController {
             final EasyFxml easyFxml,
             final RootScreenController rootScreenController,
             final SessionManager sessionManager,
-            final UpdateService updateService
+            final UpdateService updateService,
+            final StageManager stageManager
     ) {
         this.easyFxml = easyFxml;
         this.rootScreenController = rootScreenController;
         this.sessionManager = sessionManager;
         this.updateService = updateService;
+        this.stageManager = stageManager;
         this.currentViewButton = new SimpleObjectProperty<>(null);
     }
 
@@ -117,12 +127,7 @@ public class ControlBarController implements FxmlController {
         bindActionImageToLoadingView(mentions, MENTIONS);
         bindActionImageToLoadingView(directMessages, DIRECT_MESSAGES);
 
-        credits.setOnMouseClicked(
-                e -> easyFxml.loadNode(CREDITS_VIEW)
-                             .orExceptionPane()
-                             .map(pane -> Stages.stageOf("Credits", pane))
-                             .andThen(Stages::scheduleDisplaying)
-        );
+        credits.setOnMouseClicked(e -> openCreditsView());
 
         sessionManager.isLoggedInProperty().addListener((o, prev, cur) -> handleLogStatusChange(prev, cur));
         handleLogStatusChange(false, sessionManager.isLoggedInProperty().getValue());
@@ -200,12 +205,33 @@ public class ControlBarController implements FxmlController {
 
     private void bindActionImageToLoadingView(
             final HBox imageBox,
-            final FxComponent FxComponent
+            final FxComponent fxComponent
     ) {
         imageBox.setOnMouseClicked(e -> {
             currentViewButton.setValue(imageBox);
-            rootScreenController.setContent(FxComponent);
+            rootScreenController.setContent(fxComponent);
         });
+    }
+
+    private void openCreditsView() {
+        final Option<Stage> existingCreditsStage = stageManager.getSingle(CREDITS_VIEW);
+        if (existingCreditsStage.isDefined()) {
+            final Stage creditsStage = existingCreditsStage.get();
+            creditsStage.show();
+            creditsStage.toFront();
+        } else {
+            loadCreditsStage().thenAcceptAsync(stage -> {
+                stageManager.registerSingle(Screen.CREDITS_VIEW, stage);
+                Stages.scheduleDisplaying(stage);
+            });
+        }
+    }
+
+    private CompletionStage<Stage> loadCreditsStage() {
+        return easyFxml.loadNode(CREDITS_VIEW)
+                       .orExceptionPane()
+                       .map(pane -> Stages.stageOf("Credits", pane))
+                       .getOrElseThrow((Function<? super Throwable, ? extends RuntimeException>) RuntimeException::new);
     }
 
     /**
@@ -219,4 +245,5 @@ public class ControlBarController implements FxmlController {
         final Pane updatePane = updateScreenLoadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
         Stages.stageOf("Updates", updatePane).thenAcceptAsync(Stages::scheduleDisplaying);
     }
+
 }

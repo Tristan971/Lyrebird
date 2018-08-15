@@ -26,9 +26,9 @@ import moe.tristan.easyfxml.util.Stages;
 import moe.lyrebird.view.assets.ImageResources;
 import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
-import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
+import moe.lyrebird.view.screens.media.display.MediaDisplayScreen;
 import moe.lyrebird.view.screens.media.display.MediaScreenController;
-import moe.lyrebird.view.util.Clipping;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
 
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -68,7 +68,7 @@ public class EmbeddedMediaViewHelper {
      */
     @SafeVarargs
     public final Pane makeWrapperWithIcon(
-            final MediaDisplaySceen displayScreen,
+            final MediaDisplayScreen displayScreen,
             final ImageResources imageResource,
             final String mediaUrl,
             final Consumer<ImageView>... andThen
@@ -101,11 +101,11 @@ public class EmbeddedMediaViewHelper {
     /**
      * Binds the click on the preview to opening of the detailed view.
      *
-     * @param screenToLoad The {@link MediaDisplaySceen} (subset of {@link Screen}) to open on click
+     * @param screenToLoad The {@link MediaDisplayScreen} (subset of {@link Screen}) to open on click
      * @param clickable    The preview node
      * @param mediaUrl     The URL of the media that will be displayed
      */
-    private void setOnOpen(final MediaDisplaySceen screenToLoad, final Node clickable, final String mediaUrl) {
+    private void setOnOpen(final MediaDisplayScreen screenToLoad, final Node clickable, final String mediaUrl) {
         clickable.setOnMouseClicked(e -> {
             final FxmlLoadResult<Pane, MediaScreenController> mediaScreenLoad = loadMediaScreen(screenToLoad, mediaUrl);
             final Pane mediaScreenPane = mediaScreenLoad.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
@@ -120,17 +120,17 @@ public class EmbeddedMediaViewHelper {
     /**
      * Opens the given media screen type for a given media.
      *
-     * @param mediaDisplaySceen The screen to open this media with
+     * @param mediaDisplayScreen The screen to open this media with
      * @param mediaUrl          The media to display
      *
      * @return The {@link FxmlLoadResult} with preconfigured controller.
      */
     private FxmlLoadResult<Pane, MediaScreenController> loadMediaScreen(
-            final MediaDisplaySceen mediaDisplaySceen,
+            final MediaDisplayScreen mediaDisplayScreen,
             final String mediaUrl
     ) {
         return easyFxml.loadNode(
-                mediaDisplaySceen,
+                mediaDisplayScreen,
                 Pane.class,
                 MediaScreenController.class
         ).afterControllerLoaded(msc -> msc.handleMedia(mediaUrl));

@@ -18,15 +18,15 @@
 
 package moe.lyrebird.model.io;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * This class exposes convenience method to execute asynchronous network operations on the asyncIo thread.
@@ -63,14 +63,14 @@ public class AsyncIO {
      *
      * @param imageUrl the image to load's url as a string
      * @param width    the width of the miniature
-     * @param heigth   the heigth of the miniature
+     * @param height   the height of the miniature
      *
      * @return A {@link CompletableFuture} which can be asynchronously consumed if needed upon termination of this load
      * operation.
      */
-    public CompletableFuture<Image> loadImageMiniature(final String imageUrl, final double width, final double heigth) {
+    public CompletableFuture<Image> loadImageMiniature(final String imageUrl, final double width, final double height) {
         return CompletableFuture.supplyAsync(
-                () -> cachedMedia.loadImageMiniature(imageUrl, width, heigth),
+                () -> cachedMedia.loadImageMiniature(imageUrl, width, height),
                 ASYNC_IO_EXECUTOR
         );
     }

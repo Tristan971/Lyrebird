@@ -66,7 +66,7 @@ public class NewTweetService {
      * @return A {@link CompletionStage} to follow the status of the asynchronous request
      */
     public CompletionStage<Status> sendTweet(final String content, final List<File> medias) {
-        return prepateNewTweet(content, medias).thenApplyAsync(
+        return prepareNewTweet(content, medias).thenApplyAsync(
                 update -> sessionManager.doWithCurrentTwitter(twitter -> twitter.updateStatus(update)).get(),
                 TWITTER_EXECUTOR
         );
@@ -82,7 +82,7 @@ public class NewTweetService {
      * @return A {@link CompletionStage} to follow the status of the asynchronous request
      */
     public CompletionStage<Status> sendReply(final String content, final List<File> medias, final long inReplyTo) {
-        return prepateNewTweet(content, medias).thenApplyAsync(
+        return prepareNewTweet(content, medias).thenApplyAsync(
                 update -> {
                     LOG.debug("Set inReplyTo for status update {} as : {}", update, inReplyTo);
                     update.setInReplyToStatusId(inReplyTo);
@@ -102,7 +102,7 @@ public class NewTweetService {
      *
      * @return A {@link CompletionStage} to monitor the request.
      */
-    private CompletionStage<StatusUpdate> prepateNewTweet(final String content, final List<File> medias) {
+    private CompletionStage<StatusUpdate> prepareNewTweet(final String content, final List<File> medias) {
         return CompletableFuture.supplyAsync(
                 () -> sessionManager.doWithCurrentTwitter(twitter -> uploadMedias(twitter, medias)).get(),
                 TWITTER_EXECUTOR

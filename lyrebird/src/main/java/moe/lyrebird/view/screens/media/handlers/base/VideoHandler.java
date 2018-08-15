@@ -19,7 +19,7 @@
 package moe.lyrebird.view.screens.media.handlers.base;
 
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.media.display.MediaDisplaySceen;
+import moe.lyrebird.view.screens.media.display.MediaDisplayScreen;
 import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
 import moe.lyrebird.view.screens.media.handlers.MediaHandler;
 
@@ -47,11 +47,11 @@ public abstract class VideoHandler<T> implements MediaHandler<T> {
      * @param mediaUrl The video described as an URL
      *
      * @return An {@link ImageView} with a static image ({@link ImageResources#TWEETPANE_VIDEO}). This {@link ImageView}
-     * will open a {@link MediaDisplaySceen#VIDEO} screen displaying the media when it is clicked.
+     * will open a {@link MediaDisplayScreen#VIDEO} screen displaying the media when it is clicked.
      */
     protected Pane handleMediaSource(final String mediaUrl) {
         return embeddedMediaViewHelper.makeWrapperWithIcon(
-                MediaDisplaySceen.VIDEO,
+                MediaDisplayScreen.VIDEO,
                 ImageResources.TWEETPANE_VIDEO,
                 mediaUrl
         );

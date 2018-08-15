@@ -25,9 +25,9 @@ import java.net.URL;
 import java.util.Objects;
 
 /**
- * Simple helper base for fields of {@link CredittedWork} since they all have in common a name and a related URL.
+ * Simple helper base for fields of {@link CreditedWork} since they all have in common a name and a related URL.
  *
- * @see CredittedWork
+ * @see CreditedWork
  */
 public abstract class SimpleNameUrlBinding {
 

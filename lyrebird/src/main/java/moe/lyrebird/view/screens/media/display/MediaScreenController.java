@@ -19,7 +19,7 @@
 package moe.lyrebird.view.screens.media.display;
 
 import moe.tristan.easyfxml.api.FxmlController;
-import moe.lyrebird.view.util.StageAware;
+import moe.lyrebird.view.viewmodel.javafx.StageAware;
 
 import java.net.URL;
 
@@ -37,7 +37,7 @@ public interface MediaScreenController extends FxmlController, StageAware {
     void handleMedia(final String mediaUrl);
 
     /**
-     * Enforces media controllers to think about properly siszing their stage to fit as well as possible the embedded
+     * Enforces media controllers to think about properly sizing their stage to fit as well as possible the embedded
      * media.
      */
     void bindViewSizeToParent();

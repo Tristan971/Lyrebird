@@ -18,30 +18,26 @@
 
 package moe.lyrebird.view.components.mentions;
 
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Component;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.observables.Mentions;
-import moe.lyrebird.view.components.TimelineBasedController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
+
+import moe.lyrebird.model.twitter.observables.Mentions;
+import moe.lyrebird.view.components.base.TimelineControllerBase;
 
 /**
  * Mostly setup for Mentions timeline view.
  *
- * @see TimelineBasedController
+ * @see TimelineControllerBase
  */
 @Component
-public class MentionsController extends TimelineBasedController {
+public class MentionsController extends TimelineControllerBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(MentionsController.class);
 
-    public MentionsController(
-            final Mentions mentions,
-            final SessionManager sessionManager,
-            final ConfigurableApplicationContext context
-    ) {
-        super(mentions, sessionManager, context, true);
+    public MentionsController(final Mentions mentions, final ConfigurableApplicationContext context) {
+        super(mentions, context);
     }
 
     @Override

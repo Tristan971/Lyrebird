@@ -18,13 +18,6 @@
 
 package moe.lyrebird.model.update.selfupdate;
 
-import org.springframework.stereotype.Component;
-import moe.lyrebird.api.model.LyrebirdPackage;
-import moe.lyrebird.api.model.LyrebirdVersion;
-import moe.lyrebird.api.model.TargetPlatform;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,29 +26,38 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import moe.lyrebird.api.model.LyrebirdPackage;
+import moe.lyrebird.api.model.LyrebirdVersion;
+import moe.lyrebird.api.model.TargetPlatform;
+
 /**
  * This service, with the help of the {@link BinaryInstallationHelper}, generates the command line arguments for the
  * current platform to execute a selfupdate.
  *
  * @see BinaryInstallationHelper
  */
-@Component
-public class BinaryInstallationService {
+public final class BinaryInstallationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(BinaryInstallationService.class);
 
     private static final String TEMP_FOLDER = System.getProperty("java.io.tmpdir");
     private static final String LYREBIRD_DL_FOLDER = "lyrebird";
 
+    private BinaryInstallationService() {
+    }
+
     /**
-     * Determines the correct command line arguments for selfupdating a given platform's executable to a given version.
+     * Determines the correct command line arguments for self-updating a given platform's executable to a given version.
      *
      * @param targetPlatform  The platform on which the selfupdate shall be performed
      * @param lyrebirdVersion The version to which the selfupdate shall be performed
      *
      * @return The command line arguments for the selfupdate execution
      */
-    String[] getInstallationCommandLine(
+    static String[] getInstallationCommandLine(
             final TargetPlatform targetPlatform,
             final LyrebirdVersion lyrebirdVersion
     ) {
@@ -81,13 +83,13 @@ public class BinaryInstallationService {
      *
      * @return The package if it was found, else {@link Optional#empty()}.
      */
-    private Optional<LyrebirdPackage> findPackageForPlatform(
+    private static Optional<LyrebirdPackage> findPackageForPlatform(
             final LyrebirdVersion lyrebirdVersion,
             final TargetPlatform targetPlatform
     ) {
         return lyrebirdVersion.getPackages()
                               .stream()
-                              .filter(distribuable -> distribuable.getTargetPlatform().equals(targetPlatform))
+                              .filter(distributable -> distributable.getTargetPlatform().equals(targetPlatform))
                               .findAny();
     }
 
@@ -98,7 +100,7 @@ public class BinaryInstallationService {
      *
      * @return The downloaded file
      */
-    private File downloadBinary(final URL binaryUrl) {
+    private static File downloadBinary(final URL binaryUrl) {
         final File targetFile = prepareTargetFile(binaryUrl);
         LOG.debug("Downloading {} to file {}", binaryUrl, targetFile);
 
@@ -113,9 +115,9 @@ public class BinaryInstallationService {
      *
      * @param binaryUrl The URL of the binary (to match name mostly)
      *
-     * @return The premade File reference to the location to which to download
+     * @return The pre-made File reference to the location to which to download
      */
-    private File prepareTargetFile(final URL binaryUrl) {
+    private static File prepareTargetFile(final URL binaryUrl) {
         final String[] binaryUrlSplit = binaryUrl.toExternalForm().split("/");
         final String binaryFilename = binaryUrlSplit[binaryUrlSplit.length - 1];
 
@@ -135,7 +137,7 @@ public class BinaryInstallationService {
      *
      * @return The size of the downloaded file in bytes
      */
-    private long downloadFileImpl(final URL binaryUrl, final File targetFile) {
+    private static long downloadFileImpl(final URL binaryUrl, final File targetFile) {
         try (final InputStream binaryInputStream = binaryUrl.openStream()) {
             return Files.copy(binaryInputStream, targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (final IOException e) {

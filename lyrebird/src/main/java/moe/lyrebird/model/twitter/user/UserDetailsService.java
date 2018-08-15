@@ -18,18 +18,23 @@
 
 package moe.lyrebird.model.twitter.user;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+
+import javafx.scene.layout.Pane;
+
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.user.UserViewController;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
-import moe.lyrebird.view.screens.Screen;
-import moe.lyrebird.view.screens.user.UserViewController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4a.User;
 
-import javafx.scene.layout.Pane;
+import io.vavr.control.Try;
+import twitter4a.User;
 
 /**
  * This service serves as a helper for displaying a given user's detailed view.
@@ -42,10 +47,32 @@ public class UserDetailsService {
     private static final Logger LOG = LoggerFactory.getLogger(UserDetailsService.class);
 
     private final EasyFxml easyFxml;
+    private final SessionManager sessionManager;
 
     @Autowired
-    public UserDetailsService(final EasyFxml easyFxml) {
+    public UserDetailsService(final EasyFxml easyFxml, final SessionManager sessionManager) {
         this.easyFxml = easyFxml;
+        this.sessionManager = sessionManager;
+    }
+
+    public void openUserDetails(final String screenName) {
+        findUser(screenName)
+                .onSuccess(this::openUserDetails)
+                .onFailure(err -> ExceptionHandler.displayExceptionPane(
+                        "Unknown user!",
+                        "Can't map this user's screen name (@...) to an actual Twitter user!",
+                        err
+                ));
+    }
+
+    public void openUserDetails(final long targetUserId) {
+        findUser(targetUserId)
+                .onSuccess(this::openUserDetails)
+                .onFailure(err -> ExceptionHandler.displayExceptionPane(
+                        "Unknown user!",
+                        "Can't map this user's userId to an actual Twitter user!",
+                        err
+                ));
     }
 
     /**
@@ -63,6 +90,16 @@ public class UserDetailsService {
                     final String stageTitle = targetUser.getName() + " (@" + targetUser.getScreenName() + ")";
                     Stages.stageOf(stageTitle, userDetailsPane).thenAcceptAsync(Stages::scheduleDisplaying);
                 });
+    }
+
+    @Cacheable("findByScreenNameUserCache")
+    public Try<User> findUser(final String userScreenName) {
+        return sessionManager.doWithCurrentTwitter(twitter -> twitter.showUser(userScreenName));
+    }
+
+    @Cacheable("findByUserIdUserCache")
+    public Try<User> findUser(final long userId) {
+        return sessionManager.doWithCurrentTwitter(twitter -> twitter.showUser(userId));
     }
 
 }

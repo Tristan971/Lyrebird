@@ -18,17 +18,19 @@
 
 package moe.lyrebird.model.systemtray;
 
-import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.model.awt.integrations.SystemTraySupport;
-import moe.lyrebird.model.interrupts.CleanupOperation;
-import moe.lyrebird.model.interrupts.CleanupService;
+import java.awt.TrayIcon;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
-import java.awt.TrayIcon;
+import dorkbox.systemTray.Menu;
+import dorkbox.systemTray.MenuItem;
+import dorkbox.systemTray.SystemTray;
+import dorkbox.util.OS;
 
 /**
  * This class is responsible for management and exposure of the {@link LyrebirdTrayIcon}.
@@ -38,20 +40,18 @@ public class SystemTrayService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemTrayService.class);
 
+    static {
+        if (OS.isLinux()) {
+            SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.GtkStatusIcon;
+        }
+    }
+
     private final LyrebirdTrayIcon lyrebirdTrayIcon;
-    private final SystemTraySupport traySupport;
-    private final CleanupService cleanupService;
 
     private final Property<TrayIcon> trayIcon = new SimpleObjectProperty<>(null);
 
-    public SystemTrayService(
-            final LyrebirdTrayIcon lyrebirdTrayIcon,
-            final SystemTraySupport traySupport,
-            final CleanupService cleanupService
-    ) {
+    public SystemTrayService(final LyrebirdTrayIcon lyrebirdTrayIcon) {
         this.lyrebirdTrayIcon = lyrebirdTrayIcon;
-        this.traySupport = traySupport;
-        this.cleanupService = cleanupService;
         loadTrayIcon();
     }
 
@@ -64,21 +64,23 @@ public class SystemTrayService {
      */
     private void loadTrayIcon() {
         LOG.debug("Registering tray icon for Lyrebird...");
-        traySupport.registerTrayIcon(lyrebirdTrayIcon)
-                   .thenApplyAsync(trayIconRes -> trayIconRes.getOrElse(() -> {
-                       LOG.error("Could not load the tray icon!", trayIconRes.getCause());
-                       return null;
-                   }))
-                   .thenAcceptAsync(trayIcon::setValue)
-                   .thenRunAsync(() -> {
-                       if (trayIcon.getValue() == null) {
-                           return;
-                       }
-                       cleanupService.registerCleanupOperation(new CleanupOperation(
-                               "Remove system tray icon.",
-                               () -> traySupport.removeTrayIcon(trayIcon.getValue())
-                       ));
-                   });
+
+        LOG.debug("Creating a tray icon...");
+        final SystemTray tray = SystemTray.get();
+        tray.setImage(lyrebirdTrayIcon.getIcon());
+        tray.setTooltip("Lyrebird");
+
+        LOG.debug("Adding items to tray icon's menu...");
+        final Menu menu = tray.getMenu();
+
+        lyrebirdTrayIcon.getMenuItems().forEach((item, action) -> {
+            LOG.debug("Adding menu item : {} (callback : {})", item, action);
+            final MenuItem menuItem = new MenuItem(item.getLabel());
+            menuItem.setCallback(action);
+            menu.add(menuItem);
+        });
+
+        LOG.debug("Finished creating tray icon!");
     }
 
 }

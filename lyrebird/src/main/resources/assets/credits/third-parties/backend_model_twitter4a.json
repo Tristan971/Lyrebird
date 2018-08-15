@@ -1,11 +1,11 @@
 {
-  "title": "Twitter API bindings",
+  "title": "Twitter API",
   "author": {
     "name": "Yusuke Yamamoto, Takeuchi Hiroaki & others",
     "url": "https://github.com/takke/twitter4a#contributors"
   },
   "licensor": {
-    "name": "Twitter4A projects",
+    "name": "Twitter4J & Twitter4A projects",
     "url": "https://github.com/takke/twitter4a"
   },
   "license": {

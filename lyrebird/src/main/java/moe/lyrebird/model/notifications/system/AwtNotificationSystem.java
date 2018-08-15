@@ -29,7 +29,7 @@ import javafx.beans.property.Property;
 import java.awt.TrayIcon;
 
 /**
- * AWT-based native OS notification implemention of {@link NotificationSystem}.
+ * AWT-based native OS notification implementation of {@link NotificationSystem}.
  *
  * @see SystemTrayService
  */

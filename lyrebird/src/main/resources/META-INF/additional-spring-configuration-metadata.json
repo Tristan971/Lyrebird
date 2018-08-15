@@ -26,9 +26,9 @@
       "description": "The main stage's minimal width."
     },
     {
-      "name": "mainStage.minHeigth",
+      "name": "mainStage.minHeight",
       "type": "java.lang.Integer",
-      "description": "The main stage's minimal heigth."
+      "description": "The main stage's minimal height."
     },
     {
       "name": "twitter.media.allowedExtensions",

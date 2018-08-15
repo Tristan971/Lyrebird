@@ -18,26 +18,28 @@
 
 package moe.lyrebird.model.sessions;
 
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
-import io.vavr.CheckedFunction1;
-import io.vavr.control.Try;
-import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.Twitter;
-import twitter4a.User;
-import twitter4a.auth.AccessToken;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationContext;
 
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
+
+import io.vavr.CheckedFunction1;
+import io.vavr.control.Try;
+import twitter4a.Twitter;
+import twitter4a.User;
+import twitter4a.auth.AccessToken;
 
 /**
  * The session manager is responsible for persisting the sessions in database and providing handles to them should
@@ -101,7 +103,7 @@ public class SessionManager {
                   .map(Property::getValue)
                   .map(Session::getTwitterHandler)
                   .map(TwitterHandler::getTwitter)
-                  .andThenTry(session -> LOG.debug(
+                  .andThenTry(session -> LOG.trace(
                           "Preparing request for user : {}",
                           session.getScreenName()
                   ));

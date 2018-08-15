@@ -18,8 +18,21 @@
 
 package moe.lyrebird.model.update;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
 import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.model.interrupts.CleanupOperation;
@@ -28,19 +41,6 @@ import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
 import moe.lyrebird.model.notifications.NotificationSystemType;
 import moe.lyrebird.model.update.selfupdate.SelfupdateService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 /**
  * The update service takes care of all things related to update check and installation
@@ -53,7 +53,6 @@ public class UpdateService {
     private static final ScheduledExecutorService EXECUTOR = Executors.newSingleThreadScheduledExecutor();
     private static final Pattern BUILD_VERSION_PATTERN = Pattern.compile("\\.");
 
-    private final MarkdownRenderingService markdownRenderingService;
     private final LyrebirdServerClient apiClient;
     private final NotificationService notificationService;
     private final SelfupdateService selfupdateService;
@@ -66,14 +65,12 @@ public class UpdateService {
     private final Property<LyrebirdVersion> latestVersion = new SimpleObjectProperty<>(null);
 
     public UpdateService(
-            final MarkdownRenderingService markdownRenderingService,
             final LyrebirdServerClient apiClient,
             final NotificationService notificationService,
             final SelfupdateService selfupdateService,
             final Environment environment,
             final CleanupService cleanupService
     ) {
-        this.markdownRenderingService = markdownRenderingService;
         this.apiClient = apiClient;
         this.notificationService = notificationService;
         this.selfupdateService = selfupdateService;
@@ -106,21 +103,21 @@ public class UpdateService {
     public CompletableFuture<String> getLatestChangeNotes() {
         return CompletableFuture.supplyAsync(
                 () -> apiClient.getChangeNotes(latestVersion.getValue().getBuildVersion())
-        ).thenApplyAsync(markdownRenderingService::render);
+        );
     }
 
     /**
-     * Starts selfupdating to the latest version available
+     * Starts self-updating to the latest version available
      */
     public void selfupdate() {
         getLatestVersion().thenAcceptAsync(selfupdateService::selfupdate);
     }
 
     /**
-     * @return whether the current platform supports selfupdating
+     * @return whether the current platform supports self-updating
      */
-    public boolean selfupdateCompatible() {
-        return selfupdateService.selfupdateCompatible();
+    public static boolean selfupdateCompatible() {
+        return SelfupdateService.selfupdateCompatible();
     }
 
     /**

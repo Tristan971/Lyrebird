@@ -45,7 +45,7 @@ public class NewDirectMessageService {
         });
     }
 
-    private MessageData buildMessage(final User recipient, final String content) {
+    private static MessageData buildMessage(final User recipient, final String content) {
         return new MessageData(recipient.getId(), content);
     }
 

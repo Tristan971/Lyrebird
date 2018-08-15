@@ -54,9 +54,9 @@ what system you want to target. You can only build native images for the current
 First (in project folder) : ``$> mvn clean install -DskipTests``
 
 Then any of the following (in `Lyrebird/lyrebird` folder):
-- Execute only (no packaging) : ``$> mvn clean spring-boot:run``
+- Execute only (no packaging) : ``$> mvn spring-boot:run``
 - For a native installer (will be in ``Lyrebird/lyrebird/target/jfx/native``) : ``$> mvn jfx:native -DskipTests``
-- For a portable JAR file (will be in ``Lyrebird/lyrebird/target``) : ``$> mvn clean package -DskipTests``
+- For a portable JAR file (will be in ``Lyrebird/lyrebird/target``) : ``$> mvn package -DskipTests``
 
 ## What does it look like?
 [![Screenshot of current version](docs/img/screenshot.png)](docs/img/screenshot.png)
@@ -71,15 +71,16 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
         - [x] Direct messages
     - [ ] Display features :
         - [x] Basic textual display
-        - [x] Display username, @screenname and user profile picture
+        - [x] Display username, @screen_name and user profile picture
         - [ ] Display for chosen list
         - [ ] Text highlighting
-            - [ ] Mentions
-                - [ ] Color
-                - [ ] Clickable
+            - [x] Mentions
+                - [x] Color
+                - [x] Clickable
             - [ ] Hashtags
-                - [ ] Color
-                - [ ] Clickable
+                - [x] Color
+                - [x] Clickable
+                - [ ] In-app search
             - [x] URLs
                 - [x] Color
                 - [x] Clickable
@@ -95,20 +96,21 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
                 - [ ] Youtube video embedding
     - [x] Data loading features :
         - [x] Seeking older tweets by-demand (scroll or button)
-        - [x] Seek newer tweets all the time using streaming API
+        - [x] Streaming API  **NO LONGER ALLOWED BY TWITTER STARTING 16TH AUGUST 2018**
+        - [x] Seeking updated information as often as possible while respecting rate limits
 
 - [ ] Tweeting
     - [x] Support text
     - [x] Support attachments
     - [ ] Support geolocation
     
-- [ ] Interraction with tweet
+- [ ] Interaction with tweet
     - [x] Reply
     - [ ] Quote
     - [x] Like (formerly _favourite_)
     - [x] Retweet
 
-- [x] Interraction with users
+- [x] Interaction with users
     - [x] Follow/unfollow
     - [ ] Block/mute
     - [ ] List management
@@ -116,7 +118,7 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
 
 - [ ] Searches
 
-- [ ] Miscellanelous
+- [ ] Miscellaneous
     - [x] System notifications
     - [x] Internal notifications
     - [x] Update system
