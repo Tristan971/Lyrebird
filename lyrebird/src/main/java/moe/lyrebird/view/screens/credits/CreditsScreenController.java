@@ -18,26 +18,34 @@
 
 package moe.lyrebird.view.screens.credits;
 
+import java.net.URL;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
-import moe.tristan.easyfxml.util.Buttons;
-import moe.lyrebird.model.credits.CreditsService;
-import moe.lyrebird.model.credits.objects.CreditedWork;
-import moe.lyrebird.view.components.cells.CreditsCell;
-import moe.lyrebird.view.components.credits.CreditController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.image.ImageView;
 
-import java.net.URL;
+import moe.lyrebird.model.credits.CreditsService;
+import moe.lyrebird.model.credits.objects.CreditedWork;
+import moe.lyrebird.model.io.CachedMedia;
+import moe.lyrebird.model.twitter.user.UserDetailsService;
+import moe.lyrebird.view.components.cells.CreditsCell;
+import moe.lyrebird.view.components.credits.CreditController;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
+import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
+import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
+import moe.tristan.easyfxml.util.Buttons;
+
+import twitter4a.User;
 
 /**
  * This class manages with Credits/About window.
@@ -65,21 +73,33 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
     @FXML
     private Button knownIssuesButton;
 
+    @FXML
+    private ImageView applicationAuthorProfilePicture;
+
+    @FXML
+    private Hyperlink applicationAuthorProfileLink;
+
     private final CreditsService creditsService;
     private final BrowserSupport browserSupport;
+    private final UserDetailsService userDetailsService;
     private final Environment environment;
+    private final CachedMedia cachedMedia;
 
     @Autowired
     public CreditsScreenController(
             final ApplicationContext context,
             final CreditsService creditsService,
             final BrowserSupport browserSupport,
-            final Environment environment
+            final UserDetailsService userDetailsService,
+            final Environment environment,
+            final CachedMedia cachedMedia
     ) {
         super(context, CreditsCell.class);
         this.creditsService = creditsService;
         this.browserSupport = browserSupport;
+        this.userDetailsService = userDetailsService;
         this.environment = environment;
+        this.cachedMedia = cachedMedia;
     }
 
     @Override
@@ -91,6 +111,17 @@ public class CreditsScreenController extends ComponentListViewFxmlController<Cre
         bindButtonToOpenHrefEnvProperty(licenseButton, "credits.license");
         bindButtonToOpenHrefEnvProperty(sourceCodeButton, "credits.sourceCode");
         bindButtonToOpenHrefEnvProperty(knownIssuesButton, "credits.knownIssues");
+
+        displayApplicationAuthor();
+    }
+
+    private void displayApplicationAuthor() {
+        applicationAuthorProfileLink.setOnAction(e -> userDetailsService.openUserDetails("_tristan971_"));
+        userDetailsService.findUser("_tristan971_")
+                          .map(User::getProfileImageURLHttps)
+                          .map(cachedMedia::loadImage)
+                          .onSuccess(applicationAuthorProfilePicture::setImage)
+                          .andThen(() -> applicationAuthorProfilePicture.setClip(Clipping.getCircleClip(16.0)));
     }
 
     /**
