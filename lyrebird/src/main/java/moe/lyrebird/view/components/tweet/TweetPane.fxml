@@ -26,7 +26,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="moe.lyrebird.view.components.tweet.TweetPaneController">
@@ -65,7 +64,6 @@
                         <Image url="@/assets/img/general_icon_user_avatar_dark.png" />
                      </image>
                   </ImageView>
-                  <Circle centerX="24.0" centerY="24.0" fill="#ffffff00" mouseTransparent="true" radius="24.0" stroke="#000000" strokeType="INSIDE" strokeWidth="0.5" />
                </children>
                <HBox.margin>
                   <Insets top="2.5" />
