@@ -39,7 +39,7 @@ public class AutoRefreshService {
                 } catch (final Exception e) {
                     stopAutoRefreshing();
                 }
-            }, 5, secondsBetweenCalls, TimeUnit.SECONDS);
+            }, 2, secondsBetweenCalls, TimeUnit.SECONDS);
             LOGGER.debug("Scheduled autorefresh {} every {} seconds", rateLimitedCall, secondsBetweenCalls);
         });
     }
