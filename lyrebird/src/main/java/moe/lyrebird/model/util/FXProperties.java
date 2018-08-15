@@ -11,9 +11,7 @@ public final class FXProperties {
 
     public static <T> void waitForProp(final ObservableValue<T> prop, final Consumer<T> onReady) {
         if (prop.getValue() == null) {
-            prop.addListener((observable, oldValue, newValue) -> {
-                onReady.accept(newValue);
-            });
+            prop.addListener((observable, oldValue, newValue) -> onReady.accept(newValue));
         } else {
             onReady.accept(prop.getValue());
         }
