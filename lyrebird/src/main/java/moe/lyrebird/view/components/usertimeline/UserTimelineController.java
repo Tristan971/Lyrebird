@@ -27,7 +27,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.UserTimeline;
 import moe.lyrebird.view.components.base.TimelineControllerBase;
 
@@ -46,13 +45,15 @@ public class UserTimelineController extends TimelineControllerBase {
     private final UserTimeline userTimeline;
 
     @Autowired
-    public UserTimelineController(
-            final UserTimeline userTimeline,
-            final SessionManager sessionManager,
-            final ConfigurableApplicationContext context
-    ) {
-        super(userTimeline, sessionManager, context, false);
+    public UserTimelineController(final UserTimeline userTimeline, final ConfigurableApplicationContext context) {
+        super(userTimeline, context);
         this.userTimeline = userTimeline;
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        userTimeline.refresh();
     }
 
     /**

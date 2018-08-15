@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
-import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Timeline;
 import moe.lyrebird.view.components.base.TimelineControllerBase;
 
@@ -37,12 +36,8 @@ public class TimelineController extends TimelineControllerBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(TimelineController.class);
 
-    public TimelineController(
-            final Timeline timeline,
-            final SessionManager sessionManager,
-            final ConfigurableApplicationContext context
-    ) {
-        super(timeline, sessionManager, context, true);
+    public TimelineController(final Timeline timeline, final ConfigurableApplicationContext context) {
+        super(timeline, context);
     }
 
     @Override
