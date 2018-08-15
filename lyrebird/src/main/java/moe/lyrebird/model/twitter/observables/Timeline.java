@@ -18,28 +18,31 @@
 
 package moe.lyrebird.model.twitter.observables;
 
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
 import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.refresh.RateLimited;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import twitter4a.Paging;
 import twitter4a.Status;
 import twitter4a.Twitter;
 import twitter4a.TwitterException;
-
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * This class exposes the current user's timeline in an observable way
  */
 @Lazy
 @Component
-public class Timeline extends TwitterTimelineBaseModel {
+public class Timeline extends TwitterTimelineBaseModel implements RateLimited {
 
     private static final Logger LOG = LoggerFactory.getLogger(Timeline.class);
 
@@ -73,6 +76,11 @@ public class Timeline extends TwitterTimelineBaseModel {
     @Override
     protected Logger getLocalLogger() {
         return LOG;
+    }
+
+    @Override
+    public int maxRequestsPer15Minutes() {
+        return 15;
     }
 
 }

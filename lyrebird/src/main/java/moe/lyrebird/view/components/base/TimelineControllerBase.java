@@ -26,7 +26,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 
-import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.TwitterTimelineBaseModel;
 import moe.lyrebird.view.components.cells.TweetListCell;
 import moe.lyrebird.view.components.mentions.MentionsController;
@@ -47,39 +46,28 @@ public abstract class TimelineControllerBase extends ComponentListViewFxmlContro
 
     private final TwitterTimelineBaseModel timelineBase;
     private final ListProperty<Status> tweetsProperty;
-    private final boolean shouldAutomaticallyFill;
 
     /**
      * This constructor is called by the implementing class rather than Spring because there is no way we will ever use
      * field injection in Lyrebird.
      *
      * @param timelineBase            The backing model-side controller taking care of requests and exposing tweets
-     * @param sessionManager          The session manager is used only for bootstrapping and does not leak outside of
-     *                                constructor
      * @param context                 The spring context that is passed onto {@link ComponentListViewFxmlController} for
      *                                constructor injection.
-     * @param shouldAutomaticallyFill Whether this controller should directly start fetching tweets on creation.
      */
     public TimelineControllerBase(
             final TwitterTimelineBaseModel timelineBase,
-            final SessionManager sessionManager,
-            final ConfigurableApplicationContext context,
-            final boolean shouldAutomaticallyFill
+            final ConfigurableApplicationContext context
     ) {
         super(context, TweetListCell.class);
         this.timelineBase = timelineBase;
         this.tweetsProperty = new ReadOnlyListWrapper<>(timelineBase.loadedTweets());
-        this.shouldAutomaticallyFill = shouldAutomaticallyFill;
-        sessionManager.currentSessionProperty().addListener(change -> timelineBase.loadLastTweets());
     }
 
     @Override
     public void initialize() {
         super.initialize();
         listView.itemsProperty().bind(new ReadOnlyListWrapper<>(timelineBase.loadedTweets()));
-        if (shouldAutomaticallyFill) {
-            timelineBase.loadLastTweets();
-        }
     }
 
     /**

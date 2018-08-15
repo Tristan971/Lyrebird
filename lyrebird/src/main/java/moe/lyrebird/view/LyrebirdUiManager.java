@@ -18,23 +18,24 @@
 
 package moe.lyrebird.view;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlNode;
-import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.tristan.easyfxml.spring.application.FxUiManager;
+
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
 import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
 import moe.lyrebird.model.settings.Setting;
 import moe.lyrebird.model.settings.SettingsUtils;
 import moe.lyrebird.view.screens.Screen;
-
-import javafx.application.Platform;
-import javafx.stage.Stage;
-
-import java.util.concurrent.atomic.AtomicBoolean;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlNode;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
+import moe.tristan.easyfxml.spring.application.FxUiManager;
 
 /**
  * The {@link LyrebirdUiManager} is responsible for bootstrapping the GUI of the application correctly.

@@ -18,32 +18,37 @@
 
 package moe.lyrebird.model.twitter.observables;
 
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
-import moe.lyrebird.model.sessions.Session;
-import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
+import moe.lyrebird.model.notifications.Notification;
+import moe.lyrebird.model.notifications.NotificationService;
+import moe.lyrebird.model.notifications.format.TwitterNotifications;
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.refresh.RateLimited;
+
 import twitter4a.Paging;
 import twitter4a.ResponseList;
 import twitter4a.Status;
 import twitter4a.Twitter;
 import twitter4a.TwitterException;
-import twitter4a.UserMentionEntity;
-
-import java.util.Arrays;
 
 /**
  * This class exposes the current user's mentions in an observable way
  */
 @Lazy
 @Component
-public class Mentions extends TwitterTimelineBaseModel {
+public class Mentions extends TwitterTimelineBaseModel implements RateLimited {
 
     private static final Logger LOG = LoggerFactory.getLogger(Mentions.class);
 
-    public Mentions(final SessionManager sessionManager) {
+    private final NotificationService notificationService;
+
+    public Mentions(final SessionManager sessionManager, final NotificationService notificationService) {
         super(sessionManager);
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -56,25 +61,20 @@ public class Mentions extends TwitterTimelineBaseModel {
         return twitter.getMentionsTimeline(paging);
     }
 
-    /**
-     * @param status the status to test against
-     *
-     * @return whether a given status is a mention to the current user
-     */
-    public boolean isMentionToCurrentUser(final Status status) {
-        final Session currentSession = sessionManager.currentSessionProperty().getValue();
-        if (currentSession == null) {
-            return false;
-        }
-        return Arrays.stream(status.getUserMentionEntities())
-                     .map(UserMentionEntity::getId)
-                     .map(String::valueOf)
-                     .anyMatch(currentSession.getUserId()::equals);
+    @Override
+    protected void onNewElementStreamed(final Status newElement) {
+        final Notification mentionNotification = TwitterNotifications.fromMention(newElement);
+        notificationService.sendNotification(mentionNotification);
     }
 
     @Override
     protected Logger getLocalLogger() {
         return LOG;
+    }
+
+    @Override
+    public int maxRequestsPer15Minutes() {
+        return 75;
     }
 
 }

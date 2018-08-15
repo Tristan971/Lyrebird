@@ -18,26 +18,29 @@
 
 package moe.lyrebird.model.twitter.observables;
 
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
-import moe.lyrebird.model.sessions.SessionManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4a.DirectMessageEvent;
-import twitter4a.User;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.refresh.RateLimited;
+
+import twitter4a.DirectMessageEvent;
+import twitter4a.User;
+
 @Component
-public class DirectMessages {
+public class DirectMessages implements RateLimited {
 
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
@@ -48,16 +51,13 @@ public class DirectMessages {
         this.sessionManager = sessionManager;
         LOG.debug("Initializing direct messages manager.");
         this.messageEvents = FXCollections.observableHashMap();
-        sessionManager.currentSessionProperty().addListener((o, prev, cur) -> refresh());
-        if (sessionManager.isLoggedInProperty().getValue()) {
-            refresh();
-        }
     }
 
     public ObservableMap<User, ObservableList<DirectMessageEvent>> directMessages() {
         return messageEvents;
     }
 
+    @Override
     public void refresh() {
         if (!sessionManager.isLoggedInProperty().getValue()) {
             LOG.debug("Logged out, not refreshing direct messages.");
@@ -71,6 +71,11 @@ public class DirectMessages {
                           .onSuccess(this::addDirectMessages)
                           .onFailure(err -> LOG.error("Could not load direct messages successfully!", err));
         });
+    }
+
+    @Override
+    public int maxRequestsPer15Minutes() {
+        return 15;
     }
 
     private void addDirectMessages(final List<DirectMessageEvent> loadedMessages) {

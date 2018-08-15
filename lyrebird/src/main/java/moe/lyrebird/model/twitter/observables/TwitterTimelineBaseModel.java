@@ -18,20 +18,23 @@
 
 package moe.lyrebird.model.twitter.observables;
 
-import moe.lyrebird.model.sessions.SessionManager;
-import org.slf4j.Logger;
-import twitter4a.Paging;
-import twitter4a.Status;
-import twitter4a.Twitter;
-import twitter4a.TwitterException;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.slf4j.Logger;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import moe.lyrebird.model.sessions.SessionManager;
+
+import twitter4a.Paging;
+import twitter4a.Status;
+import twitter4a.Twitter;
+import twitter4a.TwitterException;
 
 /**
  * This is the base class for reverse-chronologically sorted tweet lists (aka Timelines) backend model.
@@ -39,6 +42,8 @@ import java.util.concurrent.CompletableFuture;
 public abstract class TwitterTimelineBaseModel {
 
     protected final SessionManager sessionManager;
+
+    private final AtomicBoolean isFirstCall = new AtomicBoolean(true);
 
     private final ObservableList<Status> loadedTweets = FXCollections.observableList(new LinkedList<>());
 
@@ -74,12 +79,14 @@ public abstract class TwitterTimelineBaseModel {
     /**
      * Asynchronously loads the last tweets available
      */
-    public void loadLastTweets() {
+    public void refresh() {
         CompletableFuture.runAsync(() -> {
             getLocalLogger().debug("Requesting last tweets in timeline.");
             sessionManager.getCurrentTwitter()
                           .mapTry(this::initialLoad)
-                          .onSuccess(this::addTweets);
+                          .onSuccess(this::addTweets)
+                          .onFailure(err -> getLocalLogger().error("Could not refresh!", err))
+                          .andThen(() -> isFirstCall.set(false));
         });
     }
 
@@ -89,8 +96,8 @@ public abstract class TwitterTimelineBaseModel {
      * @param receivedTweets The tweets to add.
      */
     private void addTweets(final List<Status> receivedTweets) {
-        receivedTweets.forEach(this::addTweet);
-        getLocalLogger().debug("Loaded {} tweets successfully.", receivedTweets.size());
+        final int newTweets = receivedTweets.stream().map(this::addTweet).mapToInt(val -> val ? 1 : 0).sum();
+        getLocalLogger().debug("Loaded {} new tweets.", newTweets);
     }
 
     /**
@@ -98,25 +105,20 @@ public abstract class TwitterTimelineBaseModel {
      *
      * @param newTweet The tweet to add.
      */
-    public void addTweet(final Status newTweet) {
+    private boolean addTweet(final Status newTweet) {
         if (!this.loadedTweets.contains(newTweet)) {
             this.loadedTweets.add(newTweet);
             this.loadedTweets.sort(Comparator.comparingLong(Status::getId).reversed());
+            if (!isFirstCall.get()) {
+                onNewElementStreamed(newTweet);
+            }
+            return true;
         }
+        return false;
     }
 
-    /**
-     * Removes a given tweet from the list of currently loaded ones.
-     *
-     * @param removedId The id of the tweet to remove
-     *
-     * @see Status#getId()
-     */
-    public void removeTweet(final long removedId) {
-        this.loadedTweets.stream()
-                         .filter(status -> status.getId() == removedId)
-                         .findFirst()
-                         .ifPresent(this.loadedTweets::remove);
+    protected void onNewElementStreamed(final Status newElement) {
+        // do nothing by default
     }
 
     /**
@@ -127,7 +129,7 @@ public abstract class TwitterTimelineBaseModel {
     }
 
     /**
-     * Performs the initial load of tweets (i.e. {@link #loadLastTweets()}).
+     * Performs the initial load of tweets (i.e. {@link #refresh()}).
      *
      * @param twitter The twitter instance to use
      *
