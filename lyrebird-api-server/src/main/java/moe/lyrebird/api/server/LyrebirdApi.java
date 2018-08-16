@@ -18,14 +18,23 @@
 
 package moe.lyrebird.api.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 public class LyrebirdApi {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LyrebirdApi.class);
+
     public static void main(final String[] args) {
-        SpringApplication.run(LyrebirdApi.class, args);
+        final Integer listeningPort = SpringApplication.run(LyrebirdApi.class, args)
+                                                       .getBean(Environment.class)
+                                                       .getRequiredProperty("server.port", Integer.class);
+
+        LOG.info("Started listening on localhost:{}", listeningPort);
     }
 
 }
