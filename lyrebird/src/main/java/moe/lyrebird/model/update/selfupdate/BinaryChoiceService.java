@@ -54,7 +54,7 @@ public final class BinaryChoiceService {
                 return Option.of(TargetPlatform.WINDOWS);
             case LINUX:
                 LOG.debug("Running on Linux.");
-                return Option.none();
+                return Option.of(TargetPlatform.LINUX_DEB);
             case MACOSX:
                 LOG.debug("Running on macOS.");
                 return Option.of(TargetPlatform.MACOS);

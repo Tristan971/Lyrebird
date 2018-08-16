@@ -19,14 +19,14 @@
 package moe.lyrebird;
 
 import java.awt.Toolkit;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-
+import dorkbox.util.OS;
 import moe.lyrebird.api.client.LyrebirdServerClientConfiguration;
 import moe.lyrebird.model.interrupts.CleanupService;
 import moe.lyrebird.model.update.compatibility.PostUpdateCompatibilityHelper;
@@ -34,8 +34,6 @@ import moe.lyrebird.view.LyrebirdUiManager;
 import moe.tristan.easyfxml.spring.application.FxSpringApplication;
 import moe.tristan.easyfxml.spring.application.FxSpringContext;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
-
-import dorkbox.util.OS;
 
 /**
  * This class is the entry point for Lyrebird. It bootstraps JavaFX, Spring Boot and AWT and then delegates

@@ -20,23 +20,23 @@ package moe.lyrebird.model.update.selfupdate;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
-
+import dorkbox.util.OS;
+import io.vavr.control.Option;
 import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.api.model.TargetPlatform;
+import moe.lyrebird.model.update.selfupdate.linux.PackageKitService;
 import moe.lyrebird.view.screens.Screen;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-
-import io.vavr.control.Option;
 
 /**
  * This service is in charge of the orchestration of the selfupdate process
@@ -47,10 +47,15 @@ public class SelfupdateService {
     private static final Logger LOG = LoggerFactory.getLogger(SelfupdateService.class);
 
     private final StageManager stageManager;
+    private final PackageKitService packageKitService;
 
     @Autowired
-    public SelfupdateService(final StageManager stageManager) {
+    public SelfupdateService(
+            final StageManager stageManager,
+            final PackageKitService packageKitService
+    ) {
         this.stageManager = stageManager;
+        this.packageKitService = packageKitService;
     }
 
     /**
@@ -60,6 +65,11 @@ public class SelfupdateService {
      */
     public void selfupdate(final LyrebirdVersion newVersion) {
         LOG.info("Requesting selfupdate to version : {}", newVersion);
+
+        if (OS.isLinux()) {
+            packageKitService.showNativeUnixPackageKitPrompt();
+            return;
+        }
 
         Platform.runLater(SelfupdateService::displayUpdateDownloadAlert);
 
