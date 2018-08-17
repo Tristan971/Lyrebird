@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.freedesktop.dbus.CallbackHandler;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
+import org.freedesktop.dbus.DBusInterfaceName;
 import org.freedesktop.dbus.UInt32;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.exceptions.DBusExecutionException;
@@ -33,17 +34,13 @@ public class PackageKitService {
     public void showNativeUnixPackageKitPrompt() {
         final DBusConnection conn = getDbusConnectionHolder();
         try {
-            final DBusInterface packageKit = conn.getRemoteObject(
+            final IPackageKit packageKit = conn.getRemoteObject(
                     "org.freedesktop.PackageKit",
-                    "/org/freedesktop/PackageKit"
+                    "/org/freedesktop/PackageKit",
+                    IPackageKit.class
             );
-            conn.callWithCallback(
-                    packageKit,
-                    "InstallPackageNames",
-                    new DBusCallbackHandler(),
-                    UInt32.MIN_VALUE,
-                    "lyrebird"
-            );
+            // FIXME: find the correct XID
+            packageKit.InstallPackageNames(new UInt32(0), new String[] {"lyrebird"}, "");
         } catch (DBusException e) {
             e.printStackTrace();
         }
@@ -64,4 +61,14 @@ public class PackageKitService {
 
     }
 
+}
+
+/* subset of the PackageKit Session DBus interface that's relevant to us
+ *
+ * https://blog.fpmurphy.com/2013/11/packagekit-d-bus-abstraction-layer.html
+ * https://techbase.kde.org/Development/Tutorials/PackageKit_Session_Interface
+ */
+@DBusInterfaceName("org.freedesktop.PackageKit.Modify")
+interface IPackageKit extends DBusInterface {
+    void InstallPackageNames(UInt32 xid, String[] packages, String interaction);
 }
