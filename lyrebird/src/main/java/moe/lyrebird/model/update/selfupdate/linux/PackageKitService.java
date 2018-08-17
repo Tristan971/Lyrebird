@@ -39,7 +39,7 @@ public class PackageKitService {
             );
             conn.callWithCallback(
                     packageKit,
-                    "InstallPackageNames",
+                    "InstallPackageName",
                     new DBusCallbackHandler(),
                     UInt32.MIN_VALUE,
                     "lyrebird"
