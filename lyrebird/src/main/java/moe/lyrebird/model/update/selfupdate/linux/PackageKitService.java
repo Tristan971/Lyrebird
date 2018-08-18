@@ -32,43 +32,43 @@ public class PackageKitService {
     }
 
     public void showNativeUnixPackageKitPrompt() {
+        LOG.info("Calling native unix update prompt provided by PackageKit over DBus");
+
         final DBusConnection conn = getDbusConnectionHolder();
+        LOG.debug("Got DBus connection : {}", conn);
         try {
             final IPackageKit packageKit = conn.getRemoteObject(
                     "org.freedesktop.PackageKit",
                     "/org/freedesktop/PackageKit",
                     IPackageKit.class
             );
-            // FIXME: find the correct XID
-            packageKit.InstallPackageNames(new UInt32(0), new String[] {"lyrebird"}, "");
+            LOG.debug("Got PackageKit interface binding : {}", packageKit);
+
+            final String displayName = System.getenv("DISPLAY");
+            final long displayNumber = displayName == null ? 0L : Integer.parseInt(displayName.substring(1));
+            LOG.debug("Will display update prompt on screen {} [from $DISPLAY = {}]", displayNumber, displayName);
+
+            packageKit.InstallPackageNames(new UInt32(displayNumber), new String[] {"lyrebird"}, "");
+            LOG.debug("Successfully invoked PackageKit InstallPackageNames method.");
         } catch (DBusException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private static final class DBusCallbackHandler implements CallbackHandler<Object> {
-
-        @Override
-        public void handle(Object r) {
-            LOG.info("Received dbus message back : {}", r);
-        }
-
-        @Override
-        public void handleError(DBusExecutionException e) {
-            LOG.error("Received dbus error back : {}", e);
+            LOG.error("Could not invoke PackageKit", e);
         }
 
     }
 
 }
 
-/* subset of the PackageKit Session DBus interface that's relevant to us
+/**
+ * This class represents a subset of the PackageKit Session DBus interface that's relevant to us.
  *
- * https://blog.fpmurphy.com/2013/11/packagekit-d-bus-abstraction-layer.html
- * https://techbase.kde.org/Development/Tutorials/PackageKit_Session_Interface
+ * <a href="https://blog.fpmurphy.com/2013/11/packagekit-d-bus-abstraction-layer.html">PackageKit DBus abstraction layer</a>
+ * <a href="https://techbase.kde.org/Development/Tutorials/PackageKit_Session_Interface">PackageKit Session Interface</a>
+ *
+ * @author Lourkeur
  */
 @DBusInterfaceName("org.freedesktop.PackageKit.Modify")
 interface IPackageKit extends DBusInterface {
+
     void InstallPackageNames(UInt32 xid, String[] packages, String interaction);
+
 }
