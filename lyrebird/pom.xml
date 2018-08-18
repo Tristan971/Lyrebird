@@ -57,6 +57,10 @@
                 <artifactId>maven-jar-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.9.0-SNAPSHOT</version>
@@ -83,22 +87,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>${project.basedir}/src/main/java</directory>
-                <includes>
-                    <include>**/*.fxml</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
 
     <dependencies>
