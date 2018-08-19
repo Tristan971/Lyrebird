@@ -35,8 +35,6 @@ import moe.tristan.easyfxml.spring.application.FxSpringApplication;
 import moe.tristan.easyfxml.spring.application.FxSpringContext;
 import moe.tristan.easyfxml.spring.application.FxUiManager;
 
-import dorkbox.util.OS;
-
 /**
  * This class is the entry point for Lyrebird. It bootstraps JavaFX, Spring Boot and AWT and then delegates
  * that work to the {@link LyrebirdUiManager}.
@@ -68,9 +66,6 @@ public class Lyrebird extends FxSpringApplication {
      */
     public static void main(final String[] args) {
         PostUpdateCompatibilityHelper.executeCompatibilityTasks();
-        if (OS.isMacOsX()) {
-            System.setProperty("javafx.macosx.embedded", "true");
-        }
         Toolkit.getDefaultToolkit();
         launch(args);
     }
