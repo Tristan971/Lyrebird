@@ -31,10 +31,10 @@ import javafx.collections.ObservableList;
 
 import moe.lyrebird.model.sessions.SessionManager;
 
-import twitter4a.Paging;
-import twitter4a.Status;
-import twitter4a.Twitter;
-import twitter4a.TwitterException;
+import twitter4j.Paging;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
 /**
  * This is the base class for reverse-chronologically sorted tweet lists (aka Timelines) backend model.

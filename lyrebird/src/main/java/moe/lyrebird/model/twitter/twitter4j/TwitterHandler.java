@@ -25,9 +25,9 @@ import io.vavr.Tuple2;
 import io.vavr.control.Try;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.Twitter;
-import twitter4a.auth.AccessToken;
-import twitter4a.auth.RequestToken;
+import twitter4j.Twitter;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 
 import java.net.URL;
 import java.util.Optional;

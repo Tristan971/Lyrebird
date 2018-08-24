@@ -22,7 +22,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import twitter4a.DirectMessageEvent;
+
+import twitter4j.DirectMessage;
+import twitter4j.DirectMessage;
 
 import javafx.scene.control.ListView;
 
@@ -36,7 +38,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  */
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
-public class DirectMessageListCell extends ComponentListCell<DirectMessageEvent> {
+public class DirectMessageListCell extends ComponentListCell<DirectMessage> {
 
     public DirectMessageListCell(final EasyFxml easyFxml) {
         super(easyFxml, DIRECT_MESSAGE_PANE);

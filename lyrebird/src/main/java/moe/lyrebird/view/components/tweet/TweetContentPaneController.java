@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import moe.lyrebird.view.viewmodel.tokenization.TweetContentTokenizer;
 import moe.tristan.easyfxml.api.FxmlController;
-import twitter4a.Status;
+import twitter4j.Status;
 
 /**
  * This controller and its associated view represent and display the textual content of a Tweet as rich text.

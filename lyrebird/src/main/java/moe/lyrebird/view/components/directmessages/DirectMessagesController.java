@@ -28,7 +28,7 @@ import io.reactivex.rxjavafx.observables.JavaFxObservable;
 import moe.lyrebird.model.twitter.observables.DirectMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.User;
+import twitter4j.User;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;

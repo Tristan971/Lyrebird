@@ -20,7 +20,7 @@ package moe.lyrebird.view.screens.media.handlers.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.MediaEntity;
+import twitter4j.MediaEntity;
 
 import java.util.Arrays;
 

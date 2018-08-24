@@ -84,9 +84,9 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Buttons;
 
-import twitter4a.Status;
-import twitter4a.User;
-import twitter4a.UserMentionEntity;
+import twitter4j.Status;
+import twitter4j.User;
+import twitter4j.UserMentionEntity;
 
 /**
  * This controller manages the new tweet view.

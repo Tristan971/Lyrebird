@@ -11,7 +11,7 @@ import moe.lyrebird.view.viewmodel.tokenization.Token;
 import moe.lyrebird.view.viewmodel.tokenization.TokensExtractor;
 import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 
-import twitter4a.Status;
+import twitter4j.Status;
 
 @Component
 public class HashtagTokensExtractor implements TokensExtractor {

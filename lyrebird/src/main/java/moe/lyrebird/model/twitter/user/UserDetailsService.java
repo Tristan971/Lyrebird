@@ -34,7 +34,7 @@ import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.util.Stages;
 
 import io.vavr.control.Try;
-import twitter4a.User;
+import twitter4j.User;
 
 /**
  * This service serves as a helper for displaying a given user's detailed view.

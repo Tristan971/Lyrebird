@@ -45,7 +45,7 @@ import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
 import moe.tristan.easyfxml.util.Buttons;
 
-import twitter4a.User;
+import twitter4j.User;
 
 /**
  * This class manages with Credits/About window.

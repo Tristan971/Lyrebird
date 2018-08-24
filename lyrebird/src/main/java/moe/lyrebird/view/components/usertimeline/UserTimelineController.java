@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.model.twitter.observables.UserTimeline;
 import moe.lyrebird.view.components.base.TimelineControllerBase;
 
-import twitter4a.User;
+import twitter4j.User;
 
 /**
  * Mostly setup for the self timeline view of a given user.

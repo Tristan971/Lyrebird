@@ -18,7 +18,7 @@ import moe.lyrebird.view.screens.newtweet.NewTweetController;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.Status;
+import twitter4j.Status;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;

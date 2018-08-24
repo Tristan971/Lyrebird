@@ -32,7 +32,7 @@ import moe.lyrebird.view.components.mentions.MentionsController;
 import moe.lyrebird.view.components.timeline.TimelineController;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
 
-import twitter4a.Status;
+import twitter4j.Status;
 
 /**
  * This class serves as a base implementation for backend observing lists of chronologically reverse-sorted tweets (aka
