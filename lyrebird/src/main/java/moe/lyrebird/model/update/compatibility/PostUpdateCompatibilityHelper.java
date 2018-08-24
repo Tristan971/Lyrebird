@@ -2,7 +2,6 @@ package moe.lyrebird.model.update.compatibility;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -24,8 +23,9 @@ public final class PostUpdateCompatibilityHelper {
     }
 
     private static PostUpdateCompatibilityTask wipeUserData() {
-        final List<String> reasons = Collections.singletonList(
-                "1.1.2-twitter4j-to-twitter4j-hibernate"
+        final List<String> reasons = List.of(
+                "1.1.2-twitter4j-to-twitter4a-hibernate",
+                "1.1.4-twitter4a-to-twitter4j-hibernate"
         );
 
         final Runnable execution = () -> {
