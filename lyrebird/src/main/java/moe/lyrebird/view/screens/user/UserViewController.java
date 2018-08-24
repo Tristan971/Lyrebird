@@ -56,8 +56,8 @@ import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 
-import twitter4a.Relationship;
-import twitter4a.User;
+import twitter4j.Relationship;
+import twitter4j.User;
 
 /**
  * This controller is responsible for managing the {@link Screen#USER_VIEW} screen, which is used to display details

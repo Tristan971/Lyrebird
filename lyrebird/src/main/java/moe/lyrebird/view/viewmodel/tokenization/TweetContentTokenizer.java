@@ -18,7 +18,7 @@ import javafx.scene.text.Text;
 import moe.lyrebird.model.util.URLMatcher;
 import moe.lyrebird.view.viewmodel.javafx.ClickableText;
 
-import twitter4a.Status;
+import twitter4j.Status;
 
 /**
  * This class helps with tokenization of Tweet content to make sure elements expected to be clickable are not

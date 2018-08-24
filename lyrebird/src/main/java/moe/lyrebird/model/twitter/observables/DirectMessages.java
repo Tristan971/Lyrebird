@@ -36,8 +36,8 @@ import javafx.collections.ObservableMap;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.refresh.RateLimited;
 
-import twitter4a.DirectMessageEvent;
-import twitter4a.User;
+import twitter4j.DirectMessage;
+import twitter4j.User;
 
 @Component
 public class DirectMessages implements RateLimited {
@@ -45,7 +45,7 @@ public class DirectMessages implements RateLimited {
     private static final Logger LOG = LoggerFactory.getLogger(DirectMessages.class);
 
     private final SessionManager sessionManager;
-    private final ObservableMap<User, ObservableList<DirectMessageEvent>> messageEvents;
+    private final ObservableMap<User, ObservableList<DirectMessage>> messageEvents;
 
     public DirectMessages(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
@@ -53,7 +53,7 @@ public class DirectMessages implements RateLimited {
         this.messageEvents = FXCollections.observableHashMap();
     }
 
-    public ObservableMap<User, ObservableList<DirectMessageEvent>> directMessages() {
+    public ObservableMap<User, ObservableList<DirectMessage>> directMessages() {
         return messageEvents;
     }
 
@@ -67,7 +67,7 @@ public class DirectMessages implements RateLimited {
         CompletableFuture.runAsync(() -> {
             LOG.debug("Requesting last direct messages.");
             sessionManager.getCurrentTwitter()
-                          .mapTry(twitter -> twitter.getDirectMessageEvents(20))
+                          .mapTry(twitter -> twitter.getDirectMessages(20))
                           .onSuccess(this::addDirectMessages)
                           .onFailure(err -> LOG.error("Could not load direct messages successfully!", err));
         });
@@ -78,21 +78,21 @@ public class DirectMessages implements RateLimited {
         return 15;
     }
 
-    private void addDirectMessages(final List<DirectMessageEvent> loadedMessages) {
+    private void addDirectMessages(final List<DirectMessage> loadedMessages) {
         final var knownMessages = messageEvents.values()
                                                .stream()
                                                .flatMap(List::stream)
                                                .collect(Collectors.toList());
 
         final var newMessages = loadedMessages.stream()
-                                              .filter(((Predicate<DirectMessageEvent>) knownMessages::contains).negate())
+                                              .filter(((Predicate<DirectMessage>) knownMessages::contains).negate())
                                               .collect(Collectors.toList());
         LOG.debug("Loaded {} new messages", newMessages.size());
 
         newMessages.forEach(this::addDirectMessage);
     }
 
-    public void addDirectMessage(final DirectMessageEvent directMessageEvent) {
+    public void addDirectMessage(final DirectMessage directMessageEvent) {
         final long otherId = getOtherId(directMessageEvent);
         final User other = messageEvents.keySet()
                                         .stream()
@@ -100,15 +100,15 @@ public class DirectMessages implements RateLimited {
                                         .findAny()
                                         .orElseGet(() -> showUser(otherId));
 
-        final ObservableList<DirectMessageEvent> messagesWithOther = messageEvents.computeIfAbsent(
+        final ObservableList<DirectMessage> messagesWithOther = messageEvents.computeIfAbsent(
                 other,
                 k -> FXCollections.observableArrayList()
         );
         messagesWithOther.add(directMessageEvent);
-        messagesWithOther.sort(Comparator.comparingLong(DirectMessageEvent::getId));
+        messagesWithOther.sort(Comparator.comparingLong(DirectMessage::getId));
     }
 
-    private long getOtherId(final DirectMessageEvent directMessageEvent) {
+    private long getOtherId(final DirectMessage directMessageEvent) {
         return sessionManager.isCurrentUser(directMessageEvent.getSenderId()) ?
                directMessageEvent.getRecipientId() :
                directMessageEvent.getSenderId();

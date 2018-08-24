@@ -24,8 +24,8 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.view.screens.media.handlers.direct.DirectImageHandler;
 import moe.lyrebird.view.screens.media.handlers.twitter.TwitterMediaEntity;
 import moe.lyrebird.view.screens.media.handlers.twitter.TwitterVideoHandler;
-import twitter4a.MediaEntity;
-import twitter4a.Status;
+import twitter4j.MediaEntity;
+import twitter4j.Status;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;

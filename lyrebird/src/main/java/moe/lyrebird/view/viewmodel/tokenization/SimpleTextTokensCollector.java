@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import twitter4a.Status;
+import twitter4j.Status;
 
 public final class SimpleTextTokensCollector {
 

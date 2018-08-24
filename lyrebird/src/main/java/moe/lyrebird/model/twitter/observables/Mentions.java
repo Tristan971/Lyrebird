@@ -29,11 +29,11 @@ import moe.lyrebird.model.notifications.format.TwitterNotifications;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.refresh.RateLimited;
 
-import twitter4a.Paging;
-import twitter4a.ResponseList;
-import twitter4a.Status;
-import twitter4a.Twitter;
-import twitter4a.TwitterException;
+import twitter4j.Paging;
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
 /**
  * This class exposes the current user's mentions in an observable way

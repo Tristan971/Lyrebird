@@ -23,9 +23,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
-import twitter4a.Twitter;
-import twitter4a.TwitterFactory;
-import twitter4a.conf.ConfigurationBuilder;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -41,7 +41,7 @@ public class Twitter4JComponents {
      * @return this application's configuration for connecting to the Twitter API
      */
     @Bean
-    public twitter4a.conf.Configuration configuration(final Environment environment) {
+    public twitter4j.conf.Configuration configuration(final Environment environment) {
         final ConfigurationBuilder cb = new ConfigurationBuilder();
         final String consumerKey = environment.getProperty("twitter.consumerKey");
         final String consumerSecret = environment.getProperty("twitter.consumerSecret");
@@ -56,7 +56,7 @@ public class Twitter4JComponents {
      * @return a configured TwitterFactory to generate twitter instances
      */
     @Bean
-    public TwitterFactory twitterFactory(final twitter4a.conf.Configuration configuration) {
+    public TwitterFactory twitterFactory(final twitter4j.conf.Configuration configuration) {
         return new TwitterFactory(configuration);
     }
 

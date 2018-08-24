@@ -21,7 +21,7 @@ package moe.lyrebird.view.screens.media.handlers.twitter;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
 import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
-import twitter4a.MediaEntity;
+import twitter4j.MediaEntity;
 
 import javafx.scene.layout.Pane;
 

@@ -12,8 +12,9 @@ import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.CachedTwitterInfoService;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
-import twitter4a.DirectMessageEvent;
-import twitter4a.User;
+
+import twitter4j.DirectMessage;
+import twitter4j.User;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -26,7 +27,7 @@ import javafx.scene.layout.HBox;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DMPaneController implements ComponentCellFxmlController<DirectMessageEvent> {
+public class DMPaneController implements ComponentCellFxmlController<DirectMessage> {
 
     @FXML
     private HBox container;
@@ -45,7 +46,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     private final SessionManager sessionManager;
     private final UserDetailsService userDetailsService;
 
-    private final Property<DirectMessageEvent> currentMessage = new SimpleObjectProperty<>(null);
+    private final Property<DirectMessage> currentMessage = new SimpleObjectProperty<>(null);
 
     @Autowired
     public DMPaneController(
@@ -69,7 +70,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     }
 
     @Override
-    public void updateWithValue(final DirectMessageEvent newValue) {
+    public void updateWithValue(final DirectMessage newValue) {
         this.currentMessage.setValue(newValue);
     }
 
@@ -104,7 +105,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
 
     private void textualContent() {
         JavaFxObservable.valuesOf(currentMessage)
-                        .map(DirectMessageEvent::getText)
+                        .map(DirectMessage::getText)
                         .observeOn(JavaFxScheduler.platform())
                         .forEach(messageContent::setText);
     }

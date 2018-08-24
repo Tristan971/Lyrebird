@@ -11,7 +11,7 @@ open module lyrebird {
     requires spring.beans;
     requires javafx.fxml;
     requires javafx.controls;
-    requires twitter4a.core;
+    requires twitter4j.core;
     requires io.vavr;
     requires spring.core;
     requires javafx.web;

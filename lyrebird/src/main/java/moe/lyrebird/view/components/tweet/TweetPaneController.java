@@ -54,7 +54,7 @@ import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlControlle
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Nodes;
-import twitter4a.Status;
+import twitter4j.Status;
 
 /**
  * Displays a single tweet ({@link Status} in Twitter4J).

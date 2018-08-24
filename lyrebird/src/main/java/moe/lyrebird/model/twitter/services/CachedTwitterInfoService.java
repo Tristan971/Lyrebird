@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
-import twitter4a.User;
+import twitter4j.User;
 
 @Component
 @Cacheable(value = "cachedTwitterInfo", sync = true)

@@ -37,9 +37,9 @@ import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
 
 import io.vavr.CheckedFunction1;
 import io.vavr.control.Try;
-import twitter4a.Twitter;
-import twitter4a.User;
-import twitter4a.auth.AccessToken;
+import twitter4j.Twitter;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
 
 /**
  * The session manager is responsible for persisting the sessions in database and providing handles to them should

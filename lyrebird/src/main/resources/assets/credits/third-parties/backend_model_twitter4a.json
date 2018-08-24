@@ -2,14 +2,14 @@
   "title": "Twitter API",
   "author": {
     "name": "Yusuke Yamamoto, Takeuchi Hiroaki & others",
-    "url": "https://github.com/takke/twitter4a#contributors"
+    "url": "https://github.com/Twitter4J/Twitter4J/graphs/contributors"
   },
   "licensor": {
-    "name": "Twitter4J & Twitter4A projects",
-    "url": "https://github.com/takke/twitter4a"
+    "name": "Twitter4J project",
+    "url": "https://github.com/Twitter4J/Twitter4J"
   },
   "license": {
     "name": "Apache License 2.0",
-    "url": "https://github.com/takke/twitter4a/blob/master/LICENSE.txt"
+    "url": "https://github.com/Twitter4J/Twitter4J/blob/master/LICENSE.txt"
   }
 }

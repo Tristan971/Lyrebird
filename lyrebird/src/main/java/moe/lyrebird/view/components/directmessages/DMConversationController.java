@@ -27,8 +27,8 @@ import moe.lyrebird.model.twitter.services.NewDirectMessageService;
 import moe.lyrebird.view.components.cells.DirectMessageListCell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.DirectMessageEvent;
-import twitter4a.User;
+import twitter4j.DirectMessage;
+import twitter4j.User;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -42,7 +42,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 
 @Component
 @Scope(scopeName = SCOPE_PROTOTYPE)
-public class DMConversationController extends ComponentListViewFxmlController<DirectMessageEvent> {
+public class DMConversationController extends ComponentListViewFxmlController<DirectMessage> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DMConversationController.class);
 

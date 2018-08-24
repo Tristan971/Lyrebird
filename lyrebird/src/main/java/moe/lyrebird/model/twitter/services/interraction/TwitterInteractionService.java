@@ -22,10 +22,10 @@ import org.springframework.stereotype.Component;
 import moe.lyrebird.model.sessions.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4a.Relationship;
-import twitter4a.Status;
-import twitter4a.Twitter;
-import twitter4a.User;
+import twitter4j.Relationship;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.User;
 
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 

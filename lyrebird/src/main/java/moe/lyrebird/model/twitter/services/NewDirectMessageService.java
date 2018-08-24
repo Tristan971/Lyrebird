@@ -1,17 +1,18 @@
 package moe.lyrebird.model.twitter.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.observables.DirectMessages;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4a.DirectMessageEvent;
-import twitter4a.MessageData;
-import twitter4a.User;
-
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.observables.DirectMessages;
+
+import twitter4j.DirectMessage;
+import twitter4j.User;
 
 @Component
 public class NewDirectMessageService {
@@ -27,10 +28,10 @@ public class NewDirectMessageService {
         this.directMessages = directMessages;
     }
 
-    public CompletableFuture<DirectMessageEvent> sendMessage(final User recipient, final String content) {
+    public CompletableFuture<DirectMessage> sendMessage(final User recipient, final String content) {
         LOG.debug("Sending direct message to [{}] with content {}", recipient.getScreenName(), content);
         return CompletableFuture.supplyAsync(() -> sessionManager.doWithCurrentTwitter(
-                twitter -> twitter.createMessage(buildMessage(recipient, content)))
+                twitter -> twitter.sendDirectMessage(recipient.getId(), content))
         ).thenApplyAsync(
                 msgReq -> msgReq.onSuccess(dme -> {
                     LOG.debug("Sent direct message! {}", dme);
@@ -43,10 +44,6 @@ public class NewDirectMessageService {
                 LOG.error("Could not correctly executed the direct message sending request!", err);
             }
         });
-    }
-
-    private static MessageData buildMessage(final User recipient, final String content) {
-        return new MessageData(recipient.getId(), content);
     }
 
 }

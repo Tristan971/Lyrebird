@@ -45,7 +45,7 @@ import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.util.Stages;
 
 import io.vavr.control.Try;
-import twitter4a.User;
+import twitter4j.User;
 
 /**
  * This component is loaded at the top of the {@link FxComponent#CONTROL_BAR} and serves as a very basic preview for who

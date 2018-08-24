@@ -18,17 +18,19 @@
 
 package moe.lyrebird.model.sessions;
 
-import io.vavr.control.Try;
-import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
-import twitter4a.User;
-import twitter4a.auth.AccessToken;
+import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
-import java.io.Serializable;
-import java.util.Objects;
+
+import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
+
+import io.vavr.control.Try;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
 
 /**
  * A session represents one {@link AccessToken} and the corresponding user id, which is the primary key.
@@ -37,7 +39,6 @@ import java.util.Objects;
  * <p>
  * Unused warnings are disabled because setters need to be public for hibernate mapping to database.
  */
-@SuppressWarnings("unused")
 @Entity
 public class Session implements Serializable {
 

@@ -18,7 +18,7 @@
 
 package moe.lyrebird.model.twitter.services.interraction;
 
-import twitter4a.Status;
+import twitter4j.Status;
 
 import java.util.function.BiFunction;
 

@@ -25,7 +25,7 @@ public final class PostUpdateCompatibilityHelper {
 
     private static PostUpdateCompatibilityTask wipeUserData() {
         final List<String> reasons = Collections.singletonList(
-                "1.1.2-twitter4j-to-twitter4a-hibernate"
+                "1.1.2-twitter4j-to-twitter4j-hibernate"
         );
 
         final Runnable execution = () -> {
