@@ -41,8 +41,8 @@ import moe.lyrebird.model.twitter.user.UserDetailsService;
 import moe.lyrebird.view.components.cells.CreditsCell;
 import moe.lyrebird.view.components.credits.CreditController;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
 import moe.tristan.easyfxml.model.components.listview.ComponentListViewFxmlController;
+import moe.tristan.easyfxml.model.system.BrowserSupport;
 import moe.tristan.easyfxml.util.Buttons;
 
 import twitter4j.User;

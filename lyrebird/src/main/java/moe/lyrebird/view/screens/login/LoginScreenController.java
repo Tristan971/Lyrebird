@@ -18,21 +18,16 @@
 
 package moe.lyrebird.view.screens.login;
 
+import java.net.URL;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.Buttons;
-import io.vavr.Tuple2;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -43,9 +38,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.net.URL;
-import java.util.Optional;
-import java.util.stream.Stream;
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.system.BrowserSupport;
+import moe.tristan.easyfxml.util.Buttons;
+
+import io.vavr.Tuple2;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 
 /**
  * This class is responsible for managing the login screen.

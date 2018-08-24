@@ -22,10 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
-import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
-import moe.lyrebird.model.credits.objects.CreditedWork;
-import moe.lyrebird.view.screens.Screen;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -33,6 +29,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+
+import moe.lyrebird.model.credits.objects.CreditedWork;
+import moe.lyrebird.view.screens.Screen;
+import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
+import moe.tristan.easyfxml.model.system.BrowserSupport;
 
 /**
  * This component is the one managing a single credit disclaimer unit in the credits list view.

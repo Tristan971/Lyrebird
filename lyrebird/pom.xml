@@ -168,7 +168,7 @@
         <dependency>
             <groupId>moe.tristan</groupId>
             <artifactId>easyfxml</artifactId>
-            <version>1.1.7</version>
+            <version>1.1.8</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.hamcrest</groupId>
