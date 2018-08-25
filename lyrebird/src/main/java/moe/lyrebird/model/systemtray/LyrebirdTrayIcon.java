@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
@@ -58,9 +59,8 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
     }
 
     @Override
-    public MouseListener onMouseClickListener() {
-        //noop
-        return null;
+    public Optional<MouseListener> onMouseClickListener() {
+        return Optional.empty();
     }
 
     /**
