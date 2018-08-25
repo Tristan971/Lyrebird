@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import moe.lyrebird.view.viewmodel.tokenization.Token;
 import moe.lyrebird.view.viewmodel.tokenization.TokensExtractor;
-import moe.tristan.easyfxml.model.awt.integrations.BrowserSupport;
+import moe.tristan.easyfxml.model.system.BrowserSupport;
 
 import twitter4j.Status;
 import twitter4j.URLEntity;
