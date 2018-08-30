@@ -81,6 +81,9 @@ public abstract class TwitterTimelineBaseModel {
      */
     public void refresh() {
         CompletableFuture.runAsync(() -> {
+            if (sessionManager.getCurrentTwitter().getOrElse((Twitter) null) == null) {
+                return;
+            }
             getLocalLogger().debug("Requesting last tweets in timeline.");
             sessionManager.getCurrentTwitter()
                           .mapTry(this::initialLoad)
