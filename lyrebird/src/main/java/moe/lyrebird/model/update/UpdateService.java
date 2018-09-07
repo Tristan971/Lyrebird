@@ -23,15 +23,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import moe.lyrebird.api.client.LyrebirdServerClient;
 import moe.lyrebird.api.model.LyrebirdVersion;
@@ -138,7 +139,7 @@ public class UpdateService {
 
     /**
      * Fetches the latest version and sets it in {@link #latestVersion}. If this version has a newer {@link
-     * LyrebirdVersion#buildVersion} than the current one, set {@link #isUpdateAvailable} to true
+     * LyrebirdVersion#getBuildVersion()} than the current one, set {@link #isUpdateAvailable} to true
      */
     private void poll() {
         try {

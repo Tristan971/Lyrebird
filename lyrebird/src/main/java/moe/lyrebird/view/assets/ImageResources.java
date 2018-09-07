@@ -18,6 +18,8 @@
 
 package moe.lyrebird.view.assets;
 
+import java.util.Objects;
+
 import javafx.scene.image.Image;
 
 /**
@@ -59,7 +61,7 @@ public enum ImageResources {
         final ClassLoader cl = ImageResources.class.getClassLoader();
         final String finalPath = "assets/img/" + path;
 
-        return new Image(cl.getResourceAsStream(finalPath));
+        return new Image(Objects.requireNonNull(cl.getResourceAsStream(finalPath)));
     }
 
     public Image getImage() {

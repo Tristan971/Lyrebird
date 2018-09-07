@@ -17,7 +17,6 @@ module lyrebird.server {
     requires spring.web;
 
     requires com.fasterxml.jackson.databind;
-    requires io.vavr;
 
     requires lyrebird.api;
 

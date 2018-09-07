@@ -18,18 +18,18 @@
 
 package moe.lyrebird.view.components.cells;
 
+import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGE_PANE;
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javafx.scene.control.ListView;
+
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
 
 import twitter4j.DirectMessage;
-import twitter4j.DirectMessage;
-
-import javafx.scene.control.ListView;
-
-import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGE_PANE;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * This is the class managing the cell of a direct message from the point of view of its embedding {@link ListView}.
