@@ -19,5 +19,6 @@ module lyrebird.server {
     requires com.fasterxml.jackson.databind;
 
     requires lyrebird.api;
+    requires io.vavr;
 
 }
