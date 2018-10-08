@@ -52,7 +52,7 @@ public class SystemTrayService {
 
     public SystemTrayService(final LyrebirdTrayIcon lyrebirdTrayIcon) {
         this.lyrebirdTrayIcon = lyrebirdTrayIcon;
-        loadTrayIcon();
+        //loadTrayIcon();
     }
 
     public Property<TrayIcon> trayIconProperty() {
