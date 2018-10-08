@@ -120,12 +120,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>javax.transaction-api</artifactId>
-                    <groupId>javax.transaction</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -194,12 +188,6 @@
             <groupId>moe.tristan</groupId>
             <artifactId>easyfxml</artifactId>
             <version>1.1.8</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
@@ -215,24 +203,6 @@
             <groupId>com.dorkbox</groupId>
             <artifactId>SystemTray</artifactId>
             <version>3.15</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.swt</groupId>
-                    <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Split packages overrides APIs -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.2.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.transaction</groupId>
-            <artifactId>jboss-transaction-api_1.2_spec</artifactId>
-            <version>1.1.1.Final</version>
         </dependency>
 
         <!-- Misc -->
