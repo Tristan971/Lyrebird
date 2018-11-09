@@ -1,12 +1,10 @@
 package moe.lyrebird.model.systemtray;
 
-import java.awt.*;
+import java.awt.MenuItem;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
@@ -16,15 +14,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javafx.application.Platform;
+
 import moe.lyrebird.view.screens.Screen;
-import moe.tristan.easyfxml.model.awt.integrations.SystemTrayIcon;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 
-/**
- * The {@link SystemTrayIcon} that is registered in the current OS's tray bar.
- */
 @Component
-public class LyrebirdTrayIcon implements SystemTrayIcon {
+public class LyrebirdTrayIcon {
 
     private static final Logger LOG = LoggerFactory.getLogger(LyrebirdTrayIcon.class);
 
@@ -39,28 +34,20 @@ public class LyrebirdTrayIcon implements SystemTrayIcon {
         this.stageManager = stageManager;
     }
 
-    @Override
     public String getLabel() {
         return environment.getRequiredProperty("app.promo.name");
     }
 
-    @Override
     @Cacheable("lyrebirdTrayIconURL")
     public URL getIcon() {
         return getClass().getClassLoader().getResource("assets/img/general_icon_lyrebird_logo_small.png");
     }
 
-    @Override
-    public Map<MenuItem, ActionListener> getMenuItems() {
+    Map<MenuItem, ActionListener> getMenuItems() {
         final Map<MenuItem, ActionListener> menuItems = new LinkedHashMap<>();
         menuItems.put(new MenuItem("Open Lyrebird", null), e -> showMainStage());
         menuItems.put(new MenuItem("Quit Lyrebird", null), e -> Platform.runLater(this::exitApplication));
         return menuItems;
-    }
-
-    @Override
-    public Optional<MouseListener> onMouseClickListener() {
-        return Optional.empty();
     }
 
     /**
