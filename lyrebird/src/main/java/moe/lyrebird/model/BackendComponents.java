@@ -18,20 +18,22 @@
 
 package moe.lyrebird.model;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
+
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.sessions.SessionRepository;
 import moe.lyrebird.model.twitter.twitter4j.Twitter4JComponents;
 import moe.lyrebird.model.twitter.twitter4j.TwitterHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4j.Twitter;
 
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import twitter4j.Twitter;
 
 /**
  * Back-end (Twitter, persistence etc.) components go here.

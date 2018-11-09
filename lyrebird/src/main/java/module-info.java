@@ -25,4 +25,6 @@ open module lyrebird {
     requires prettytime;
     requires spring.data.jpa;
     requires oshi.core;
+    requires net.bytebuddy;
+
 }
