@@ -25,7 +25,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.web.WebView;
 
 import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.model.update.UpdateService;
@@ -44,9 +43,6 @@ public class UpdateScreenController implements FxmlController {
 
     @FXML
     private Label latestVersionLabel;
-
-    @FXML
-    private WebView changeNotesWebView;
 
     @FXML
     private Button updateButton;
@@ -92,9 +88,6 @@ public class UpdateScreenController implements FxmlController {
         this.latestVersionLabel.setText(latestVersion.getVersion());
 
         this.openInBrowserUrl.setOnAction(e -> browserSupport.openUrl(latestVersion.getReleaseUrl()));
-
-        updateService.getLatestChangeNotes()
-                     .thenAcceptAsync(this.changeNotesWebView.getEngine()::loadContent, Platform::runLater);
     }
 
 }

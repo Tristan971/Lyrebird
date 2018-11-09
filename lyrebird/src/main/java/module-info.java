@@ -14,7 +14,6 @@ open module lyrebird {
     requires org.twitter4j.core;
     requires io.vavr;
     requires spring.core;
-    requires javafx.web;
     requires javafx.media;
     requires java.prefs;
     requires java.persistence;
