@@ -18,55 +18,19 @@
 
 package moe.lyrebird.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
-public final class LyrebirdVersion {
+import org.immutables.value.Value.Immutable;
 
-    private final String version;
-    private final int buildVersion;
-    private final String releaseUrl;
-    private final List<LyrebirdPackage> packages;
+@Immutable
+public interface LyrebirdVersion {
 
-    @JsonCreator
-    public LyrebirdVersion(
-            @JsonProperty("version") final String version,
-            @JsonProperty("buildVersion") final int buildVersion,
-            @JsonProperty("releaseUrl") final String releaseUrl,
-            @JsonProperty("packages") final List<LyrebirdPackage> packages
-    ) {
-        this.version = version;
-        this.buildVersion = buildVersion;
-        this.releaseUrl = releaseUrl;
-        this.packages = packages;
-    }
+    String getVersion();
 
-    public String getVersion() {
-        return version;
-    }
+    int getBuildVersion();
 
-    public int getBuildVersion() {
-        return buildVersion;
-    }
+    String getReleaseUrl();
 
-    public String getReleaseUrl() {
-        return releaseUrl;
-    }
-
-    public List<LyrebirdPackage> getPackages() {
-        return packages;
-    }
-
-    @Override
-    public String toString() {
-        return "LyrebirdVersion{" +
-               "version='" + version + '\'' +
-               ", buildVersion='" + buildVersion + '\'' +
-               ", releaseUrl='" + releaseUrl + '\'' +
-               ", packages=" + packages +
-               '}';
-    }
+    List<LyrebirdPackage> getPackages();
 
 }

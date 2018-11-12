@@ -18,39 +18,15 @@
 
 package moe.lyrebird.api.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.net.URL;
 
-public final class LyrebirdPackage {
+import org.immutables.value.Value.Immutable;
 
-    private final TargetPlatform targetPlatform;
-    private final URL packageUrl;
+@Immutable
+public interface LyrebirdPackage {
 
-    @JsonCreator
-    public LyrebirdPackage(
-            @JsonProperty("targetPlatform") final TargetPlatform targetPlatform,
-            @JsonProperty("packageUrl") final URL packageUrl
-    ) {
-        this.targetPlatform = targetPlatform;
-        this.packageUrl = packageUrl;
-    }
+    TargetPlatform getTargetPlatform();
 
-    public TargetPlatform getTargetPlatform() {
-        return targetPlatform;
-    }
-
-    public URL getPackageUrl() {
-        return packageUrl;
-    }
-
-    @Override
-    public String toString() {
-        return "LyrebirdPackage{" +
-               "targetPlatform=" + targetPlatform +
-               ", packageUrl=" + packageUrl +
-               '}';
-    }
+    URL getPackageUrl();
 
 }
