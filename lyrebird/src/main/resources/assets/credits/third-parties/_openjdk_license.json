@@ -1,0 +1,15 @@
+{
+  "title": "OpenJDK project",
+  "author": {
+    "name": "Oracle",
+    "url": "http://openjdk.java.net/"
+  },
+  "licensor": {
+    "name": "AdoptOpenJDK",
+    "url": "https://adoptopenjdk.net/"
+  },
+  "license": {
+    "name": "GNU GPL v2 with Classpath exception",
+    "url": "http://openjdk.java.net/legal/gplv2+ce.html"
+  }
+}

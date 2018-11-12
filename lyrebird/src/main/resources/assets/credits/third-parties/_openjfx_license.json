@@ -1,0 +1,15 @@
+{
+  "title": "OpenJFX project",
+  "author": {
+    "name": "Oracle",
+    "url": "https://openjdk.java.net/projects/openjfx/"
+  },
+  "licensor": {
+    "name": "OpenJFX project",
+    "url": "https://openjfx.io/"
+  },
+  "license": {
+    "name": "GNU GPL v2 with Classpath exception",
+    "url": "http://openjdk.java.net/legal/gplv2+ce.html"
+  }
+}
