@@ -18,13 +18,7 @@
 
 package moe.lyrebird.api.server.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import moe.lyrebird.api.model.LyrebirdVersion;
+import static io.vavr.API.unchecked;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -32,7 +26,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.vavr.API.unchecked;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import moe.lyrebird.api.model.LyrebirdVersion;
 
 @Component
 public class VersionService {

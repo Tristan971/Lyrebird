@@ -22,7 +22,10 @@ import java.util.List;
 
 import org.immutables.value.Value.Immutable;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 @Immutable
+@JsonDeserialize(as = ImmutableLyrebirdVersion.class)
 public interface LyrebirdVersion {
 
     String getVersion();

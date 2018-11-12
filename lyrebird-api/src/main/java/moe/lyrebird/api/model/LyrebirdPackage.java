@@ -22,7 +22,10 @@ import java.net.URL;
 
 import org.immutables.value.Value.Immutable;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 @Immutable
+@JsonDeserialize(as = ImmutableLyrebirdPackage.class)
 public interface LyrebirdPackage {
 
     TargetPlatform getTargetPlatform();
