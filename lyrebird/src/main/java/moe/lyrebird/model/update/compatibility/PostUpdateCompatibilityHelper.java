@@ -1,13 +1,11 @@
 package moe.lyrebird.model.update.compatibility;
 
-import java.io.File;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.vavr.control.Option;
 
 public final class PostUpdateCompatibilityHelper {
 
@@ -18,24 +16,10 @@ public final class PostUpdateCompatibilityHelper {
 
     public static void executeCompatibilityTasks() {
         LOG.debug("Parsing post-update compatibility tasks.");
-        Stream.of(wipeUserData())
-              .forEach(PostUpdateCompatibilityTask::executeIfNecessary);
-    }
-
-    private static PostUpdateCompatibilityTask wipeUserData() {
-        final List<String> reasons = List.of(
-                "1.1.2-twitter4j-to-twitter4a-hibernate",
-                "1.1.4-twitter4a-to-twitter4j-hibernate"
-        );
-
-        final Runnable execution = () -> {
-            final File userSettingsFolder = new File(System.getProperty("user.home"), ".lyrebird");
-            if (userSettingsFolder.exists() && userSettingsFolder.isDirectory()) {
-                Arrays.stream(Objects.requireNonNull(userSettingsFolder.listFiles())).forEach(File::delete);
-            }
-        };
-
-        return new PostUpdateCompatibilityTask("Wipe user data.", reasons, execution);
+        Arrays.stream(PostUpdateCompatibilityTasks.values())
+              .map(PostUpdateCompatibilityTask::getRequiredExecution)
+              .flatMap(Option::toJavaStream)
+              .forEach(Runnable::run);
     }
 
 }
