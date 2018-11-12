@@ -11,10 +11,9 @@ open module lyrebird {
     requires spring.beans;
     requires javafx.fxml;
     requires javafx.controls;
-    requires twitter4j.core;
+    requires org.twitter4j.core;
     requires io.vavr;
     requires spring.core;
-    requires javafx.web;
     requires javafx.media;
     requires java.prefs;
     requires java.persistence;
@@ -25,4 +24,6 @@ open module lyrebird {
     requires prettytime;
     requires spring.data.jpa;
     requires oshi.core;
+    requires net.bytebuddy;
+
 }

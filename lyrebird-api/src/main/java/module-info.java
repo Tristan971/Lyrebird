@@ -14,4 +14,6 @@ open module lyrebird.api {
     requires jackson.annotations;
     requires java.sql;
 
+    requires static org.immutables.value;
+
 }

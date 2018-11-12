@@ -85,7 +85,6 @@
                   </HBox>
                </children>
             </VBox>
-            <WebView fx:id="changeNotesWebView" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
             <VBox alignment="CENTER" styleClass="dark">
                <children>
                   <Separator prefWidth="200.0" />

@@ -30,7 +30,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import dorkbox.systemTray.Menu;
 import dorkbox.systemTray.MenuItem;
 import dorkbox.systemTray.SystemTray;
-import dorkbox.util.OS;
 
 /**
  * This class is responsible for management and exposure of the {@link LyrebirdTrayIcon}.
@@ -40,19 +39,13 @@ public class SystemTrayService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemTrayService.class);
 
-    static {
-        if (OS.isLinux()) {
-            SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.GtkStatusIcon;
-        }
-    }
-
     private final LyrebirdTrayIcon lyrebirdTrayIcon;
 
     private final Property<TrayIcon> trayIcon = new SimpleObjectProperty<>(null);
 
     public SystemTrayService(final LyrebirdTrayIcon lyrebirdTrayIcon) {
         this.lyrebirdTrayIcon = lyrebirdTrayIcon;
-        loadTrayIcon();
+        //loadTrayIcon();
     }
 
     public Property<TrayIcon> trayIconProperty() {

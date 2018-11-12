@@ -25,11 +25,11 @@
     <parent>
         <groupId>moe.lyrebird</groupId>
         <artifactId>lyrebird-parent</artifactId>
-        <version>1.1.4</version>
+        <version>1.2.0</version>
     </parent>
 
     <artifactId>lyrebird</artifactId>
-    <version>1.1.4</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
 
     <name>Lyrebird</name>
@@ -55,32 +55,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.zenjava</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.9.0-SNAPSHOT</version>
-                <configuration>
-                    <appName>Lyrebird</appName>
-                    <identifier>Lyrebird</identifier>
-                    <vendor>Lyrebird</vendor>
-                    <mainClass>moe.lyrebird.Lyrebird</mainClass>
-                    <needMenu>true</needMenu>
-                    <needShortcut>true</needShortcut>
-                    <skipJNLP>true</skipJNLP>
-                    <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
-                    <bundleArguments>
-                        <dropinResourcesRoot>${project.basedir}/src/main/java</dropinResourcesRoot>
-                        <icon.ico>${project.basedir}/src/main/deploy/package/windows/Lyrebird.ico</icon.ico>
-                        <icon.icns>${project.basedir}/src/main/deploy/package/macosx/Lyrebird.icns</icon.icns>
-                        <icon.png>${project.basedir}/src/main/deploy/package/linux/Lyrebird.png</icon.png>
-                        <mac.CFBundleIdentifier>moe.lyrebird.Lyrebird</mac.CFBundleIdentifier>
-                        <mac.CFBundleName>Lyrebird</mac.CFBundleName>
-                        <mac.CFBundleVersion>${project.version}</mac.CFBundleVersion>
-                        <mac.dmg.simple>true</mac.dmg.simple>
-                        <installdirChooser>true</installdirChooser>
-                    </bundleArguments>
-                </configuration>
             </plugin>
         </plugins>
 
@@ -120,12 +94,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>javax.transaction-api</artifactId>
-                    <groupId>javax.transaction</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -166,15 +134,29 @@
 
         <!-- JavaFX -->
         <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>11</version>
+        </dependency>
+        <dependency>
             <groupId>moe.tristan</groupId>
             <artifactId>easyfxml</artifactId>
-            <version>1.1.8</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>2.0.1</version>
         </dependency>
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
@@ -189,25 +171,7 @@
         <dependency>
             <groupId>com.dorkbox</groupId>
             <artifactId>SystemTray</artifactId>
-            <version>3.15</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.swt</groupId>
-                    <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Split packages overrides APIs -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.2.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.spec.javax.transaction</groupId>
-            <artifactId>jboss-transaction-api_1.2_spec</artifactId>
-            <version>1.1.1.Final</version>
+            <version>3.17</version>
         </dependency>
 
         <!-- Misc -->
@@ -227,7 +191,74 @@
             <artifactId>prettytime</artifactId>
             <version>4.0.1.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.23.1-GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>bundle-native</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.zenjava</groupId>
+                        <artifactId>javafx-maven-plugin</artifactId>
+                        <version>8.9.0-SNAPSHOT</version>
+                        <configuration>
+                            <appName>Lyrebird</appName>
+                            <identifier>Lyrebird</identifier>
+                            <vendor>Lyrebird</vendor>
+                            <mainClass>moe.lyrebird.Lyrebird</mainClass>
+                            <needMenu>true</needMenu>
+                            <needShortcut>true</needShortcut>
+                            <skipJNLP>true</skipJNLP>
+                            <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
+                            <bundleArguments>
+                                <dropinResourcesRoot>${project.basedir}/src/main/java</dropinResourcesRoot>
+                                <icon.ico>${project.basedir}/src/main/deploy/package/windows/Lyrebird.ico</icon.ico>
+                                <icon.icns>${project.basedir}/src/main/deploy/package/macosx/Lyrebird.icns</icon.icns>
+                                <icon.png>${project.basedir}/src/main/deploy/package/linux/Lyrebird.png</icon.png>
+                                <mac.CFBundleIdentifier>moe.lyrebird.Lyrebird</mac.CFBundleIdentifier>
+                                <mac.CFBundleName>Lyrebird</mac.CFBundleName>
+                                <mac.CFBundleVersion>${project.version}</mac.CFBundleVersion>
+                                <mac.dmg.simple>true</mac.dmg.simple>
+                                <installdirChooser>true</installdirChooser>
+                            </bundleArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <pluginRepositories>
         <pluginRepository>

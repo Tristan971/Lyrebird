@@ -18,7 +18,6 @@
 
 package moe.lyrebird.model.sessions;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -40,9 +39,7 @@ import twitter4j.auth.AccessToken;
  * Unused warnings are disabled because setters need to be public for hibernate mapping to database.
  */
 @Entity
-public class Session implements Serializable {
-
-    private static final long serialVersionUID = -9038797949832585362L;
+public class Session {
 
     @Id
     private String userId;

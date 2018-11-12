@@ -18,19 +18,19 @@
 
 package moe.lyrebird.model.notifications;
 
+import static moe.lyrebird.model.notifications.NotificationSystemType.INTERNAL;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.lyrebird.model.notifications.system.NotificationSystem;
-import moe.lyrebird.view.screens.Screen;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javafx.stage.Stage;
 
-import static moe.lyrebird.model.notifications.NotificationSystemType.INTERNAL;
-import static moe.lyrebird.model.notifications.NotificationSystemType.SYSTEM;
+import moe.lyrebird.model.notifications.system.NotificationSystem;
+import moe.lyrebird.view.screens.Screen;
+import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 
 /**
  * This service is in charge of dispatching notification requests to the appropriate {@link NotificationSystem}.
@@ -69,7 +69,8 @@ public class NotificationService {
 
         final boolean isVisible = mainStage.isShowing() && !mainStage.isIconified();
 
-        final NotificationSystemType appropriateNotificationSystem = isVisible ? INTERNAL : SYSTEM;
+        // TODO: re-enable native notifications once SystemTray issues are fixed
+        final NotificationSystemType appropriateNotificationSystem = INTERNAL;
         LOG.debug("Determined that the appropriate notification system is {}", appropriateNotificationSystem);
         sendNotification(notification, appropriateNotificationSystem);
     }
