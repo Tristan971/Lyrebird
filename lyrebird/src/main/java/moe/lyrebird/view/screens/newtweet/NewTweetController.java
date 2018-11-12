@@ -39,14 +39,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ListProperty;
@@ -60,6 +52,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -68,6 +63,18 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Buttons;
 
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Mentions;
@@ -79,11 +86,6 @@ import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import moe.lyrebird.view.viewmodel.javafx.StageAware;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.Buttons;
-
 import twitter4j.Status;
 import twitter4j.User;
 import twitter4j.UserMentionEntity;
@@ -164,6 +166,7 @@ public class NewTweetController implements FxmlController, StageAware {
         mediaPreviewBox.managedProperty().bind(mediasNotEmpty);
 
         inReplyStatus.addListener((o, prev, cur) -> prefillMentionsForReply());
+        sendOnControlEnter();
     }
 
     /**
@@ -317,13 +320,21 @@ public class NewTweetController implements FxmlController, StageAware {
         pickMediaButton.setDisable(false);
         mediasToUpload.addAll(selectedFiles);
         LOG.debug("Added media files for upload with next tweet : {}", selectedFiles);
-        final List<ImageView> mediaImagePreviews = selectedFiles.stream()
-                                                                .map(NewTweetController::buildMediaPreviewImageView)
-                                                                .filter(Objects::nonNull)
-                                                                .collect(Collectors.toList());
+        final List<ImageView> mediaImagePreviews =
+                selectedFiles.stream()
+                             .map(NewTweetController::buildMediaPreviewImageView)
+                             .filter(Objects::nonNull)
+                             .collect(Collectors.toList());
         if (!mediaImagePreviews.isEmpty()) {
             mediaPreviewBox.getChildren().addAll(mediaImagePreviews);
         }
+    }
+
+    private void sendOnControlEnter() {
+        tweetTextArea.sceneProperty().addListener((o, prev, cur) -> cur.getAccelerators().put(
+                new KeyCodeCombination(KeyCode.ENTER, KeyCombination.CONTROL_DOWN),
+                sendButton::fire
+        ));
     }
 
     /**
