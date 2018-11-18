@@ -64,8 +64,16 @@
     -fx-background-color: #ebebeb;
 }
 
+.hoverableButton:pressed {
+    -fx-background-color: #adadad;
+}
+
 .list-view .list-cell:selected .hoverableButton:hover {
     -fx-background-color: #cdd8e6;
+}
+
+.list-view .list-cell:selected .hoverableButton:pressed {
+    -fx-background-color: #aab3bf;
 }
 
 #tweet {
