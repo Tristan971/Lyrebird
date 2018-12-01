@@ -33,9 +33,9 @@ import moe.lyrebird.model.settings.Setting;
 import moe.lyrebird.model.settings.SettingsUtils;
 import moe.lyrebird.view.screens.Screen;
 import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.FxUiManager;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
-import moe.tristan.easyfxml.spring.application.FxUiManager;
 
 /**
  * The {@link LyrebirdUiManager} is responsible for bootstrapping the GUI of the application correctly.
