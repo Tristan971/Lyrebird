@@ -54,7 +54,7 @@ import moe.tristan.easyfxml.FxUiManager;
  */
 @SpringBootApplication
 @EnableCaching
-@Import({EasyFxmlAutoConfiguration.class, LyrebirdServerClientConfiguration.class})
+@Import(LyrebirdServerClientConfiguration.class)
 public class Lyrebird extends FxApplication {
 
     /**
