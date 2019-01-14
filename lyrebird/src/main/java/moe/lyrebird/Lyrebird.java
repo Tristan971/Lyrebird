@@ -31,7 +31,6 @@ import moe.lyrebird.api.client.LyrebirdServerClientConfiguration;
 import moe.lyrebird.model.interrupts.CleanupService;
 import moe.lyrebird.model.update.compatibility.PostUpdateCompatibilityHelper;
 import moe.lyrebird.view.LyrebirdUiManager;
-import moe.tristan.easyfxml.EasyFxmlAutoConfiguration;
 import moe.tristan.easyfxml.FxApplication;
 import moe.tristan.easyfxml.FxUiManager;
 
