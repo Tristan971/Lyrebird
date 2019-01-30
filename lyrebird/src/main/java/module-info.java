@@ -1,29 +1,32 @@
 open module lyrebird {
+    requires lyrebird.api;
+    requires org.twitter4j.core;
 
+    requires java.persistence;
+    requires java.prefs;
+
+    requires easyfxml;
+    requires java.desktop;
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires javafx.graphics;
+    requires javafx.media;
+    requires rxjavafx;
+    requires SystemTray;
+
+    requires jackson.annotations;
+    requires com.fasterxml.jackson.databind;
+
+    requires io.vavr;
+    requires io.reactivex.rxjava2;
+    requires net.bytebuddy;
+    requires oshi.core;
+    requires prettytime;
+    requires slf4j.api;
+
+    requires spring.beans;
     requires spring.boot.autoconfigure;
     requires spring.context;
-    requires easyfxml;
-    requires SystemTray;
-    requires java.desktop;
-    requires lyrebird.api;
-    requires javafx.graphics;
-    requires slf4j.api;
-    requires spring.beans;
-    requires javafx.fxml;
-    requires javafx.controls;
-    requires org.twitter4j.core;
-    requires io.vavr;
     requires spring.core;
-    requires javafx.media;
-    requires java.prefs;
-    requires java.persistence;
-    requires com.fasterxml.jackson.databind;
-    requires jackson.annotations;
-    requires rxjavafx;
-    requires io.reactivex.rxjava2;
-    requires prettytime;
     requires spring.data.jpa;
-    requires oshi.core;
-    requires net.bytebuddy;
-
 }

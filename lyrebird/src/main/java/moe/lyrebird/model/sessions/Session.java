@@ -36,8 +36,9 @@ import twitter4j.auth.AccessToken;
  * <p>
  * It is serializable (and serialized) and can be retrieved to construct a {@link TwitterHandler instance}.
  * <p>
- * Unused warnings are disabled because setters need to be public for hibernate mapping to database.
+ * Unused warnings are disabled because Hibernate does use (and need) this class to have no-arg constructor and public getter/setter pairs for fields.
  */
+@SuppressWarnings("unused")
 @Entity
 public class Session {
 
@@ -124,4 +125,5 @@ public class Session {
                ", accessToken=" + accessToken +
                '}';
     }
+
 }
