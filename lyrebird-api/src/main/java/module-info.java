@@ -12,6 +12,7 @@ open module lyrebird.api {
 
     requires com.fasterxml.jackson.databind;
     requires jackson.annotations;
+    requires java.annotation;
     requires java.sql;
 
     requires static org.immutables.value;
