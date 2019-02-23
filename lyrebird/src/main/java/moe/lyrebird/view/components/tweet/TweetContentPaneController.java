@@ -48,7 +48,6 @@ public class TweetContentPaneController implements FxmlController {
         VBox.setVgrow(tweetContent, Priority.ALWAYS);
     }
 
-
     public void setStatusProp(final Status status) {
         this.statusProp.setValue(status);
     }
