@@ -32,7 +32,6 @@ import moe.lyrebird.model.notifications.NotificationService;
 import moe.lyrebird.model.settings.Setting;
 import moe.lyrebird.model.settings.SettingsUtils;
 import moe.lyrebird.view.screens.Screen;
-import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.FxUiManager;
 import moe.tristan.easyfxml.api.FxmlNode;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
@@ -55,7 +54,6 @@ public class LyrebirdUiManager extends FxUiManager {
     /**
      * The constructor of this class, called by Spring automatically.
      *
-     * @param easyFxml            The instance of {@link EasyFxml} that will be used to load the main stage's view.
      * @param stageManager        The instance of {@link StageManager} that will be used to register the root view for
      *                            later retrieval.
      * @param environment         The spring environment to use property keys for minimal size and main stage title.
@@ -64,12 +62,10 @@ public class LyrebirdUiManager extends FxUiManager {
      */
     @Autowired
     public LyrebirdUiManager(
-            final EasyFxml easyFxml,
             final StageManager stageManager,
             final Environment environment,
             final NotificationService notificationService
     ) {
-        super(easyFxml);
         this.stageManager = stageManager;
         this.environment = environment;
         this.notificationService = notificationService;
