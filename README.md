@@ -121,11 +121,15 @@ Then any of the following (in `Lyrebird/lyrebird` folder):
         - [x] Basic update system
         - [x] Auto-update
 
-## Can I contribute?
-Please do!
+## Contributors
+
+### Can I help?
+Please do! There's a large amount of features to support and I can't really work on it regularly by myself unfortunately...
 
 It should be fairly easy to understand the general idea of the back-end model for any
 seasoned Java developer with some Spring Framework experience.
 
 For the UI/JavaFX model a lot of the work is delegated to a JavaFX framework called
 EasyFXML which you can read about [here](https://github.com/Tristan971/EasyFXML).
+
+[![](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/images/0)](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/links/0)[![](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/images/1)](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/links/1)[![](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/images/2)](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/links/2)[![](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/images/3)](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/links/3)[![](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/images/4)](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/links/4)[![](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/images/5)](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/links/5)[![](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/images/6)](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/links/6)[![](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/images/7)](https://sourcerer.io/fame/Tristan971/Tristan971/Lyrebird/links/7)
