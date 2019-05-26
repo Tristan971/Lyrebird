@@ -5,7 +5,7 @@ open module lyrebird {
     requires java.persistence;
     requires java.prefs;
 
-    requires easyfxml;
+    requires moe.tristan.easyfxml;
     requires java.desktop;
     requires javafx.controls;
     requires javafx.fxml;

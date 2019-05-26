@@ -133,29 +133,14 @@
 
         <!-- JavaFX -->
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
-            <version>${openjfx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${openjfx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${openjfx.version}</version>
+            <groupId>moe.tristan</groupId>
+            <artifactId>easyfxml</artifactId>
+            <version>3.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>${openjfx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>moe.tristan</groupId>
-            <artifactId>easyfxml</artifactId>
-            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
@@ -219,45 +204,6 @@
             <artifactId>validation-api</artifactId>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>bundle-native</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.zenjava</groupId>
-                        <artifactId>javafx-maven-plugin</artifactId>
-                        <version>8.9.0-SNAPSHOT</version>
-                        <configuration>
-                            <appName>Lyrebird</appName>
-                            <identifier>Lyrebird</identifier>
-                            <vendor>Lyrebird</vendor>
-                            <mainClass>moe.lyrebird.Lyrebird</mainClass>
-                            <needMenu>true</needMenu>
-                            <needShortcut>true</needShortcut>
-                            <skipJNLP>true</skipJNLP>
-                            <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
-                            <bundleArguments>
-                                <dropinResourcesRoot>${project.basedir}/src/main/java</dropinResourcesRoot>
-                                <icon.ico>${project.basedir}/src/main/deploy/package/windows/Lyrebird.ico</icon.ico>
-                                <icon.icns>${project.basedir}/src/main/deploy/package/macosx/Lyrebird.icns</icon.icns>
-                                <icon.png>${project.basedir}/src/main/deploy/package/linux/Lyrebird.png</icon.png>
-                                <mac.CFBundleIdentifier>moe.lyrebird.Lyrebird</mac.CFBundleIdentifier>
-                                <mac.CFBundleName>Lyrebird</mac.CFBundleName>
-                                <mac.CFBundleVersion>${project.version}</mac.CFBundleVersion>
-                                <mac.dmg.simple>true</mac.dmg.simple>
-                                <installdirChooser>true</installdirChooser>
-                            </bundleArguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <pluginRepositories>
         <pluginRepository>
