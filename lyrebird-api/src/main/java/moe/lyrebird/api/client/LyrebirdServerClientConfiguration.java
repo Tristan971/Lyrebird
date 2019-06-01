@@ -18,17 +18,17 @@
 
 package moe.lyrebird.api.client;
 
+import java.util.Collections;
+
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-
 @Configuration
-@ComponentScan(basePackages = "moe.lyrebird.api.client")
-@PropertySource("classpath:api.properties")
+@ComponentScan
+@EnableAutoConfiguration
 public class LyrebirdServerClientConfiguration {
 
     @Bean

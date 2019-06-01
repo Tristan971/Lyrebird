@@ -11,14 +11,12 @@ open module lyrebird {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.media;
-    requires rxjavafx;
     requires SystemTray;
 
     requires jackson.annotations;
     requires com.fasterxml.jackson.databind;
 
     requires io.vavr;
-    requires io.reactivex.rxjava2;
     requires net.bytebuddy;
     requires oshi.core;
     requires prettytime;
@@ -29,4 +27,5 @@ open module lyrebird {
     requires spring.context;
     requires spring.core;
     requires spring.data.jpa;
+    requires spring.boot;
 }

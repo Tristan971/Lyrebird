@@ -9,6 +9,7 @@ open module lyrebird.api {
     requires spring.context;
     requires spring.core;
     requires spring.web;
+    requires spring.boot.autoconfigure;
 
     requires com.fasterxml.jackson.databind;
     requires jackson.annotations;

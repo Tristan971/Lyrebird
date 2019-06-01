@@ -60,14 +60,14 @@
 
         <resources>
             <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>**/*</include>
                 </includes>
             </resource>
             <resource>
-                <directory>${project.basedir}/src/main/java</directory>
+                <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.fxml</include>
                 </includes>
@@ -143,16 +143,6 @@
             <version>${openjfx.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.reactivex.rxjava2</groupId>
-            <artifactId>rxjavafx</artifactId>
-            <version>2.2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.reactivex.rxjava2</groupId>
-            <artifactId>rxjava</artifactId>
-            <version>2.1.17</version>
-        </dependency>
-        <dependency>
             <groupId>com.dorkbox</groupId>
             <artifactId>SystemTray</artifactId>
             <version>3.17</version>
@@ -177,9 +167,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.23.1-GA</version>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
         </dependency>
 
         <dependency>
@@ -197,22 +186,9 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
+            <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-        </dependency>
     </dependencies>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>oss-sonatype-snapshots</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>

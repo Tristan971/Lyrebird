@@ -1,20 +1,11 @@
 package moe.lyrebird.view.components.directmessages;
 
+import static moe.tristan.easyfxml.util.Properties.whenPropertyIsSet;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
-import io.reactivex.rxjavafx.observables.JavaFxObservable;
-import io.reactivex.rxjavafx.schedulers.JavaFxScheduler;
-import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.model.twitter.services.CachedTwitterInfoService;
-import moe.lyrebird.model.twitter.user.UserDetailsService;
-import moe.lyrebird.view.viewmodel.javafx.Clipping;
-
-import twitter4j.DirectMessage;
-import twitter4j.User;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -24,6 +15,16 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+
+import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.model.sessions.SessionManager;
+import moe.lyrebird.model.twitter.services.CachedTwitterInfoService;
+import moe.lyrebird.model.twitter.user.UserDetailsService;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
+import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
+
+import twitter4j.DirectMessage;
+import twitter4j.User;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -75,7 +76,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     }
 
     private void profilePictures() {
-        JavaFxObservable.valuesOf(currentMessage).forEach(messageEvent -> {
+        whenPropertyIsSet(currentMessage, messageEvent -> {
             final boolean isSentByMe = sessionManager.isCurrentUser(messageEvent.getSenderId());
             final User sender = cachedTwitterInfoService.getUser(messageEvent.getSenderId());
             if (isSentByMe) {
@@ -104,10 +105,7 @@ public class DMPaneController implements ComponentCellFxmlController<DirectMessa
     }
 
     private void textualContent() {
-        JavaFxObservable.valuesOf(currentMessage)
-                        .map(DirectMessage::getText)
-                        .observeOn(JavaFxScheduler.platform())
-                        .forEach(messageContent::setText);
+        whenPropertyIsSet(currentMessage, DirectMessage::getText, messageContent::setText);
     }
 
 }

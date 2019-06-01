@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 /**
  * Preconfigured extension filter helper for Twitter media.
  */
+@Lazy
 @Component
 public class TwitterMediaExtensionFilter {
 
