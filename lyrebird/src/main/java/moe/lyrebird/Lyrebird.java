@@ -22,12 +22,10 @@ import java.awt.Toolkit;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Import;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import moe.lyrebird.api.client.LyrebirdServerClientConfiguration;
 import moe.lyrebird.model.interrupts.CleanupService;
 import moe.lyrebird.model.update.compatibility.PostUpdateCompatibilityHelper;
 import moe.lyrebird.view.LyrebirdUiManager;
@@ -53,7 +51,6 @@ import moe.tristan.easyfxml.FxUiManager;
  */
 @SpringBootApplication
 @EnableCaching
-@Import(value = LyrebirdServerClientConfiguration.class)
 public class Lyrebird extends FxApplication {
 
     /**

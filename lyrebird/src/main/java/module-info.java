@@ -28,4 +28,5 @@ open module lyrebird {
     requires spring.core;
     requires spring.data.jpa;
     requires spring.boot;
+    requires spring.web;
 }

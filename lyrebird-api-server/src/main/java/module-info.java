@@ -1,10 +1,8 @@
-module lyrebird.server {
+open module lyrebird.server {
 
-    opens moe.lyrebird.api.server to spring.core;
-
-    exports moe.lyrebird.api.server to spring.beans, spring.context;
-    exports moe.lyrebird.api.server.model to spring.beans;
-    exports moe.lyrebird.api.server.controllers to spring.beans, spring.web;
+    exports moe.lyrebird.api.server;
+    exports moe.lyrebird.api.server.model;
+    exports moe.lyrebird.api.server.controllers;
 
     requires slf4j.api;
 

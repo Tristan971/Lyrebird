@@ -22,20 +22,18 @@ import java.util.List;
 
 import org.immutables.value.Value.Immutable;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.treatwell.immutables.styles.ValueObjectStyle;
 
 @Immutable
-@JsonDeserialize
-@JsonSerialize
-public interface LyrebirdVersion {
+@ValueObjectStyle
+abstract class AbstractLyrebirdVersion {
 
-    String getVersion();
+    public abstract String getVersion();
 
-    int getBuildVersion();
+    public abstract int getBuildVersion();
 
-    String getReleaseUrl();
+    public abstract String getReleaseUrl();
 
-    List<LyrebirdPackage> getPackages();
+    public abstract List<LyrebirdPackage> getPackages();
 
 }

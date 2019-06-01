@@ -16,20 +16,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.api.client;
+package moe.lyrebird.model.update.client;
 
+import static moe.lyrebird.api.conf.Endpoints.VERSIONS_CHANGENOTES;
+import static moe.lyrebird.api.conf.Endpoints.VERSIONS_CONTROLLER;
+import static moe.lyrebird.api.conf.Endpoints.VERSIONS_LATEST;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import moe.lyrebird.api.model.LyrebirdVersion;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import static moe.lyrebird.api.conf.Endpoints.VERSIONS_CHANGENOTES;
-import static moe.lyrebird.api.conf.Endpoints.VERSIONS_CONTROLLER;
-import static moe.lyrebird.api.conf.Endpoints.VERSIONS_LATEST;
+import moe.lyrebird.api.model.LyrebirdVersion;
 
 @Component
 public class LyrebirdServerClient {
@@ -40,8 +41,9 @@ public class LyrebirdServerClient {
     private final String apiUrl;
 
     @Autowired
-    public LyrebirdServerClient(final RestTemplate restTemplate, final Environment environment) {
-        this.restTemplate = restTemplate;
+    public LyrebirdServerClient(final Environment environment) {
+        this.restTemplate = new RestTemplate();
+        this.restTemplate.getInterceptors().add(new LyrebirdServerClientInterceptor());
         this.apiUrl = environment.getRequiredProperty("api.url");
     }
 

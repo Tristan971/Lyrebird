@@ -34,7 +34,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import moe.lyrebird.api.client.LyrebirdServerClient;
+import moe.lyrebird.model.update.client.LyrebirdServerClient;
 import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.model.interrupts.CleanupOperation;
 import moe.lyrebird.model.interrupts.CleanupService;

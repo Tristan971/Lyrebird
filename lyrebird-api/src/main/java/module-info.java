@@ -1,7 +1,6 @@
 open module lyrebird.api {
     exports moe.lyrebird.api.model;
     exports moe.lyrebird.api.conf;
-    exports moe.lyrebird.api.client;
 
     requires slf4j.api;
 
@@ -16,6 +15,7 @@ open module lyrebird.api {
     requires java.annotation;
     requires java.sql;
 
-    requires static org.immutables.value;
+    requires org.immutables.value;
+    requires immutables.styles;
 
 }

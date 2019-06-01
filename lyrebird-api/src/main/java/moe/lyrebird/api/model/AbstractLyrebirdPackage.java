@@ -16,26 +16,20 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package moe.lyrebird.api.client;
+package moe.lyrebird.api.model;
 
-import java.util.Collections;
+import java.net.URL;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
+import org.immutables.value.Value.Immutable;
 
-@Configuration
-@ComponentScan
-@EnableAutoConfiguration
-public class LyrebirdServerClientConfiguration {
+import com.treatwell.immutables.styles.ValueObjectStyle;
 
-    @Bean
-    public RestTemplate restTemplate() {
-        final RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Collections.singletonList(new LyrebirdServerClientInterceptor()));
-        return restTemplate;
-    }
+@Immutable
+@ValueObjectStyle
+abstract class AbstractLyrebirdPackage {
+
+    public abstract TargetPlatform getTargetPlatform();
+
+    public abstract URL getPackageUrl();
 
 }
