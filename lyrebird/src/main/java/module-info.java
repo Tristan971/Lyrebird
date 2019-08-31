@@ -29,4 +29,8 @@ open module lyrebird {
     requires spring.data.jpa;
     requires spring.boot;
     requires spring.web;
+
+    requires java.sql;
+    requires liquibase.core;
+
 }
