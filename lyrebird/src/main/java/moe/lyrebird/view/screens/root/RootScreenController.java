@@ -31,8 +31,11 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import moe.lyrebird.view.components.FxComponent;
+
+import moe.lyrebird.view.components.controlbar.ControlBarComponent;
+import moe.lyrebird.view.components.notifications.NotificationPaneComponent;
 import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlComponent;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 
@@ -49,10 +52,19 @@ public class RootScreenController implements FxmlController {
 
     private final EasyFxml easyFxml;
 
-    private final Map<FxComponent, Pane> cachedComponents = new ConcurrentHashMap<>();
+    private final ControlBarComponent controlBarComponent;
+    private final NotificationPaneComponent notificationPaneComponent;
 
-    public RootScreenController(final EasyFxml easyFxml) {
+    private final Map<FxmlComponent, Pane> cachedComponents = new ConcurrentHashMap<>();
+
+    public RootScreenController(
+            EasyFxml easyFxml,
+            ControlBarComponent controlBarComponent,
+            NotificationPaneComponent notificationPaneComponent
+    ) {
         this.easyFxml = easyFxml;
+        this.controlBarComponent = controlBarComponent;
+        this.notificationPaneComponent = notificationPaneComponent;
     }
 
     @Override
@@ -62,41 +74,37 @@ public class RootScreenController implements FxmlController {
     }
 
     /**
-     * Loads up the {@link FxComponent#CONTROL_BAR} on the left side of the {@link BorderPane} which is the main
-     * container
-     * for the main view.
+     * Loads up the {@link ControlBarComponent} on the left side of the {@link BorderPane} which is the main container for the main view.
      */
     private void loadControlBar() {
         LOG.debug("Initializing control bar...");
-        loadComponentAsync(FxComponent.CONTROL_BAR).thenAcceptAsync(
+        loadComponentAsync(controlBarComponent).thenAcceptAsync(
                 this.contentPane::setLeft,
                 Platform::runLater
         );
     }
 
     /**
-     * Loads up the {@link FxComponent#NOTIFICATIONS_PANE} on the top side of the {@link BorderPane} which is the main
-     * container for the main view.
+     * Loads up the {@link NotificationPaneComponent} on the top side of the {@link BorderPane} which is the main container for the main view.
      */
     private void loadNotificationPane() {
         LOG.debug("Initializing notification pane...");
-        loadComponentAsync(FxComponent.NOTIFICATIONS_PANE).thenAcceptAsync(
+        loadComponentAsync(notificationPaneComponent).thenAcceptAsync(
                 this.contentPane::setTop,
                 Platform::runLater
         );
     }
 
     /**
-     * Helper function to load a given {@link FxComponent} as center node for the {@link BorderPane} which is the main
-     * container for the root view.
+     * Helper function to load a given {@link FxmlComponent} as center node for the {@link BorderPane} which is the main container for the root view.
      *
      * @param fxComponent The fxComponent to load.
      */
-    public void setContent(final FxComponent fxComponent) {
+    public void setContent(FxmlComponent fxComponent) {
         loadComponentAsync(fxComponent).thenAcceptAsync(this.contentPane::setCenter, Platform::runLater);
     }
 
-    private CompletableFuture<Pane> loadComponentAsync(final FxComponent fxComponent) {
+    private CompletableFuture<Pane> loadComponentAsync(final FxmlComponent fxComponent) {
         return CompletableFuture.supplyAsync(() -> {
             LOG.info("Switching content of root pane to {}", fxComponent);
             final Pane loadedPane = cachedComponents.computeIfAbsent(fxComponent, this::loadComponentSynchronous);
@@ -104,9 +112,9 @@ public class RootScreenController implements FxmlController {
         }, Platform::runLater);
     }
 
-    private Pane loadComponentSynchronous(final FxComponent fxComponent) {
+    private Pane loadComponentSynchronous(final FxmlComponent fxComponent) {
         return this.easyFxml
-                .loadNode(fxComponent)
+                .load(fxComponent)
                 .getNode()
                 .getOrElseGet(ExceptionHandler::fromThrowable);
     }

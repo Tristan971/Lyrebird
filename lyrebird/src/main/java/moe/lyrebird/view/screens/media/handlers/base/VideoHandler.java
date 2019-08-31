@@ -18,13 +18,13 @@
 
 package moe.lyrebird.view.screens.media.handlers.base;
 
-import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.media.display.MediaDisplayScreen;
-import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
-import moe.lyrebird.view.screens.media.handlers.MediaHandler;
-
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+
+import moe.lyrebird.view.assets.ImageResources;
+import moe.lyrebird.view.screens.media.display.video.VideoScreenComponent;
+import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.MediaHandler;
 
 /**
  * Basic implementation for video media handlers that can extract a URL to preview.
@@ -36,9 +36,11 @@ import javafx.scene.layout.Pane;
 public abstract class VideoHandler<T> implements MediaHandler<T> {
 
     private final EmbeddedMediaViewHelper embeddedMediaViewHelper;
+    private final VideoScreenComponent videoScreenComponent;
 
-    public VideoHandler(final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
+    public VideoHandler(EmbeddedMediaViewHelper embeddedMediaViewHelper, VideoScreenComponent videoScreenComponent) {
         this.embeddedMediaViewHelper = embeddedMediaViewHelper;
+        this.videoScreenComponent = videoScreenComponent;
     }
 
     /**
@@ -47,11 +49,11 @@ public abstract class VideoHandler<T> implements MediaHandler<T> {
      * @param mediaUrl The video described as an URL
      *
      * @return An {@link ImageView} with a static image ({@link ImageResources#TWEETPANE_VIDEO}). This {@link ImageView}
-     * will open a {@link MediaDisplayScreen#VIDEO} screen displaying the media when it is clicked.
+     * will open a {@link VideoScreenComponent} screen displaying the media when it is clicked.
      */
     protected Pane handleMediaSource(final String mediaUrl) {
         return embeddedMediaViewHelper.makeWrapperWithIcon(
-                MediaDisplayScreen.VIDEO,
+                videoScreenComponent,
                 ImageResources.TWEETPANE_VIDEO,
                 mediaUrl
         );

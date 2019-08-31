@@ -37,8 +37,9 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.Session;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
-import moe.lyrebird.view.components.FxComponent;
-import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.components.controlbar.ControlBarComponent;
+import moe.lyrebird.view.screens.login.LoginScreenComponent;
+import moe.lyrebird.view.screens.user.UserScreenComponent;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
@@ -48,8 +49,8 @@ import io.vavr.control.Try;
 import twitter4j.User;
 
 /**
- * This component is loaded at the top of the {@link FxComponent#CONTROL_BAR} and serves as a very basic preview for who
- * is the current user that will be used to perform all the actions requested.
+ * This component is loaded at the top of the {@link ControlBarComponent} and serves as a very basic preview for who is the current user that will be used to
+ * perform all the actions requested.
  *
  * @see SessionManager
  */
@@ -71,18 +72,21 @@ public class CurrentAccountController implements FxmlController {
     private final EasyFxml easyFxml;
     private final SessionManager sessionManager;
     private final UserDetailsService userDetailsService;
+    private final LoginScreenComponent loginScreenComponent;
 
     @Autowired
     public CurrentAccountController(
-            final SessionManager sessionManager,
-            final AsyncIO asyncIO,
-            final EasyFxml easyFxml,
-            final UserDetailsService userDetailsService
+            SessionManager sessionManager,
+            AsyncIO asyncIO,
+            EasyFxml easyFxml,
+            UserDetailsService userDetailsService,
+            LoginScreenComponent loginScreenComponent
     ) {
         this.sessionManager = sessionManager;
         this.asyncIO = asyncIO;
         this.easyFxml = easyFxml;
         this.userDetailsService = userDetailsService;
+        this.loginScreenComponent = loginScreenComponent;
     }
 
     @Override
@@ -103,8 +107,7 @@ public class CurrentAccountController implements FxmlController {
     }
 
     /**
-     * Asynchronously binds the displayed profile picture to the one resolved for the user in the current session via
-     * calling {@link SessionManager}.
+     * Asynchronously binds the displayed profile picture to the one resolved for the user in the current session via calling {@link SessionManager}.
      */
     private void bindProfilePicture() {
         sessionManager.currentSessionProperty().addListener(
@@ -114,8 +117,7 @@ public class CurrentAccountController implements FxmlController {
     }
 
     /**
-     * Handles the change of a user either from none (unlogged) or to another one if the user has multiple accounts set
-     * up.
+     * Handles the change of a user either from none (unlogged) or to another one if the user has multiple accounts set up.
      *
      * @param newValue The newly selected user for usage.
      */
@@ -124,8 +126,8 @@ public class CurrentAccountController implements FxmlController {
     }
 
     /**
-     * Handles clicks on the user profile picture. It either relates to adding an account (in unlogged state) or to
-     * displaying the current user's detailed view.
+     * Handles clicks on the user profile picture. It either relates to adding an account (in unlogged state) or to displaying the current user's detailed
+     * view.
      */
     private void handleClickOnProfile() {
         LOG.debug("Clicked on current session profile picture");
@@ -142,7 +144,7 @@ public class CurrentAccountController implements FxmlController {
      * Called when the user requests the adding of a new account.
      */
     private void handleNewSessionRequest() {
-        easyFxml.loadNode(Screen.LOGIN_VIEW)
+        easyFxml.load(loginScreenComponent)
                 .getNode()
                 .map(loginScreen -> Stages.stageOf("Add new account", loginScreen))
                 .andThen(Stages::scheduleDisplaying);
@@ -151,7 +153,7 @@ public class CurrentAccountController implements FxmlController {
     /**
      * Called when the user requests the displaying of the current user's detailed view.
      *
-     * @see Screen#USER_VIEW
+     * @see UserScreenComponent
      */
     private void loadDetailsForCurrentUser() {
         sessionManager.currentSessionProperty()

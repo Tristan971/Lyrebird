@@ -23,33 +23,22 @@
 
     <parent>
         <groupId>moe.lyrebird</groupId>
-        <artifactId>lyrebird-parent</artifactId>
+        <artifactId>lyrebird-module-base</artifactId>
         <version>1.2.0</version>
+        <relativePath>../lyrebird-module-base/pom.xml</relativePath>
     </parent>
-
-    <artifactId>lyrebird-api-server</artifactId>
-    <version>1.2.0</version>
-    <packaging>jar</packaging>
 
     <name>lyrebird-api-server</name>
     <description>Lyrebird server</description>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>10</java.version>
-    </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+    <artifactId>lyrebird-api-server</artifactId>
+    <packaging>jar</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>moe.lyrebird</groupId>
+            <artifactId>lyrebird-api</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
@@ -64,29 +53,12 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
 
-        <dependency>
-            <groupId>moe.lyrebird</groupId>
-            <artifactId>lyrebird-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- Vavr -->
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
-            <version>0.9.2</version>
         </dependency>
     </dependencies>
 

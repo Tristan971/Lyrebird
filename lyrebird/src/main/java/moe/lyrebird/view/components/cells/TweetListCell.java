@@ -18,16 +18,18 @@
 
 package moe.lyrebird.view.components.cells;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import twitter4j.Status;
 
 import javafx.scene.control.ListView;
 
-import static moe.lyrebird.view.components.FxComponent.TWEET;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import moe.lyrebird.view.components.tweet.TweetPaneComponent;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
+
+import twitter4j.Status;
 
 /**
  * This is the class managing the cell of a tweet from the point of view of its embedding {@link ListView}.
@@ -38,8 +40,8 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class TweetListCell extends ComponentListCell<Status> {
 
-    public TweetListCell(final EasyFxml easyFxml) {
-        super(easyFxml, TWEET);
+    public TweetListCell(EasyFxml easyFxml, TweetPaneComponent tweetPaneComponent) {
+        super(easyFxml, tweetPaneComponent);
     }
 
 }

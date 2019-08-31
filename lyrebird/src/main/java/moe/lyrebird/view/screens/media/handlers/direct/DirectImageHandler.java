@@ -20,11 +20,13 @@ package moe.lyrebird.view.screens.media.handlers.direct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
-import moe.lyrebird.view.screens.media.handlers.base.ImageHandler;
 
 import javafx.scene.layout.Pane;
+
+import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.view.screens.media.display.photo.ImageScreenComponent;
+import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.base.ImageHandler;
 
 /**
  * Implementation of {@link ImageHandler} for images already in URL form.
@@ -35,8 +37,8 @@ import javafx.scene.layout.Pane;
 public class DirectImageHandler extends ImageHandler<String> {
 
     @Autowired
-    public DirectImageHandler(final AsyncIO asyncIO, final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
-        super(asyncIO, embeddedMediaViewHelper);
+    public DirectImageHandler(AsyncIO asyncIO, EmbeddedMediaViewHelper embeddedMediaViewHelper, ImageScreenComponent imageScreenComponent) {
+        super(asyncIO, embeddedMediaViewHelper, imageScreenComponent);
     }
 
     @Override

@@ -39,6 +39,14 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ListProperty;
@@ -64,28 +72,21 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.util.Buttons;
-
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.observables.Mentions;
 import moe.lyrebird.model.twitter.observables.Timeline;
 import moe.lyrebird.model.twitter.refresh.RateLimited;
 import moe.lyrebird.model.twitter.services.NewTweetService;
 import moe.lyrebird.model.twitter.util.TwitterMediaExtensionFilter;
-import moe.lyrebird.view.components.FxComponent;
+import moe.lyrebird.view.components.tweet.TweetPaneComponent;
 import moe.lyrebird.view.components.tweet.TweetPaneController;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import moe.lyrebird.view.viewmodel.javafx.StageAware;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.util.Buttons;
+
 import twitter4j.Status;
 import twitter4j.User;
 import twitter4j.UserMentionEntity;
@@ -95,8 +96,7 @@ import twitter4j.UserMentionEntity;
  * <p>
  * It is made {@link Lazy} in case the user never uses it.
  * <p>
- * It is also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} in case multiple new tweet screens are open at the
- * same time.
+ * It is also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} in case multiple new tweet screens are open at the same time.
  */
 @Lazy
 @Component
@@ -132,17 +132,20 @@ public class NewTweetController implements FxmlController, StageAware {
     private final Timeline timeline;
     private final Mentions mentions;
 
+    private final TweetPaneComponent tweetPaneComponent;
+
     private final ListProperty<File> mediasToUpload;
     private final Property<Stage> embeddingStage;
     private final Property<Status> inReplyStatus = new SimpleObjectProperty<>();
 
     public NewTweetController(
-            final NewTweetService newTweetService,
-            final TwitterMediaExtensionFilter extensionFilter,
-            final EasyFxml easyFxml,
-            final SessionManager sessionManager,
-            final Timeline timeline,
-            final Mentions mentions
+            NewTweetService newTweetService,
+            TwitterMediaExtensionFilter extensionFilter,
+            EasyFxml easyFxml,
+            SessionManager sessionManager,
+            Timeline timeline,
+            Mentions mentions,
+            TweetPaneComponent tweetPaneComponent
     ) {
         this.newTweetService = newTweetService;
         this.twitterMediaExtensionFilter = extensionFilter;
@@ -150,6 +153,7 @@ public class NewTweetController implements FxmlController, StageAware {
         this.sessionManager = sessionManager;
         this.timeline = timeline;
         this.mentions = mentions;
+        this.tweetPaneComponent = tweetPaneComponent;
         this.mediasToUpload = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<>()));
         this.embeddingStage = new SimpleObjectProperty<>(null);
     }
@@ -185,7 +189,7 @@ public class NewTweetController implements FxmlController, StageAware {
     public void setInReplyToTweet(final Status repliedTweet) {
         LOG.debug("Set new tweet stage to embed status : {}", repliedTweet.getId());
         inReplyStatus.setValue(repliedTweet);
-        easyFxml.loadNode(FxComponent.TWEET, Pane.class, TweetPaneController.class)
+        easyFxml.load(tweetPaneComponent, Pane.class, TweetPaneController.class)
                 .afterControllerLoaded(tpc -> {
                     tpc.embeddedPropertyProperty().setValue(true);
                     tpc.updateWithValue(repliedTweet);
@@ -215,8 +219,7 @@ public class NewTweetController implements FxmlController, StageAware {
     }
 
     /**
-     * Makes the character counter colorful depending on the current amount typed relative to the maximum Twitter
-     * allows.
+     * Makes the character counter colorful depending on the current amount typed relative to the maximum Twitter allows.
      */
     private void enableTweetLengthCheck() {
         tweetTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -234,8 +237,8 @@ public class NewTweetController implements FxmlController, StageAware {
     }
 
     /**
-     * Dynamically either sends a normal tweet or a reply depending on whether the controller was used to prepare a
-     * "normal" new tweet or a reply (i.e. if there was a value set for {@link #inReplyStatus}.
+     * Dynamically either sends a normal tweet or a reply depending on whether the controller was used to prepare a "normal" new tweet or a reply (i.e. if there
+     * was a value set for {@link #inReplyStatus}.
      */
     private void send() {
         Match(inReplyStatus.getValue()).of(
@@ -278,8 +281,7 @@ public class NewTweetController implements FxmlController, StageAware {
     }
 
     /**
-     * Opens a file picker for choosing attachments for the currently made tweet and registers the asynchronous choice
-     * result in {@link #mediasToUpload}.
+     * Opens a file picker for choosing attachments for the currently made tweet and registers the asynchronous choice result in {@link #mediasToUpload}.
      */
     private void openMediaAttachmentsFilePicker() {
         pickMediaButton.setDisable(true);
@@ -291,8 +293,7 @@ public class NewTweetController implements FxmlController, StageAware {
     }
 
     /**
-     * Opens a {@link FileChooser} to pick attachments from with a pre-made {@link ExtensionFilter} for the allowed
-     * media types.
+     * Opens a {@link FileChooser} to pick attachments from with a pre-made {@link ExtensionFilter} for the allowed media types.
      *
      * @return an asynchronous result containing the list of selected files once user is done with choosing them.
      */

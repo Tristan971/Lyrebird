@@ -48,9 +48,8 @@ import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
 import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.components.FxComponent;
+import moe.lyrebird.view.components.usertimeline.UserTimelineComponent;
 import moe.lyrebird.view.components.usertimeline.UserTimelineController;
-import moe.lyrebird.view.screens.Screen;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.api.FxmlController;
@@ -60,13 +59,11 @@ import twitter4j.Relationship;
 import twitter4j.User;
 
 /**
- * This controller is responsible for managing the {@link Screen#USER_VIEW} screen, which is used to display details
- * about a specific user.
+ * This controller is responsible for managing the {@link UserScreenComponent}, which is used to display details about a specific user.
  * <p>
  * Made {@link Lazy} in case the user never uses it.
  * <p>
- * Also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} because the user might want to display multiple users at
- * the same time.
+ * Also made {@link ConfigurableBeanFactory#SCOPE_PROTOTYPE} because the user might want to display multiple users at the same time.
  */
 @Lazy
 @Component
@@ -132,19 +129,23 @@ public class UserViewController implements FxmlController {
     private final SessionManager sessionManager;
     private final TwitterInteractionService interactionService;
 
+    private final UserTimelineComponent userTimelineComponent;
+
     private final Property<User> targetUserProp;
 
     @Autowired
     public UserViewController(
-            final EasyFxml easyFxml,
-            final AsyncIO asyncIO,
-            final SessionManager sessionManager,
-            final TwitterInteractionService interactionService
+            EasyFxml easyFxml,
+            AsyncIO asyncIO,
+            SessionManager sessionManager,
+            TwitterInteractionService interactionService,
+            UserTimelineComponent userTimelineComponent
     ) {
         this.easyFxml = easyFxml;
         this.asyncIO = asyncIO;
         this.sessionManager = sessionManager;
         this.interactionService = interactionService;
+        this.userTimelineComponent = userTimelineComponent;
         this.targetUserProp = new SimpleObjectProperty<>(null);
     }
 
@@ -279,8 +280,8 @@ public class UserViewController implements FxmlController {
     }
 
     /**
-     * Called by {@link #updateFollowStatusText()} ()} to give, if pertinent, a simple text displaying if the target
-     * user is already following the current user.
+     * Called by {@link #updateFollowStatusText()} ()} to give, if pertinent, a simple text displaying if the target user is already following the current
+     * user.
      */
     private void updateFriendshipStatus() {
         CompletableFuture.supplyAsync(this::getRelationship)
@@ -325,7 +326,7 @@ public class UserViewController implements FxmlController {
      */
     private void loadTargetUserTimeline() {
         final User user = targetUserProp.getValue();
-        easyFxml.loadNode(FxComponent.USER_TIMELINE, Pane.class, UserTimelineController.class)
+        easyFxml.load(userTimelineComponent, Pane.class, UserTimelineController.class)
                 .afterControllerLoaded(utc -> utc.setTargetUser(user))
                 .afterNodeLoaded(userDetailsTimeline -> VBox.setVgrow(userDetailsTimeline, Priority.ALWAYS))
                 .getNode()

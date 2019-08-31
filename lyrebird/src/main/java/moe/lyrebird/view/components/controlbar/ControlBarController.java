@@ -18,12 +18,6 @@
 
 package moe.lyrebird.view.components.controlbar;
 
-import static moe.lyrebird.view.components.FxComponent.CURRENT_ACCOUNT;
-import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGES;
-import static moe.lyrebird.view.components.FxComponent.MENTIONS;
-import static moe.lyrebird.view.components.FxComponent.TIMELINE;
-import static moe.lyrebird.view.screens.Screen.CREDITS_VIEW;
-import static moe.lyrebird.view.screens.Screen.NEW_TWEET_VIEW;
 import static moe.tristan.easyfxml.model.exception.ExceptionHandler.displayExceptionPane;
 
 import java.util.List;
@@ -44,12 +38,18 @@ import javafx.stage.Stage;
 
 import moe.lyrebird.model.sessions.SessionManager;
 import moe.lyrebird.model.update.UpdateService;
-import moe.lyrebird.view.components.FxComponent;
-import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.components.currentaccount.CurrentAccountComponent;
+import moe.lyrebird.view.components.directmessages.DirectMessagesComponent;
+import moe.lyrebird.view.components.mentions.MentionsComponent;
+import moe.lyrebird.view.components.timeline.TimelineComponent;
+import moe.lyrebird.view.screens.credits.CreditScreenComponent;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
+import moe.lyrebird.view.screens.newtweet.NewTweetScreenComponent;
 import moe.lyrebird.view.screens.root.RootScreenController;
+import moe.lyrebird.view.screens.update.UpdateScreenComponent;
 import moe.lyrebird.view.viewmodel.javafx.Clipping;
 import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlComponent;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -93,20 +93,43 @@ public class ControlBarController implements FxmlController {
     private final UpdateService updateService;
     private final StageManager stageManager;
 
+    private final TimelineComponent timelineComponent;
+    private final MentionsComponent mentionsComponent;
+    private final DirectMessagesComponent directMessagesComponent;
+    private final CurrentAccountComponent currentAccountComponent;
+
+    private final NewTweetScreenComponent newTweetScreenComponent;
+    private final CreditScreenComponent creditScreenComponent;
+    private final UpdateScreenComponent updateScreenComponent;
+
     private final Property<HBox> currentViewButton;
 
     public ControlBarController(
-            final EasyFxml easyFxml,
-            final RootScreenController rootScreenController,
-            final SessionManager sessionManager,
-            final UpdateService updateService,
-            final StageManager stageManager
+            EasyFxml easyFxml,
+            RootScreenController rootScreenController,
+            SessionManager sessionManager,
+            UpdateService updateService,
+            StageManager stageManager,
+            TimelineComponent timelineComponent,
+            MentionsComponent mentionsComponent,
+            DirectMessagesComponent directMessagesComponent,
+            CurrentAccountComponent currentAccountComponent,
+            NewTweetScreenComponent newTweetScreenComponent,
+            CreditScreenComponent creditScreenComponent,
+            UpdateScreenComponent updateScreenComponent
     ) {
         this.easyFxml = easyFxml;
         this.rootScreenController = rootScreenController;
         this.sessionManager = sessionManager;
         this.updateService = updateService;
         this.stageManager = stageManager;
+        this.timelineComponent = timelineComponent;
+        this.mentionsComponent = mentionsComponent;
+        this.directMessagesComponent = directMessagesComponent;
+        this.currentAccountComponent = currentAccountComponent;
+        this.newTweetScreenComponent = newTweetScreenComponent;
+        this.creditScreenComponent = creditScreenComponent;
+        this.updateScreenComponent = updateScreenComponent;
         this.currentViewButton = new SimpleObjectProperty<>(null);
     }
 
@@ -123,9 +146,9 @@ public class ControlBarController implements FxmlController {
 
         setUpTweetButton();
 
-        bindActionImageToLoadingView(timeline, TIMELINE);
-        bindActionImageToLoadingView(mentions, MENTIONS);
-        bindActionImageToLoadingView(directMessages, DIRECT_MESSAGES);
+        bindActionImageToLoadingView(timeline, timelineComponent);
+        bindActionImageToLoadingView(mentions, mentionsComponent);
+        bindActionImageToLoadingView(directMessages, directMessagesComponent);
 
         credits.setOnMouseClicked(e -> openCreditsView());
 
@@ -150,7 +173,7 @@ public class ControlBarController implements FxmlController {
      * Loads the current user's account view on the top of the bar.
      */
     private void loadCurrentAccountPanel() {
-        easyFxml.loadNode(CURRENT_ACCOUNT)
+        easyFxml.load(currentAccountComponent)
                 .getNode()
                 .onSuccess(container::setTop)
                 .onFailure(err -> displayExceptionPane(
@@ -163,12 +186,12 @@ public class ControlBarController implements FxmlController {
     /**
      * Called on click on the {@link #tweet} box. Opens a new tweet window.
      *
-     * @see Screen#NEW_TWEET_VIEW
+     * @see NewTweetScreenComponent
      */
     private void openTweetWindow() {
         LOG.info("Opening new tweet stage...");
-        final FxmlLoadResult<Pane, NewTweetController> newTweetViewLoadResult = this.easyFxml.loadNode(
-                NEW_TWEET_VIEW,
+        final FxmlLoadResult<Pane, NewTweetController> newTweetViewLoadResult = this.easyFxml.load(
+                newTweetScreenComponent,
                 Pane.class,
                 NewTweetController.class
         );
@@ -181,8 +204,7 @@ public class ControlBarController implements FxmlController {
     }
 
     /**
-     * This method managed switching from an unlogged to a logged state. It is tied to {@link
-     * SessionManager#isLoggedInProperty()}'s value.
+     * This method managed switching from an unlogged to a logged state. It is tied to {@link SessionManager#isLoggedInProperty()}'s value.
      *
      * @param previous Whether the user was previously logged-in
      * @param current  Whether the user is not logged-in
@@ -203,10 +225,7 @@ public class ControlBarController implements FxmlController {
         }
     }
 
-    private void bindActionImageToLoadingView(
-            final HBox imageBox,
-            final FxComponent fxComponent
-    ) {
+    private void bindActionImageToLoadingView(final HBox imageBox, final FxmlComponent fxComponent) {
         imageBox.setOnMouseClicked(e -> {
             currentViewButton.setValue(imageBox);
             rootScreenController.setContent(fxComponent);
@@ -214,34 +233,34 @@ public class ControlBarController implements FxmlController {
     }
 
     private void openCreditsView() {
-        final Option<Stage> existingCreditsStage = stageManager.getSingle(CREDITS_VIEW);
+        final Option<Stage> existingCreditsStage = stageManager.getSingle(creditScreenComponent);
         if (existingCreditsStage.isDefined()) {
             final Stage creditsStage = existingCreditsStage.get();
             creditsStage.show();
             creditsStage.toFront();
         } else {
             loadCreditsStage().thenAcceptAsync(stage -> {
-                stageManager.registerSingle(Screen.CREDITS_VIEW, stage);
+                stageManager.registerSingle(creditScreenComponent, stage);
                 Stages.scheduleDisplaying(stage);
             });
         }
     }
 
     private CompletionStage<Stage> loadCreditsStage() {
-        return easyFxml.loadNode(CREDITS_VIEW)
+        return easyFxml.load(creditScreenComponent)
                        .orExceptionPane()
                        .map(pane -> Stages.stageOf("Credits", pane))
                        .getOrElseThrow((Function<? super Throwable, ? extends RuntimeException>) RuntimeException::new);
     }
 
     /**
-     * The {@link #update} box only show up when an update is detected as available. Then if it is the case, this method
-     * is called on click to open the update information screen.
+     * The {@link #update} box only show up when an update is detected as available. Then if it is the case, this method is called on click to open the update
+     * information screen.
      *
-     * @see Screen#UPDATE_VIEW
+     * @see UpdateScreenComponent
      */
     private void openUpdatesScreen() {
-        final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.loadNode(Screen.UPDATE_VIEW);
+        final FxmlLoadResult<Pane, FxmlController> updateScreenLoadResult = easyFxml.load(updateScreenComponent);
         final Pane updatePane = updateScreenLoadResult.getNode().getOrElseGet(ExceptionHandler::fromThrowable);
         Stages.stageOf("Updates", updatePane).thenAcceptAsync(Stages::scheduleDisplaying);
     }

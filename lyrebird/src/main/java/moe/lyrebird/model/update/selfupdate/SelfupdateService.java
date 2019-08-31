@@ -33,7 +33,7 @@ import javafx.stage.Stage;
 
 import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.api.model.TargetPlatform;
-import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.root.RootScreenComponent;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 
 import io.vavr.control.Option;
@@ -47,10 +47,12 @@ public class SelfupdateService {
     private static final Logger LOG = LoggerFactory.getLogger(SelfupdateService.class);
 
     private final StageManager stageManager;
+    private final RootScreenComponent rootScreenComponent;
 
     @Autowired
-    public SelfupdateService(final StageManager stageManager) {
+    public SelfupdateService(final StageManager stageManager, RootScreenComponent rootScreenComponent) {
         this.stageManager = stageManager;
+        this.rootScreenComponent = rootScreenComponent;
     }
 
     /**
@@ -76,7 +78,7 @@ public class SelfupdateService {
     }
 
     private void launchUpdate(final String[] exec) {
-        stageManager.getSingle(Screen.ROOT_VIEW).peek(Stage::close);
+        stageManager.getSingle(rootScreenComponent).peek(Stage::close);
         SelfupdateService.displayRestartAlert();
         SelfupdateService.installNewVersion(exec);
         System.exit(0);
@@ -118,8 +120,8 @@ public class SelfupdateService {
     }
 
     /**
-     * Displays an alert to the user informing them that the selfupdate is ready to start and they need to restart the
-     * application after we automatically stop it.
+     * Displays an alert to the user informing them that the selfupdate is ready to start and they need to restart the application after we automatically stop
+     * it.
      */
     private static void displayRestartAlert() {
         LOG.debug("Displaying restart information alert!");

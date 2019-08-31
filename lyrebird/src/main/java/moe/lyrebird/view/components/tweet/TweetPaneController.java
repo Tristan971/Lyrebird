@@ -19,7 +19,6 @@
 package moe.lyrebird.view.components.tweet;
 
 import static moe.lyrebird.view.assets.ImageResources.GENERAL_USER_AVATAR_DARK;
-import static moe.lyrebird.view.components.FxComponent.TWEET_INTERACTION_BOX;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 import java.util.List;
@@ -42,9 +41,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
 import moe.lyrebird.model.io.AsyncIO;
 import moe.lyrebird.model.twitter.user.UserDetailsService;
-import moe.lyrebird.view.components.FxComponent;
 import moe.lyrebird.view.components.cells.TweetListCell;
 import moe.lyrebird.view.screens.media.MediaEmbeddingService;
 import moe.lyrebird.view.screens.newtweet.NewTweetController;
@@ -54,6 +53,7 @@ import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlControlle
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
 import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
 import moe.tristan.easyfxml.util.Nodes;
+
 import twitter4j.Status;
 
 /**
@@ -101,25 +101,32 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     @FXML
     private BorderPane interactionBox;
 
+    private final EasyFxml easyFxml;
     private final AsyncIO asyncIO;
     private final MediaEmbeddingService mediaEmbeddingService;
     private final UserDetailsService userDetailsService;
-    private final EasyFxml easyFxml;
+
+    private final TweetContentPaneComponent tweetContentPaneComponent;
+    private final TweetInteractionPaneComponent tweetInteractionPaneComponent;
 
     private final Property<Status> currentStatus;
     private final BooleanProperty isRetweet = new SimpleBooleanProperty(false);
     private final BooleanProperty embeddedProperty = new SimpleBooleanProperty(false);
 
     public TweetPaneController(
-            final AsyncIO asyncIO,
-            final MediaEmbeddingService mediaEmbeddingService,
-            final UserDetailsService userDetailsService,
-            final EasyFxml easyFxml
+            AsyncIO asyncIO,
+            MediaEmbeddingService mediaEmbeddingService,
+            UserDetailsService userDetailsService,
+            EasyFxml easyFxml,
+            TweetContentPaneComponent tweetContentPaneComponent,
+            TweetInteractionPaneComponent tweetInteractionPaneComponent
     ) {
         this.asyncIO = asyncIO;
         this.mediaEmbeddingService = mediaEmbeddingService;
         this.userDetailsService = userDetailsService;
         this.easyFxml = easyFxml;
+        this.tweetContentPaneComponent = tweetContentPaneComponent;
+        this.tweetInteractionPaneComponent = tweetInteractionPaneComponent;
         this.currentStatus = new SimpleObjectProperty<>(null);
     }
 
@@ -144,7 +151,7 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
         interactionBox.visibleProperty().bind(embeddedProperty.not());
         interactionBox.managedProperty().bind(embeddedProperty.not());
 
-        easyFxml.loadNode(TWEET_INTERACTION_BOX, Pane.class, TweetInteractionPaneController.class)
+        easyFxml.load(tweetInteractionPaneComponent, Pane.class, TweetInteractionPaneController.class)
                 .afterControllerLoaded(tipc -> tipc.targetStatusProperty().bind(currentStatus))
                 .getNode()
                 .recover(ExceptionHandler::fromThrowable)
@@ -203,8 +210,8 @@ public class TweetPaneController implements ComponentCellFxmlController<Status> 
     private void loadTextIntoTextFlow(final Status status) {
         tweetContent.getChildren().clear();
 
-        final FxmlLoadResult<Pane, TweetContentPaneController> result = easyFxml.loadNode(
-                FxComponent.TWEET_CONTENT_PANE,
+        final FxmlLoadResult<Pane, TweetContentPaneController> result = easyFxml.load(
+                tweetInteractionPaneComponent,
                 Pane.class,
                 TweetContentPaneController.class
         );

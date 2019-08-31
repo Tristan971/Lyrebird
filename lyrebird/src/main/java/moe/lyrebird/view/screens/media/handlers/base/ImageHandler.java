@@ -18,17 +18,17 @@
 
 package moe.lyrebird.view.screens.media.handlers.base;
 
-import moe.lyrebird.model.io.AsyncIO;
-import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.media.display.MediaDisplayScreen;
-import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
-import moe.lyrebird.view.screens.media.handlers.MediaHandler;
+import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MEDIA_RECTANGLE_SIDE;
 
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import static moe.lyrebird.view.screens.media.MediaEmbeddingService.EMBEDDED_MEDIA_RECTANGLE_SIDE;
+import moe.lyrebird.model.io.AsyncIO;
+import moe.lyrebird.view.assets.ImageResources;
+import moe.lyrebird.view.screens.media.display.photo.ImageScreenComponent;
+import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.MediaHandler;
 
 /**
  * Basic implementation for image handlers that can extract a URL to preview.
@@ -41,13 +41,16 @@ public abstract class ImageHandler<T> implements MediaHandler<T> {
 
     private final AsyncIO asyncIO;
     private final EmbeddedMediaViewHelper embeddedMediaViewHelper;
+    private final ImageScreenComponent imageScreenComponent;
 
     public ImageHandler(
-            final AsyncIO asyncIO,
-            final EmbeddedMediaViewHelper embeddedMediaViewHelper
+            AsyncIO asyncIO,
+            EmbeddedMediaViewHelper embeddedMediaViewHelper,
+            ImageScreenComponent imageScreenComponent
     ) {
         this.asyncIO = asyncIO;
         this.embeddedMediaViewHelper = embeddedMediaViewHelper;
+        this.imageScreenComponent = imageScreenComponent;
     }
 
     /**
@@ -55,13 +58,13 @@ public abstract class ImageHandler<T> implements MediaHandler<T> {
      *
      * @param imageUrl The image described as an URL
      *
-     * @return An {@link ImageView} with asynchronously loaded image miniature as display image with by default (until
-     * the asynchronous call is done) a static image ({@link ImageResources#GENERAL_LOADING_REMOTE}). This {@link ImageView}
-     * will open a {@link MediaDisplayScreen#PHOTO} screen displaying the media when it is clicked.
+     * @return An {@link ImageView} with asynchronously loaded image miniature as display image with by default (until the asynchronous call is done) a static
+     * image ({@link ImageResources#GENERAL_LOADING_REMOTE}). This {@link ImageView} will open a {@link ImageScreenComponent} screen displaying the media when
+     * it is clicked.
      */
     protected Pane handleMediaSource(final String imageUrl) {
         return embeddedMediaViewHelper.makeWrapperWithIcon(
-                MediaDisplayScreen.PHOTO,
+                imageScreenComponent,
                 ImageResources.GENERAL_LOADING_REMOTE,
                 imageUrl,
                 imageView -> loadMiniatureAsync(imageView, imageUrl)

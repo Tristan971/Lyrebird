@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 import javafx.stage.Stage;
 
 import moe.lyrebird.model.notifications.system.NotificationSystem;
-import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.root.RootScreenComponent;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 
 /**
@@ -42,28 +42,26 @@ public class NotificationService {
 
     private final ApplicationContext context;
     private final StageManager stageManager;
+    private final RootScreenComponent rootScreenComponent;
 
     @Autowired
-    public NotificationService(
-            final ApplicationContext context,
-            final StageManager stageManager
-    ) {
+    public NotificationService(ApplicationContext context, StageManager stageManager, RootScreenComponent rootScreenComponent) {
         this.context = context;
         this.stageManager = stageManager;
+        this.rootScreenComponent = rootScreenComponent;
     }
 
     /**
-     * Sends a notification to the user, automatically choosing the appropriate {@link NotificationSystem} depending on
-     * the current focus state of the main window.
+     * Sends a notification to the user, automatically choosing the appropriate {@link NotificationSystem} depending on the current focus state of the main
+     * window.
      * <p>
-     * Will use the system-level system if the application's main window is not visible (that is, if it is minimized or
-     * hidden).
+     * Will use the system-level system if the application's main window is not visible (that is, if it is minimized or hidden).
      *
      * @param notification The notification to display.
      */
     public void sendNotification(final Notification notification) {
         LOG.debug("Requesting display of notification with smart display system type.");
-        final Stage mainStage = stageManager.getSingle(Screen.ROOT_VIEW).getOrElseThrow(
+        final Stage mainStage = stageManager.getSingle(rootScreenComponent).getOrElseThrow(
                 () -> new IllegalStateException("Can not find main stage.")
         );
 

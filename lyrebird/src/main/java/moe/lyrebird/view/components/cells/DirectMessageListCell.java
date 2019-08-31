@@ -18,7 +18,6 @@
 
 package moe.lyrebird.view.components.cells;
 
-import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGE_PANE;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 import org.springframework.context.annotation.Scope;
@@ -26,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import javafx.scene.control.ListView;
 
+import moe.lyrebird.view.components.directmessages.DirectMessagePaneComponent;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
 
@@ -40,8 +40,8 @@ import twitter4j.DirectMessage;
 @Scope(scopeName = SCOPE_PROTOTYPE)
 public class DirectMessageListCell extends ComponentListCell<DirectMessage> {
 
-    public DirectMessageListCell(final EasyFxml easyFxml) {
-        super(easyFxml, DIRECT_MESSAGE_PANE);
+    public DirectMessageListCell(final EasyFxml easyFxml, DirectMessagePaneComponent directMessagePaneComponent) {
+        super(easyFxml, directMessagePaneComponent);
     }
 
 }

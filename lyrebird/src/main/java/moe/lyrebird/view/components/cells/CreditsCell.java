@@ -18,18 +18,19 @@
 
 package moe.lyrebird.view.components.cells;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
-import moe.lyrebird.model.credits.objects.CreditedWork;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.ListView;
 
-import static moe.lyrebird.view.components.FxComponent.CREDIT;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import moe.lyrebird.model.credits.objects.CreditedWork;
+import moe.lyrebird.view.components.credits.CreditComponent;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.model.components.listview.ComponentListCell;
 
 /**
  * This is the class managing the cell of a credit disclaimer from the point of view of its embedding {@link ListView}.
@@ -42,8 +43,8 @@ public class CreditsCell extends ComponentListCell<CreditedWork> {
 
     private final BooleanProperty shouldDisplay;
 
-    public CreditsCell(final EasyFxml easyFxml) {
-        super(easyFxml, CREDIT);
+    public CreditsCell(EasyFxml easyFxml, CreditComponent creditComponent) {
+        super(easyFxml, creditComponent);
         this.shouldDisplay = new SimpleBooleanProperty(false);
         this.cellNode.visibleProperty().bind(shouldDisplay);
     }
@@ -53,4 +54,5 @@ public class CreditsCell extends ComponentListCell<CreditedWork> {
         super.updateItem(item, empty);
         this.shouldDisplay.setValue(item != null && !empty);
     }
+
 }

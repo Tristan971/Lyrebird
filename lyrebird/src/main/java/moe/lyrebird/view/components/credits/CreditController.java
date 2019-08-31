@@ -31,14 +31,14 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 
 import moe.lyrebird.model.credits.objects.CreditedWork;
-import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.credits.CreditScreenComponent;
 import moe.tristan.easyfxml.model.components.listview.ComponentCellFxmlController;
 import moe.tristan.easyfxml.model.system.BrowserSupport;
 
 /**
  * This component is the one managing a single credit disclaimer unit in the credits list view.
  *
- * @see Screen#CREDITS_VIEW
+ * @see CreditScreenComponent
  */
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Component

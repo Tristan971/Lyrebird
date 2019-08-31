@@ -31,16 +31,15 @@ import moe.lyrebird.model.notifications.Notification;
 import moe.lyrebird.model.notifications.NotificationService;
 import moe.lyrebird.model.settings.Setting;
 import moe.lyrebird.model.settings.SettingsUtils;
-import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.root.RootScreenComponent;
 import moe.tristan.easyfxml.FxUiManager;
-import moe.tristan.easyfxml.api.FxmlNode;
+import moe.tristan.easyfxml.api.FxmlComponent;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 
 /**
  * The {@link LyrebirdUiManager} is responsible for bootstrapping the GUI of the application correctly.
  * <p>
- * To do so, it serves as the entry point for the JavaFX side of things and uses overriding from {@link FxUiManager} for
- * root view configuration.
+ * To do so, it serves as the entry point for the JavaFX side of things and uses overriding from {@link FxUiManager} for root view configuration.
  */
 @Component
 public class LyrebirdUiManager extends FxUiManager {
@@ -51,24 +50,27 @@ public class LyrebirdUiManager extends FxUiManager {
 
     private final AtomicBoolean informedUserOfCloseBehavior;
 
+    private final RootScreenComponent rootScreenComponent;
+
     /**
      * The constructor of this class, called by Spring automatically.
      *
-     * @param stageManager        The instance of {@link StageManager} that will be used to register the root view for
-     *                            later retrieval.
+     * @param stageManager        The instance of {@link StageManager} that will be used to register the root view for later retrieval.
      * @param environment         The spring environment to use property keys for minimal size and main stage title.
-     * @param notificationService The notification service that will be used to notify user of the custom behavior of
-     *                            this main stage's closure view {@link #handleMainStageClosure(Stage)}.
+     * @param notificationService The notification service that will be used to notify user of the custom behavior of this main stage's closure view {@link
+     *                            #handleMainStageClosure(Stage)}.
+     * @param rootScreenComponent The root component to load
      */
     @Autowired
     public LyrebirdUiManager(
             final StageManager stageManager,
             final Environment environment,
-            final NotificationService notificationService
-    ) {
+            final NotificationService notificationService,
+            RootScreenComponent rootScreenComponent) {
         this.stageManager = stageManager;
         this.environment = environment;
         this.notificationService = notificationService;
+        this.rootScreenComponent = rootScreenComponent;
         this.informedUserOfCloseBehavior = new AtomicBoolean(SettingsUtils.get(
                 Setting.NOTIFICATION_MAIN_STAGE_TRAY_SEEN,
                 false
@@ -88,8 +90,7 @@ public class LyrebirdUiManager extends FxUiManager {
     }
 
     /**
-     * This method is called by {@link FxUiManager} and is the first call that is made after {@link
-     * FxUiManager#startGui(Stage)} is called.
+     * This method is called by {@link FxUiManager} and is the first call that is made after {@link FxUiManager#startGui(Stage)} is called.
      * <p>
      * Here we mostly do some post-processing to:
      * <ul>
@@ -109,15 +110,15 @@ public class LyrebirdUiManager extends FxUiManager {
         mainStage.setMinWidth(environment.getRequiredProperty("mainStage.minWidth", Integer.class));
         mainStage.setWidth(600.0);
         mainStage.setHeight(500.0);
-        stageManager.registerSingle(Screen.ROOT_VIEW, mainStage);
+        stageManager.registerSingle(rootScreenComponent, mainStage);
     }
 
     /**
-     * @return The root {@link FxmlNode} of the application to put inside the main stage as sole node of the main scene.
+     * @return The root {@link FxmlComponent} of the application to put inside the main stage as sole node of the main scene.
      */
     @Override
-    protected FxmlNode mainComponent() {
-        return Screen.ROOT_VIEW;
+    protected FxmlComponent mainComponent() {
+        return rootScreenComponent;
     }
 
     /**

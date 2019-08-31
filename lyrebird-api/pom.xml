@@ -23,49 +23,23 @@
 
     <parent>
         <groupId>moe.lyrebird</groupId>
-        <artifactId>lyrebird-parent</artifactId>
+        <artifactId>lyrebird-module-base</artifactId>
         <version>1.2.0</version>
+        <relativePath>../lyrebird-module-base/pom.xml</relativePath>
     </parent>
-
-    <artifactId>lyrebird-api</artifactId>
-    <version>1.2.0</version>
-    <packaging>jar</packaging>
 
     <name>lyrebird-api</name>
     <description>Lyrebird API model</description>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <dependency>
-                            <groupId>org.immutables</groupId>
-                            <artifactId>value</artifactId>
-                            <version>2.7.4</version>
-                        </dependency>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+    <artifactId>lyrebird-api</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.immutables</groupId>
             <artifactId>value</artifactId>
-            <version>2.7.4</version>
         </dependency>
         <dependency>
             <groupId>com.treatwell</groupId>
             <artifactId>immutables-styles</artifactId>
-            <version>2.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

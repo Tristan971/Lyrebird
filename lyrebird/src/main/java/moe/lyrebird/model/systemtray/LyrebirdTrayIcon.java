@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javafx.application.Platform;
 
-import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.root.RootScreenComponent;
 import moe.tristan.easyfxml.model.beanmanagement.StageManager;
 
 @Component
@@ -25,13 +25,12 @@ public class LyrebirdTrayIcon {
 
     private final Environment environment;
     private final StageManager stageManager;
+    private final RootScreenComponent rootScreenComponent;
 
-    public LyrebirdTrayIcon(
-            final Environment environment,
-            final StageManager stageManager
-    ) {
+    public LyrebirdTrayIcon(Environment environment, StageManager stageManager, RootScreenComponent rootScreenComponent) {
         this.environment = environment;
         this.stageManager = stageManager;
+        this.rootScreenComponent = rootScreenComponent;
     }
 
     public String getLabel() {
@@ -55,7 +54,7 @@ public class LyrebirdTrayIcon {
      */
     private void showMainStage() {
         CompletableFuture.runAsync(
-                () -> stageManager.getSingle(Screen.ROOT_VIEW)
+                () -> stageManager.getSingle(rootScreenComponent)
                                   .toTry(IllegalStateException::new)
                                   .onSuccess(stage -> {
                                       stage.show();
@@ -70,7 +69,7 @@ public class LyrebirdTrayIcon {
      */
     private void exitApplication() {
         LOG.info("Requesting application closure from tray icon.");
-        stageManager.getSingle(Screen.ROOT_VIEW).getOrElseThrow(IllegalStateException::new).close();
+        stageManager.getSingle(rootScreenComponent).getOrElseThrow(IllegalStateException::new).close();
         Platform.exit();
     }
 

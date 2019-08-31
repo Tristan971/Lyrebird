@@ -28,12 +28,11 @@ import javafx.scene.control.Label;
 
 import moe.lyrebird.api.model.LyrebirdVersion;
 import moe.lyrebird.model.update.UpdateService;
-import moe.lyrebird.view.screens.Screen;
 import moe.tristan.easyfxml.api.FxmlController;
 import moe.tristan.easyfxml.model.system.BrowserSupport;
 
 /**
- * This controller is responsible for managing the {@link Screen#UPDATE_VIEW} screen.
+ * This controller is responsible for managing the {@link UpdateScreenComponent}.
  */
 @Component
 public class UpdateScreenController implements FxmlController {

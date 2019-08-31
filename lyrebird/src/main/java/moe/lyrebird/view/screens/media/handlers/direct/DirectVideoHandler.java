@@ -19,10 +19,12 @@
 package moe.lyrebird.view.screens.media.handlers.direct;
 
 import org.springframework.stereotype.Component;
-import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
-import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
 
 import javafx.scene.layout.Pane;
+
+import moe.lyrebird.view.screens.media.display.video.VideoScreenComponent;
+import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
 
 /**
  * Implementation of {@link VideoHandler} for videos already in URL form.
@@ -32,8 +34,8 @@ import javafx.scene.layout.Pane;
 @Component
 public class DirectVideoHandler extends VideoHandler<String> {
 
-    public DirectVideoHandler(final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
-        super(embeddedMediaViewHelper);
+    public DirectVideoHandler(EmbeddedMediaViewHelper embeddedMediaViewHelper, VideoScreenComponent videoScreenComponent) {
+        super(embeddedMediaViewHelper, videoScreenComponent);
     }
 
     @Override

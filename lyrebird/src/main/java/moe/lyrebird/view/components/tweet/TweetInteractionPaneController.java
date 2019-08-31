@@ -1,24 +1,16 @@
 package moe.lyrebird.view.components.tweet;
 
+import static moe.lyrebird.model.twitter.services.interraction.StatusInteraction.LIKE;
+import static moe.lyrebird.model.twitter.services.interraction.StatusInteraction.RETWEET;
+
+import java.util.concurrent.CompletableFuture;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import moe.tristan.easyfxml.EasyFxml;
-import moe.tristan.easyfxml.api.FxmlController;
-import moe.tristan.easyfxml.model.exception.ExceptionHandler;
-import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
-import moe.tristan.easyfxml.util.Stages;
-import moe.lyrebird.model.twitter.services.interraction.StatusInteraction;
-import moe.lyrebird.model.twitter.services.interraction.TwitterBinaryInteraction;
-import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
-import moe.lyrebird.view.assets.ImageResources;
-import moe.lyrebird.view.screens.Screen;
-import moe.lyrebird.view.screens.newtweet.NewTweetController;
-import moe.lyrebird.view.viewmodel.javafx.Clipping;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4j.Status;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
@@ -28,10 +20,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import java.util.concurrent.CompletableFuture;
+import moe.lyrebird.model.twitter.services.interraction.StatusInteraction;
+import moe.lyrebird.model.twitter.services.interraction.TwitterBinaryInteraction;
+import moe.lyrebird.model.twitter.services.interraction.TwitterInteractionService;
+import moe.lyrebird.view.assets.ImageResources;
+import moe.lyrebird.view.screens.newtweet.NewTweetController;
+import moe.lyrebird.view.screens.newtweet.NewTweetScreenComponent;
+import moe.lyrebird.view.viewmodel.javafx.Clipping;
+import moe.tristan.easyfxml.EasyFxml;
+import moe.tristan.easyfxml.api.FxmlController;
+import moe.tristan.easyfxml.model.exception.ExceptionHandler;
+import moe.tristan.easyfxml.model.fxml.FxmlLoadResult;
+import moe.tristan.easyfxml.util.Stages;
 
-import static moe.lyrebird.model.twitter.services.interraction.StatusInteraction.LIKE;
-import static moe.lyrebird.model.twitter.services.interraction.StatusInteraction.RETWEET;
+import twitter4j.Status;
 
 /**
  * This class manages the display of an interaction toolbar under every non-embedded tweet.
@@ -68,13 +70,17 @@ public class TweetInteractionPaneController implements FxmlController {
     private final EasyFxml easyFxml;
     private final Property<Status> targetStatus;
 
+    private final NewTweetScreenComponent newTweetScreenComponent;
+
     @Autowired
     public TweetInteractionPaneController(
-            final TwitterInteractionService interactionService,
-            final EasyFxml easyFxml
+            EasyFxml easyFxml,
+            TwitterInteractionService interactionService,
+            NewTweetScreenComponent newTweetScreenComponent
     ) {
         this.interactionService = interactionService;
         this.easyFxml = easyFxml;
+        this.newTweetScreenComponent = newTweetScreenComponent;
         this.targetStatus = new SimpleObjectProperty<>(null);
     }
 
@@ -106,11 +112,11 @@ public class TweetInteractionPaneController implements FxmlController {
     }
 
     /**
-     * Opens a {@link Screen#NEW_TWEET_VIEW} with the current status embedded for reply features.
+     * Opens a {@link NewTweetScreenComponent} with the current status embedded for reply features.
      */
     private void onReply() {
-        final FxmlLoadResult<Pane, NewTweetController> replyStageLoad = easyFxml.loadNode(
-                Screen.NEW_TWEET_VIEW,
+        final FxmlLoadResult<Pane, NewTweetController> replyStageLoad = easyFxml.load(
+                newTweetScreenComponent,
                 Pane.class,
                 NewTweetController.class
         ).afterControllerLoaded(ntc -> ntc.setInReplyToTweet(targetStatus.getValue()));

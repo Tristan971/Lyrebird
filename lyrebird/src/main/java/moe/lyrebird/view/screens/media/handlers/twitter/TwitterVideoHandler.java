@@ -18,15 +18,18 @@
 
 package moe.lyrebird.view.screens.media.handlers.twitter;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 import org.springframework.stereotype.Component;
-import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
-import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
-import twitter4j.MediaEntity;
 
 import javafx.scene.layout.Pane;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import moe.lyrebird.view.screens.media.display.video.VideoScreenComponent;
+import moe.lyrebird.view.screens.media.handlers.EmbeddedMediaViewHelper;
+import moe.lyrebird.view.screens.media.handlers.base.VideoHandler;
+
+import twitter4j.MediaEntity;
 
 /**
  * Twitter-specific implementation of the {@link VideoHandler}.
@@ -34,8 +37,8 @@ import java.util.Comparator;
 @Component
 public class TwitterVideoHandler extends VideoHandler<MediaEntity.Variant[]> {
 
-    public TwitterVideoHandler(final EmbeddedMediaViewHelper embeddedMediaViewHelper) {
-        super(embeddedMediaViewHelper);
+    public TwitterVideoHandler(EmbeddedMediaViewHelper embeddedMediaViewHelper, VideoScreenComponent videoScreenComponent) {
+        super(embeddedMediaViewHelper, videoScreenComponent);
     }
 
     /**

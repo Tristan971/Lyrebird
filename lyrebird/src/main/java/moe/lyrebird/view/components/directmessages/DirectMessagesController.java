@@ -18,8 +18,6 @@
 
 package moe.lyrebird.view.components.directmessages;
 
-import static moe.lyrebird.view.components.FxComponent.DIRECT_MESSAGE_CONVERSATION;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,14 +56,20 @@ public class DirectMessagesController implements FxmlController {
 
     private final EasyFxml easyFxml;
     private final DirectMessages directMessages;
+    private final DirectMessagesConversationComponent directMessagesConversationComponent;
 
     private final Set<User> loadedPals = new HashSet<>();
     private final ObservableList<Tab> conversationsManaged;
 
     @Autowired
-    public DirectMessagesController(final EasyFxml easyFxml, final DirectMessages directMessages) {
+    public DirectMessagesController(
+            EasyFxml easyFxml,
+            DirectMessages directMessages,
+            DirectMessagesConversationComponent directMessagesConversationComponent
+    ) {
         this.easyFxml = easyFxml;
         this.directMessages = directMessages;
+        this.directMessagesConversationComponent = directMessagesConversationComponent;
         this.conversationsManaged = FXCollections.observableArrayList();
         listenToNewConversations();
     }
@@ -90,7 +94,7 @@ public class DirectMessagesController implements FxmlController {
             return;
         }
         LOG.debug("Creating a conversation tab for conversation with {}", user.getScreenName());
-        easyFxml.loadNode(DIRECT_MESSAGE_CONVERSATION, Pane.class, DMConversationController.class)
+        easyFxml.load(directMessagesConversationComponent, Pane.class, DMConversationController.class)
                 .afterControllerLoaded(dmc -> dmc.setPal(user))
                 .getNode()
                 .recover(ExceptionHandler::fromThrowable)

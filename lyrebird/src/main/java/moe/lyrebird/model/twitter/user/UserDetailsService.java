@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import javafx.scene.layout.Pane;
 
 import moe.lyrebird.model.sessions.SessionManager;
-import moe.lyrebird.view.screens.Screen;
+import moe.lyrebird.view.screens.user.UserScreenComponent;
 import moe.lyrebird.view.screens.user.UserViewController;
 import moe.tristan.easyfxml.EasyFxml;
 import moe.tristan.easyfxml.model.exception.ExceptionHandler;
@@ -39,7 +39,7 @@ import twitter4j.User;
 /**
  * This service serves as a helper for displaying a given user's detailed view.
  *
- * @see Screen#USER_VIEW
+ * @see UserScreenComponent
  */
 @Component
 public class UserDetailsService {
@@ -49,10 +49,13 @@ public class UserDetailsService {
     private final EasyFxml easyFxml;
     private final SessionManager sessionManager;
 
+    private final UserScreenComponent userScreenComponent;
+
     @Autowired
-    public UserDetailsService(final EasyFxml easyFxml, final SessionManager sessionManager) {
+    public UserDetailsService(EasyFxml easyFxml, SessionManager sessionManager, UserScreenComponent userScreenComponent) {
         this.easyFxml = easyFxml;
         this.sessionManager = sessionManager;
+        this.userScreenComponent = userScreenComponent;
     }
 
     public void openUserDetails(final String screenName) {
@@ -82,7 +85,7 @@ public class UserDetailsService {
      */
     public void openUserDetails(final User targetUser) {
         LOG.info("Opening detailed view of user : {} (@{})", targetUser.getName(), targetUser.getScreenName());
-        easyFxml.loadNode(Screen.USER_VIEW, Pane.class, UserViewController.class)
+        easyFxml.load(userScreenComponent, Pane.class, UserViewController.class)
                 .afterControllerLoaded(uvc -> uvc.targetUserProperty().setValue(targetUser))
                 .getNode()
                 .recover(ExceptionHandler::fromThrowable)
