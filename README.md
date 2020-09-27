@@ -1,3 +1,13 @@
+### Archival
+
+Unfortunately, Twitter's stance towards third-party clients rendered building a good one pretty much impossible.
+
+Additionally, I do not really have the time to manage this project myself anymore.
+
+Hence the archival.
+
+---
+
 ![Promo logo](docs/img/promo-logo-png.png)
 
 Last `develop` branch's statistics :
